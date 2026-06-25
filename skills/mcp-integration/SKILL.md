@@ -6,6 +6,8 @@ origin: cc-investigation
 
 # MCP 能力目录
 
+本技能是 MCP 配置的**学习型参考库**。MCP 的实际配置向导由 `/cc-investigation:cold-start-interview` 的 Phase 2.5 提供。若需动态切换 MCP 配置，请运行 cold-start-interview 或编辑项目 `.mcp.json`。
+
 本文件记录 cc-investigation 生态中可用的 MCP 服务器类型及其能力说明。MCP 与技能之间遵循**松耦合原则**——技能不绑定具体 MCP，MCP 不驱动技能流程。
 
 ## 配置前置检查

@@ -138,7 +138,8 @@
         "claude-project"
       ],
       "dependencies": [
-        "investigation-foundation"
+        "investigation-foundation",
+        "ontology"
       ],
       "defaultInstall": true,
       "cost": "medium",
@@ -199,6 +200,24 @@
       "stability": "stable"
     },
     {
+      "id": "ontology",
+      "kind": "skills",
+      "description": "调查本体论 — Object/Link/Action 模型定义、Binding Protocol、建模最佳实践与 Action 治理规则",
+      "paths": [
+        "skills/ontology"
+      ],
+      "targets": [
+        "claude",
+        "claude-project"
+      ],
+      "dependencies": [
+        "rules-core"
+      ],
+      "defaultInstall": true,
+      "cost": "medium",
+      "stability": "beta"
+    },
+    {
       "id": "case-management",
       "kind": "skills",
       "description": "调查流程与案件管理 — 案件生命周期管理、质量管控、团队协作、时间线管理、风险管理",
@@ -211,7 +230,8 @@
       ],
       "dependencies": [
         "commands-core",
-        "platform-configs"
+        "platform-configs",
+        "ontology"
       ],
       "defaultInstall": false,
       "cost": "medium",
@@ -224,7 +244,7 @@
       "paths": [
         "skills/mcp-integration",
         "mcp-configs",
-        ".mcp.json",
+        "project-templates/default/.mcp.json",
         "docs/capability-surface-selection.md"
       ],
       "targets": [

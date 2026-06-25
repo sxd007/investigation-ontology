@@ -1,5 +1,6 @@
 ---
 name: case-manager
+tools: Read, Write
 description: 案件管理器 — 负责案件状态跟踪、阶段门禁检查、状态变更验证和决策日志记录，确保案件按阶段框架有序推进
 ---
 

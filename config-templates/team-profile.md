@@ -47,6 +47,20 @@
 **Team Lead:** [PLACEHOLDER]
 **Reporting Line:** [PLACEHOLDER]
 
+## 角色画像（Skill Profile）
+
+**影响技能：** 全部（决定办案时默认聚焦/优先提示哪些技能集）
+
+*由 cold-start-interview 读取 `manifests/install-profiles.json` 后引导选择。画像决定本团队默认聚焦的技能集，避免无关技能干扰；不阻止按需临时加载任何其他技能。可随时改为其他画像或 `full`。*
+
+| 字段 | 影响说明 |
+|------|---------|
+| 选定画像 | investigator/auditor/analyst/interviewer/full 之一，决定优先加载的技能集 |
+| 激活技能集 | 该画像包含的技能模块列表（来源：install-profiles.json） |
+
+**Selected Profile:** [PLACEHOLDER: investigator/auditor/analyst/interviewer/full]
+**Active Skills:** [PLACEHOLDER]
+
 ## 调查通信纪律
 
 **影响技能：** interview-analysis（举报人联系约束）、investigation-planner（计划中的时间框定）

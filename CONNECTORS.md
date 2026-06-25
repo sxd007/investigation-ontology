@@ -54,7 +54,7 @@ cc-investigation 的 MCP 连接器按部署方式分为三类：
 
 ### 自动部署（无需操作）
 
-`investigation-pdf` 已在 `.mcp.json` 中注册，每次启动 Claude Code 时自动加载。
+`investigation-pdf` 已在项目级 `.mcp.json`（由 `/investigate new` 从 `project-templates/default/.mcp.json` 部署到案件项目根目录）中注册，每次启动 Claude Code 时自动加载。
 
 ### 用户配置（按需添加）
 

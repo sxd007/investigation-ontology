@@ -53,19 +53,29 @@
         "required": ["id", "type"]
       }
     },
-    "entities": {
-      "type": "array",
-      "description": "涉案实体（人员、公司、项目等）。每个实体在 nodes/ 中有对应的 ENT-NNN 文件做详细信息。此数组为结构化摘要。",
-      "items": {
-        "type": "object",
-        "properties": {
-          "entity_id": { "type": "string", "pattern": "^ENT-\\d{3,}$" },
-          "entity_type": {
-            "type": "string",
-            "enum": ["subject", "organization", "project", "account", "device", "other"]
-          },
-          "name": { "type": "string" },
-          "role": { "type": "string" },
+"entities": {
+        "type": "array",
+        "description": "涉案实体（人员、公司、项目等）。每个实体在 nodes/ 中有对应的 ENT-NNN 文件做详细信息。此数组为结构化摘要。每个实体必须包含 ontology_ref 指向本体层对象。",
+        "items": {
+          "type": "object",
+          "properties": {
+            "entity_id": { "type": "string", "pattern": "^ENT-\\d{3,}$" },
+            "ontology_ref": {
+              "type": "object",
+              "description": "指向本体层 Entity 对象的引用",
+              "properties": {
+                "object_id": { "type": "string", "description": "本体层实体 ID（如 P-0001）" },
+                "object_type": { "type": "string", "enum": ["Person", "Organization", "Account", "Asset", "Instrument"] },
+                "lifecycle_status": { "type": "string", "enum": ["UNRESOLVED", "VERIFIED", "DISPUTED", "SEALED"] }
+              },
+              "required": ["object_id", "object_type"]
+            },
+            "entity_type": {
+              "type": "string",
+              "enum": ["subject", "organization", "project", "account", "device", "other"]
+            },
+            "name": { "type": "string" },
+            "role": { "type": "string" },
           "intent_score": {
             "type": "integer",
             "description": "意图评分总分（仅 entity_type=subject 时适用）。由 case-manager 在 REVIEWING 阶段按 intent-scoring.md 框架计算。"
@@ -105,11 +115,21 @@
     },
     "evidence_items": {
       "type": "array",
-      "description": "证据条目登记——每条证据的核心注册信息。证据的详细分析、提炼和关系声明由 nodes/ 中的 EV-NNN 文件承载。此数组仅为注册层，不含关系字段（关系见 nodes/ 中各文件的 relations 字段）。",
+      "description": "证据条目登记——每条证据的核心注册信息。证据的详细分析、提炼和关系声明由 nodes/ 中的 EV-NNN 文件承载。此数组仅为注册层，不含关系字段（关系见 nodes/ 中各文件的 relations 字段）。每条证据必须包含 ontology_ref 指向本体层 Evidence 对象。",
       "items": {
         "type": "object",
         "properties": {
           "evidence_id": { "type": "string", "pattern": "^EV-\\d{3,}$" },
+          "ontology_ref": {
+            "type": "object",
+            "description": "指向本体层 Evidence 对象的引用",
+            "properties": {
+              "object_id": { "type": "string", "description": "本体层证据 ID（如 ev-010）" },
+              "object_type": { "type": "string", "enum": ["Evidence"] },
+              "sealed": { "type": "boolean", "description": "证据冻结状态（从本体层继承）" }
+            },
+            "required": ["object_id", "object_type"]
+          },
           "type": {
             "type": "string",
             "enum": [

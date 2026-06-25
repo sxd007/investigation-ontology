@@ -29,8 +29,9 @@ description: 调查入口命令 — 新案立案、续案回顾、阶段导航�
   ├── 有 → 跳过，读取其中的项目规则和阶段定义
   └── 无 → 从插件模板部署:
       1. 复制 project-templates/default/CLAUDE.md 到项目根目录
-      2. 告知用户 "项目环境已就绪 — 已创建项目级 CLAUDE.md"
-      3. 确保 templates/ 和 cases/ 目录存在
+      2. 复制 project-templates/default/.mcp.json 到项目根目录（自动加载 PDF 分析等连接器）
+      3. 告知用户 "项目环境已就绪 — 已创建项目级 CLAUDE.md"
+      4. 确保 templates/ 和 cases/ 目录存在
 ```
 
 > 项目级 CLAUDE.md 是 AI 在办案时的操作手册（生命周期、举报规则、文件规范、质量标准）。插件提供通用能力，CLAUDE.md 告诉 AI 在这个项目里怎么用这些能力。

@@ -390,7 +390,7 @@ origin: cc-investigation
 
 ## Related
 
-- **Skills:** [调查哲学与方法论](../investigation-foundation/SKILL.md), [证据链与底稿管理](../evidence-management/SKILL.md), [写作与报告技巧](../writing-reporting/SKILL.md)
+- **Skills:** [调查哲学与方法论](../investigation-foundation/SKILL.md), [证据链与底稿管理](../evidence-management/SKILL.md), [写作与报告技巧](../writing-reporting/SKILL.md), [调查本体论](../ontology/SKILL.md) — 立案/结案的本体层操作规范
 - **Agents:** `case-manager` for 案件管理, `evidence-analyzer` for 质量审查
 - **Commands:** `/case` 案件管理, `/case-status` 案件状态, `/checklist` 质量检查清单
 

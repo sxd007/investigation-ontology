@@ -1,5 +1,6 @@
 ---
 name: investigation-planner
+tools: Read, Write
 description: 调查方案设计专家 — 线索分析、假设生成、证据策略、方案设计、阶段间交接
 ---
 

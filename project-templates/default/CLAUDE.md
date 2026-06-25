@@ -21,11 +21,32 @@ AI **必须始终清楚**自己的定位：
 
 ### 1. 基本红线
 
-- **拒绝**任何未经授权的监控、跟踪、人肉搜索或数据采集
+- **拒绝**任何未经授权的数据采集
 - **拒绝**生成伪造证据、误导性报告
-- 通过 MCP 获取数据时，**先确认**用户对该数据源拥有合法访问权限
 - 任何涉及法律判断、证据可采性或人员可信度评分的输出，附带"仅供参考，需专业人士核实"警示
 - 主动建议对个人数据进行脱敏处理
+
+### 2. 本体层操作（Ontology）
+
+> 本体层（`entities/`、`relations/`）定义了可呈堂的事实骨架。在建模/创建/修改本体对象前，加载 `/ontology` skill 获取完整的方法论、模型定义和约束规范。Hooks 在写入时自动校验前置条件——你无法绕过。
+
+#### 快速参考
+
+| 当你想要… | Action | 详细清单 |
+|---|---|---|
+| 立案 / 登记证据 / 创建实体 / 声明关系 / 冻结 / 替代 / 合并 / 争议 / 结案 | 见技能 `references/actions/` | 加载 `/ontology` 后按需 read |
+
+#### 状态展示规则
+
+两套独立的状态体系，**输出时必须分开标注**：
+
+| 维度 | 状态值 | 含义 |
+|---|---|---|
+| **调查阶段** | INIT / PRE / FIELDWORK / REVIEWING / CLOSED | 工作流进度（`meta.json`） |
+| **本体状态** | UNRESOLVED / VERIFIED / DISPUTED / SEALED | 实体可信度（`lifecycle_status`） |
+
+✅ `当前调查阶段：REVIEWING ｜ 本体状态：3 VERIFIED，1 DISPUTED`
+❌ `案件目前 VERIFIED`（混用）
 
 ---
 
@@ -54,6 +75,7 @@ AI **必须始终清楚**自己的定位：
 | `fraud-fake-chop` | 场景 | 伪造印章（私刻、变造、盗用、冒用） |
 | `fraud-conflicts-of-interest` | 场景 | 利益冲突（采购/销售冲突、裙带关系、回扣关联） |
 | `interview-analysis` | 沟通 | PEACE 访谈策略、SCAN 陈述分析、对抗行为识别 |
+| `ontology` | 本体 | 本体论方法论 — Object/Link/Action 模型、Binding Protocol、建模指南 |
 | `investigation-memory` | 归档 | 过程非结构化信息记录（不干扰案件推进） |
 | `case-retrospective` | 复盘 | 完结案件多维度复盘（用户显式触发） |
 | `mcp-integration` | 集成 | MCP 能力与技能的配合方式 |
@@ -88,10 +110,11 @@ AI 在以下时刻应主动加载对应技能：
 
 | 场景 | 加载的技能 |
 |------|-----------|
-| 收到举报/线索 | `fraud-classification` → 判断案件性质 |
+| 管理案件进展 | `case-management` → 启动案件、阶段框架、门禁管控 |
+| 举报/线索定性 | `fraud-classification` → 判断案件性质 |
 | 制定调查计划 | `investigation-foundation` → 假设驱动推理 |
-| 管理案件进展 | `case-management` → 阶段框架、门禁管控 |
 | 登记证据 | `evidence-management` → 保管链、可采性 |
+| 创建/修改本体对象 | `ontology` → 模型定义、Action 约束、Binding Protocol（处理 entities/、relations/ 时自动激活） |
 | 分析数据 | `data-analysis` → 异常检测方法 |
 | 链路对比分析 | `order-execution-variance-analysis` → 申报与执行记录结构化对比 |
 | 准备访谈 | `interview-analysis` → PEACE 模型、问题设计 |
@@ -118,23 +141,23 @@ AI 在以下时刻应主动加载对应技能：
 
 **必须完成的核心任务**：
 
-| 任务 | 产出物 | 参考技能 |
-|------|--------|---------|
-| 举报信息结构化提取 | `01_INIT/01_init_intelligence_summary.md` | — |
-| 案件性质判断 | 同上 §2 | `cc-investigation:fraud-classification` |
-| 信息缺口分析（IG-xx） | 同上 §4 | — |
-| 初步调查计划 | 同上 §5 | `cc-investigation:investigation-foundation` |
-| 核心假设建立 | 同上 §6 | `cc-investigation:investigation-foundation` |
-| 案件元数据创建 | `meta.json` | — |
-| 门禁清单创建 | `checklist.yaml` | — |
-| 证据注册表创建 | `evidence_registry.json` | `cc-investigation:evidence-management` |
-| 节点目录创建 | `nodes/`（EV-001、ENT-001、初始 HYP 节点） | `cc-investigation:evidence-management` |
+| 任务 | 产出物 | 参考技能 | 本体层动作 |
+|------|--------|---------|-----------|
+| 举报信息结构化提取 | `01_INIT/01_init_intelligence_summary.md` | — | — |
+| 案件性质判断 | 同上 §2 | `cc-investigation:fraud-classification` | — |
+| 信息缺口分析（IG-xx） | 同上 §4 | — | — |
+| 初步调查计划 | 同上 §5 | `cc-investigation:investigation-foundation` | — |
+| 核心假设建立 | 同上 §6 | `cc-investigation:investigation-foundation` | — |
+| 案件元数据创建 | `meta.json` | — | 先执行 `OPEN_CASE` → 创建 `entities/case/` |
+| 门禁清单创建 | `checklist.yaml` | — | — |
+| 证据注册表创建 | `evidence_registry.json` | `cc-investigation:evidence-management` | 先执行 `ACQUIRE_EVIDENCE` → 创建 `entities/evidence/` |
+| 节点目录创建 | `nodes/`（EV-001、ENT-001、初始 HYP 节点） | `cc-investigation:evidence-management` | EV/ENT 节点必须含 `ontology_ref` |
 
 **领域特定知识**：如果案件涉及具体舞弊类型（渠道窜货、采购舞弊等），加载对应的 `cc-investigation:fraud-*` 技能获取该领域的调查切入点和信号模式。
 
 ### PRE_INVESTIGATION 阶段 — 静默情报收集
 
-**目标**：在静默条件下穷尽系统内可获取的情报。
+**目标**：在静默条件下穷尽系统内可获取的情报，充分了解调查对象。
 
 **产出物**：
 - `pre_investigation_brief.md`
@@ -172,24 +195,23 @@ AI 在以下时刻应主动加载对应技能：
 
 ### 3.1 联系举报人前必须完成的步骤
 
-- [ ] 通过手机号/邮箱完成举报人背景核查（企查查/天眼查 → 公司关联 → 司法风险）
-- [ ] 评估结果决定通话策略后再安排通话
+- [ ] 通过手机号/邮箱完成举报人背景核查（内部数据库 → 企查查/天眼查 → 公司关联 → 司法风险）
+- [ ] 评估结果决定通话策略后再安排沟通
 
 ### 3.2 通话纪律
 
-- ❌ 同一举报事项未经内部复盘，不得连续通话超过1次
 - ❌ 在获取可核查信息前，不得向举报人披露调查方法论细节
-- ✅ 每次通话后输出 `call_memo_*.md` 并完成通话评估
-- ✅ 通话评估包括：信息交换是否对等？/ 是否有警示信号？/ 策略是否需要调整？
+- ✅ 每次沟通后输出 `call_memo_*.md` 并完成沟通评估
+- ✅ 沟通评估包括：信息交换是否对等？/ 是否有警示信号？/ 策略是否需要调整？
 
 ### 3.3 警示信号—暂停评估触发条件
 
-通话中出现以下任意信号时，安排下一次通话前必须暂停并重新评估：
+通话中出现以下任意信号时，安排下一次沟通前必须暂停并重新评估：
 
 1. 对方要求全程录音
 2. 对方连续两次未提供约定的核心信息
 3. 对方主动追问调查流程、法律处置路径、报案策略
-4. 背景核查返回负面结果
+4. 举报人背景核查返回负面结果
 
 ### 3.4 假设管理
 
@@ -199,16 +221,42 @@ AI 在以下时刻应主动加载对应技能：
 
 ### 3.5 证据管理
 
+#### 认知层操作
+
 - ✅ 从收到举报信息的那一刻起，创建 `evidence_registry.json` 和 `nodes/` 目录
 - ✅ 第一项证据就是举报信息本身：在 evidence_registry.json 注册为 EV-001，在 `nodes/EV-001.md`（或 `.json`）中记录详细信息
 - ✅ **关系图仅通过 `nodes/` 中各文件的 `relations` 字段声明**（derived_from/supports/contradicts 等类型），不复制到 evidence_registry.json 中
 - ✅ 使用 `skills/evidence-management/scripts/scan-chain.py` 编译关系图、追溯链、检查完整性
 
+#### 本体层操作
+
+> 每条证据和每个实体除了在认知层注册外，还必须在本体层创建对应的对象。
+> 本体层对象是可呈堂的事实骨架——一旦冻结（sealed=true）不可修改。
+
+- ✅ 登记证据前，先按 `/ontology` skill 的指引校验前置条件（ACQUIRE_EVIDENCE），然后在 `entities/evidence/` 下创建 Evidence 本体文件（含 sha256 哈希和保管链信息）
+- ✅ 在 `nodes/EV-001.json` 的 `ontology_ref` 字段中指向刚创建的 Evidence 本体对象
+- ✅ 在 `evidence_registry.json` 的 `evidence_items[]` 中同步填写 `ontology_ref`（指向 `entities/evidence/`）
+- ✅ 举报线索中涉及的人员/机构/账户，先在 `entities/` 下创建对应的 UNRESOLVED 本体实体，再在 `nodes/ENT-001.json` 的 `ontology_ref` 中指向它
+- ✅ 冻结证据时，先按 `/ontology` skill 的指引校验前置条件（SEAL_EVIDENCE），然后更新本体文件的 `sealed: true`
+
+#### 本体映射示例
+
+```
+举报信息 → 认知层: nodes/EV-001.json          → 本体层: entities/evidence/ev-001.yaml
+          └── ontology_ref.object_id: "ev-001"
+             ontology_ref.object_type: "Evidence"
+
+涉案人员 → 认知层: nodes/ENT-001.json          → 本体层: entities/person/P-0001.yaml
+          └── ontology_ref.object_id: "P-0001"
+             ontology_ref.object_type: "Person"
+             ontology_ref.lifecycle_status: "UNRESOLVED"
+```
+
 ---
 
 ## 四、案件文件结构规范
 
-### 3.1 项目目录结构
+### 4.1 项目目录结构
 
 ```
 <project-root>/
@@ -216,33 +264,55 @@ AI 在以下时刻应主动加载对应技能：
 ├── templates/                         ← 工作底稿模板
 │   └── contact_whistleblower_template.md
 │
+├── entities/                          ← 本体层：可呈堂的事实骨架（Object Types）
+│   ├── person/P-0001.yaml            ← 自然人
+│   ├── organization/O-0042.yaml      ← 组织/机构
+│   ├── account/acc-0012.yaml         ← 金融账户
+│   ├── evidence/ev-010.yaml          ← 证据
+│   └── case/case-001.yaml            ← 案件
+│
+├── relations/                         ← 本体层：实体间关系（Link Types）
+│   ├── R-001.yaml                    ← 关系记录（TRANSFERRED, HAS_ACCOUNT...）
+│   └── R-002.yaml
+│
+├── rules/                             ← 治理规则
+│   ├── ontology-actions/             ← Action 前置条件定义（Layer 3 防御）
+│   │   ├── CLOSE_CASE.md
+│   │   ├── ADMIT_CANDIDATE.md
+│   │   └── ...
+│   └── binding-protocol.md           ← 认知层 ↔ 本体层映射规则
+│
 └── cases/
     └── CASE-YYYY-NNN/
         ├── README.md                  ← 案件目录索引
-        ├── meta.json                  ← 案件元数据
+        ├── meta.json                  ← 案件元数据（认知层）
         ├── checklist.yaml             ← 门禁清单
-        ├── evidence_registry.json     ← 证据注册表（结构化索引，不含关系字段）
+        ├── evidence_registry.json     ← 证据注册表
         ├── CHANGELOG.json             ← 变更记录
         │
         ├── nodes/                     ← 分析推理层（关系仅在此声明）
-        │   ├── EV-001.json
+        │   ├── EV-001.json           ← 必须含 ontology_ref 指向 entities/evidence/
+        │   ├── ENT-001.json          ← 必须含 ontology_ref 指向 entities/{type}/
         │   ├── LS-001.md
         │   ├── ARG-001.md
         │   ├── FND-001.md
         │   └── ...
         │
-        ├── raw/                       ← 原始证据文件（PDF、截图等）
+        ├── raw/                       ← 原始证据文件
         │   └── EV-001.pdf
         │
-        ├── 01_INIT/                   ← 立案阶段产物
-        ├── 02_PRE_INVESTIGATION/      ← 外围调查阶段产物
-        ├── 03_FIELDWORK/              ← 实地取证阶段产物
-        ├── 04_REVIEWING/              ← 收敛定性阶段产物
+        ├── ontology-refs/             ← 认知层 → 本体层引用快照（可选）
+        │   └── ev-010.ref.yaml
         │
-        └── case_memory/               ← 过程记忆
+        ├── 01_INIT/
+        ├── 02_PRE_INVESTIGATION/
+        ├── 03_FIELDWORK/
+        ├── 04_REVIEWING/
+        │
+        └── case_memory/
 ```
 
-### 3.2 命名规范
+### 4.2 命名规范
 
 | 规范 | 说明 |
 |------|------|
@@ -252,7 +322,7 @@ AI 在以下时刻应主动加载对应技能：
 | 日期后缀 | 可能产生多个版本的文件（call_memo、closing_report）必须带 `_YYYYMMDD` |
 | 功能明确 | 文件名须能让人只看名字就知道文件用途 |
 
-### 3.3 跨文件索引要求
+### 4.3 跨文件索引要求
 
 每个文件必须在头部或尾部标明与其他文件的关系：
 
@@ -287,6 +357,10 @@ AI 在以下时刻应主动加载对应技能：
 - [ ] 证据链完整性检查通过（`skills/evidence-management/scripts/scan-chain.py --integrity` 无 ERROR）
 - [ ] 放弃/关闭理由已在 meta.json 中记录
 - [ ] 高风险目标已标注
+- [ ] **本体层校验**：运行 `scripts/audit-binding.sh <case_id>`，无 ERROR
+- [ ] **Entity 状态**：所有 `involved_entities` 的 lifecycle_status 非 UNRESOLVED
+- [ ] **Evidence 状态**：所有 `contained_evidence` 的 sealed = true
+- [ ] **FND 引用**：所有 FND 引用的 Relation 的 evidence_tier = HARD
 
 ---
 
@@ -324,3 +398,6 @@ AI 在以下时刻应主动加载对应技能：
 - **证据规则** — `rules/evidence-rules.md`
 - **底稿标准** — `rules/working-paper-standards.md`
 - **案例数据模型** — `docs/case-data-model.md`
+- **本体设计哲学** — `docs/ontology/design-overview.md`
+- **绑定协议（Binding Protocol）** — `/ontology` skill → `references/binding-protocol.md`
+- **Action 规则** — `/ontology` skill → `references/actions/` 目录

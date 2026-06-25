@@ -1,5 +1,6 @@
 ---
 name: evidence-analyzer
+tools: Read, Write
 description: 证据分析师 — 评估证据的可采性、可靠性和充分性，识别证据链中的弱点和缺口，登记到证据注册表
 ---
 

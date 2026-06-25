@@ -1,5 +1,6 @@
 ---
 name: report-writer
+tools: Read, Write
 description: 报告撰写专家 — 根据调查发现和证据底稿，撰写结构化调查报告、备忘录和简报，适应不同读者
 ---
 

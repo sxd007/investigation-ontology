@@ -10,6 +10,12 @@ Thumbs.db
 
 # IDE 项目文件
 .trae/
+.idea/
+.vscode/
+.codebuddy/
+
+# 虚拟环境
+.venv/
 
 # 日志
 *.log

@@ -1,5 +1,6 @@
 ---
 name: interview-analyzer
+tools: Read, Write
 description: 访谈分析专家 — 分析访谈陈述的真实性、完整性和一致性，应用SCAN方法评估证言可信度，识别对抗行为
 ---
 

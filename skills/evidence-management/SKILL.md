@@ -552,7 +552,7 @@ excerpt 是"流向下一级的事实"——告诉下游节点/读者这段关系
 
 ## Related
 
-- **Skills:** [调查哲学与方法论](../investigation-foundation/SKILL.md), [写作与报告技巧](../writing-reporting/SKILL.md), [访谈与问话分析](../interview-analysis/SKILL.md)
+- **Skills:** [调查哲学与方法论](../investigation-foundation/SKILL.md), [写作与报告技巧](../writing-reporting/SKILL.md), [访谈与问话分析](../interview-analysis/SKILL.md), [调查本体论](../ontology/SKILL.md) — 登记证据/实体的本体层操作规范
 - **Rules:** [证据规则](../../rules/evidence-rules.md), [底稿标准](../../rules/working-paper-standards.md)
 - **Agents:** `evidence-analyzer` for 证据评估, `case-manager` for 底稿复核
 - **Commands:** `/evidence` 证据管理, `/chain-of-custody` 保管链, `/working-paper` 底稿操作

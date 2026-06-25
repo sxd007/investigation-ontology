@@ -7,17 +7,17 @@ description: 用户从创建案件到结案的全流程引导地图——五个�
 ```
 用户旅程                             架构映射                             状态
 ─────────────────────────────────────────────────────────────────────
-                                   事前准备 → /cold-start-interview     🟡 已创建，与流程断开
+                                   事前准备 → /cold-start-interview     � 已创建并衔接 /investigate
                                                                        
-1. 启动案件                           → /investigate 入口命令            🔴 需要创建
+1. 启动案件                           → /investigate 入口命令            � 已实现 new/continue/status
    ├── 新案件：创建档案                 → cases/{case_id}/ + meta.json    🟢 数据结构就绪
-   │   ├── agent 与调查员讨论线索       → 需要 agent 主动分析+追问       🔴 缺失
+   │   ├── agent 与调查员讨论线索       → 需要 agent 主动分析+追问       � /investigate new 线索讨论模式
    │   ├── 初步核实举报线索             → key_entities_verified 门禁     🟢 门禁已定义，流程未串
    │   ├── 联系举报人扩充线索           → 举报人接触（静默边界例外）      🔴 无具体引导
    │   └── 形成立案判断                 → case_opened 门禁               🟢 门禁已定义
    │                                                                    
-   └── 继续案件：回顾状态               → 读取 meta+checklist+evidence   🔴 case-manager 不会主动回顾
-                                       → 输出状态摘要                     🔴 需要 agent 侧新增
+   └── 继续案件：回顾状态               → 读取 meta+checklist+evidence   � /investigate continue
+                                       → 输出状态摘要                     🟢 /investigate continue
 
 2. INIT 阶段                           → 初始评估 + 立案                🟢 阶段已定义
    ├── 分析讨论举报线索                 → 假设生成（假设类型体系）        🟢 foundation 已定义
@@ -79,15 +79,16 @@ description: 用户从创建案件到结案的全流程引导地图——五个�
 | `agents/data-analyzer.md` | 同样太简略 |
 | `agents/report-writer.md` | 同样太简略 |
 | `agents/fraud-type-classifier.md` | 同样太简略 |
-| `/cold-start-interview` 命令 | 做完配置后不指向案件创建 |
+| ~~`/cold-start-interview` 命令~~ | ✅ 已解决 — "完成后"节指向 `/investigate new`；并新增角色画像选择（读取 install-profiles.json） |
 
 ### 🔴 缺失
 
 | 缺口 | 影响 |
 |------|------|
-| `/investigate` 入口命令 | 用户不知道第一步敲什么 |
-| Agent 主动分析/追问能力 | INIT 阶段需要 agent 与调查员讨论线索，不是被动填空 |
-| 继续案件（状态回顾） | case-manager 不会主动读取所有档案输出摘要 |
+| ~~`/investigate` 入口命令~~ | ✅ 已实现 — commands/investigate.md 提供 new/continue/status |
+| ~~Agent 主动分析/追问能力~~ | ✅ 已实现 — /investigate new 的"线索讨论模式"主动分析+追问 |
+| ~~继续案件（状态回顾）~~ | ✅ 已实现 — /investigate continue 读取档案输出状态摘要 |
+| 举报人沟通引导 | 静默边界例外场景（举报人可接触），无具体操作指引 |
 | 举报人沟通引导 | 静默边界例外场景（举报人可接触），无具体操作指引 |
 | 阶段间导航 | 每个阶段完成后，用户不知道下一步该调用哪个 agent |
 | Agent 间协作机制 | 🟡 已解决 — HITL 交付确认模式：每个 agent 末尾按 展示→讨论→确认→写入→建议 交付，调查员确认后才写入并建议下一步 agent |
@@ -100,11 +101,11 @@ description: 用户从创建案件到结案的全流程引导地图——五个�
 
 按用户旅程的顺序，优先补**阻塞用户前进的**：
 
-### P0 — 用户走不通的
+### P0 — 用户走不通的（✅ 已全部实现）
 
-1. **`/investigate` 入口命令** — 没有入口，用户卡在第一步
-2. **Agent 主动分析能力** — INIT 阶段 agent 需要和调查员"对话式"讨论线索，不是等用户填完所有字段
-3. **继续案件状态回顾** — 再次打开会话时，用户不知道自己之前做到哪了
+1. ✅ **`/investigate` 入口命令** — commands/investigate.md 提供 new/continue/status 三个子命令
+2. ✅ **Agent 主动分析能力** — /investigate new 定义"线索讨论模式"，主动提取实体、匹配舅弊类型、识别缺口并追问
+3. ✅ **继续案件状态回顾** — /investigate continue 读取 meta+checklist+evidence 输出状态摘要
 
 ### P1 — 用户能走但体验差
 
@@ -123,10 +124,8 @@ description: 用户从创建案件到结案的全流程引导地图——五个�
 
 ## 下一步建议
 
-直接补 P0 的三个缺口，从**用户走不通的地方**开始：
+P0（用户走不通的）三个缺口已全部实现（`/investigate` 命令）。剩余工作集中在 P1/P2 体验优化：
 
-1. **优先：创建 `/investigate` 命令** 作为入口
-2. **其次：给 case-manager 增加"主动回顾"能力** — 读取所有档案输出状态摘要
-3. **再其次：扩展 agent（尤其是 investigation-planner）的 Process 到可操作粒度**
-
-要在 P0 的第一个（`/investigate` 命令）开始吗？
+1. **阶段间导航** — 每阶段完成时由 case-manager 提示下一步该用哪个 agent
+2. **Agent Process 补全** — 扩展 7 个 agent 的 process 到可操作粒度
+3. **电子取证 / 可视化汇报引导** — 补充 FIELDWORK/CLOSED 阶段的具体操作指引

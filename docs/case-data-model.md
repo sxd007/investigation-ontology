@@ -2,6 +2,8 @@
 
 本文件回答：**创建一个新案件时，需要初始化哪些数据文件？顺序是什么？去哪找精确的字段定义？**
 
+> **本体层说明**：本模型描述的是**认知层**（cc-investigation skills）的数据结构。在此基础上，每个案件还需要同步维护**本体层**的实体和关系文件（`entities/`、`relations/`），通过 `ontology_ref` 字段与认知层节点关联。详见 `docs/ontology/design-overview.md`。
+
 ## 案件核心数据文件
 
 每个案件包含 **4 个核心数据结构文件 + nodes/ 分析层目录**。创建顺序如下：
@@ -108,18 +110,19 @@ CLOSED              更新 status         更新 closed            归档       
 | **用途** | 承载证据链的推理分析：线索提炼（LS）、论据构建（ARG）、事实认定推理（FND）。关系图仅通过各节点文件的 `relations` 字段声明（derived_from/supports/contradicts 等类型）。 |
 | **模板参考** | [`project-templates/default/nodes/`](../project-templates/default/nodes/) |
 | **生命周期管理** | [`skills/evidence-management/SKILL.md`](../skills/evidence-management/SKILL.md) |
+| **本体层绑定** | ENT 和 EV 节点必须包含 `ontology_ref` 字段指向 `entities/` 中的本体对象，详见 `/ontology` skill → `references/binding-protocol.md` |
 
 **节点类型**：
 
-| 前缀 | 类型 | 文件格式 | 说明 |
-|------|------|----------|------|
-| EV- | evidence | JSON/MD | 原始证据注册和详细分析 |
-| LS- | clue | MD | 从原始证据中提炼的线索 |
-| ARG- | argument | MD | 基于线索的论据构建 |
-| FND- | finding | MD | 基于论据的事实认定 |
-| ENT- | entity | JSON | 涉案实体详情 |
-| HYP- | hypothesis | JSON | 假设详情 |
-| EVT- | event | JSON | 事件时间线详情 |
+| 前缀 | 类型 | 文件格式 | 说明 | 本体层映射 |
+|------|------|----------|------|-----------|
+| EV- | evidence | JSON/MD | 原始证据注册和详细分析 | 必须含 `ontology_ref` → `entities/evidence/` |
+| LS- | clue | MD | 从原始证据中提炼的线索 | 不映射 |
+| ARG- | argument | MD | 基于线索的论据构建 | 不映射 |
+| FND- | finding | MD | 基于论据的事实认定 | 引用 `relations/` (仅 HARD) |
+| ENT- | entity | JSON | 涉案实体详情 | 必须含 `ontology_ref` → `entities/{type}/` |
+| HYP- | hypothesis | JSON | 假设详情 | 不映射 |
+| EVT- | event | JSON | 事件时间线详情 | 不映射 |
 
 **关键规则**：
 - 节点类型由 frontmatter 中的 `type` 字段决定，不按类型分子目录

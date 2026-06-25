@@ -1,5 +1,6 @@
 ---
 name: fraud-type-classifier
+tools: Read
 description: 舞弊类型分类师 — 根据线索特征和信号，识别最可能涉及的舞弊类型，匹配专题调查技能和调查方案
 ---
 

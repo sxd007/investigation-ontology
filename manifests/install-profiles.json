@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "_note": "每个 profile 的 modules 列表必须是依赖完整的（包含其全部模块的传递依赖），这是安装的权威来源。当 profile 与 install-modules.json 的 defaultInstall 标志冲突时，以 profile 列表为准；defaultInstall 仅用于未指定 profile 时的默认基线。新增/修改 profile 后请运行 scripts/validate-manifests 校验依赖闭合。",
   "profiles": {
     "minimal": {
       "description": "最小基线 — 调查准则、代理、命令、平台配置，无领域技能",
@@ -19,6 +20,7 @@
         "commands-core",
         "platform-configs",
         "investigation-foundation",
+        "ontology",
         "fraud-classification",
         "investigation-techniques",
         "evidence-management",
@@ -45,6 +47,7 @@
         "commands-core",
         "platform-configs",
         "investigation-foundation",
+        "ontology",
         "data-analysis",
         "evidence-management",
         "writing-reporting",
@@ -60,7 +63,9 @@
         "commands-core",
         "platform-configs",
         "investigation-foundation",
+        "ontology",
         "data-analysis",
+        "evidence-management",
         "writing-reporting",
         "mcp-integration",
         "cold-start-interview"
@@ -74,6 +79,7 @@
         "commands-core",
         "platform-configs",
         "investigation-foundation",
+        "ontology",
         "interview-analysis",
         "evidence-management",
         "writing-reporting",
@@ -89,6 +95,7 @@
         "commands-core",
         "platform-configs",
         "investigation-foundation",
+        "ontology",
         "fraud-classification",
         "investigation-techniques",
         "evidence-management",
@@ -105,7 +112,10 @@
         "fraud-ip",
         "fraud-hr",
         "fraud-fake-chop",
-        "fraud-conflicts-of-interest"
+        "fraud-conflicts-of-interest",
+        "order-execution-variance-analysis",
+        "investigation-memory",
+        "case-retrospective"
       ]
     }
   }

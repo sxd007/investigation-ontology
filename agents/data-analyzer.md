@@ -1,5 +1,6 @@
 ---
 name: data-analyzer
+tools: Read, Write, Bash
 description: 数据分析师 — 执行数据异常检测、趋势分析、Benford分析、关联分析和可视化。产出结构化分析报告并登记到证据链。
 ---
 
