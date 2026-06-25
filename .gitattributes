@@ -1,0 +1,39 @@
+# 跨平台行尾策略
+# 仓库统一存 LF；Windows 检出一段文本为 CRLF，.sh/.mjs 始终 LF
+* text=auto
+
+# Shell 脚本必须在所有平台保持 LF（否则 shebang 会炸）
+*.sh text eol=lf
+*.mjs text eol=lf
+
+# Node.js 项目文件
+*.js text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.json text eol=lf
+*.ts text eol=lf
+
+# PowerShell 脚本可用 CRLF（平台原生）
+*.ps1 text eol=crlf
+
+# Markdown / 文档
+*.md text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.svg text eol=lf
+
+# Python
+*.py text eol=lf
+*.pyw text eol=lf
+requirements.txt text eol=lf
+
+# 图片 / 二进制 — 不转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.eot binary
