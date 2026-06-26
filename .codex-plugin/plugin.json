@@ -1,0 +1,49 @@
+{
+  "name": "investigation-ontology",
+  "version": "1.0.0",
+  "description": "Anti-fraud investigation workflows, evidence chain management, interview analysis, audit techniques, and report writing for Codex.",
+  "author": {
+    "name": "Alpha Shen",
+    "email": "",
+    "url": "https://github.com/sxd007"
+  },
+  "homepage": "https://github.com/sxd007/investigation-ontology",
+  "repository": "https://github.com/sxd007/investigation-ontology",
+  "license": "Apache-2.0",
+  "keywords": [
+    "investigation",
+    "fraud-examination",
+    "forensic-accounting",
+    "internal-audit",
+    "evidence-management",
+    "interview-analysis",
+    "codex",
+    "skills"
+  ],
+  "skills": "./skills/",
+  "hooks": "./hooks.json",
+  "mcpServers": "./mcp.json",
+  "interface": {
+    "displayName": "Investigation Ontology",
+    "shortDescription": "Anti-fraud investigation workflows for Codex.",
+    "longDescription": "Investigation Ontology packages anti-fraud investigation methodology, case lifecycle guidance, evidence chain management, interview analysis, audit and data-analysis techniques, domain fraud scenarios, and report-writing workflows as an official-style Codex plugin with skills, commands, agents, MCP configuration, and validation scripts.",
+    "developerName": "Alpha Shen",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Shell",
+      "MCP"
+    ],
+    "websiteURL": "https://github.com/sxd007/investigation-ontology",
+    "privacyPolicyURL": "https://github.com/sxd007/investigation-ontology/blob/main/SECURITY.md",
+    "termsOfServiceURL": "https://github.com/sxd007/investigation-ontology/blob/main/DISCLAIMER.md",
+    "defaultPrompt": [
+      "Start a new investigation case.",
+      "Assess this fraud allegation.",
+      "Review evidence chain quality."
+    ],
+    "brandColor": "#0F766E",
+    "screenshots": []
+  }
+}

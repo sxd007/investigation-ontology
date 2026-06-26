@@ -1,7 +1,7 @@
 {
   "name": "investigation-ontology",
   "version": "1.0.0",
-  "description": "反舞弊调查全流程插件市场 — 调查方法论、证据链管理、访谈分析、可视化报告、审计技术、流程分析",
+  "description": "反舞弊调查全流程插件 — 调查方法论、证据链管理、访谈分析、可视化报告、审计技术、流程分析",
   "author": {
     "name": "Alpha Shen",
     "url": "https://github.com/sxd007"
@@ -9,7 +9,6 @@
   "homepage": "https://github.com/sxd007/investigation-ontology",
   "repository": "https://github.com/sxd007/investigation-ontology",
   "license": "Apache-2.0",
-  "disclaimer": "see DISCLAIMER.md",
   "keywords": [
     "investigation",
     "fraud-examination",
@@ -17,10 +16,18 @@
     "internal-audit",
     "evidence-management",
     "interview-analysis",
-    "claude-code",
+    "codebuddy",
     "skills"
   ],
-  "mcpServers": {},
-  "skills": ["./skills/"],
-  "commands": ["./commands/"]
+  "commands": [
+    "./commands/"
+  ],
+  "agents": [
+    "./agents/"
+  ],
+  "skills": [
+    "./skills/"
+  ],
+  "hooks": "./hooks/codebuddy-hooks.json",
+  "mcpServers": {}
 }

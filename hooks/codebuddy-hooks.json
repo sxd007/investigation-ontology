@@ -1,0 +1,53 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/scripts/run-hook.mjs\" session-start",
+            "timeout": 5
+          }
+        ],
+        "description": "Check config status, count active cases, give actionable prompt (cross-platform via node)",
+        "id": "session:start:status"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/scripts/run-hook.mjs\" pre-write-naming",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/scripts/run-hook.mjs\" validate-action",
+            "timeout": 15,
+            "statusMessage": "校验本体 Action 前置条件…"
+          }
+        ],
+        "description": "Remind naming conventions + enforce ontology Action preconditions (cross-platform via node; scripts early-exit on non entities/ relations/ paths)",
+        "id": "pre:write:case-file-guard"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/scripts/run-hook.mjs\" check-ref",
+            "timeout": 10,
+            "statusMessage": "检查 ontology_ref 引用完整性…"
+          }
+        ],
+        "description": "Check ontology_ref exists after writing ENT/EV node files (cross-platform via node)",
+        "id": "post:write:ontology-ref-check"
+      }
+    ]
+  }
+}

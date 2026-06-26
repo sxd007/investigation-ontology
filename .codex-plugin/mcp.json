@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "investigation-pdf": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-pdf"],
+      "description": "PDF文档分析 — 读取合同、发票、报告等PDF文件，提取文本和元数据。用于证据文件分析和文档审查。自动加载（无需API Key）。"
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "CONFIG_FILE=${HOME}/.investigation-ontology/config/team-profile.md; ACTIVE_CASES=$(ls -d cases/*/ 2>/dev/null | wc -l); if [ -f \"$CONFIG_FILE\" ] && ! grep -q '\\[PLACEHOLDER\\]' \"$CONFIG_FILE\"; then echo \"[investigation-ontology] Investigation plugin loaded.\"; [ \"$ACTIVE_CASES\" -gt 0 ] && echo \"[investigation-ontology] Current directory has $ACTIVE_CASES case(s). Run /investigation-ontology:investigate list.\" || echo \"[investigation-ontology] Run /investigation-ontology:investigate new to start a case.\"; else echo \"[investigation-ontology] First use? Run /investigation-ontology:cold-start-interview to configure.\"; fi",
+            "timeout": 5
+          }
+        ],
+        "description": "Check config status and active cases with Codex-neutral paths",
+        "id": "session:start:status"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "case $(pwd) in */investigation-ontology:cases/*) echo \"[investigation-ontology] Case file write reminder: use numbered names, date suffixes for versions, and relation indexes where applicable.\" ;; esac",
+            "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "\"${INVESTIGATION_ONTOLOGY_ROOT:-$(pwd)}\"/scripts/validate-ontology-action.sh",
+            "args": [],
+            "timeout": 10,
+            "statusMessage": "Validating ontology Action preconditions..."
+          }
+        ],
+        "description": "Remind naming conventions and enforce ontology Action preconditions when hook runtime supports it",
+        "id": "pre:write:case-file-guard"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${INVESTIGATION_ONTOLOGY_ROOT:-$(pwd)}\"/scripts/check-ontology-ref.sh",
+            "args": [],
+            "timeout": 5,
+            "statusMessage": "Checking ontology_ref integrity..."
+          }
+        ],
+        "description": "Check ontology_ref exists after writing ENT/EV node files when hook runtime supports it",
+        "id": "post:write:ontology-ref-check"
+      }
+    ]
+  }
+}

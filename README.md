@@ -1,23 +1,51 @@
-# cc-investigation 🔍
+# investigation-ontology 🔍
 
-**反舞弊调查全流程插件市场** — 调查方法论、证据链管理、访谈分析、可视化报告、审计技术、流程分析等专业技能的 Claude Code 插件市场。
+**跨平台反舞弊调查全流程插件** — 调查方法论、证据链管理、访谈分析、可视化报告、审计技术、流程分析等专业技能，支持 Claude Code、CodeBuddy 和 Codex 三大平台。
 
 ## 概述
 
-cc-investigation 是专为反舞弊调查人员和内部审计师设计的 Claude Code 插件市场，提供从报案受理到结案归档的全流程专业支持。
+investigation-ontology 是专为反舞弊调查人员和内部审计师设计的跨平台插件，提供从报案受理到结案归档的全流程专业支持。一次开发，三平台分发。
 
 ## 安装
 
+### Claude Code
+
 ```bash
 # 添加市场源
-claude plugin marketplace add https://github.com/sxd007/cc-investigation
+claude plugin marketplace add https://github.com/sxd007/investigation-ontology
 
 # 安装（全量）
-claude plugin install cc-investigation@cc-investigation
+claude plugin install investigation-ontology
 
 # 安装（按配置）
-claude plugin install cc-investigation@cc-investigation --profile investigator
-claude plugin install cc-investigation@cc-investigation --profile auditor
+claude plugin install investigation-ontology --profile investigator
+claude plugin install investigation-ontology --profile auditor
+```
+
+### CodeBuddy
+
+```bash
+# 添加市场源
+codebuddy plugin marketplace add https://github.com/sxd007/investigation-ontology
+
+# 安装（全量）
+codebuddy plugin install investigation-ontology
+
+# 安装（按配置）
+codebuddy plugin install investigation-ontology --profile investigator
+```
+
+### Codex
+
+```bash
+# 添加市场源
+codex plugin marketplace add https://github.com/sxd007/investigation-ontology
+
+# 安装
+codex plugin install investigation-ontology
+
+# 或从本地 workspace 使用
+# 在 .agents/plugins/marketplace.json 中配置本地路径
 ```
 
 ## 安装配置
@@ -69,24 +97,52 @@ claude plugin install cc-investigation@cc-investigation --profile auditor
 ## 项目结构
 
 ```
-cc-investigation/
-├── .claude-plugin/
-│   ├── plugin.json              # 插件清单
-│   ├── marketplace.json         # 市场元信息
-│   └── PLUGIN_SCHEMA_NOTES.md   # Schema踩坑记录
-├── manifests/
-│   ├── install-modules.json     # 模块定义
+investigation-ontology/
+├── .claude-plugin/           # Claude Code 入口
+│   ├── plugin.json
+│   └── PLUGIN_SCHEMA_NOTES.md
+├── .codebuddy-plugin/        # CodeBuddy 入口
+│   ├── plugin.json
+│   └── PLUGIN_SCHEMA_NOTES.md
+├── .codex-plugin/            # Codex 入口
+│   ├── plugin.json
+│   ├── mcp.json                  # Codex MCP 服务器配置
+│   └── PLUGIN_SCHEMA_NOTES.md
+
+├── hooks.json                # Hooks 配置 (Codex 根目录)
+├── hooks/                    # Hooks 配置 (Claude Code / CodeBuddy)
+│   ├── hooks.json                # Claude Code hooks
+│   └── codebuddy-hooks.json      # CodeBuddy hooks
+├── manifests/                # 跨平台配置
+│   ├── install-modules.json     # 模块定义（支持三平台）
 │   ├── install-components.json  # 组件定义
 │   └── install-profiles.json    # 安装配置
-├── skills/                      # 技能定义 (8个领域)
-├── commands/                    # 斜杠命令 (8个)
-├── agents/                      # 子代理定义 (6个)
-├── rules/                       # 调查准则 (4个)
-├── hooks/                       # 生命周期钩子
-├── docs/                        # 文档
-├── CLAUDE.md                    # 项目指导
+├── skills/                   # 技能定义 (共享，20+个)
+├── commands/                 # 斜杠命令 (共享，11个)
+│   └── _conventions.md          # 命令规范说明 (Codex)
+├── agents/                   # 子代理定义 (共享，6个)
+├── rules/                    # 调查准则 (共享，4个)
+├── docs/                     # 文档 (共享)
+├── CLAUDE.md                 # Claude Code 开发指南
+├── CODEBUDDY.md              # CodeBuddy 开发指南
+├── CODEX.md                  # Codex 开发指南
+├── DEVELOPMENT_GUIDE.md      # 跨平台开发指南
 └── README.md
 ```
+
+### 跨平台架构说明
+
+| 方面 | Claude Code | CodeBuddy | Codex |
+|------|-----------|-----------|-------|
+| **入口** | `.claude-plugin/plugin.json` | `.codebuddy-plugin/plugin.json` | `.codex-plugin/plugin.json` |
+| **Hooks 文件** | `hooks/hooks.json` | `hooks/codebuddy-hooks.json` | `hooks.json` (根目录) |
+| **Hooks 环境变量** | `${CLAUDE_PLUGIN_ROOT}` | `${CODEBUDDY_PLUGIN_ROOT}` | 壳脚本路径 |
+| **Hook 脚本语言** | Node.js (.mjs) | Node.js (.mjs) | Shell (.sh) |
+| **MCP 配置** | 不使用 | 不使用 | `.mcp.json` |
+| **Plugin.json 特有字段** | 基础 | `agents` | `interface` |
+| **共享内容** | ✓ | ✓ | ✓ |
+
+**关键差异：** 三个平台各有独立的 plugin.json 和 hooks 配置，但共享所有业务逻辑内容（skills/, commands/, agents/ 等）。`manifests/install-modules.json` 中的 `targets` 字段声明了每个模块的三平台支持情况。
 
 ## 持续扩展
 
@@ -101,7 +157,7 @@ cc-investigation/
 **Alpha Shen** — 反舞弊调查从业者
 
 - GitHub: [sxd007](https://github.com/sxd007)
-- 项目主页: [github.com/sxd007/cc-investigation](https://github.com/sxd007/cc-investigation)
+- 项目主页: [github.com/sxd007/investigation-ontology](https://github.com/sxd007/investigation-ontology)
 
 本项目由作者独立开发维护。如有问题、建议或合作意向，欢迎通过 GitHub Issues 联系。
 

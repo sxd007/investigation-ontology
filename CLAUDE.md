@@ -1,6 +1,6 @@
-# cc-investigation — 插件开发指南
+# investigation-ontology (Claude Code) — 插件开发指南
 
-本文件是本仓库（cc-investigation 插件项目）的**开发者指南**，指导 AI 协助开发者维护和扩展本插件。
+本文件是本仓库（investigation-ontology 跨平台插件项目）的 **Claude Code 开发者指南**，指导 AI 协助开发者维护和扩展本插件在 Claude Code 平台的实现。
 
 **这不是用户指南。** 用户指南位于 `project-templates/default/CLAUDE.md`，分发到调查员的案件项目中使用。
 
@@ -8,20 +8,30 @@
 
 ## 一、项目总览
 
-cc-investigation 是一个 Claude Code 插件，为反舞弊调查提供技能体系、命令入口和专项代理。
+investigation-ontology 是一个跨平台插件，同时支持 Claude Code、CodeBuddy 和 Codex 三个平台。本文件特别针对 **Claude Code 版本** 的开发和维护。
+
+### Claude Code 特定配置
+
+- **入口**: `.claude-plugin/plugin.json`
+- **Hooks**: `hooks/hooks.json` (使用 `${CLAUDE_PLUGIN_ROOT}` 环境变量)
+- **MCP**: 不使用（通过 `mcpServers: {}` 声明）
 
 ### 分发机制
 
-用户通过 `/plugin install cc-investigation` 安装时，安装器读取 `manifests/install-modules.json` 中每个模块的 `paths` 字段来定位分发文件。**根部 CLAUDE.md 不在任何模块的 paths 中，不会被分发。**
+用户通过 `claude plugin install investigation-ontology` 安装时，安装器读取 `manifests/install-modules.json` 中每个模块的 `paths` 字段来定位分发文件。**根部 CLAUDE.md 不在任何模块的 paths 中，不会被分发。**
+
+同一仓库中的内容被三个平台共享，但安装器只识别该平台对应的 targets 字段。
 
 ### 开发者 vs 用户 上下文隔离
 
 | 文件 | 谁读 | 作用 |
 |------|------|------|
-| `CLAUDE.md`（本文件） | 开发者 + AI | 插件开发操作指南 |
+| `CLAUDE.md`（本文件） | Claude Code 开发者 + AI | Claude Code 版本开发指南 |
+| `CODEBUDDY.md` | CodeBuddy 开发者 + AI | CodeBuddy 版本开发指南 |
+| `CODEX.md` | Codex 开发者 + AI | Codex 版本开发指南 |
+| `DEVELOPMENT_GUIDE.md` | 人类开发者 | 架构说明、跨平台维护指南 |
+| `README.md` | GitHub 访客 | 多平台安装说明 |
 | `project-templates/default/CLAUDE.md` | 调查员 + AI | 调查案件操作指南（分发后） |
-| `DEVELOPMENT_GUIDE.md` | 人类开发者 | 架构说明、构建方式 |
-| `README.md`（有的话） | GitHub 访客 | 项目简介、安装说明 |
 
 ---
 
@@ -53,13 +63,15 @@ cc-investigation 是一个 Claude Code 插件，为反舞弊调查提供技能�
   "kind": "skills",
   "description": "一句话描述",
   "paths": ["skills/fraud-xxx"],
-  "targets": ["claude", "claude-project"],
+  "targets": ["claude", "codebuddy", "codex", "claude-project", "codebuddy-project", "codex-project"],
   "dependencies": ["investigation-foundation", "fraud-classification"],
   "defaultInstall": false,
   "cost": "medium",
   "stability": "alpha"
 }
 ```
+
+注意：`targets` 应包含所有三个平台的变种，以支持跨平台分发。
 
 ### 3.2 更新技能内容
 

@@ -10,8 +10,13 @@
       ],
       "targets": [
         "claude",
+        "codebuddy",
+        "codex",
         "claude-project",
-        "cursor"
+        "codebuddy-project",
+        "codex-project",
+        "cursor",
+        "repo-agent"
       ],
       "dependencies": [],
       "defaultInstall": true,
@@ -28,8 +33,13 @@
       ],
       "targets": [
         "claude",
+        "codebuddy",
+        "codex",
         "claude-project",
-        "cursor"
+        "codebuddy-project",
+        "codex-project",
+        "cursor",
+        "repo-agent"
       ],
       "dependencies": [],
       "defaultInstall": true,
@@ -45,8 +55,13 @@
       ],
       "targets": [
         "claude",
+        "codebuddy",
+        "codex",
         "claude-project",
-        "cursor"
+        "codebuddy-project",
+        "codex-project",
+        "cursor",
+        "repo-agent"
       ],
       "dependencies": [],
       "defaultInstall": true,
@@ -62,8 +77,13 @@
       ],
       "targets": [
         "claude",
+        "codebuddy",
+        "codex",
         "claude-project",
-        "cursor"
+        "codebuddy-project",
+        "codex-project",
+        "cursor",
+        "repo-agent"
       ],
       "dependencies": [],
       "defaultInstall": true,
@@ -79,7 +99,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "rules-core",
@@ -99,7 +123,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation"
@@ -117,7 +145,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation"
@@ -135,7 +167,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation",
@@ -154,7 +190,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation"
@@ -172,7 +212,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation"
@@ -190,7 +234,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "evidence-management"
@@ -208,7 +256,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "rules-core"
@@ -226,7 +278,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "commands-core",
@@ -249,7 +305,11 @@
       ],
       "targets": [
         "claude",
+        "codebuddy",
+        "codex",
         "claude-project",
+        "codebuddy-project",
+        "codex-project",
         "cursor"
       ],
       "dependencies": [
@@ -270,7 +330,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "platform-configs"
@@ -288,7 +352,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation",
@@ -307,7 +375,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation",
@@ -326,7 +398,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation",
@@ -345,7 +421,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation",
@@ -364,7 +444,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation",
@@ -383,7 +467,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation",
@@ -402,7 +490,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation",
@@ -421,7 +513,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation",
@@ -440,7 +536,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation",
@@ -459,7 +559,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "investigation-foundation",
@@ -478,7 +582,11 @@
       ],
       "targets": [
         "claude",
-        "claude-project"
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
       ],
       "dependencies": [
         "case-management",

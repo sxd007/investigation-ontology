@@ -1,6 +1,8 @@
-# cc-investigation 开发指南
+# investigation-ontology 开发指南
 
-本文档面向希望理解、修改或扩展 cc-investigation 插件的开发者。内容涵盖架构哲学、系统机制、目录规范和开发流程。
+本文档面向希望理解、修改或扩展 investigation-ontology 跨平台插件的开发者。内容涵盖架构哲学、系统机制、目录规范和开发流程。
+
+**跨平台说明：** 本指南适用于所有三个平台（Claude Code、CodeBuddy、Codex）。关于平台特定的差异（hooks 配置、MCP 设置、环境变量等），详见 [`docs/ARCHITECTURE_NOTES.md`](docs/ARCHITECTURE_NOTES.md)。
 
 ***
 
@@ -172,6 +174,31 @@ cc-investigation/
 
 ## 四、开发操作指南
 
+### 4.0 跨平台维护检查清单
+
+本插件支持三个平台（Claude Code、CodeBuddy、Codex）。开发时需注意平台差异：
+
+**平台特定文件（不共享）：**
+- `.claude-plugin/plugin.json` — Claude Code 入口
+- `.codebuddy-plugin/plugin.json` — CodeBuddy 入口  
+- `.codex-plugin/plugin.json` — Codex 入口
+- `hooks/hooks.json` — Claude Code hooks（环境变量：`${CLAUDE_PLUGIN_ROOT}`）
+- `hooks/codebuddy-hooks.json` — CodeBuddy hooks（环境变量：`${CODEBUDDY_PLUGIN_ROOT}`）
+- `hooks.json` — Codex hooks（环境变量：`${INVESTIGATION_ONTOLOGY_ROOT}`）
+- `.mcp.json` — Codex MCP 配置（根目录）
+- `project-templates/default/.mcp.json` — 用户项目模板副本（分发用）
+
+**修改这些文件时的同步检查：**
+- 修改 hooks 业务逻辑 → 同步更新 Node.js 版本（`scripts/run-hook.mjs`）和 Shell 版本（`scripts/*.sh`）
+- 添加 MCP 服务器 → 同步更新根目录 `.mcp.json` **和** `project-templates/default/.mcp.json`
+- 新增 plugin.json 字段 → 确认各平台 plugin.json 的字段兼容性（详见 [`docs/ARCHITECTURE_NOTES.md`](docs/ARCHITECTURE_NOTES.md)）
+
+**共享内容（所有平台）：**
+- `skills/` `commands/` `agents/` `rules/` `docs/` 等业务逻辑内容
+- `manifests/install-modules.json` 中各模块的 `targets` 字段应包含三平台变种
+
+详细的跨平台架构设计和维护指南，见 [`docs/ARCHITECTURE_NOTES.md`](docs/ARCHITECTURE_NOTES.md)。
+
 ### 4.1 常规开发流程
 
 1. **分类先行**：新内容先判定属于三类中的哪一类，决定放在哪个目录、用什么格式
@@ -189,8 +216,8 @@ cc-investigation/
 3. 根据内容类别（工作流/工具赋能/场景经验）遵循对应编写规范
 4. MCP 相关章节使用类型化 + 条件式 + fallback 格式
 5. 阶段定义使用输入/输出/门禁三元组格式
-6. 在 `CLAUDE.md`（插件级用户指南）的技能索引表中添加新条目
-7. （如适用）在 `manifests/install-modules.json` 中添加为新模块
+6. 在三个平台的开发指南中添加新条目：`CLAUDE.md` / `CODEBUDDY.md` / `CODEX.md`（如适用）
+7. （如适用）在 `manifests/install-modules.json` 中添加为新模块，并确保 `targets` 包含所有支持的平台
 8. 验证并本地测试
 
 ### 4.3 新增一个 Command 的步骤
