@@ -583,7 +583,7 @@ node skills/evidence-management/templates/evidence-chain-viz/evidence_chain_inje
 | `--integrity` | 完整性检查（缺失引用、孤立节点、废弃 sources 字段） |
 | `--check-chains` | 推理链逻辑检查（类型匹配、循环引用、冲突关系） |
 | `--validate` | 节点文件结构验证（ID 格式、必填字段） |
-| `--sync` | 同步 chain_nodes 索引回 evidence_registry.json |
+| `--sync` | 同步 chain_nodes 索引回 evidence_registry.json（以节点文件 frontmatter 的 `status` 为准；直接修改 registry 的 chain_nodes 状态会在下次 `--sync` 时被文件覆盖） |
 | `--graph` | 输出 Mermaid 图（对话内预览） |
 | `--html [file]` | 生成交互式 HTML（默认 `evidence_chain_output.html`） |
 

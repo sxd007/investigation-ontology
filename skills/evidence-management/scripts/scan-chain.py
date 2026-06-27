@@ -60,6 +60,7 @@ CHAIN_RULES = {
     "clue":    {"allowed_prefixes": {"EV"},           "min_sources": 1},
     "argument":{"allowed_prefixes": {"LS", "ARG"},    "min_sources": 1},
     "finding": {"allowed_prefixes": {"ARG"},          "min_sources": 1},
+    "event":   {"allowed_prefixes": {"EV"},           "min_sources": 0},
 }
 
 
@@ -325,7 +326,10 @@ def load_all_nodes(case_dir: Path) -> list[dict]:
     for fpath in sorted(nodes_dir.iterdir()):
         if fpath.is_dir():
             continue
-        meta = parse_frontmatter(fpath) or read_json_node(fpath)
+        if fpath.suffix == ".json":
+            meta = read_json_node(fpath)
+        else:
+            meta = parse_frontmatter(fpath)
         if not meta:
             continue
 
@@ -393,7 +397,7 @@ def sync_chain_index(case_dir: Path, nodes: list[dict]) -> dict:
         nid = node["id"]
         old = existing.get(nid, {})
         file_index[nid] = {"id": nid, "type": node["type"],
-                           "status": old.get("status", node["status"])}
+                           "status": node["status"]}
 
     current_ids = set(existing.keys())
     file_ids = set(file_index.keys())
@@ -692,7 +696,7 @@ LABEL_MAP = {
 
 
 def format_mermaid(nodes: list[dict]) -> str:
-    lines = ["graph TD"]
+    lines = ["graph LR"]
     for n in nodes:
         nid = n["id"]
         for rt, items in n["relations"].items():
@@ -718,7 +722,7 @@ def _run_html_injector(case_dir: Path, output: str) -> None:
     try:
         result = subprocess.run(
             ["node", str(injector), str(case_dir), output],
-            capture_output=True, text=True
+            capture_output=True, text=True, encoding="utf-8"
         )
         if result.returncode == 0:
             print(result.stdout.strip())

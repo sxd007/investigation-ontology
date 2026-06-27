@@ -38,6 +38,11 @@ function parseFrontmatter(content) {
   while ((m = scalarRe.exec(yaml)) !== null) {
     const key = m[1];
     let val = m[2].trim();
+    // 内联数组: key: ["val1", "val2"] 或 key: [val1, val2]
+    if (val.startsWith('[') && val.endsWith(']')) {
+      fm[key] = val.slice(1, -1).split(',').map(s => s.trim().replace(/^['"]|['"]$/g, '')).filter(Boolean);
+      continue;
+    }
     if ((val.startsWith('"') && val.endsWith('"')) ||
         (val.startsWith("'") && val.endsWith("'")))
       val = val.slice(1, -1);
@@ -68,6 +73,13 @@ function parseFrontmatter(content) {
       }
       if (items.length) relations[relType] = items;
     }
+    // 内联数组子键: e.g., supports: ["ARG-001", "ARG-002"]
+    for (const im of [...relText.matchAll(/^[ \t]{2}(\w+):\s*\[([^\]]*)\]/gm)]) {
+      const relType = im[1];
+      if (relations[relType]) continue; // block-list 格式已解析，跳过
+      const ids = im[2].split(',').map(s => s.trim().replace(/^['"]|['"]$/g, '')).filter(Boolean);
+      if (ids.length) relations[relType] = ids.map(id => ({ id, excerpt: '', form: 'text' }));
+    }
     if (Object.keys(relations).length > 0) fm.relations = relations;
   }
 
@@ -91,7 +103,12 @@ function loadNodes(nodesDir) {
 
   for (const file of fs.readdirSync(nodesDir).filter(f => f.match(/^[A-Z]+-\d+\.(md|json)$/))) {
     const raw = fs.readFileSync(path.join(nodesDir, file), 'utf8');
-    const parsed = parseFrontmatter(raw);
+    let parsed;
+    if (file.endsWith('.json')) {
+      try { parsed = { frontmatter: JSON.parse(raw), body: '' }; } catch { continue; }
+    } else {
+      parsed = parseFrontmatter(raw);
+    }
     if (!parsed || !parsed.frontmatter?.id) continue;
 
     const fm = parsed.frontmatter;
@@ -178,9 +195,7 @@ function loadRegistry(jsonPath) {
           body: '',
           assertion: f.statement || '',
           intent: '',
-          sources: (f.supporting_evidence_ids || []).map(eid => ({
-            id: eid, excerpt: '', form: 'text',
-          })),
+          sources: [],  // relations 来自 nodes/FND-NNN.md，由 mergeNodes 覆盖填充
           confidence: f.confidence || 'probable',
           fraud_type: Array.isArray(f.fraud_type) ? f.fraud_type.join(', ') : (f.fraud_type || ''),
           generated_by: '',
