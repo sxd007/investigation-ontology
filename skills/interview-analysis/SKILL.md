@@ -260,7 +260,7 @@ origin: efio
 
 ### 2.4 输出格式与报告模板
 
-输出为完整的 HTML 报告，严格遵循 `transcript-review/assets/report_template.html` 的结构。
+输出为完整的 HTML 报告，严格遵循 `templates/transcript_review_report_template.html` 的结构。
 
 报告包含四个数据填充区：
 
