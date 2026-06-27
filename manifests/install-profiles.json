@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 1,
   "_note": "每个 profile 的 modules 列表必须是依赖完整的（包含其全部模块的传递依赖），这是安装的权威来源。当 profile 与 install-modules.json 的 defaultInstall 标志冲突时，以 profile 列表为准；defaultInstall 仅用于未指定 profile 时的默认基线。新增/修改 profile 后请运行 scripts/validate-manifests 校验依赖闭合。",
   "profiles": {
