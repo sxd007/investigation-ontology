@@ -1,5 +1,5 @@
-{
-  "name": "investigation-ontology",
+﻿{
+  "name": "efio",
   "version": "1.0.0",
   "description": "反舞弊调查全流程插件 — 调查方法论、证据链管理、访谈分析、可视化报告、审计技术、流程分析",
   "author": {
@@ -9,6 +9,7 @@
   "homepage": "https://github.com/sxd007/investigation-ontology",
   "repository": "https://github.com/sxd007/investigation-ontology",
   "license": "Apache-2.0",
+  "hooks": "./hooks.json",
   "keywords": [
     "investigation",
     "fraud-examination",
@@ -28,6 +29,5 @@
   "skills": [
     "./skills/"
   ],
-  "hooks": "./hooks/codebuddy-hooks.json",
   "mcpServers": {}
 }

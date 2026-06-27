@@ -1,19 +1,19 @@
----
-description: MCP 配置管理器 — 查看、添加、移除、验证调查环境中可用的 MCP 服务器。与 cold-start-interview Phase 2.5 配套，支持运行期动态调整
+﻿---
+description: MCP 配置管理器 — 查看、添加、移除、验证调查环境中可用的 MCP 服务器。与 cold-start Phase 2.5 配套，支持运行期动态调整
 ---
 
-# /cc-investigation:mcp-config
+# /efio:mcp-config
 
-调查环境 MCP（Model Context Protocol）的后续管理工具。首次配置在 `/cc-investigation:cold-start-interview` 的 Phase 2.5 进行；此命令用于中途增删改查 MCP。
+调查环境 MCP（Model Context Protocol）的后续管理工具。首次配置在 `/efio:cold-start` 的 Phase 2.5 进行；此命令用于中途增删改查 MCP。
 
 ## Usage
 
 ```
-/cc-investigation:mcp-config                 # 交互式菜单（默认）
-/cc-investigation:mcp-config --list         # 列出当前已配置的 MCP
-/cc-investigation:mcp-config --add          # 交互式添加新 MCP
-/cc-investigation:mcp-config --remove       # 交互式移除 MCP
-/cc-investigation:mcp-config --verify       # 验证所有已配置 MCP 的可用性
+/efio:mcp-config                 # 交互式菜单（默认）
+/efio:mcp-config --list         # 列出当前已配置的 MCP
+/efio:mcp-config --add          # 交互式添加新 MCP
+/efio:mcp-config --remove       # 交互式移除 MCP
+/efio:mcp-config --verify       # 验证所有已配置 MCP 的可用性
 ```
 
 ## 使用场景
@@ -73,7 +73,7 @@ description: MCP 配置管理器 — 查看、添加、移除、验证调查环�
 **交互示例**：
 
 ```
-> /cc-investigation:mcp-config --add
+> /efio:mcp-config --add
 
 可添加的新 MCP 能力（从 mcp-configs/mcp-servers.json）：
 
@@ -127,7 +127,7 @@ description: MCP 配置管理器 — 查看、添加、移除、验证调查环�
 **交互示例**：
 
 ```
-> /cc-investigation:mcp-config --remove
+> /efio:mcp-config --remove
 
 当前已配置的 MCP：
 
@@ -182,7 +182,7 @@ description: MCP 配置管理器 — 查看、添加、移除、验证调查环�
 
 修复建议:
   [ ] 重新安装 server-sqlite: npm install -g @modelcontextprotocol/server-sqlite
-  [ ] 移除故障的 MCP: /cc-investigation:mcp-config --remove
+  [ ] 移除故障的 MCP: /efio:mcp-config --remove
   
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -198,14 +198,14 @@ MCP 配置变更后，立即生效，无需重启。后续调查工作会自动�
 
 ## 注意
 
-- 与 `/cc-investigation:profile` 命令形成对称：profile 管理**技能配置**，mcp-config 管理 **MCP 能力**
+- 与 `/efio:profile` 命令形成对称：profile 管理**技能配置**，mcp-config 管理 **MCP 能力**
 - MCP 配置存储在两处（保持一致）：
   - `.mcp.json` - 具体的 MCP 启动命令和参数
   - `team-profile.md` 的"MCP 集成状态"表 - 人类可读的状态记录
 
 ## 相关
 
-- **首次配置:** [cold-start-interview](./cold-start-interview.md) Phase 2.5
+- **首次配置:** [cold-start](./cold-start.md) Phase 2.5
 - **技能配置:** [profile](./profile.md) (计划中)
 - **参考文档:** [skills/mcp-integration/SKILL.md](../skills/mcp-integration/SKILL.md)
 - **配置源:** [mcp-configs/mcp-servers.json](../mcp-configs/mcp-servers.json)

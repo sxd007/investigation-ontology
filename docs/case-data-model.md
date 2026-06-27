@@ -1,8 +1,8 @@
-# 案件数据模型
+﻿# 案件数据模型
 
 本文件回答：**创建一个新案件时，需要初始化哪些数据文件？顺序是什么？去哪找精确的字段定义？**
 
-> **本体层说明**：本模型描述的是**认知层**（cc-investigation skills）的数据结构。在此基础上，每个案件还需要同步维护**本体层**的实体和关系文件（`entities/`、`relations/`），通过 `ontology_ref` 字段与认知层节点关联。详见 `docs/ontology/design-overview.md`。
+> **本体层说明**：本模型描述的是**认知层**（investigation-ontology skills）的数据结构。在此基础上，每个案件还需要同步维护**本体层**的实体和关系文件（`entities/`、`relations/`），通过 `ontology_ref` 字段与认知层节点关联。详见 `docs/ontology/design-overview.md`。
 
 ## 案件核心数据文件
 

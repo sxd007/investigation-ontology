@@ -1,4 +1,4 @@
-# investigation-ontology (Codex) — 使用和开发指南
+﻿# investigation-ontology (Codex) — 使用和开发指南
 
 本文档指导 Codex 开发者和用户如何使用和扩展 investigation-ontology 插件。
 
@@ -27,10 +27,10 @@ investigation-ontology 是一个跨平台插件，在 Codex 中通过 `.codex-pl
 
 ### Hooks 配置
 
-Codex 使用根目录的 `hooks.json` 文件（与 Claude Code / CodeBuddy 不同）：
+Codex 使用 `.codex-plugin/hooks.json` 文件（与 Claude Code / CodeBuddy 隔离）：
 
 ```
-hooks.json  # 根目录
+.codex-plugin/hooks.json  # Codex 专用目录
 ```
 
 环境变量：`${INVESTIGATION_ONTOLOGY_ROOT}` 用于脚本路径引用。
@@ -78,15 +78,15 @@ $ontology                    # 案件数据模型、Object/Link/Action 定义
 使用插件命令进行确定性工作流：
 
 ```text
-/investigation-ontology:investigate new      # 启动新案件
-/investigation-ontology:investigate continue # 继续现有案件
-/investigation-ontology:evidence add         # 添加证据
-/investigation-ontology:interview plan       # 策划访谈
-/investigation-ontology:report draft         # 起草报告
-/investigation-ontology:case status          # 查看案件状态
-/investigation-ontology:analyze              # 数据分析
-/investigation-ontology:fraud-type           # 舞弊类型识别
-/investigation-ontology:working-paper        # 底稿管理
+/efio:investigate new      # 启动新案件
+/efio:investigate continue # 继续现有案件
+/efio:evidence add         # 添加证据
+/efio:interview plan       # 策划访谈
+/efio:report draft         # 起草报告
+/efio:case status          # 查看案件状态
+/efio:analyze              # 数据分析
+/efio:fraud-type           # 舞弊类型识别
+/efio:working-paper        # 底稿管理
 ```
 
 命令文件存储在 `commands/` 目录中，描述预期输入、需要读取或写入的文件、相关技能和验证检查。
@@ -109,11 +109,11 @@ $ontology                    # 案件数据模型、Object/Link/Action 定义
 
 3. **初始化案件**：
    ```
-   /investigation-ontology:investigate new
+   /efio:investigate new
    ```
    或使用冷启动向导：
    ```
-   /investigation-ontology:cold-start-interview
+   /efio:cold-start
    ```
 
 4. **配置团队概览**：在首次运行时按提示配置团队背景、证据策略和集成选项。
@@ -137,9 +137,9 @@ $ontology                    # 案件数据模型、Object/Link/Action 定义
 
 | 方面 | 处理方式 |
 |------|---------|
-| **Hooks 位置** | `hooks.json` 在根目录（而非子目录） |
+| **Hooks 位置** | `.codex-plugin/hooks.json`（Codex 专用目录隔离） |
 | **Hook 脚本语言** | 支持 shell 脚本（而非 Node.js） |
-| **MCP 配置** | `mcp.json` 在 `.codex-plugin/` 目录（仅 Codex 安装时获得） |
+| **MCP 配置** | `.codex-plugin/mcp.json`（Codex 专用目录隔离） |
 | **Plugin.json 结构** | 包含 `interface` 字段用于 UI 定制 |
 
 ### 添加新技能
@@ -220,6 +220,7 @@ Hook 脚本支持 shell 命令和路径引用。
 - `manifests/install-modules.json` — 模块注册表
 - `manifests/install-profiles.json` — 安装配置集
 - `.codex-plugin/plugin.json` — Codex 插件清单
-- `.codex-plugin/mcp.json` — MCP 服务器配置（Codex 专用）
+- `.codex-plugin/hooks.json` — Codex hooks 配置（Codex 专用）
+- `.codex-plugin/mcp.json` — Codex MCP 服务器配置（Codex 专用）
 - `project-templates/default/` — 项目模板
 

@@ -1,6 +1,6 @@
-{
+﻿{
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "cc-investigation:schemas:changelog",
+  "$id": "efio:schemas:changelog",
   "title": "案件变更记录（CHANGELOG）",
   "description": "案件全生命周期中所有生成物的变更清单——每当证据注册表、元数据、checklist、产出文档等发生有意义的变化时，自动追加一条变更记录。相当于 git commit message 的轻量替代。",
   "type": "object",

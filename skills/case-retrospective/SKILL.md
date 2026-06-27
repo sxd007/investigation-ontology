@@ -1,7 +1,7 @@
----
+﻿---
 name: case-retrospective
 description: 案件回顾与复盘技术 — 完结案件的多维度复盘框架，聚焦调查员的能力、经验、逻辑、工作方法和工作流组织。独立于案件调查流程，仅在用户显式要求时执行，目标为提升调查员觉知而非产出案件结论
-origin: cc-investigation
+origin: efio
 ---
 
 # 案件回顾与复盘技术

@@ -1,7 +1,7 @@
----
+﻿---
 name: order-execution-variance-analysis
 description: 项目执行差异分析 — 多维度对比合同流、货物流、资金流的申报记录与实际执行记录，输出结构化差异报告。适用于渠道舞弊、采购舞弊、虚构交易等多类场景。
-origin: cc-investigation
+origin: efio
 ---
 
 # 项目执行差异分析
@@ -13,9 +13,9 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

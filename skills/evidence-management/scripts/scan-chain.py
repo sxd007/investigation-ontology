@@ -23,7 +23,8 @@ scan-chain.py — 证据链编译与完整性检查工具 (v2)
   scan-chain.py cases/CASE-2026-001/ --integrity
   scan-chain.py cases/CASE-2026-001/ --check-chains
   scan-chain.py cases/CASE-2026-001/ --sync
-  scan-chain.py cases/CASE-2026-001/ --graph          # Mermaid 图输出（带边类型）
+  scan-chain.py cases/CASE-2026-001/ --graph          # Mermaid 图（对话内快速预览）
+  scan-chain.py cases/CASE-2026-001/ --html output.html  # 交互式 HTML（需要 Node.js）
 """
 
 from pathlib import Path
@@ -704,6 +705,31 @@ def format_mermaid(nodes: list[dict]) -> str:
     return "\n".join(lines)
 
 
+# ── HTML 可视化（调用 evidence_chain_injector.js）──
+
+def _run_html_injector(case_dir: Path, output: str) -> None:
+    """调用 evidence_chain_injector.js 生成交互式 HTML。"""
+    import subprocess
+    injector = Path(__file__).parent.parent / "templates" / "evidence-chain-viz" / "evidence_chain_injector.js"
+    if not injector.exists():
+        print(f"  [ERROR] 未找到 {injector}", file=sys.stderr)
+        print("  HTML 可视化需要 templates/evidence-chain-viz/evidence_chain_injector.js", file=sys.stderr)
+        return
+    try:
+        result = subprocess.run(
+            ["node", str(injector), str(case_dir), output],
+            capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            print(result.stdout.strip())
+            print(f"\n🌐 已生成 HTML: {Path(output).resolve()}")
+            print("   用浏览器打开查看交互式证据链图")
+        else:
+            print(f"  [ERROR] injector 执行失败:\n{result.stderr}", file=sys.stderr)
+    except FileNotFoundError:
+        print("  [ERROR] 未找到 node 命令。请确保已安装 Node.js。", file=sys.stderr)
+
+
 # ── 主入口 ──
 
 def main():
@@ -715,7 +741,8 @@ def main():
   scan-chain.py cases/CASE-2026-001/ --integrity
   scan-chain.py cases/CASE-2026-001/ --check-chains
   scan-chain.py cases/CASE-2026-001/ --sync
-  scan-chain.py cases/CASE-2026-001/ --graph""",
+  scan-chain.py cases/CASE-2026-001/ --graph
+  scan-chain.py cases/CASE-2026-001/ --html output.html   # 生成 HTML 交互图""",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("case_dir", type=Path, help="案件目录路径")
@@ -724,7 +751,9 @@ def main():
     parser.add_argument("--integrity", action="store_true", help="完整性检查")
     parser.add_argument("--check-chains", action="store_true", help="推理链逻辑完整性检查")
     parser.add_argument("--sync", action="store_true", help="同步 chain_nodes 索引")
-    parser.add_argument("--graph", action="store_true", help="Mermaid 流程图 (带边类型)")
+    parser.add_argument("--graph", action="store_true", help="Mermaid 流程图 (带边类型)，用于对话内快速预览")
+    parser.add_argument("--html", type=str, metavar="OUTPUT", nargs="?", const="evidence_chain_output.html",
+                        help="生成交互式 HTML 可视化图（使用 evidence_chain_injector.js 模板）")
     parser.add_argument("--validate", action="store_true", help="节点文件结构验证")
 
     args = parser.parse_args()
@@ -787,8 +816,11 @@ def main():
     if args.graph:
         print(f"\n```mermaid\n{format_mermaid(nodes)}\n```")
 
+    if args.html:
+        _run_html_injector(case_dir, args.html)
+
     if not any([args.list, args.trace, args.integrity,
-                args.check_chains, args.sync, args.graph, args.validate]):
+                args.check_chains, args.sync, args.graph, args.html, args.validate]):
         parser.print_help()
 
 

@@ -1,4 +1,4 @@
-{
+﻿{
   "version": 1,
   "modules": [
     {
@@ -320,12 +320,12 @@
       "stability": "stable"
     },
     {
-      "id": "cold-start-interview",
+      "id": "cold-start",
       "kind": "skills",
       "description": "首次设置向导 — Cold-start interview 引导调查员完成团队配置、证据策略、集成检查。配置写入持久化路径，所有技能依赖此配置运行。",
       "paths": [
-        "skills/cold-start-interview",
-        "commands/cold-start-interview.md",
+        "skills/cold-start",
+        "commands/cold-start.md",
         "config-templates"
       ],
       "targets": [

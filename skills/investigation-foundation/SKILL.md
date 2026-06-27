@@ -1,7 +1,7 @@
----
+﻿---
 name: investigation-foundation
 description: 反舞弊调查哲学与方法论 — 调查思维框架、科学推理方法、认知偏差防控、假设驱动调查、证据金字塔、调查伦理与职业道德。所有调查技能的认知基础。
-origin: cc-investigation
+origin: efio
 ---
 
 # 调查哲学与方法论
@@ -13,9 +13,9 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

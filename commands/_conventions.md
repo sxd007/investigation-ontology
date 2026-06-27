@@ -1,11 +1,11 @@
-# Command Conventions
+﻿# Command Conventions
 
 Every non-underscore file in `commands/` is a plugin slash-command workflow.
 
 ## Naming
 
 - File names use lower-case kebab-case, for example `investigate.md`.
-- Document invocations with the plugin namespace, for example `/investigation-ontology:investigate`.
+- Document invocations with the plugin namespace, for example `/efio:investigate`.
 
 ## Required Sections
 

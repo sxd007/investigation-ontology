@@ -1,23 +1,23 @@
----
+﻿---
 name: mcp-integration
 description: 调查 MCP 能力目录 — 记录本插件生态中可用的 MCP 服务器类型及能力说明。MCP 与技能之间遵循松耦合原则：技能描述分析需求，模型自行编排 MCP 调用。
-origin: cc-investigation
+origin: efio
 ---
 
 # MCP 能力目录
 
-本技能是 MCP 配置的**学习型参考库**。MCP 的实际配置向导由 `/cc-investigation:cold-start-interview` 的 Phase 2.5 提供。若需动态切换 MCP 配置，请运行 cold-start-interview 或编辑项目 `.mcp.json`。
+本技能是 MCP 配置的**学习型参考库**。MCP 的实际配置向导由 `/efio:cold-start` 的 Phase 2.5 提供。若需动态切换 MCP 配置，请运行 cold-start 或编辑项目 `.mcp.json`。
 
-本文件记录 cc-investigation 生态中可用的 MCP 服务器类型及其能力说明。MCP 与技能之间遵循**松耦合原则**——技能不绑定具体 MCP，MCP 不驱动技能流程。
+本文件记录 investigation-ontology 生态中可用的 MCP 服务器类型及其能力说明。MCP 与技能之间遵循**松耦合原则**——技能不绑定具体 MCP，MCP 不驱动技能流程。
 
 ## 配置前置检查
 
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 
@@ -66,7 +66,7 @@ origin: cc-investigation
 
 ### 配置状态检查
 
-运行 `/cc-investigation:cold-start-interview --check-integrations` 可检查当前环境已配置了哪些 MCP 服务器及其状态。
+运行 `/efio:cold-start --check-integrations` 可检查当前环境已配置了哪些 MCP 服务器及其状态。
 
 ---
 

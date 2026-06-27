@@ -1,13 +1,13 @@
-# Ontology 层设计概述
+﻿# Ontology 层设计概述
 
-> 本文档概述 cc-investigation 中集成本体层（Ontology Layer）的设计。
+> 本文档概述 investigation-ontology 中集成本体层（Ontology Layer）的设计。
 > 完整设计哲学参见 [investigation-ontology](https://github.com/your-org/investigation-ontology) 仓库的 `design-phylosophy.md`。
 
 ---
 
 ## 为什么需要本体层？
 
-cc-investigation 的认知层（`meta.json`、`evidence_registry.json`、`nodes/`）已经很好地解决了"如何推理"的问题。但缺少一个**可呈堂的事实骨架**——经过质证的高置信事实需要独立于推理过程存储，确保：
+investigation-ontology 的认知层（`meta.json`、`evidence_registry.json`、`nodes/`）已经很好地解决了"如何推理"的问题。但缺少一个**可呈堂的事实骨架**——经过质证的高置信事实需要独立于推理过程存储，确保：
 
 1. **证据中心**：所有实体和关系可追溯至原始证据
 2. **状态不可绕过**：治理规则（如"结案时所有 Entity 必须 VERIFIED"）由 Action 前置条件强制执行
@@ -16,7 +16,7 @@ cc-investigation 的认知层（`meta.json`、`evidence_registry.json`、`nodes/
 ## 架构关系
 
 ```
-认知层（cc-investigation）          本体层（Ontology）
+认知层（investigation-ontology）          本体层（Ontology）
 ─────────────────────              ─────────────────
 meta.json                          entities/case/*.yaml
 evidence_registry.json             entities/evidence/*.yaml

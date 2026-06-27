@@ -1,6 +1,6 @@
-{
+﻿{
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "cc-investigation:schemas:checklist",
+  "$id": "efio:schemas:checklist",
   "title": "阶段门禁清单",
   "description": "checklist.yaml 记录各阶段完成状态，作为阶段推进的门禁依据。每个阶段包含一组必选条件，全部满足后方可推进至下一阶段。详见 case-management/SKILL.md § 数据结构。",
   "type": "object",

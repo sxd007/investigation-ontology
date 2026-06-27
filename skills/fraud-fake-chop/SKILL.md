@@ -1,7 +1,7 @@
----
+﻿---
 name: fraud-fake-chop
 description: 伪造印章调查 — 私刻、变造、盗用、冒用公司公章或授权章的调查方法。覆盖印章真伪识别、印文比对方法、使用痕迹追溯、伪造目的判断。
-origin: cc-investigation
+origin: efio
 ---
 
 # 伪造印章调查
@@ -17,9 +17,9 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

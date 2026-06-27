@@ -1,7 +1,7 @@
----
+﻿---
 name: fraud-ip
 description: 知识产权舞弊调查 — 涵盖商业秘密窃取、竞业违规、专利侵权的调查方法。覆盖数据外泄检测、离职前行为链分析、竞业违约取证、专利侵权识别等场景。
-origin: cc-investigation
+origin: efio
 ---
 
 # 知识产权舞弊调查
@@ -17,9 +17,9 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

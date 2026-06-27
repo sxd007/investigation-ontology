@@ -1,15 +1,15 @@
-<!--
+﻿<!--
 ⚠️ 模板文件 — 插件发版携带，每次插件更新时覆盖。
 
 实际用户配置写入路径（升级不受影响）：
-  ~/.claude/plugins/config/cc-investigation/evidence-policy.md
+  {配置路径}/evidence-policy.md
 
-此文件仅供 cold-start-interview 作为模板读取和填充。任何 skill 不得从此路径读取配置。
+此文件仅供 cold-start 作为模板读取和填充。任何 skill 不得从此路径读取配置。
 -->
 
 # 证据管理策略（Evidence Policy）
 
-*由 /cc-investigation:cold-start-interview 在首次设置时生成并填充。*
+*由 /efio:cold-start 在首次设置时生成并填充。*
 
 ---
 

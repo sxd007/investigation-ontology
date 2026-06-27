@@ -1,7 +1,7 @@
----
+﻿---
 name: fraud-classification
 description: 舞弊分类与路由 — 基于 ACFE 分类框架分析线索信号、匹配案件所属舞弊类型、路由到对应 fraud-<domain> 场景技能
-origin: cc-investigation
+origin: efio
 ---
 
 # 舞弊分类与路由
@@ -13,9 +13,9 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

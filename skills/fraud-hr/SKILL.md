@@ -1,7 +1,7 @@
----
+﻿---
 name: fraud-hr
 description: 人力资源舞弊调查 — 覆盖虚假员工、薪资操纵、佣金舞弊、招聘舞弊、履历造假、考勤舞弊、福利滥用等场景的信号识别与调查方法。
-origin: cc-investigation
+origin: efio
 ---
 
 # 人力资源舞弊调查
@@ -17,9 +17,9 @@ HR 舞弊属于 ACFE 资产挪用（Asset Misappropriation）— 薪资/工时�
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

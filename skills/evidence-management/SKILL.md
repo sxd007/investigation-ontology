@@ -1,7 +1,7 @@
----
+﻿---
 name: evidence-management
 description: 证据链与调查底稿管理 — 证据识别与收集、链式保管(Custody Chain)、证据可采性评估、底稿编制规范、底稿复核与归档、电子证据保全
-origin: cc-investigation
+origin: efio
 ---
 
 # 证据链与调查底稿管理
@@ -13,12 +13,12 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 
-检查 ~/.claude/plugins/config/cc-investigation/evidence-policy.md
+检查 {配置路径}/evidence-policy.md
 ├── 不存在或含标记 → 使用内置默认值（不阻塞）
 └── 就绪 → 读取密级体系、保管链要求等配置
 ```
@@ -531,6 +531,61 @@ excerpt 是"流向下一级的事实"——告诉下游节点/读者这段关系
 - `ENT-NNN.md` — 实体模板
 - `HYP-NNN.md` — 假设模板
 - `EVT-NNN.md` — 事件模板
+
+---
+
+## 证据链可视化
+
+### ⚠️ 节点格式规范（重要）
+
+> **不要**为了让工具运行而创建非标准格式的节点文件。`scan-chain.py` 和 `evidence_chain_injector.js` 均已兼容本体论定义的标准 `relations` 格式。如果工具无法识别你的节点，**修工具，不改节点**。
+
+所有节点文件**只使用** `relations:` 字段声明关系（见上方 § 关系声明）。旧版 `sources:` 字段已废弃（`scan-chain.py --integrity` 会发出 WARN）。
+
+### 两种可视化模式
+
+| 模式 | 命令 | 适用场景 | 输出 |
+|------|------|---------|------|
+| **对话内 Mermaid** | `scan-chain.py <case_dir> --graph` | 快速预览、在对话界面直接查看结构 | Mermaid 代码块（平台渲染） |
+| **交互式 HTML** | `scan-chain.py <case_dir> --html output.html` | 完整交互图、汇报展示、复杂案件 | 独立 HTML 文件（浏览器打开） |
+
+**Mermaid 快速预览：**
+
+```bash
+python scan-chain.py cases/CASE-2026-001/ --graph
+```
+
+输出在对话框内渲染（支持 Mermaid 的平台）；不支持时以文本形式展示。
+
+**交互式 HTML（推荐用于正式汇报）：**
+
+```bash
+# 需要 Node.js 环境
+python scan-chain.py cases/CASE-2026-001/ --html evidence_chain.html
+# 然后用浏览器打开 evidence_chain.html
+```
+
+HTML 模板来源：`skills/evidence-management/templates/evidence-chain-viz/evidence_chain_viewer.html`。`evidence_chain_injector.js` 负责将案件数据注入模板，生成零外部依赖的独立 HTML 文件。
+
+**手动调用 injector（调试场景）：**
+
+```bash
+node skills/evidence-management/templates/evidence-chain-viz/evidence_chain_injector.js \
+  cases/CASE-2026-001/ output.html
+```
+
+### scan-chain.py 完整选项参考
+
+| 选项 | 说明 |
+|------|------|
+| `--list` | 列出所有节点、关系类型、状态 |
+| `--trace FND-001` | 追溯 FND-001 的完整证据链（DFS） |
+| `--integrity` | 完整性检查（缺失引用、孤立节点、废弃 sources 字段） |
+| `--check-chains` | 推理链逻辑检查（类型匹配、循环引用、冲突关系） |
+| `--validate` | 节点文件结构验证（ID 格式、必填字段） |
+| `--sync` | 同步 chain_nodes 索引回 evidence_registry.json |
+| `--graph` | 输出 Mermaid 图（对话内预览） |
+| `--html [file]` | 生成交互式 HTML（默认 `evidence_chain_output.html`） |
 
 ---
 

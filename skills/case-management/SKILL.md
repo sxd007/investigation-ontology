@@ -1,7 +1,7 @@
----
+﻿---
 name: case-management
 description: 调查流程与案件管理 — 案件生命周期管理、调查计划编制、质量管控(质量控制)、团队协作、时间线管理、风险管理、成本管理、结案评估
-origin: cc-investigation
+origin: efio
 ---
 
 # 调查流程与案件管理
@@ -13,9 +13,9 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

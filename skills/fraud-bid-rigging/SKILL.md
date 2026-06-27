@@ -1,7 +1,7 @@
----
+﻿---
 name: fraud-bid-rigging
 description: 投标操纵（围标/串标）调查 — 投标方之间或与招标方合谋破坏竞争机制的各类行为。覆盖压标、陪标、轮标、市场划分、转包回补、信息泄露等模式的信号识别与调查方法。
-origin: cc-investigation
+origin: efio
 ---
 
 # 投标操纵调查
@@ -17,9 +17,9 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

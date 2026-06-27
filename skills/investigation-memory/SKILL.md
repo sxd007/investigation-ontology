@@ -1,7 +1,7 @@
----
+﻿---
 name: investigation-memory
 description: 调查场景记忆系统 — 案件过程中非结构化信息的底层归档，记录讨论分支、灵感、犹豫、思考过程，形成可查询的考察档案，支撑复盘与定向检索，但不干扰案件推进与方法论执行
-origin: cc-investigation
+origin: efio
 ---
 
 # 调查场景记忆系统

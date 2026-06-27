@@ -1,4 +1,4 @@
-# investigation-ontology (Claude Code) — 插件开发指南
+﻿# investigation-ontology (Claude Code) — 插件开发指南
 
 本文件是本仓库（investigation-ontology 跨平台插件项目）的 **Claude Code 开发者指南**，指导 AI 协助开发者维护和扩展本插件在 Claude Code 平台的实现。
 
@@ -13,7 +13,7 @@ investigation-ontology 是一个跨平台插件，同时支持 Claude Code、Cod
 ### Claude Code 特定配置
 
 - **入口**: `.claude-plugin/plugin.json`
-- **Hooks**: `hooks/hooks.json` (使用 `${CLAUDE_PLUGIN_ROOT}` 环境变量)
+- **Hooks**: `.claude-plugin/hooks.json` (使用 `${CLAUDE_PLUGIN_ROOT}` 环境变量)
 - **MCP**: 不使用（通过 `mcpServers: {}` 声明）
 
 ### 分发机制
@@ -122,7 +122,7 @@ investigation-ontology 是一个跨平台插件，同时支持 Claude Code、Cod
 | investigation-techniques | heavy | stable | 核心 |
 | case-management | medium | beta | 核心 |
 | mcp-integration | medium | stable | 核心 |
-| cold-start-interview | light | stable | 核心 |
+| cold-start | light | stable | 核心 |
 | fraud-channel | heavy | beta | 核心 |
 | fraud-reimbursement | medium | alpha | 开发者 |
 | fraud-procurement | medium | alpha | 开发者 |

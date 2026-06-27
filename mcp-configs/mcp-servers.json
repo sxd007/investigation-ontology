@@ -1,4 +1,4 @@
-{
+﻿{
   "mcpServers": {
     "investigation-pdf": {
       "command": "npx",
@@ -30,7 +30,7 @@
         "deploy": "builtin"
       },
       "sequential_thinking": {
-        "description": "Sequential Thinking — 分步推理，用于调查假设推演、证据链逻辑验证、时间线推断，已通过 cc-investigation 插件加载",
+        "description": "Sequential Thinking — 分步推理，用于调查假设推演、证据链逻辑验证、时间线推断，已通过 investigation-ontology 插件加载",
         "investigation_scenarios": ["多重竞争假设分析", "因果关系推理", "证据链逻辑验证"],
         "deploy": "builtin"
       },
@@ -57,7 +57,7 @@
       "investigation-reasoning": {
         "command": "npx",
         "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
-        "description": "【结构化推理】提供 sequential_thinking 工具。用于假设推演、证据链逻辑验证。注意：cc-investigation 插件已内置此工具，仅在需要独立 MCP 服务时配置。",
+        "description": "【结构化推理】提供 sequential_thinking 工具。用于假设推演、证据链逻辑验证。注意：investigation-ontology 插件已内置此工具，仅在需要独立 MCP 服务时配置。",
         "recommendedFor": ["investigation-foundation", "fraud-classification", "evidence-management"],
         "fallback": "使用插件内置的推理工具",
         "auth": "none",
@@ -140,8 +140,8 @@
     ]
   },
   "_docs": {
-    "purpose": "cc-investigation MCP 完整能力目录。auto-deploy 的服务器已注册到 .mcp.json 自动加载；builtin 是 Claude Code 内置能力无需配置；user_configurable 需要用户自行添加到 .mcp.json 或 ~/.claude.json。",
-    "usage": "调查员参考此目录了解可用的 MCP 能力，然后运行 /cc-investigation:cold-start-interview --check-integrations 检查当前环境状态。",
+    "purpose": "investigation-ontology MCP 完整能力目录。auto-deploy 的服务器已注册到 .mcp.json 自动加载；builtin 是 Claude Code 内置能力无需配置；user_configurable 需要用户自行添加到 .mcp.json 或 ~/.claude.json。",
+    "usage": "调查员参考此目录了解可用的 MCP 能力，然后运行 /efio:cold-start --check-integrations 检查当前环境状态。",
     "risk_warning": "涉及敏感调查数据的 MCP（如 investigation-db、investigation-fs）务必限定访问范围，避免泄露案件数据。",
     "key_design": "所有技能引用 MCP 时按能力类型描述（如'PDF分析工具'），不写具体工具名。此目录是唯一的 MCP 名称到能力类型的映射记录。"
   }

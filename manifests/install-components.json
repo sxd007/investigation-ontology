@@ -1,4 +1,4 @@
-{
+﻿{
   "version": 1,
   "components": [
     {
@@ -110,7 +110,7 @@
       "family": "setup",
       "description": "Cold-start 首次设置向导 — 团队配置、证据策略、集成检查",
       "modules": [
-        "cold-start-interview"
+        "cold-start"
       ]
     }
   ]

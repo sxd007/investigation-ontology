@@ -1,4 +1,4 @@
----
+﻿---
 description: 用户从创建案件到结案的全流程引导地图——五个阶段、涉及组件、产出物、现状评估
 ---
 
@@ -7,7 +7,7 @@ description: 用户从创建案件到结案的全流程引导地图——五个�
 ```
 用户旅程                             架构映射                             状态
 ─────────────────────────────────────────────────────────────────────
-                                   事前准备 → /cold-start-interview     � 已创建并衔接 /investigate
+                                   事前准备 → /cold-start     � 已创建并衔接 /investigate
                                                                        
 1. 启动案件                           → /investigate 入口命令            � 已实现 new/continue/status
    ├── 新案件：创建档案                 → cases/{case_id}/ + meta.json    🟢 数据结构就绪
@@ -79,7 +79,7 @@ description: 用户从创建案件到结案的全流程引导地图——五个�
 | `agents/data-analyzer.md` | 同样太简略 |
 | `agents/report-writer.md` | 同样太简略 |
 | `agents/fraud-type-classifier.md` | 同样太简略 |
-| ~~`/cold-start-interview` 命令~~ | ✅ 已解决 — "完成后"节指向 `/investigate new`；并新增角色画像选择（读取 install-profiles.json） |
+| ~~`/cold-start` 命令~~ | ✅ 已解决 — "完成后"节指向 `/investigate new`；并新增角色画像选择（读取 install-profiles.json） |
 
 ### 🔴 缺失
 
@@ -111,7 +111,7 @@ description: 用户从创建案件到结案的全流程引导地图——五个�
 
 4. **阶段间导航** — 每个阶段完成时，case-manager 告诉用户下一步该做什么、该用哪个 agent
 5. **Agent Process 补全** — 7 个 agent 的 process 从 5 步扩展到可操作流程
-6. **冷启动 → 案件创建 的衔接** — `/cold-start-interview` 完成后指向 `/investigate`
+6. **冷启动 → 案件创建 的衔接** — `/cold-start` 完成后指向 `/investigate`
 
 ### P2 — 特定场景优化
 

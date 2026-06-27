@@ -100,19 +100,17 @@ codex plugin install investigation-ontology
 investigation-ontology/
 ├── .claude-plugin/           # Claude Code 入口
 │   ├── plugin.json
+│   ├── hooks.json                # Claude Code hooks (仅 CC 安装时分发)
 │   └── PLUGIN_SCHEMA_NOTES.md
 ├── .codebuddy-plugin/        # CodeBuddy 入口
 │   ├── plugin.json
+│   ├── hooks.json                # CodeBuddy hooks (仅 CB 安装时分发)
 │   └── PLUGIN_SCHEMA_NOTES.md
 ├── .codex-plugin/            # Codex 入口
 │   ├── plugin.json
+│   ├── hooks.json                # Codex hooks (仅 Codex 安装时分发)
 │   ├── mcp.json                  # Codex MCP 服务器配置
 │   └── PLUGIN_SCHEMA_NOTES.md
-
-├── hooks.json                # Hooks 配置 (Codex 根目录)
-├── hooks/                    # Hooks 配置 (Claude Code / CodeBuddy)
-│   ├── hooks.json                # Claude Code hooks
-│   └── codebuddy-hooks.json      # CodeBuddy hooks
 ├── manifests/                # 跨平台配置
 │   ├── install-modules.json     # 模块定义（支持三平台）
 │   ├── install-components.json  # 组件定义
@@ -135,14 +133,14 @@ investigation-ontology/
 | 方面 | Claude Code | CodeBuddy | Codex |
 |------|-----------|-----------|-------|
 | **入口** | `.claude-plugin/plugin.json` | `.codebuddy-plugin/plugin.json` | `.codex-plugin/plugin.json` |
-| **Hooks 文件** | `hooks/hooks.json` | `hooks/codebuddy-hooks.json` | `hooks.json` (根目录) |
-| **Hooks 环境变量** | `${CLAUDE_PLUGIN_ROOT}` | `${CODEBUDDY_PLUGIN_ROOT}` | 壳脚本路径 |
+| **Hooks 文件** | `.claude-plugin/hooks.json` | `.codebuddy-plugin/hooks.json` | `.codex-plugin/hooks.json` |
+| **Hooks 环境变量** | `${CLAUDE_PLUGIN_ROOT}` | `${CODEBUDDY_PLUGIN_ROOT}` | `${INVESTIGATION_ONTOLOGY_ROOT}` |
 | **Hook 脚本语言** | Node.js (.mjs) | Node.js (.mjs) | Shell (.sh) |
-| **MCP 配置** | 不使用 | 不使用 | `.mcp.json` |
+| **MCP 配置** | 不使用 | 不使用 | `.codex-plugin/mcp.json` |
 | **Plugin.json 特有字段** | 基础 | `agents` | `interface` |
 | **共享内容** | ✓ | ✓ | ✓ |
 
-**关键差异：** 三个平台各有独立的 plugin.json 和 hooks 配置，但共享所有业务逻辑内容（skills/, commands/, agents/ 等）。`manifests/install-modules.json` 中的 `targets` 字段声明了每个模块的三平台支持情况。
+**架构原则：** 所有平台专用配置都在各自的 `.xxx-plugin/` 目录下，确保安装器只分发该平台需要的文件。共享的业务逻辑内容（skills/, commands/, agents/ 等）在仓库根级。
 
 ## 持续扩展
 

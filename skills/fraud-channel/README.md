@@ -1,4 +1,4 @@
-# 渠道舞弊调查 — 个人工作手册
+﻿# 渠道舞弊调查 — 个人工作手册
 
 面向：正在使用 fraud-channel 技能进行渠道调查的调查员。
 目的：自己看的速查手册。重审本质、指引技能调用、说明参考资源用法、说明企业适配方法。
@@ -98,7 +98,7 @@
 
 ### Step 2：明确关键定义
 
-建议写入 `~/.claude/plugins/config/cc-investigation/team-profile.md` 或 `policy_index.md` 开头：
+建议写入 `{配置路径}/team-profile.md` 或 `policy_index.md` 开头：
 
 - **特价订单审批流程**：各级审批权限、OA 流程编号
 - **渠道层级定义**：一代/二代/三代如何界定

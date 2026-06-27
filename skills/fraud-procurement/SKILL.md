@@ -1,7 +1,7 @@
----
+﻿---
 name: fraud-procurement
 description: 采购舞弊调查 — 在采购全生命周期（需求→寻源→定标→签约→收货→付款）中的舞弊行为。覆盖围标串标、拆分订单、参数定制、虚假供应商、虚假收货、轮标截标等模式的信号识别与调查方法。
-origin: cc-investigation
+origin: efio
 ---
 
 # 采购舞弊调查
@@ -17,9 +17,9 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

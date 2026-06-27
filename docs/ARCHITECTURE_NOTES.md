@@ -38,7 +38,7 @@
 
 | 方面 | Claude Code | CodeBuddy | Codex |
 |------|-----------|-----------|-------|
-| **配置文件** | `hooks/hooks.json` | `hooks/codebuddy-hooks.json` | `hooks.json` (根目录) |
+| **配置文件位置** | `.claude-plugin/hooks.json` | `.codebuddy-plugin/hooks.json` | `.codex-plugin/hooks.json` |
 | **环境变量** | `${CLAUDE_PLUGIN_ROOT}` | `${CODEBUDDY_PLUGIN_ROOT}` | `${INVESTIGATION_ONTOLOGY_ROOT:-$(pwd)}` |
 | **脚本语言** | Node.js (.mjs) | Node.js (.mjs) | Shell Script (.sh) |
 | **脚本路径** | `scripts/run-hook.mjs` | `scripts/run-hook.mjs` | `scripts/validate-ontology-action.sh` / `check-ontology-ref.sh` |
@@ -48,12 +48,16 @@
 **Claude Code & CodeBuddy：**
 - 都使用 Node.js 脚本（`run-hook.mjs`）以实现跨平台一致性
 - 环境变量由各平台独立注入（`${CLAUDE_PLUGIN_ROOT}` vs `${CODEBUDDY_PLUGIN_ROOT}`）
+- 配置文件放在各自的 `.claude-plugin/` 和 `.codebuddy-plugin/` 目录下，实现隔离
 - 脚本内部逻辑完全相同，通过环境变量适配不同平台
 
 **Codex：**
 - 使用原生 Shell 脚本，充分利用 Codex 的 shell 执行能力
 - 环境变量 `${INVESTIGATION_ONTOLOGY_ROOT}` 由插件注入，或回退到 `$(pwd)`
+- 配置文件在 `.codex-plugin/` 目录下
 - 脚本可以直接使用 bash/sh 特性，无需 Node.js 运行时
+
+**隔离机制：** 所有 hooks 配置都在各自的 `.xxx-plugin/` 目录中，安装器只会分发该平台对应的 hooks.json
 
 ### 2.3 维护指南
 

@@ -1,17 +1,17 @@
----
+﻿---
 skill_navigation:
   description: "撰写 INIT 情报摘要前，建议根据案件特征加载以下技能获取背景知识"
   suggestions:
-    - skill: "cc-investigation:fraud-classification"
+    - skill: "efio:fraud-classification"
       when: "案件舞弊类型不明确"
       provides: "ACFE 分类框架，辅助案件定性"
-    - skill: "cc-investigation:fraud-channel"
+    - skill: "efio:fraud-channel"
       when: "案件涉及窜货、假单、渠道违规"
       provides: "渠道舞弊的典型手法模式、核查切入点、信号清单"
-    - skill: "cc-investigation:investigation-foundation"
+    - skill: "efio:investigation-foundation"
       when: "需要构建假设体系"
       provides: "假设驱动调查方法论、假设优先级排序、证伪策略"
-    - skill: "cc-investigation:evidence-management"
+    - skill: "efio:evidence-management"
       when: "撰写完毕后创建 evidence_registry.json"
       provides: "证据注册表结构、初始证据条目登记标准"
   project_rules:

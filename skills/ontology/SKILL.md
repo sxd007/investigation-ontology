@@ -1,4 +1,4 @@
----
+﻿---
 name: ontology
 description: >
   操作 entities/ 或 relations/ 目录、创建或修改本体对象 (Person/Organization/Account/Evidence/Case)、
@@ -6,7 +6,7 @@ description: >
   (CLOSE_CASE/RESOLVE_ENTITY/SEAL_EVIDENCE/ASSERT_RELATION 等) 时，必须使用本技能。
   调查本体论定义"什么存在"的结构性方法论 — 覆盖 Object Types、Link Types、Action 治理规则、
   以及认知层与本体层的 Binding Protocol。
-origin: cc-investigation
+origin: efio
 paths: entities/*, relations/*
 ---
 
@@ -28,7 +28,7 @@ Action 治理                  证据可采性评估
 不可绕过的前置条件            案件工作流
 ```
 
-> **架构来源**：基于 Palantir Ontology 三层架构 + cc-investigation 证据链/案件管理方法论。详见 `design-phylosophy.md`。
+> **架构来源**：基于 Palantir Ontology 三层架构 + investigation-ontology 证据链/案件管理方法论。详见 `design-phylosophy.md`。
 
 ## Core Concepts
 

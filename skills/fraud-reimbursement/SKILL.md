@@ -1,7 +1,7 @@
----
+﻿---
 name: fraud-reimbursement
 description: 费用报销舞弊调查 — 员工利用职务便利虚构、篡改、重复申报或不当归类的报销行为。覆盖信号识别、证据路径、数据分析方法和调查方案设计。
-origin: cc-investigation
+origin: efio
 ---
 
 # 费用报销舞弊调查
@@ -15,9 +15,9 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

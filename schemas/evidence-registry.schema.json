@@ -1,6 +1,6 @@
-{
+﻿{
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "cc-investigation:schemas:evidence-registry",
+  "$id": "efio:schemas:evidence-registry",
   "title": "证据注册表",
   "description": "evidence_registry.json 是案件证据的结构化核心登记文件。负责：节点发现（chain_nodes 索引）、实体管理（entities）、假设追踪（hypotheses）、事件时间线（event_timeline）。关系图（谁推导自谁、谁支撑谁、谁反驳谁）由 nodes/ 目录中各节点文件的 relations 字段声明，不在此 JSON 中维护副本。由 evidence-management/SKILL.md 管理完整字段说明。",
   "type": "object",

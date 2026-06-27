@@ -1,4 +1,4 @@
-# 安全策略
+﻿# 安全策略
 
 ## 支持的版本
 
@@ -9,7 +9,7 @@
 
 ## 报告安全漏洞
 
-cc-investigation 是一个调查方法论工具集，本身不直接处理网络请求或用户数据。但以下情况属于安全关注范围：
+investigation-ontology 是一个调查方法论工具集，本身不直接处理网络请求或用户数据。但以下情况属于安全关注范围：
 
 ### 应由报告的安全问题
 - 插件代码中的注入漏洞（命令注入、路径遍历等）
@@ -22,7 +22,7 @@ cc-investigation 是一个调查方法论工具集，本身不直接处理网络
 
 请**不要**通过公开 Issue 报告安全漏洞。请通过以下方式私下报告：
 
-1. **GitHub 安全公告**：在项目仓库提交 [Security Advisory](https://github.com/sxd007/cc-investigation/security/advisories)
+1. **GitHub 安全公告**：在项目仓库提交 [Security Advisory](https://github.com/sxd007/investigation-ontology/security/advisories)
 2. **邮箱**：联系作者 Alpha Shen（通过 GitHub 个人主页获取联系方式）
 3. **Issue 中提及**：如果必须通过 Issue，请在标题注明 `[SECURITY]` 并避免在正文中透露漏洞细节
 

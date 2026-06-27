@@ -1,7 +1,7 @@
----
+﻿---
 name: data-analysis
 description: 数据分析与审计技术 — 内部审计方法论、流程分析技术、异常检测、数据可视化、持续监控、审计轨迹分析、统计抽样、合规检查技术
-origin: cc-investigation
+origin: efio
 ---
 
 # 数据分析与审计技术
@@ -13,9 +13,9 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

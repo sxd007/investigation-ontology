@@ -1,10 +1,10 @@
-# Connectors — 调查工具连接器
+﻿# Connectors — 调查工具连接器
 
-cc-investigation 的 MCP 连接器生态。每个连接器为调查技能提供外部数据或工具能力。
+investigation-ontology 的 MCP 连接器生态。每个连接器为调查技能提供外部数据或工具能力。
 
 ## 连接器分类
 
-cc-investigation 的 MCP 连接器按部署方式分为三类：
+investigation-ontology 的 MCP 连接器按部署方式分为三类：
 
 | 类别 | 说明 | 配置方式 |
 |------|------|---------|
@@ -81,7 +81,7 @@ cc-investigation 的 MCP 连接器按部署方式分为三类：
 }
 ```
 
-配置完成后，运行 `/cc-investigation:cold-start-interview --check-integrations` 验证集成状态。
+配置完成后，运行 `/efio:cold-start --check-integrations` 验证集成状态。
 
 ## 添加新 Connector
 
@@ -104,7 +104,7 @@ cc-investigation 的 MCP 连接器按部署方式分为三类：
 
 ## Wanted Connectors
 
-这些连接器能显著提升 cc-investigation 的能力。如果你在使用或运营它们，欢迎贡献：
+这些连接器能显著提升 investigation-ontology 的能力。如果你在使用或运营它们，欢迎贡献：
 
 | Connector | 用途 | 优先级 |
 |---|---|---|

@@ -1,16 +1,16 @@
-<!--
+﻿<!--
 ⚠️ 模板文件 — 插件发版携带，每次插件更新时覆盖。
 
 实际用户配置写入路径（升级不受影响）：
-  ~/.claude/plugins/config/cc-investigation/team-profile.md
+  {配置路径}/team-profile.md
 
-此文件仅供 cold-start-interview 作为模板读取和填充。任何 skill 不得从此路径读取配置。
+此文件仅供 cold-start 作为模板读取和填充。任何 skill 不得从此路径读取配置。
 每次发版更新此模板时，需要保留所有 [PLACEHOLDER] 标记，新增字段遵循下方标注格式。
 -->
 
 # 调查团队档案（Team Profile）
 
-*由 /cc-investigation:cold-start-interview 在首次设置时生成并填充。如果看到 [PLACEHOLDER] 标记，请运行该命令完成设置。*
+*由 /efio:cold-start 在首次设置时生成并填充。如果看到 [PLACEHOLDER] 标记，请运行该命令完成设置。*
 
 *填充后直接编辑此文件（用户配置路径），改动一处即对所有技能生效。*
 
@@ -51,7 +51,7 @@
 
 **影响技能：** 全部（决定办案时默认聚焦/优先提示哪些技能集）
 
-*由 cold-start-interview 读取 `manifests/install-profiles.json` 后引导选择。画像决定本团队默认聚焦的技能集，避免无关技能干扰；不阻止按需临时加载任何其他技能。可随时改为其他画像或 `full`。*
+*由 cold-start 读取 `manifests/install-profiles.json` 后引导选择。画像决定本团队默认聚焦的技能集，避免无关技能干扰；不阻止按需临时加载任何其他技能。可随时改为其他画像或 `full`。*
 
 | 字段 | 影响说明 |
 |------|---------|
@@ -114,7 +114,7 @@
 
 **影响技能：** mcp-integration（能力映射报告）
 
-*此表由 cold-start-interview 的 --check-integrations 阶段自动填充，用户无需手工填写。*
+*此表由 cold-start 的 --check-integrations 阶段自动填充，用户无需手工填写。*
 
 | 集成项 | 状态 | 不可用时降级方式 |
 |--------|------|-----------------|
@@ -123,7 +123,7 @@
 | 数据分析（SQL/脚本） | [PLACEHOLDER] | 手动分析 |
 | 企业信息查询 | [PLACEHOLDER] | 浏览器搜索 |
 
-*更新：运行 `/cc-investigation:cold-start-interview --check-integrations`*
+*更新：运行 `/efio:cold-start --check-integrations`*
 
 ---
 

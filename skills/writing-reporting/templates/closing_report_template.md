@@ -1,8 +1,8 @@
----
+﻿---
 skill_navigation:
   description: "撰写结案报告前，建议加载以下技能确保报告完整"
   suggestions:
-    - skill: "cc-investigation:evidence-management"
+    - skill: "efio:evidence-management"
       when: "需要确认证据注册表是否完整"
       provides: "证据充分性评估标准、confidence 定型方法"
   project_rules:

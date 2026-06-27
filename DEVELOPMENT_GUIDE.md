@@ -1,4 +1,4 @@
-# investigation-ontology 开发指南
+﻿# investigation-ontology 开发指南
 
 本文档面向希望理解、修改或扩展 investigation-ontology 跨平台插件的开发者。内容涵盖架构哲学、系统机制、目录规范和开发流程。
 
@@ -8,7 +8,7 @@
 
 ## 一、项目架构三分法
 
-cc-investigation 的所有内容分为三大类。**每新增一个文件、每修改一个模块，先判定它属于哪一类**，然后遵循该类别的设计原则。
+investigation-ontology 的所有内容分为三大类。**每新增一个文件、每修改一个模块，先判定它属于哪一类**，然后遵循该类别的设计原则。
 
 | 类别                          | 范围                       | 核心原则                     | 代表文件                                                                                                                  |
 | --------------------------- | ------------------------ | ------------------------ | --------------------------------------------------------------------------------------------------------------------- |
@@ -118,7 +118,7 @@ skills/evidence-management/SKILL.md
 ## 三、目录结构
 
 ```
-cc-investigation/
+investigation-ontology/
 ├── CLAUDE.md                       ← 插件级用户指南（对安装了插件的用户）
 ├── DEVELOPMENT_GUIDE.md            ← 本文件（插件开发指南）
 ├── README.md                       ← 面向用户的介绍和安装说明
@@ -156,7 +156,7 @@ cc-investigation/
 │   ├── fraud-conflicts-of-interest/ ← 场景经验类
 │   │
 │   │  # 底层机制（配置初始化，不属于三类）
-│   ├── cold-start-interview/       ← 底层机制
+│   ├── cold-start/       ← 底层机制
 │
 ├── agents/                         ← 子代理定义（自动发现）
 ├── commands/                       ← 斜杠命令（自动发现）
@@ -206,7 +206,7 @@ cc-investigation/
 3. **数据模型变更**：同步更新 `schemas/*.json` + 对应 skill 的章节 + `docs/case-data-model.md`
 4. **更新 manifests**：新增/移除模块时更新 `manifests/install-modules.json`
 5. **验证**：运行 `claude plugin validate .claude-plugin/plugin.json`
-6. **本地测试**：`claude plugin marketplace add . && claude plugin install cc-investigation@cc-investigation --profile <profile>`
+6. **本地测试**：`claude plugin marketplace add . && claude plugin install investigation-ontology@investigation-ontology --profile <profile>`
 7. **推送**：Push to git for distribution
 
 ### 4.2 新增一个 Skill 的步骤
@@ -338,15 +338,15 @@ cc-investigation/
 
 ## 六、配置消费开发规范
 
-cc-investigation 的用户配置系统位于 `~/.claude/plugins/config/cc-investigation/`，由 `config-templates/` 下的模板定义结构、`cold-start-interview` 负责写入、各 skill 负责消费。
+investigation-ontology 的用户配置系统位于 `{配置路径}/`，由 `config-templates/` 下的模板定义结构、`cold-start` 负责写入、各 skill 负责消费。
 
 ### 6.1 配置生命周期
 
 ```
 模板 (config-templates/team-profile.md)          ← 发版维护
-  │ cold-start-interview 读取
+  │ cold-start 读取
   ▼
-用户配置 (~/.claude/plugins/config/cc-investigation/)  ← 持久化，升级不覆盖
+用户配置 ({配置路径}/)  ← 持久化，升级不覆盖
   │ 各 skill 前置检查
   ▼
 行为调整（约束/参数化）
@@ -392,11 +392,11 @@ cc-investigation 的用户配置系统位于 `~/.claude/plugins/config/cc-invest
 
 ### 6.5 升级场景保护
 
-插件更新时 `config-templates/*.md` 会被覆盖。用户配置 `~/.claude/plugins/config/cc-investigation/*` 不受影响。
+插件更新时 `config-templates/*.md` 会被覆盖。用户配置 `{配置路径}/*` 不受影响。
 
 升级后可能出现的场景：
 
-- **模板新增了字段** → cold-start-interview 的模板合并机制（Phase 4.2）检测到差异，引导用户补充
+- **模板新增了字段** → cold-start 的模板合并机制（Phase 4.2）检测到差异，引导用户补充
 - **现有字段值有效** → 不动，保留用户配置值
 - **删除了字段** → 用户配置中保留，不主动删除（静默遗留）
 
@@ -404,7 +404,7 @@ cc-investigation 的用户配置系统位于 `~/.claude/plugins/config/cc-invest
 
 | 状态               | 判断条件                      | 对 skill 的影响                    |
 | ---------------- | ------------------------- | ------------------------------ |
-| DOES\_NOT\_EXIST | 文件不存在                     | 停止操作，提示运行 cold-start-interview |
+| DOES\_NOT\_EXIST | 文件不存在                     | 停止操作，提示运行 cold-start |
 | PAUSED           | 含 `<!-- SETUP PAUSED AT:` | 停止操作，提示 resume                 |
 | HAS\_PLACEHOLDER | 含 `[PLACEHOLDER]`         | 停止操作，提示 complete               |
 | READY            | 以上皆否                      | 正常读取配置，按值调整行为                  |
@@ -415,13 +415,13 @@ cc-investigation 的用户配置系统位于 `~/.claude/plugins/config/cc-invest
 
 ```bash
 # 从本地路径添加市场源
-claude plugin marketplace add /path/to/cc-investigation
+claude plugin marketplace add /path/to/investigation-ontology
 
 # 安装（全量）
-claude plugin install cc-investigation@cc-investigation
+claude plugin install investigation-ontology@investigation-ontology
 
 # 指定配置安装
-claude plugin install cc-investigation@cc-investigation --profile <profile>
+claude plugin install investigation-ontology@investigation-ontology --profile <profile>
 
 # 验证插件配置
 claude plugin validate .claude-plugin/plugin.json

@@ -1,7 +1,7 @@
----
+﻿---
 name: fraud-conflicts-of-interest
 description: 利益冲突舞弊调查 — 员工在商业决策中存在未披露的个人利益，损害公司利益的各类场景。覆盖采购冲突、销售冲突、裙带关系、双重角色、回扣关联的信号识别与调查方法。
-origin: cc-investigation
+origin: efio
 ---
 
 # 利益冲突舞弊调查
@@ -15,9 +15,9 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

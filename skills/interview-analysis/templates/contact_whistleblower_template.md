@@ -1,11 +1,11 @@
----
+﻿---
 skill_navigation:
   description: "使用本模板前，建议根据案件特征加载以下技能获取背景知识"
   suggestions:
-    - skill: "cc-investigation:investigation-techniques"
+    - skill: "efio:investigation-techniques"
       when: "举报人有录音行为、或多次联系不提供核心信息、或反问调查流程"
       provides: "反情报刺探策略、信息分级方法"
-    - skill: "cc-investigation:evidence-management"
+    - skill: "efio:evidence-management"
       when: "通话/邮件结束后登记获取的信息"
       provides: "证据注册表结构和标准"
   project_rules:

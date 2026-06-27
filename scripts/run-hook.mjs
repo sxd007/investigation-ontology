@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 // ============================================================================
 // run-hook.mjs — 跨平台 Hook 启动器
 //
@@ -53,7 +53,7 @@ function runScript(base) {
 
 // ── SessionStart：检查配置状态、统计活跃案件、给出可执行提示 ──────
 function sessionStart() {
-  const cfg = join(os.homedir(), '.claude', 'plugins', 'config', 'cc-investigation', 'team-profile.md');
+  const cfg = join(os.homedir(), '.claude', 'plugins', 'config', 'investigation-ontology', 'team-profile.md');
   let active = 0;
   try {
     const casesDir = join(process.cwd(), 'cases');
@@ -70,14 +70,14 @@ function sessionStart() {
     /* ignore */
   }
   if (ready) {
-    console.log('[cc-investigation] 调查工具包已加载。');
+    console.log('[investigation-ontology] 调查工具包已加载。');
     console.log(
       active > 0
-        ? `[cc-investigation] 当前目录有 ${active} 个案件，运行 /investigate list 查看`
-        : '[cc-investigation] 运行 /investigate new 启动新案件'
+        ? `[investigation-ontology] 当前目录有 ${active} 个案件，运行 /investigate list 查看`
+        : '[investigation-ontology] 运行 /investigate new 启动新案件'
     );
   } else {
-    console.log('[cc-investigation] 首次使用? 运行 /cc-investigation:cold-start-interview 完成设置');
+    console.log('[investigation-ontology] 首次使用? 运行 /efio:cold-start 完成设置');
   }
 }
 
@@ -93,7 +93,7 @@ function preWriteNaming() {
   const cwd = data?.cwd || process.cwd();
   if (/(^|[/\\])cases[/\\]/.test(fp) || /(^|[/\\])cases([/\\]|$)/.test(cwd)) {
     console.log(
-      '[cc-investigation] 案件文件操作 — 检查: 1) 文件名带序号前缀(01_) 2) 多版本文件带日期后缀(_YYYYMMDD) 3) 文件头尾有关联索引'
+      '[investigation-ontology] 案件文件操作 — 检查: 1) 文件名带序号前缀(01_) 2) 多版本文件带日期后缀(_YYYYMMDD) 3) 文件头尾有关联索引'
     );
   }
 }

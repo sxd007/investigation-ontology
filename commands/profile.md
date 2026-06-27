@@ -1,18 +1,18 @@
----
+﻿---
 description: 技能配置管理器 — 中途切换调查团队的技能 profile（角色画像），动态更新激活的技能集
 ---
 
-# /cc-investigation:profile
+# /efio:profile
 
-调查团队技能配置的管理工具。首次配置在 `/cc-investigation:cold-start-interview` 的 Phase 1.6 进行；此命令用于中途切换 profile 或查看当前配置。
+调查团队技能配置的管理工具。首次配置在 `/efio:cold-start` 的 Phase 1.6 进行；此命令用于中途切换 profile 或查看当前配置。
 
 ## Usage
 
 ```
-/cc-investigation:profile                    # 交互式菜单（默认）
-/cc-investigation:profile --current          # 查看当前激活的 profile 和技能
-/cc-investigation:profile --switch           # 切换到另一个 profile
-/cc-investigation:profile --describe <name>  # 查看某个 profile 的详细说明
+/efio:profile                    # 交互式菜单（默认）
+/efio:profile --current          # 查看当前激活的 profile 和技能
+/efio:profile --switch           # 切换到另一个 profile
+/efio:profile --describe <name>  # 查看某个 profile 的详细说明
 ```
 
 ## 使用场景
@@ -85,7 +85,7 @@ description: 技能配置管理器 — 中途切换调查团队的技能 profile
 **交互示例**：
 
 ```
-> /cc-investigation:profile --switch
+> /efio:profile --switch
 
 可用的技能配置 Profile（来自 manifests/install-profiles.json）：
 
@@ -157,7 +157,7 @@ description: 技能配置管理器 — 中途切换调查团队的技能 profile
 展示某个 profile 的完整信息（来自 `install-profiles.json`）：
 
 ```
-> /cc-investigation:profile --describe full
+> /efio:profile --describe full
 
 Profile: full
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -211,13 +211,13 @@ profile 切换后，立即生效。调查工作中模型会根据新的激活技
 
 ## 注意
 
-- 与 `/cc-investigation:mcp-config` 命令形成对称：profile 管理**技能配置**，mcp-config 管理 **MCP 能力**
+- 与 `/efio:mcp-config` 命令形成对称：profile 管理**技能配置**，mcp-config 管理 **MCP 能力**
 - 切换 profile 不会移除已创建的案件记录，仅影响后续新案件的技能加载
 - 即使不在某个 profile 中，用户也可以通过 `/help <skill>` 手动加载任何技能
 
 ## 相关
 
-- **首次配置:** [cold-start-interview](./cold-start-interview.md) Phase 1.6
+- **首次配置:** [cold-start](./cold-start.md) Phase 1.6
 - **MCP 配置:** [mcp-config](./mcp-config.md)
 - **Profile 定义:** [manifests/install-profiles.json](../manifests/install-profiles.json)
 - **团队配置:** [config-templates/team-profile.md](../config-templates/team-profile.md)

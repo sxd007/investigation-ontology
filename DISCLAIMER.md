@@ -1,4 +1,4 @@
-# 免责声明与使用条款
+﻿# 免责声明与使用条款
 
 **最后更新：2026-06-15**
 
@@ -6,7 +6,7 @@
 
 ## 重要提示 — 请先阅读
 
-cc-investigation（以下简称"本插件"或"本项目"）是一套为反舞弊调查和内部审计提供方法论参考的**知识工具集**。使用本插件前，请仔细阅读以下条款。
+investigation-ontology（以下简称"本插件"或"本项目"）是一套为反舞弊调查和内部审计提供方法论参考的**知识工具集**。使用本插件前，请仔细阅读以下条款。
 
 ---
 
@@ -205,7 +205,7 @@ cc-investigation（以下简称"本插件"或"本项目"）是一套为反舞弊
 
 - **作者**: Alpha Shen
 - **GitHub**: [sxd007](https://github.com/sxd007)
-- **Issues**: [提交问题](https://github.com/sxd007/cc-investigation/issues)
+- **Issues**: [提交问题](https://github.com/sxd007/investigation-ontology/issues)
 
 ---
 

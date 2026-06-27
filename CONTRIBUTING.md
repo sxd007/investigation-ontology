@@ -1,6 +1,6 @@
-# 贡献指南
+﻿# 贡献指南
 
-感谢你考虑为 cc-investigation 贡献代码或内容。本文档是参与本项目的**必读规范**，涵盖架构合规、编写规范、注册同步、提交流程和伦理要求。
+感谢你考虑为 investigation-ontology 贡献代码或内容。本文档是参与本项目的**必读规范**，涵盖架构合规、编写规范、注册同步、提交流程和伦理要求。
 
 ***
 
@@ -93,7 +93,7 @@
 
 ## 二、架构合规——先分类，再动手
 
-cc-investigation 的所有内容分为三大类。**每新增一个文件、每修改一个模块，先判定它属于哪一类**，然后遵循该类别的设计原则。
+investigation-ontology 的所有内容分为三大类。**每新增一个文件、每修改一个模块，先判定它属于哪一类**，然后遵循该类别的设计原则。
 
 | 类别 | 范围 | 核心原则 |
 |------|------|---------|
@@ -135,7 +135,7 @@ cc-investigation 的所有内容分为三大类。**每新增一个文件、每�
 所有内容必须放入已有目录结构：
 
 ```
-cc-investigation/
+investigation-ontology/
 ├── skills/              # 技能定义（新增技能放这里）
 ├── agents/              # 子代理定义
 ├── commands/            # 斜杠命令
@@ -177,7 +177,7 @@ cc-investigation/
 ---
 name: fraud-xxx
 description: 一句话描述该技能的作用
-origin: cc-investigation
+origin: efio
 ---
 ```
 
@@ -215,7 +215,7 @@ skills/fraud-<domain>/
 
 ## 四、注册与同步
 
-cc-investigation 采用模块化安装体系，新增或修改技能时必须同步更新注册数据，否则安装器无法识别你的变更。
+investigation-ontology 采用模块化安装体系，新增或修改技能时必须同步更新注册数据，否则安装器无法识别你的变更。
 
 ### 4.1 新增场景技能的 6 文件同步
 
@@ -400,8 +400,8 @@ PR 标题和描述必须包含以下信息：
 claude plugin validate .claude-plugin/plugin.json
 
 # 2. 从本地路径安装测试
-claude plugin marketplace add /path/to/cc-investigation
-claude plugin install cc-investigation@cc-investigation --profile investigator
+claude plugin marketplace add /path/to/investigation-ontology
+claude plugin install investigation-ontology@investigation-ontology --profile investigator
 
 # 3. 检查新技能是否被正确发现
 # （查看 Claude Code 启动日志，确认 skills/*/SKILL.md 被加载）

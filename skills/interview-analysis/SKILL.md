@@ -1,7 +1,7 @@
----
+﻿---
 name: interview-analysis
 description: 访谈全流程支持 — 策略设计、提纲生成与评估、笔录结构化审查与对抗行为识别、SCAN陈述分析、可信度评估、问话策略
-origin: cc-investigation
+origin: efio
 ---
 
 # 访谈与问话分析
@@ -13,9 +13,9 @@ origin: cc-investigation
 在执行本技能的业务操作前，按以下流程检查用户配置：
 
 ```
-检查 ~/.claude/plugins/config/cc-investigation/team-profile.md
+检查 {配置路径}/team-profile.md
 ├── 不存在 / 含 [PLACEHOLDER] / 含 PAUSED 标记
-│   └── 停止操作，提示: "请先运行 /cc-investigation:cold-start-interview 完成设置"
+│   └── 自动进入 /efio:cold-start 配置向导，完成后继续当前操作
 └── 配置就绪 → 继续
 ```
 

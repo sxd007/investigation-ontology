@@ -1,4 +1,4 @@
-{
+﻿{
   "hooks": {
     "SessionStart": [
       {
@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "CONFIG_FILE=${HOME}/.investigation-ontology/config/team-profile.md; ACTIVE_CASES=$(ls -d cases/*/ 2>/dev/null | wc -l); if [ -f \"$CONFIG_FILE\" ] && ! grep -q '\\[PLACEHOLDER\\]' \"$CONFIG_FILE\"; then echo \"[investigation-ontology] Investigation plugin loaded.\"; [ \"$ACTIVE_CASES\" -gt 0 ] && echo \"[investigation-ontology] Current directory has $ACTIVE_CASES case(s). Run /investigation-ontology:investigate list.\" || echo \"[investigation-ontology] Run /investigation-ontology:investigate new to start a case.\"; else echo \"[investigation-ontology] First use? Run /investigation-ontology:cold-start-interview to configure.\"; fi",
+            "command": "CONFIG_FILE=${HOME}/.investigation-ontology/config/team-profile.md; ACTIVE_CASES=$(ls -d cases/*/ 2>/dev/null | wc -l); if [ -f \"$CONFIG_FILE\" ] && ! grep -q '\\[PLACEHOLDER\\]' \"$CONFIG_FILE\"; then echo \"[investigation-ontology] Investigation plugin loaded.\"; [ \"$ACTIVE_CASES\" -gt 0 ] && echo \"[investigation-ontology] Current directory has $ACTIVE_CASES case(s). Run /efio:investigate list.\" || echo \"[investigation-ontology] Run /efio:investigate new to start a case.\"; else echo \"[investigation-ontology] First use? Run /efio:cold-start to configure.\"; fi",
             "timeout": 5
           }
         ],
@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "case $(pwd) in */investigation-ontology:cases/*) echo \"[investigation-ontology] Case file write reminder: use numbered names, date suffixes for versions, and relation indexes where applicable.\" ;; esac",
+            "command": "case $(pwd) in */efio:cases/*) echo \"[investigation-ontology] Case file write reminder: use numbered names, date suffixes for versions, and relation indexes where applicable.\" ;; esac",
             "timeout": 3
           },
           {

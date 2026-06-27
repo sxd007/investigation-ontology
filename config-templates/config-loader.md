@@ -1,6 +1,21 @@
-# 配置加载契约（Config Loading Contract）
+﻿# 配置加载契约（Config Loading Contract）
 
 **所有 skill 和 agent 不得直接执行实质性工作，直到已完成以下配置检查。**
+
+---
+
+## § 平台路径（Platform Config Path）
+
+在读写任何用户配置前，必须先确定 `{PLUGIN_CONFIG_DIR}`，规则如下：
+
+| 运行平台 | {PLUGIN_CONFIG_DIR} |
+|---------|---------------------|
+| **Claude Code** | `~/.claude/plugins/config/efio` |
+| **CodeBuddy**   | `~/.codebuddy/plugins/config/efio` |
+| **Codex**       | `~/.codex/plugins/config/efio` |
+| **其他 / 未知** | `~/.investigation-ontology/config`（降级路径） |
+
+**检测方式：** 平台由运行时上下文隐式决定——Claude Code 下 `$CLAUDE_PLUGIN_ROOT` 有值，CodeBuddy 下 `$CODEBUDDY_PLUGIN_ROOT` 有值，Codex 下 `$INVESTIGATION_ONTOLOGY_ROOT` 有值。如无法从环境变量判断，询问用户当前使用的平台。
 
 ---
 
@@ -8,9 +23,10 @@
 
 1. 配置路径（持久化，升级不覆盖）：
    ```
-   ~/.claude/plugins/config/cc-investigation/team-profile.md
-   ~/.claude/plugins/config/cc-investigation/evidence-policy.md
+   {PLUGIN_CONFIG_DIR}/team-profile.md
+   {PLUGIN_CONFIG_DIR}/evidence-policy.md
    ```
+   其中 `{PLUGIN_CONFIG_DIR}` 按上方平台路径表解析。
 
 2. 模板路径（插件自带，每次更新被覆盖）：
    ```
@@ -18,7 +34,7 @@
    <plugin-root>/config-templates/evidence-policy.md
    ```
 
-3. 唯一豁免此检查的 skill：**cold-start-interview** 自身。其他所有 skill 必须按以下流程执行。
+3. 唯一豁免此检查的 skill：**cold-start** 自身。其他所有 skill 必须按以下流程执行。
 
 ---
 
@@ -29,19 +45,19 @@
 对每个配置文件的四种状态做分支判断：
 
 ```
-READ ~/.claude/plugins/config/cc-investigation/team-profile.md
+READ {PLUGIN_CONFIG_DIR}/team-profile.md    ← 路径按上方平台表解析
 
 IF 文件不存在:
-  → "插件尚未初始化。运行 /cc-investigation:cold-start-interview 完成首次设置。"
-  → 停止实质性工作
+  → 告知用户: "检测到插件尚未初始化，正在自动启动配置向导（约 10-15 分钟），完成后将继续您的操作。"
+  → 自动执行 /efio:cold-start 完整流程（Phase 1 → 2.5 → 3 → 4）
 
 ELSE IF 文件包含 "<!-- SETUP PAUSED AT:":
-  → "上次设置未完成。运行 /cc-investigation:cold-start-interview 从断点继续。"
-  → 停止实质性工作
+  → 告知用户: "检测到上次配置未完成，正在自动从断点继续。"
+  → 自动执行 /efio:cold-start 断点恢复流程
 
 ELSE IF 文件包含 "[PLACEHOLDER]":
-  → "配置未完成。运行 /cc-investigation:cold-start-interview 补全缺失信息。"
-  → 停止实质性工作
+  → 告知用户: "检测到配置不完整，正在自动引导补全。"
+  → 自动执行 /efio:cold-start 补全流程（定位所有 [PLACEHOLDER] 逐项填写）
 
 ELSE:
   → 配置就绪。继续。
@@ -71,9 +87,9 @@ ELSE:
 
 | 状态 | 判断条件 | 处理方式 |
 |------|---------|---------|
-| DOES_NOT_EXIST | 文件路径不存在 | team-profile → 停止并提示；evidence-policy → 使用默认值 |
-| PAUSED | 文件包含 `<!-- SETUP PAUSED AT:` | 停止并提示用户 resume |
-| HAS_PLACEHOLDER | 文件包含 `[PLACEHOLDER]`（不区分大小写） | 停止并提示用户 complete |
+| DOES_NOT_EXIST | 文件路径不存在 | team-profile → 自动启动 cold-start 完整流程；evidence-policy → 使用默认值 |
+| PAUSED | 文件包含 `<!-- SETUP PAUSED AT:` | 自动 resume cold-start 断点恢复流程 |
+| HAS_PLACEHOLDER | 文件包含 `[PLACEHOLDER]`（不区分大小写） | 自动进入 cold-start 补全流程 |
 | READY | 以上条件都不满足 | 读取配置，继续执行 |
 
 ---
@@ -101,4 +117,4 @@ ELSE:
 
 ---
 
-*此文件描述加载规范。实际加载指令在 cold-start-interview 和各 skill 的 SKILL.md 中执行。*
+*此文件描述加载规范。实际加载指令在 cold-start 和各 skill 的 SKILL.md 中执行。*

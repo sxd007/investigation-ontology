@@ -51,7 +51,7 @@ investigation-ontology 是一个跨平台插件，支持 Claude Code、CodeBuddy
 
 ### hooks 配置
 
-CodeBuddy 使用 `hooks/codebuddy-hooks.json`（独立于 Claude Code 的 `hooks/hooks.json`）：
+CodeBuddy 使用 `.codebuddy-plugin/hooks.json`（独立于 Claude Code 和 Codex）：
 
 ```json
 {

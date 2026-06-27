@@ -1,6 +1,6 @@
-{
+﻿{
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "cc-investigation:schemas:meta",
+  "$id": "efio:schemas:meta",
   "title": "案件元数据",
   "description": "每个案件的 meta.json 必须遵循此结构。初始化时只需填写必填字段，其余字段随调查推进逐步填充。详见 case-management/SKILL.md § 数据结构。",
   "type": "object",

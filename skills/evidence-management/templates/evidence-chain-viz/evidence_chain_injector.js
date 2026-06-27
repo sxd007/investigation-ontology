@@ -44,12 +44,32 @@ function parseFrontmatter(content) {
     if (val) fm[key] = val;
   }
 
-  // sources 数组（多行对象）
+  // sources 数组（旧格式：多行对象 - id/excerpt/form）
   const sources = [];
   const srcObjRe = /^\s+-\s+id:\s*(\S+)\s*\n\s+excerpt:\s*"((?:[^"\\]|\\.)*)"\s*\n\s+form:\s*(\S+)/gm;
   while ((m = srcObjRe.exec(yaml)) !== null)
     sources.push({ id: m[1], excerpt: m[2], form: m[3] });
   if (sources.length > 0) fm.sources = sources;
+
+  // relations 字典（新格式：relations: derived_from: - id: xxx）
+  const relBlockMatch = yaml.match(/^relations:\s*\n((?:[ \t]+[^\n]+\n?)*)/m);
+  if (relBlockMatch) {
+    const relText = relBlockMatch[1];
+    const relations = {};
+    // 匹配子键（如 derived_from:），收集其列表项
+    const typeMatches = [...relText.matchAll(/^[ \t]{2}(\w+):\s*\n((?:[ \t]{4}-[ \t]+[^\n]+\n?(?:[ \t]{6}[^\n]+\n?)*)*)/gm)];
+    for (const tm of typeMatches) {
+      const relType = tm[1];
+      const items = [];
+      for (const im of [...tm[2].matchAll(/^[ \t]+-[ \t]+id:[ \t]+([^\s"']+|"[^"]+"|'[^']+')/gm)]) {
+        const id = im[1].replace(/^['"]|['"]$/g, '');
+        const excerptMatch = tm[2].slice(im.index).match(/excerpt:[ \t]+"((?:[^"\\]|\\.)*)"/);
+        items.push({ id, excerpt: excerptMatch ? excerptMatch[1] : '', form: 'text' });
+      }
+      if (items.length) relations[relType] = items;
+    }
+    if (Object.keys(relations).length > 0) fm.relations = relations;
+  }
 
   // 简单数组
   const flatArrRe = /^(\w[\w_-]*):\s*\n((?:\s+-\s+[^\n]+\n?)+)/gm;
@@ -83,6 +103,18 @@ function loadNodes(nodesDir) {
     if (!fm.title && !fm.proposition && !fm.statement && !fm.name && Array.isArray(fm.alias) && fm.alias.length)
       title = `[${fm.role || '角色'}: ${fm.alias[0]}]`;
 
+    // 优先用新格式 relations.derived_from，回退到旧格式 sources
+    const derivedFrom = (fm.relations?.derived_from || []).map(r => ({
+      id: r.id || r,
+      excerpt: (r.excerpt || '').slice(0, 80),
+      form: r.form || 'text',
+    }));
+    const legacySources = (fm.sources || []).map(s => ({
+      id: s.id,
+      excerpt: (s.excerpt || '').slice(0, 80),
+      form: s.form || 'text',
+    }));
+
     nodes[id] = {
       id,
       type: prefix,
@@ -91,11 +123,8 @@ function loadNodes(nodesDir) {
       body: parsed.body || '',
       assertion: fm.proposition || fm.statement || fm.title || fm.name || '',
       intent: fm.intent || '',
-      sources: (fm.sources || []).map(s => ({
-        id: s.id,
-        excerpt: (s.excerpt || '').slice(0, 80),
-        form: s.form || 'text',
-      })),
+      sources: derivedFrom.length > 0 ? derivedFrom : legacySources,
+      relations: fm.relations || {},
       generated_by: fm.generated_by || '',
       reviewed_by: fm.reviewed_by || '',
       confidence: fm.confidence || null,
@@ -223,6 +252,11 @@ function buildAllChains(nodes) {
   if (!findings.length) {
     const referenced = new Set();
     for (const n of Object.values(nodes)) if (n.sources) for (const s of n.sources) referenced.add(s.id);
+    // 也从 relations 中收集被引用节点（新格式）
+    for (const n of Object.values(nodes)) {
+      for (const items of Object.values(n.relations || {}))
+        for (const r of items) referenced.add(r.id || r);
+    }
     return Object.values(nodes).filter(n => !referenced.has(n.id) && !['ENT','EVT','HYP'].includes(n.type)).map(n => buildChainTree(nodes, n.id)).filter(Boolean);
   }
   return findings.map(f => buildChainTree(nodes, f.id)).filter(Boolean);

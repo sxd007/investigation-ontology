@@ -1,4 +1,4 @@
-# 舞弊分类 — 个人工作手册
+﻿# 舞弊分类 — 个人工作手册
 
 面向：正在使用 fraud-classification 技能进行案件分类的调查员。
 目的：自己看的速查手册。理解 ACFE 分类框架、掌握技能调用方法、学会适配企业自有分类体系。
@@ -24,7 +24,7 @@
 3. 路由到对应的 `fraud-<domain>` 场景技能
 4. 输出分类理由和置信度
 
-**入口：** `/cc-investigation:fraud-type` 或直接向 Claude 描述案情。
+**入口：** `/efio:fraud-type` 或直接向 Claude 描述案情。
 
 ### 方式二：直接调用本技能
 
@@ -186,5 +186,5 @@
 | ACFE 官方调查报告 | [acfe.com/report-to-the-nations](https://acfe.com/report-to-the-nations) | 损失估算、行业分布、基准数据        |
 | 技能完整定义      | `SKILL.md`                                                               | 分类全景、各类型调查手段矩阵、手段选择矩阵 |
 | 舞弊类型分类代理    | `agents/fraud-type-classifier.md`                                        | 自动分类的代理实现             |
-| 企业配置        | `~/.claude/plugins/config/cc-investigation/team-profile.md`              | 企业分类映射、制度定义           |
+| 企业配置        | `{配置路径}/team-profile.md`              | 企业分类映射、制度定义           |
 

@@ -1,11 +1,11 @@
----
+﻿---
 skill_navigation:
   description: "整理通话记录时，建议根据通话中出现的信号加载以下技能"
   suggestions:
-    - skill: "cc-investigation:investigation-techniques"
+    - skill: "efio:investigation-techniques"
       when: "举报人出现录音、反问调查流程、或不提供核心信息"
       provides: "反情报刺探评估、信息泄露复盘方法"
-    - skill: "cc-investigation:evidence-management"
+    - skill: "efio:evidence-management"
       when: "通话中获取了新的信息或证据"
       provides: "证据注册表追加标准"
   project_rules:

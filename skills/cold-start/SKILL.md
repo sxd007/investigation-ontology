@@ -1,13 +1,15 @@
----
-name: cold-start-interview
+﻿---
+name: cold-start
 description: 首次设置向导 — 引导调查员完成团队配置、证据策略、集成检查和偏好设置。写入持久化配置路径，所有技能依赖此配置运行。支持中断恢复、升级合并和增量更新。
-origin: cc-investigation
+origin: efio
 user-invocable: true
 ---
 
-# Cold-Start Interview
+# Cold-Start 配置向导
 
-首次安装 cc-investigation 后的设置向导。在一次对话中完成所有配置，让插件从"通用模板"变成"你的调查工具"。
+首次安装 investigation-ontology 后的设置向导。在一次对话中完成所有配置，让插件从"通用模板"变成"你的调查工具"。
+
+> **注意：** 本技能是**配置类**技能，不属于调查业务流程。「cold-start」指插件初始化启动，与访谈（interview）无关。
 
 ---
 
@@ -16,19 +18,25 @@ user-invocable: true
 | 场景 | 行为 |
 |------|------|
 | 插件安装后首次触发（SessionStart hook） | 自动提示运行 |
-| 用户主动运行 `/cc-investigation:cold-start-interview` | 进入状态检测 |
-| 技能检测到 team-profile.md 不存在或含 `[PLACEHOLDER]` | 引导用户运行此命令 |
-| 用户运行 `--check-integrations` | 仅检查集成状态，不重新访谈 |
-| 用户运行 `--redo` | 重新完整访谈，覆盖现有配置（先展示 diff） |
+| **调用任意插件功能时配置未就绪** | **自动进入本向导，无需用户手动触发** |
+| 用户主动运行 `/efio:cold-start` | 进入状态检测 |
+| 用户运行 `--check-integrations` | 仅检查集成状态，不重新设置 |
+| 用户运行 `--redo` | 重新完整设置，覆盖现有配置（先展示 diff） |
 
 ---
 
 ## 状态检测（入口）
 
-每次运行时，先检查配置路径的四种状态，然后分支：
+每次运行时，先解析 `{PLUGIN_CONFIG_DIR}`（见 `config-templates/config-loader.md § 平台路径`），再检查四种状态：
+
+| 平台 | {PLUGIN_CONFIG_DIR} |
+|------|---------------------|
+| Claude Code | `{配置路径}` |
+| CodeBuddy   | `~/.codebuddy/plugins/config/efio` |
+| Codex       | `~/.codex/plugins/config/efio` |
 
 ```
-~/.claude/plugins/config/cc-investigation/team-profile.md 的状态:
+{PLUGIN_CONFIG_DIR}/team-profile.md 的状态:
 
 DOES_NOT_EXIST      → 进入 Phase 1（全新设置）
 ├── evidence-policy.md 也不存在 → 标记为"可选，稍后设置"
@@ -208,7 +216,7 @@ npx -y @modelcontextprotocol/server-<name> --version
 
 ### 4.1 全新写入
 
-首次设置时，按模板结构写入 `~/.claude/plugins/config/cc-investigation/team-profile.md`。模板中所有 `[PLACEHOLDER]` 替换为用户填写值。
+首次设置时，按模板结构写入 `{PLUGIN_CONFIG_DIR}/team-profile.md`（路径按平台表解析，见 § 状态检测入口）。模板中所有 `[PLACEHOLDER]` 替换为用户填写值。
 
 ### 4.2 模板合并（升级场景）
 
@@ -216,7 +224,7 @@ npx -y @modelcontextprotocol/server-<name> --version
 
 ```
 1. READ 新模板 (config-templates/team-profile.md)
-2. READ 现有用户配置 (~/.claude/plugins/config/cc-investigation/team-profile.md)
+2. READ 现有用户配置 ({PLUGIN_CONFIG_DIR}/team-profile.md)
 3. 按 H2 节逐节对比:
    - 模板中存在但配置中不存在的节 → 标记为"新配置项"
    - 模板和配置中都存在但配置中有 [PLACEHOLDER] → 标记为"待补全"
@@ -241,11 +249,23 @@ npx -y @modelcontextprotocol/server-<name> --version
 | 自定义 HTTP 搜索 | ✗ 不可用 | - | 服务端点无响应 |
 ```
 
-### 4.4 输出摘要
+### 4.4 项目上下文文件
+
+在用户的**案件工作目录**（用户运行 `/investigate new` 指向的目录）中，按平台写入对应名称的上下文文件：
+
+| 平台 | 写入文件名 | 内容来源 |
+|------|-----------|---------|
+| Claude Code | `CLAUDE.md` | `project-templates/default/CLAUDE.md` |
+| CodeBuddy   | `CODEBUDDY.md` | `project-templates/default/CODEBUDDY.md` |
+| Codex       | `CODEX.md` | `project-templates/default/CODEX.md` |
+
+> **重要：** 在 CodeBuddy 平台**不要**创建 `CLAUDE.md`，应创建 `CODEBUDDY.md`；在 Codex 平台创建 `CODEX.md`。
+
+### 4.5 输出摘要
 
 ```
 ╔══════════════════════════════════════════════════════════════════╗
-║              cc-investigation 配置完成                           ║
+║              investigation-ontology 配置完成                           ║
 ╠══════════════════════════════════════════════════════════════════╣
 ║  组织: XX 集团公司  |  行业: 制造  |  法域: 中国大陆              ║
 ║  团队: 调查部 (5人)  |  汇报: 审计委员会                          ║
@@ -258,7 +278,7 @@ npx -y @modelcontextprotocol/server-<name> --version
 │  /help investigation-foundation  了解调查基础方法论               │
 └─────────────────────────────────────────────────────────────────┘
 ```
-│  /cc-investigation:cold-start-interview  重新配置               │
+│  /efio:cold-start  重新配置               │
 │  --check-integrations                    检查集成状态            │
 └────────────────────────────────────────────────────────────────┘
 ```
@@ -270,9 +290,9 @@ npx -y @modelcontextprotocol/server-<name> --version
 每次发版更新 `config-templates/team-profile.md` 时：
 
 1. **保留模板结构**：所有字段保持 `[PLACEHOLDER]` 标记
-2. **新增字段必须标注"影响技能"**：确保 cold-start-interview 能识别并归入正确的合并流程
+2. **新增字段必须标注"影响技能"**：确保 cold-start 能识别并归入正确的合并流程
 3. **不修改 config-loader.md**：该契约已覆盖所有场景
-4. **用户配置不受影响**：`~/.claude/plugins/config/cc-investigation/*` 不会被插件更新覆盖
+4. **用户配置不受影响**：`{PLUGIN_CONFIG_DIR}/*` 不会被插件更新覆盖
 
 ---
 
@@ -280,4 +300,4 @@ npx -y @modelcontextprotocol/server-<name> --version
 
 - **Skills:** [调查流程与案件管理](../case-management/SKILL.md)、[MCP 能力目录](../mcp-integration/SKILL.md)
 - **Config System:** [config-loader.md](../../config-templates/config-loader.md)、[team-profile.md 模板](../../config-templates/team-profile.md)
-- **Commands:** `/cc-investigation:cold-start-interview`, `--check-integrations`, `--redo`
+- **Commands:** `/efio:cold-start`, `--check-integrations`, `--redo`
