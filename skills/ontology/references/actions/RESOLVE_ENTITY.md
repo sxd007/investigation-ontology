@@ -8,7 +8,7 @@
 ## □ 前置条件检查清单
 
 ### □ 1. 实体状态
-- 读取 `entities/{type}/{id}.yaml`
+- 读取 `global_ontology/entities/{type}/{id}.yaml`
 - `lifecycle_status` 的值：_____
 - 是否为 `UNRESOLVED`？是 / 否
 - ❌ 如果否：终止操作，只有 UNRESOLVED 的实体可被核实

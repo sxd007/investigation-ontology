@@ -1,7 +1,7 @@
 # 本体关系模板：Relation（实体间关系）
 
 ## 文件路径
-`relations/{id}.yaml`
+`global_ontology/relations/{id}.yaml`
 
 ```yaml
 meta:

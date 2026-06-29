@@ -13,7 +13,7 @@
 - ❌ 如果是：终止操作，证据已存在
 
 ## 执行步骤
-1. 在 `entities/evidence/` 下创建 Evidence 本体文件（`sealed: false`）
+1. 在 `global_ontology/entities/evidence/` 下创建 Evidence 本体文件（`sealed: false`）
 2. 在 `cases/<case_id>/nodes/` 下创建 EV-NNN 认知层节点，添加 `ontology_ref`
 3. 在 `evidence_registry.json` 中注册证据条目
 4. 记录审计

@@ -28,7 +28,7 @@ AI **必须始终清楚**自己的定位：
 
 ### 2. 本体层操作（Ontology）
 
-> 本体层（`entities/`、`relations/`）定义了可呈堂的事实骨架。在建模/创建/修改本体对象前，加载 `/ontology` skill 获取完整的方法论、模型定义和约束规范。Hooks 在写入时自动校验前置条件——你无法绕过。
+> 本体层（`global_ontology/entities/`、`global_ontology/relations/`）定义了可呼堂的事实骨架。在建模/创建/修改本体对象前，加载 `/ontology` skill 获取完整的方法论、模型定义和约束规范。Hooks 在写入时自动校验前置条件——你无法绕过。
 
 #### 快速参考
 
@@ -114,7 +114,7 @@ AI 在以下时刻应主动加载对应技能：
 | 举报/线索定性 | `fraud-classification` → 判断案件性质 |
 | 制定调查计划 | `investigation-foundation` → 假设驱动推理 |
 | 登记证据 | `evidence-management` → 保管链、可采性 |
-| 创建/修改本体对象 | `ontology` → 模型定义、Action 约束、Binding Protocol（处理 entities/、relations/ 时自动激活） |
+| 创建/修改本体对象 | `ontology` → 模型定义、Action 约束、Binding Protocol（处理 global_ontology/entities/、global_ontology/relations/ 时自动激活） |
 | 分析数据 | `data-analysis` → 异常检测方法 |
 | 链路对比分析 | `order-execution-variance-analysis` → 申报与执行记录结构化对比 |
 | 准备访谈 | `interview-analysis` → PEACE 模型、问题设计 |
@@ -148,9 +148,9 @@ AI 在以下时刻应主动加载对应技能：
 | 信息缺口分析（IG-xx） | 同上 §4 | — | — |
 | 初步调查计划 | 同上 §5 | `efio:investigation-foundation` | — |
 | 核心假设建立 | 同上 §6 | `efio:investigation-foundation` | — |
-| 案件元数据创建 | `meta.json` | — | 先执行 `OPEN_CASE` → 创建 `entities/case/` |
+| 案件元数据创建 | `meta.json` | — | 先执行 `OPEN_CASE` → 创建 `global_ontology/entities/case/` |
 | 门禁清单创建 | `checklist.yaml` | — | — |
-| 证据注册表创建 | `evidence_registry.json` | `efio:evidence-management` | 先执行 `ACQUIRE_EVIDENCE` → 创建 `entities/evidence/` |
+| 证据注册表创建 | `evidence_registry.json` | `efio:evidence-management` | 先执行 `ACQUIRE_EVIDENCE` → 创建 `global_ontology/entities/evidence/` |
 | 节点目录创建 | `nodes/`（EV-001、ENT-001、初始 HYP 节点） | `efio:evidence-management` | EV/ENT 节点必须含 `ontology_ref` |
 
 **领域特定知识**：如果案件涉及具体舞弊类型（渠道窜货、采购舞弊等），加载对应的 `efio:fraud-*` 技能获取该领域的调查切入点和信号模式。
@@ -233,20 +233,20 @@ AI 在以下时刻应主动加载对应技能：
 > 每条证据和每个实体除了在认知层注册外，还必须在本体层创建对应的对象。
 > 本体层对象是可呈堂的事实骨架——一旦冻结（sealed=true）不可修改。
 
-- ✅ 登记证据前，先按 `/ontology` skill 的指引校验前置条件（ACQUIRE_EVIDENCE），然后在 `entities/evidence/` 下创建 Evidence 本体文件（含 sha256 哈希和保管链信息）
+- ✅ 登记证据前，先按 `/ontology` skill 的指引校验前置条件（ACQUIRE_EVIDENCE），然后在 `global_ontology/entities/evidence/` 下创建 Evidence 本体文件（含 sha256 哈希和保管链信息）
 - ✅ 在 `nodes/EV-001.json` 的 `ontology_ref` 字段中指向刚创建的 Evidence 本体对象
-- ✅ 在 `evidence_registry.json` 的 `evidence_items[]` 中同步填写 `ontology_ref`（指向 `entities/evidence/`）
-- ✅ 举报线索中涉及的人员/机构/账户，先在 `entities/` 下创建对应的 UNRESOLVED 本体实体，再在 `nodes/ENT-001.json` 的 `ontology_ref` 中指向它
+- ✅ 在 `evidence_registry.json` 的 `evidence_items[]` 中同步填写 `ontology_ref`（指向 `global_ontology/entities/evidence/`）
+- ✅ 举报线索中涉及的人员/机构/账户，先在 `global_ontology/entities/` 下创建对应的 UNRESOLVED 本体实体，再在 `nodes/ENT-001.json` 的 `ontology_ref` 中指向它
 - ✅ 冻结证据时，先按 `/ontology` skill 的指引校验前置条件（SEAL_EVIDENCE），然后更新本体文件的 `sealed: true`
 
 #### 本体映射示例
 
 ```
-举报信息 → 认知层: nodes/EV-001.json          → 本体层: entities/evidence/ev-001.yaml
+举报信息 → 认知层: nodes/EV-001.json          → 本体层: global_ontology/entities/evidence/ev-001.yaml
           └── ontology_ref.object_id: "ev-001"
              ontology_ref.object_type: "Evidence"
 
-涉案人员 → 认知层: nodes/ENT-001.json          → 本体层: entities/person/P-0001.yaml
+涉案人员 → 认知层: nodes/ENT-001.json          → 本体层: global_ontology/entities/person/P-0001.yaml
           └── ontology_ref.object_id: "P-0001"
              ontology_ref.object_type: "Person"
              ontology_ref.lifecycle_status: "UNRESOLVED"
@@ -264,16 +264,16 @@ AI 在以下时刻应主动加载对应技能：
 ├── templates/                         ← 工作底稿模板
 │   └── contact_whistleblower_template.md
 │
-├── entities/                          ← 本体层：可呈堂的事实骨架（Object Types）
-│   ├── person/P-0001.yaml            ← 自然人
-│   ├── organization/O-0042.yaml      ← 组织/机构
-│   ├── account/acc-0012.yaml         ← 金融账户
-│   ├── evidence/ev-010.yaml          ← 证据
-│   └── case/case-001.yaml            ← 案件
-│
-├── relations/                         ← 本体层：实体间关系（Link Types）
-│   ├── R-001.yaml                    ← 关系记录（TRANSFERRED, HAS_ACCOUNT...）
-│   └── R-002.yaml
+├── global_ontology/                   ← 本体层：跨案件共享实体图谱（详见 global_ontology/README.md）
+│   ├── entities/                      ← Object Types
+│   │   ├── person/P-0001.yaml        ← 自然人
+│   │   ├── organization/O-0042.yaml  ← 组织/机构
+│   │   ├── account/acc-0012.yaml     ← 金融账户
+│   │   ├── evidence/ev-010.yaml      ← 证据
+│   │   └── case/case-001.yaml        ← 案件
+│   └── relations/                     ← Link Types
+│       ├── R-001.yaml                ← 关系记录（TRANSFERRED, HAS_ACCOUNT...）
+│       └── R-002.yaml
 │
 ├── rules/                             ← 治理规则
 │   ├── ontology-actions/             ← Action 前置条件定义（Layer 3 防御）
@@ -291,8 +291,8 @@ AI 在以下时刻应主动加载对应技能：
         ├── CHANGELOG.json             ← 变更记录
         │
         ├── nodes/                     ← 分析推理层（关系仅在此声明）
-        │   ├── EV-001.json           ← 必须含 ontology_ref 指向 entities/evidence/
-        │   ├── ENT-001.json          ← 必须含 ontology_ref 指向 entities/{type}/
+        │   ├── EV-001.json           ← 必须含 ontology_ref 指向 global_ontology/entities/evidence/
+        │   ├── ENT-001.json          ← 必须含 ontology_ref 指向 global_ontology/entities/{type}/
         │   ├── LS-001.md
         │   ├── ARG-001.md
         │   ├── FND-001.md

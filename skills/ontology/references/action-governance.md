@@ -55,11 +55,11 @@
 
 | 写入路径 | 触发条件 | Action |
 |---------|---------|--------|
-| `entities/case/*.yaml` | lifecycle_status: CLOSED | CLOSE_CASE |
-| `relations/*.yaml` | 新文件 | ASSERT_RELATION |
-| `entities/(person\|organization\|account)/*.yaml` | UNRESOLVED→VERIFIED | RESOLVE_ENTITY |
-| `entities/evidence/*.yaml` | sealed false→true | SEAL_EVIDENCE |
-| `entities/(person\|org\|account\|evidence)/*.yaml` | 新文件 | ADMIT_CANDIDATE |
+| `global_ontology/entities/case/*.yaml` | lifecycle_status: CLOSED | CLOSE_CASE |
+| `global_ontology/relations/*.yaml` | 新文件 | ASSERT_RELATION |
+| `global_ontology/entities/(person\|organization\|account)/*.yaml` | UNRESOLVED→VERIFIED | RESOLVE_ENTITY |
+| `global_ontology/entities/evidence/*.yaml` | sealed false→true | SEAL_EVIDENCE |
+| `global_ontology/entities/(person\|org\|account\|evidence)/*.yaml` | 新文件 | ADMIT_CANDIDATE |
 
 ## 详细前置条件清单
 

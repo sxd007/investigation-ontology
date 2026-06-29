@@ -1,7 +1,7 @@
 # 本体实体模板：Evidence（证据）
 
 ## 文件路径
-`entities/evidence/{id}.yaml`
+`global_ontology/entities/evidence/{id}.yaml`
 
 ```yaml
 meta:

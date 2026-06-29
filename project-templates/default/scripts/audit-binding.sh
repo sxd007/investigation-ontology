@@ -41,12 +41,12 @@ for node_file in "$CASE_DIR/nodes"/ENT-*.json "$CASE_DIR/nodes"/ENT-*.md; do
   # 检查本体文件是否存在
   ONT_DIR=""
   case "$ONT_TYPE" in
-    Person) ONT_DIR="entities/person" ;;
-    Organization) ONT_DIR="entities/organization" ;;
-    Account) ONT_DIR="entities/account" ;;
-    Evidence) ONT_DIR="entities/evidence" ;;
-    Case) ONT_DIR="entities/case" ;;
-    *) ONT_DIR="entities/unknown" ;;
+    Person) ONT_DIR="global_ontology/entities/person" ;;
+    Organization) ONT_DIR="global_ontology/entities/organization" ;;
+    Account) ONT_DIR="global_ontology/entities/account" ;;
+    Evidence) ONT_DIR="global_ontology/entities/evidence" ;;
+    Case) ONT_DIR="global_ontology/entities/case" ;;
+    *) ONT_DIR="global_ontology/entities/unknown" ;;
   esac
   
   if [ ! -f "$ONT_DIR/$ONT_ID.yaml" ]; then
@@ -71,11 +71,11 @@ for node_file in "$CASE_DIR/nodes"/EV-*.json "$CASE_DIR/nodes"/EV-*.md; do
     continue
   fi
   
-  if [ ! -f "entities/evidence/$ONT_ID.yaml" ]; then
-    echo "⚠️  ERROR: $node_file 引用 entities/evidence/$ONT_ID.yaml 不存在"
+  if [ ! -f "global_ontology/entities/evidence/$ONT_ID.yaml" ]; then
+    echo "⚠️  ERROR: $node_file 引用 global_ontology/entities/evidence/$ONT_ID.yaml 不存在"
     ERRORS=$((ERRORS + 1))
   else
-    echo "✅  $node_file → entities/evidence/$ONT_ID.yaml (OK)"
+    echo "✅  $node_file → global_ontology/entities/evidence/$ONT_ID.yaml (OK)"
   fi
 done
 
@@ -83,7 +83,7 @@ done
 echo ""
 echo "--- 3. Case 本体状态检查 ---"
 META_STATUS=$(grep -oP '"status":\s*"\K[^"]+' "$CASE_DIR/meta.json" 2>/dev/null || echo "NOT_FOUND")
-CASE_FILE="entities/case/case-$(echo "$CASE_ID" | tr '[:upper:'] '[:lower:]').yaml"
+CASE_FILE="global_ontology/entities/case/case-$(echo "$CASE_ID" | tr '[:upper:]' '[:lower:]').yaml"
 if [ -f "$CASE_FILE" ]; then
   ONT_STATUS=$(grep -oP 'lifecycle_status:\s*\K\S+' "$CASE_FILE" 2>/dev/null || echo "NOT_FOUND")
   echo "  认知层 status: $META_STATUS"

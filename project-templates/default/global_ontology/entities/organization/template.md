@@ -1,7 +1,7 @@
 # 本体实体模板：Organization（组织/机构）
 
 ## 文件路径
-`entities/organization/{id}.yaml`
+`global_ontology/entities/organization/{id}.yaml`
 
 ```yaml
 meta:

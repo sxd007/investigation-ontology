@@ -173,7 +173,7 @@ scripts/validate-pack.sh
 
 ### 检查本体引用
 
-修改 `entities/` 或 `relations/` 后，运行：
+修改 `global_ontology/entities/` 或 `global_ontology/relations/` 后，运行：
 
 ```bash
 # PowerShell

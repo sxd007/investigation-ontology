@@ -24,8 +24,8 @@ if ($hookInput.tool_input.PSObject.Properties.Name -contains "content") {
     $payload = ""
 }
 
-# ── 路径匹配：只处理 entities/ 和 relations/ ─────────────────────
-if ($filePath -notmatch '(^|\\|/)entities[/\\]' -and $filePath -notmatch '(^|\\|/)relations[/\\]') {
+# ── 路径匹配：只处理 global_ontology/entities/ 和 global_ontology/relations/ ──
+if ($filePath -notmatch '(^|\\|/)global_ontology[/\\]entities[/\\]' -and $filePath -notmatch '(^|\\|/)global_ontology[/\\]relations[/\\]') {
     exit 0
 }
 
@@ -61,8 +61,8 @@ function YamlField {
 
 # ── Action 反查 ────────────────────────────────────────────────────
 
-# CLOSE_CASE: entities/case/*.yaml + lifecycle_status: CLOSED
-if ($filePath -match 'entities[/\\]case[/\\]') {
+# CLOSE_CASE: global_ontology/entities/case/*.yaml + lifecycle_status: CLOSED
+if ($filePath -match 'global_ontology[/\\]entities[/\\]case[/\\]') {
     if ($payload -match 'lifecycle_status\s*:\s*CLOSED') {
         # 1. 检查当前状态
         $curStatus = YamlField $absPath "lifecycle_status"
@@ -92,8 +92,8 @@ if ($filePath -match 'entities[/\\]case[/\\]') {
     exit 0
 }
 
-# ASSERT_RELATION: relations/*.yaml
-if ($filePath -match 'relations[/\\]') {
+# ASSERT_RELATION: global_ontology/relations/*.yaml
+if ($filePath -match 'global_ontology[/\\]relations[/\\]') {
     if (-not (Test-Path $absPath) -or (Get-Item $absPath).Length -eq 0) {
         # 新建关系
         if (-not ($payload -match 'source_evidence_refs')) {
@@ -103,8 +103,8 @@ if ($filePath -match 'relations[/\\]') {
     exit 0
 }
 
-# RESOLVE_ENTITY: entities/(person|organization|account)/*.yaml + VERIFIED
-if ($filePath -match 'entities[/\\](person|organization|account)[/\\]') {
+# RESOLVE_ENTITY: global_ontology/entities/(person|organization|account)/*.yaml + VERIFIED
+if ($filePath -match 'global_ontology[/\\]entities[/\\](person|organization|account)[/\\]') {
     if ($payload -match 'lifecycle_status\s*:\s*VERIFIED') {
         $curStatus = YamlField $absPath "lifecycle_status"
         if ($curStatus -and $curStatus -ne "UNRESOLVED") {
@@ -114,8 +114,8 @@ if ($filePath -match 'entities[/\\](person|organization|account)[/\\]') {
     exit 0
 }
 
-# SEAL_EVIDENCE: entities/evidence/*.yaml + sealed: true
-if ($filePath -match 'entities[/\\]evidence[/\\]') {
+# SEAL_EVIDENCE: global_ontology/entities/evidence/*.yaml + sealed: true
+if ($filePath -match 'global_ontology[/\\]entities[/\\]evidence[/\\]') {
     if ($payload -match 'sealed\s*:\s*true') {
         $curSealed = YamlField $absPath "sealed"
         if ($curSealed -eq "true") {

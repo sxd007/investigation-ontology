@@ -33,7 +33,7 @@ if ($content -notmatch 'ontology_ref') {
     $msg = @{
         hookSpecificOutput = @{
             hookEventName = "PostToolUse"
-            additionalContext = "⚠️ [Binding Protocol] 文件 $filePath 缺少 ontology_ref 字段。请立即补充指向 entities/ 中对应本体对象的引用。详见 skills/ontology/references/binding-protocol.md。"
+            additionalContext = "⚠️ [Binding Protocol] 文件 $filePath 缺少 ontology_ref 字段。请立即补充指向 global_ontology/entities/ 中对应本体对象的引用。详见 skills/ontology/references/binding-protocol.md。"
         }
     } | ConvertTo-Json -Compress
     Write-Output $msg
@@ -46,11 +46,11 @@ if ($content -match '"object_id"\s*:\s*"([^"]+)"') {
     if ($content -match '"object_type"\s*:\s*"([^"]+)"') {
         $objectType = $matches[1]
         $typeMap = @{
-            "Person" = "entities/person"
-            "Organization" = "entities/organization"
-            "Account" = "entities/account"
-            "Evidence" = "entities/evidence"
-            "Case" = "entities/case"
+            "Person" = "global_ontology/entities/person"
+            "Organization" = "global_ontology/entities/organization"
+            "Account" = "global_ontology/entities/account"
+            "Evidence" = "global_ontology/entities/evidence"
+            "Case" = "global_ontology/entities/case"
         }
         if ($typeMap.ContainsKey($objectType)) {
             # 向上查找项目根目录

@@ -7,13 +7,13 @@
 ```
 认知层（Epistemic Layer）               本体层（Ontology Layer）
 ─────────────────────────              ───────────────────────
-nodes/ENT-001.json  ──ontology_ref──▶  entities/person/P-0001.yaml
-nodes/EV-001.json   ──ontology_ref──▶  entities/evidence/ev-001.yaml
-nodes/FND-001.md    ──引用 RELATION ──▶ relations/R-001.yaml (仅 HARD)
+nodes/ENT-001.json  ──ontology_ref──▶  global_ontology/entities/person/P-0001.yaml
+nodes/EV-001.json   ──ontology_ref──▶  global_ontology/entities/evidence/ev-001.yaml
+nodes/FND-001.md    ──引用 RELATION ──▶ global_ontology/relations/R-001.yaml (仅 HARD)
 nodes/LS-001.md     ──不映射─────────▶  (无)
 nodes/ARG-001.md    ──不映射─────────▶  (无)
 nodes/HYP-001.md    ──不映射─────────▶  (无)
-meta.json           ──不映射─────────▶  entities/case/case-001.yaml
+meta.json           ──不映射─────────▶  global_ontology/entities/case/case-001.yaml
                         (但 case_id 对应)
 ```
 

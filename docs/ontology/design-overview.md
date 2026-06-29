@@ -11,20 +11,20 @@ investigation-ontology 的认知层（`meta.json`、`evidence_registry.json`、`
 
 1. **证据中心**：所有实体和关系可追溯至原始证据
 2. **状态不可绕过**：治理规则（如"结案时所有 Entity 必须 VERIFIED"）由 Action 前置条件强制执行
-3. **图数据库就绪**：`entities/` + `relations/` 可直接投影为属性图，支持穿透查询
+3. **图数据库就绪**：`global_ontology/entities/` + `global_ontology/relations/` 可直接投影为属性图，支持穿透查询
 
 ## 架构关系
 
 ```
 认知层（investigation-ontology）          本体层（Ontology）
 ─────────────────────              ─────────────────
-meta.json                          entities/case/*.yaml
-evidence_registry.json             entities/evidence/*.yaml
-nodes/ENT-*.json  ──ontology_ref──→ entities/person/*.yaml
-nodes/EV-*.json   ──ontology_ref──→ entities/evidence/*.yaml
-（无直接映射）                       entities/organization/*.yaml
-（无直接映射）                       entities/account/*.yaml
-（无直接映射）                       relations/*.yaml
+meta.json                          global_ontology/entities/case/*.yaml
+evidence_registry.json             global_ontology/entities/evidence/*.yaml
+nodes/ENT-*.json  ──ontology_ref──→ global_ontology/entities/person/*.yaml
+nodes/EV-*.json   ──ontology_ref──→ global_ontology/entities/evidence/*.yaml
+（无直接映射）                       global_ontology/entities/organization/*.yaml
+（无直接映射）                       global_ontology/entities/account/*.yaml
+（无直接映射）                       global_ontology/relations/*.yaml
 ```
 
 ## 分层防御
@@ -33,16 +33,16 @@ nodes/EV-*.json   ──ontology_ref──→ entities/evidence/*.yaml
 |---|---|---|
 | Layer 1 | CLAUDE.md + AI prompt | 创建节点时自动写入 ontology_ref |
 | Layer 2 | JSON Schema + pre-commit | 提交时校验 ontology_ref 必填 |
-| Layer 3 | PreToolUse Hook + `scripts/validate-ontology-action.sh` | 写入 entities/、relations/ 时代码强制校验前置条件 |
+| Layer 3 | PreToolUse Hook + `scripts/validate-ontology-action.sh` | 写入 global_ontology/entities/、global_ontology/relations/ 时代码强制校验前置条件 |
 | Layer 4 | `scripts/audit-binding.sh` | 定期巡检发现偏移 |
 
 ## 文件映射
 
 | 本体层目录 | 对应的 Object Type | 说明 |
 |---|---|---|
-| `entities/person/` | Person | 自然人 |
-| `entities/organization/` | Organization | 组织/机构 |
-| `entities/account/` | Account | 金融账户 |
-| `entities/evidence/` | Evidence | 证据载体 |
-| `entities/case/` | Case | 案件容器 |
-| `relations/` | Link Types | 实体间关系 |
+| `global_ontology/entities/person/` | Person | 自然人 |
+| `global_ontology/entities/organization/` | Organization | 组织/机构 |
+| `global_ontology/entities/account/` | Account | 金融账户 |
+| `global_ontology/entities/evidence/` | Evidence | 证据载体 |
+| `global_ontology/entities/case/` | Case | 案件容器 |
+| `global_ontology/relations/` | Link Types | 实体间关系 |

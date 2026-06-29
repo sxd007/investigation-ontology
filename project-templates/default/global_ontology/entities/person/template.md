@@ -1,7 +1,7 @@
 # 本体实体模板：Person（自然人）
 
 ## 文件路径
-`entities/person/{id}.yaml`
+`global_ontology/entities/person/{id}.yaml`
 
 ## 字段定义
 ```yaml
@@ -11,7 +11,7 @@ meta:
   lifecycle_status: UNRESOLVED  # UNRESOLVED | VERIFIED | DISPUTED | SEALED
   created_at: "2026-06-22T00:00:00Z"
   created_by: "system"
-  source_evidence_ref: "ev-010" # 指向 entities/evidence/ 中的证据 ID
+  source_evidence_ref: "ev-010" # 指向 global_ontology/entities/evidence/ 中的证据 ID
 
 properties:
   name_primary: "张三"           # 法定姓名
@@ -22,8 +22,8 @@ properties:
   tax_id: ""                     # 税号（如适用）
 
 links:
-  employed_by: "O-0042"         # 指向 entities/organization/
-  has_accounts:                  # 指向 entities/account/
+  employed_by: "O-0042"         # 指向 global_ontology/entities/organization/
+  has_accounts:                  # 指向 global_ontology/entities/account/
     - "acc-0012"
 
 audit:

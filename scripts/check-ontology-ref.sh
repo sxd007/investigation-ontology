@@ -54,7 +54,7 @@ if [ -n "$MISSING" ]; then
 {
   "hookSpecificOutput": {
     "hookEventName": "PostToolUse",
-    "additionalContext": "⚠️ [Binding Protocol] 文件 $FILE_PATH 缺少 ontology_ref 字段。请立即补充指向 entities/ 中对应本体对象的引用。实体节点引用 entities/{person,organization,account}/，证据节点引用 entities/evidence/。详见 skills/ontology/references/binding-protocol.md。"
+    "additionalContext": "⚠️ [Binding Protocol] 文件 $FILE_PATH 缺少 ontology_ref 字段。请立即补充指向 global_ontology/entities/ 中对应本体对象的引用。实体节点引用 global_ontology/entities/{person,organization,account}/，证据节点引用 global_ontology/entities/evidence/。详见 skills/ontology/references/binding-protocol.md。"
   }
 }
 JSON
@@ -70,11 +70,11 @@ if [ -n "$OBJECT_ID" ]; then
   # 根据类型查找对应的本体文件
   local target_dir=""
   case "$OBJECT_TYPE" in
-    "Person")        target_dir="entities/person" ;;
-    "Organization")  target_dir="entities/organization" ;;
-    "Account")       target_dir="entities/account" ;;
-    "Evidence")      target_dir="entities/evidence" ;;
-    "Case")          target_dir="entities/case" ;;
+    "Person")        target_dir="global_ontology/entities/person" ;;
+    "Organization")  target_dir="global_ontology/entities/organization" ;;
+    "Account")       target_dir="global_ontology/entities/account" ;;
+    "Evidence")      target_dir="global_ontology/entities/evidence" ;;
+    "Case")          target_dir="global_ontology/entities/case" ;;
     *)               target_dir="" ;;
   esac
 

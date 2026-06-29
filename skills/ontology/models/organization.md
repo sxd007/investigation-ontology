@@ -1,6 +1,6 @@
 # Organization（组织/机构）
 
-> Object Type: `Organization` · 存储路径: `entities/organization/{id}.yaml` · ID 前缀: `O-`
+> Object Type: `Organization` · 存储路径: `global_ontology/entities/organization/{id}.yaml` · ID 前缀: `O-`
 
 ## Schema
 
@@ -22,11 +22,11 @@ properties:
   registration_no: ""            # 工商注册号
 
 links:
-  employees:                     # 指向 entities/person/
+  employees:                     # 指向 global_ontology/entities/person/
     - "P-0001"
-  has_accounts:                  # 指向 entities/account/
+  has_accounts:                  # 指向 global_ontology/entities/account/
     - "acc-0012"
-  parent_org: null               # 指向 entities/organization/（母子公司）
+  parent_org: null               # 指向 global_ontology/entities/organization/（母子公司）
 
 audit:
   - action: "entity_created"

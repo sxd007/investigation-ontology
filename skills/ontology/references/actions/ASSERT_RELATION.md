@@ -19,7 +19,7 @@
 
 ### □ 3. 实体有效性（中间态校验）
 - `from_entity` 和 `to_entity` 指向的本体 Entity 是否存在？
-- **现场查询** from_entity 和 to_entity 的当前 `lifecycle_status`（从 `entities/{type}/{id}.yaml` 读取，不依赖认知层缓存）
+- **现场查询** from_entity 和 to_entity 的当前 `lifecycle_status`（从 `global_ontology/entities/{type}/{id}.yaml` 读取，不依赖认知层缓存）
 - 是否所有 Entity 的 `lifecycle_status` 非 UNRESOLVED？
 - from_entity 或 to_entity 是否有 `superseded_by` 字段？（已被合并的实体不可引用）
 - ❌ 如果不满足：终止操作，指出具体哪个实体的状态不满足
@@ -35,7 +35,7 @@
 ## 执行步骤
 
 ### 步骤 1：创建 Relation
-- 在 `relations/` 下创建新 YAML 文件
+- 在 `global_ontology/relations/` 下创建新 YAML 文件
 - `evidence_tier: HARD`
 
 ### 步骤 2：更新认知层

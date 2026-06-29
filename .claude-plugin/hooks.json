@@ -30,7 +30,7 @@
             "statusMessage": "校验本体 Action 前置条件…"
           }
         ],
-        "description": "Remind naming conventions + enforce ontology Action preconditions (cross-platform via node; scripts early-exit on non entities/ relations/ paths)",
+        "description": "Remind naming conventions + enforce ontology Action preconditions (cross-platform via node; scripts early-exit on non global_ontology/entities/ global_ontology/relations/ paths)",
         "id": "pre:write:case-file-guard"
       }
     ],

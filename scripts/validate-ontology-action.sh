@@ -3,7 +3,7 @@
 # validate-ontology-action.sh — PreToolUse Hook
 #
 # Claude Code 在调用 Write/Edit 工具前触发此脚本。
-# 如果写入目标是 entities/ 或 relations/ 下的文件，脚本现场读取
+# 如果写入目标是 global_ontology/entities/ 或 global_ontology/relations/ 下的文件，脚本现场读取
 # YAML 文件的实际状态，校验对应 Action 的前置条件。
 #
 # 返回值：
@@ -30,10 +30,10 @@ OLD_STRING=$(echo "$INPUT" | grep -o '"old_string"\s*:\s*"[^"]*"' | head -1 | se
 # 合并内容：Edit 用 new_string，Write 用 content
 PAYLOAD="${NEW_STRING:-$CONTENT}"
 
-# ── 路径匹配：只处理 entities/ 和 relations/ ─────────────────────
+# ── 路径匹配：只处理 global_ontology/entities/ 和 global_ontology/relations/ ──
 # 注意：file_path 可能是绝对路径或相对路径
 case "$FILE_PATH" in
-  */entities/*|*/relations/*|entities/*|relations/*)
+  */global_ontology/entities/*|*/global_ontology/relations/*|global_ontology/entities/*|global_ontology/relations/*)
     ;;  # 匹配，继续校验
   *)
     exit 0  # 不匹配，放行
@@ -132,9 +132,9 @@ check_close_case() {
   if grep -q "contained_evidence:" "$case_file" 2>/dev/null; then
     local ev_ids=$(grep -A50 "contained_evidence:" "$case_file" | grep -E "^\s*-\s*" | sed 's/.*-\s*//;s/\"//g')
     for evid in $ev_ids; do
-      local ev_file=$(find "$case_dir/../../entities/evidence" -name "${evid}.yaml" 2>/dev/null | head -1)
+      local ev_file=$(find "$case_dir/../../global_ontology/entities/evidence" -name "${evid}.yaml" 2>/dev/null | head -1)
       if [ -z "$ev_file" ]; then
-        ev_file=$(find "$case_dir/../../entities/evidence" -name "*${evid}*" 2>/dev/null | head -1)
+        ev_file=$(find "$case_dir/../../global_ontology/entities/evidence" -name "*${evid}*" 2>/dev/null | head -1)
       fi
       if [ -n "$ev_file" ]; then
         local sealed=$(yaml_field "$ev_file" "sealed")
@@ -305,16 +305,16 @@ check_admit_candidate() {
 
 # ── 主路由：根据路径分发到具体校验函数 ────────────────────────────
 case "$FILE_PATH" in
-  */entities/case/*|entities/case/*)
+  */global_ontology/entities/case/*|global_ontology/entities/case/*)
     check_close_case
     ;;
-  */entities/evidence/*|entities/evidence/*)
+  */global_ontology/entities/evidence/*|global_ontology/entities/evidence/*)
     check_seal_evidence
     ;;
-  */entities/person/*|entities/organization/*|entities/account/*|entities/person/*|entities/organization/*|entities/account/*)
+  */global_ontology/entities/person/*|*/global_ontology/entities/organization/*|*/global_ontology/entities/account/*|global_ontology/entities/person/*|global_ontology/entities/organization/*|global_ontology/entities/account/*)
     check_resolve_entity
     ;;
-  */relations/*|relations/*)
+  */global_ontology/relations/*|global_ontology/relations/*)
     check_assert_relation
     ;;
   *)

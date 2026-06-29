@@ -1,6 +1,6 @@
 # Account（金融账户）
 
-> Object Type: `Account` · 存储路径: `entities/account/{id}.yaml` · ID 前缀: `acc-`
+> Object Type: `Account` · 存储路径: `global_ontology/entities/account/{id}.yaml` · ID 前缀: `acc-`
 
 ## Schema
 
@@ -22,7 +22,7 @@ properties:
   fast_turnover: true                # 是否有快进快出特征
 
 links:
-  owner_id: "P-0001"              # 指向 entities/person/ 或 entities/organization/
+  owner_id: "P-0001"              # 指向 global_ontology/entities/person/ 或 global_ontology/entities/organization/
   related_transactions:           # 指向 relations/（资金流关系）
     - "R-001"
 

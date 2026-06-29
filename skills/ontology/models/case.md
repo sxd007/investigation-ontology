@@ -1,6 +1,6 @@
 # Case（案件）
 
-> Object Type: `Case` · 存储路径: `entities/case/{id}.yaml` · ID 前缀: `CASE-YYYY-NNN`
+> Object Type: `Case` · 存储路径: `global_ontology/entities/case/{id}.yaml` · ID 前缀: `CASE-YYYY-NNN`
 
 ## Schema
 

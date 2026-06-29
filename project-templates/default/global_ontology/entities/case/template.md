@@ -1,7 +1,7 @@
 # 本体实体模板：Case（案件）
 
 ## 文件路径
-`entities/case/{id}.yaml`
+`global_ontology/entities/case/{id}.yaml`
 
 ```yaml
 meta:

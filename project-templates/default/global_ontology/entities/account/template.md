@@ -1,7 +1,7 @@
 # 本体实体模板：Account（金融账户）
 
 ## 文件路径
-`entities/account/{id}.yaml`
+`global_ontology/entities/account/{id}.yaml`
 
 ```yaml
 meta:
@@ -19,8 +19,8 @@ properties:
   account_type: "personal"       # personal | corporate | virtual
 
 links:
-  owner: "P-0001"                # 指向 entities/person/ 或 entities/organization/
-  transactions:                   # 指向 relations/ 中的资金转移关系
+  owner: "P-0001"                # 指向 global_ontology/entities/person/ 或 global_ontology/entities/organization/
+  transactions:                   # 指向 global_ontology/relations/ 中的资金转移关系
     - "R-001"
     - "R-002"
 ```

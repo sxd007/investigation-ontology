@@ -17,7 +17,7 @@
 ### 何时创建新 Entity vs 引用已有
 
 ```
-需要建模一个实体 → 搜索 entities/ 下是否有匹配:
+需要建模一个实体 → 搜索 global_ontology/entities/ 下是否有匹配:
   ├── tax_id / id_card_hash / hr_code 匹配 → 引用已有（不要新建）
   ├── name 匹配但关键 ID 不同 → 检查是否是别名？→ 是，引用已有并追加 aliases
   ├── 无匹配 → 创建新 Entity（UNRESOLVED）
@@ -77,7 +77,7 @@ meta:
 ### ❌ 反模式 4：删除旧 Relation
 
 ```yaml
-# ❌ 直接删除 relations/R-001.yaml
+# ❌ 直接删除 global_ontology/relations/R-001.yaml
 ```
 
 **正确做法**：创建新 Relation（R-002），设置 `R-001.superseded_by = "R-002"`。

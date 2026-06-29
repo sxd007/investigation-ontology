@@ -9,7 +9,7 @@
 请逐一检查，每项完成后在 `[x]` 标记：
 
 ### □ 1. 案件状态
-- 读取 `entities/case/` 下对应的 Case 本体文件
+- 读取 `global_ontology/entities/case/` 下对应的 Case 本体文件
 - `lifecycle_status` 的值：_____
 - 是否为 `ACTIVE`？是 / 否
 - ❌ 如果否：终止操作，告知用户只有 ACTIVE 状态的案件可以结案
@@ -50,7 +50,7 @@
 
 ### 步骤 1：更新本体 Case 状态
 ```yaml
-# entities/case/<case_id>.yaml 中修改：
+# global_ontology/entities/case/<case_id>.yaml 中修改：
 lifecycle_status: CLOSED
 closed_at: <当前时间 ISO 8601>
 closed_by: <操作者>
@@ -77,7 +77,7 @@ closed_by: <操作者>
   "action": "case_closed",
   "summary": "案件 <case_id> 已结案",
   "triggered_by": "<操作者>",
-  "related_ids": ["entities/case/<case_id>.yaml"],
+  "related_ids": ["global_ontology/entities/case/<case_id>.yaml"],
   "preconditions_verified": ["case_status", "entity_status", "fnd_status", "evidence_sealed", "binding_protocol"]
 }
 ```

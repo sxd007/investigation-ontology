@@ -1,6 +1,6 @@
 # Evidence（证据）
 
-> Object Type: `Evidence` · 存储路径: `entities/evidence/{id}.yaml` · ID 前缀: `ev-`
+> Object Type: `Evidence` · 存储路径: `global_ontology/entities/evidence/{id}.yaml` · ID 前缀: `ev-`
 
 ## Schema
 

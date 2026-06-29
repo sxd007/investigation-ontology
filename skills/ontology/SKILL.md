@@ -1,13 +1,13 @@
 ﻿---
 name: ontology
 description: >
-  操作 entities/ 或 relations/ 目录、创建或修改本体对象 (Person/Organization/Account/Evidence/Case)、
+  操作 global_ontology/entities/ 或 global_ontology/relations/ 目录、创建或修改本体对象 (Person/Organization/Account/Evidence/Case)、
   断言关系 (Relation: TRANSFERRED/HAS_ACCOUNT/WORKS_AT...)、或执行本体 Action
   (CLOSE_CASE/RESOLVE_ENTITY/SEAL_EVIDENCE/ASSERT_RELATION 等) 时，必须使用本技能。
   调查本体论定义"什么存在"的结构性方法论 — 覆盖 Object Types、Link Types、Action 治理规则、
   以及认知层与本体层的 Binding Protocol。
 origin: efio
-paths: entities/*, relations/*
+paths: global_ontology/entities/*, global_ontology/relations/*
 ---
 
 # 调查本体论 (Investigation Ontology)
@@ -36,11 +36,11 @@ Action 治理                  证据可采性评估
 
 | Type | ID 前缀 | 存储路径 | 说明 |
 |------|--------|---------|------|
-| Person | `P-` | `entities/person/` | 自然人 |
-| Organization | `O-` | `entities/organization/` | 组织/机构 |
-| Account | `acc-` | `entities/account/` | 金融账户 |
-| Evidence | `ev-` | `entities/evidence/` | 证据载体 |
-| Case | `CASE-YYYY-NNN` | `entities/case/` | 案件容器 |
+| Person | `P-` | `global_ontology/entities/person/` | 自然人 |
+| Organization | `O-` | `global_ontology/entities/organization/` | 组织/机构 |
+| Account | `acc-` | `global_ontology/entities/account/` | 金融账户 |
+| Evidence | `ev-` | `global_ontology/entities/evidence/` | 证据载体 |
+| Case | `CASE-YYYY-NNN` | `global_ontology/entities/case/` | 案件容器 |
 
 完整 schema、状态机、约束见：
 - [models/person.md](models/person.md)
@@ -115,7 +115,7 @@ Hooks 是治理规则的**编译后执行体**，Claude 无法绕过：
 
 | Hook | 触发时机 | 作用 |
 |------|---------|------|
-| PreToolUse: validate-ontology-action.sh | Write/Edit entities/、relations/ 前 | 现场校验 precondition，不满足则 deny |
+| PreToolUse: validate-ontology-action.sh | Write/Edit global_ontology/entities/、global_ontology/relations/ 前 | 现场校验 precondition，不满足则 deny |
 | PostToolUse: check-ontology-ref.sh | Write nodes/ENT-*.json、nodes/EV-*.json 后 | 检查 ontology_ref 有效性，缺失则警告 |
 
 详见 `hooks/hooks.json` 和 `scripts/` 目录。

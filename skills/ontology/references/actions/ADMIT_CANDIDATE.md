@@ -19,7 +19,7 @@
 
 ### □ 3. 身份归一检查（仅 Person/Organization 类型）
 - 如果 candidate.type 是 Person 或 Organization：
-  - 搜索 `entities/person/` 和 `entities/organization/` 目录下所有已有实体
+  - 搜索 `global_ontology/entities/person/` 和 `global_ontology/entities/organization/` 目录下所有已有实体
   - 检查 tax_id / id_card_hash / name 是否与已有实体冲突
 - ❌ 如果冲突：终止操作，提示发现冲突实体，建议先执行 `MERGE_ENTITIES` 或人工复核
 
@@ -33,11 +33,11 @@
 
 ### 步骤 1：创建本体对象
 - **如果是实体类型**：
-  - 在 `entities/{type}/` 目录下创建新 YAML 文件
+  - 在 `global_ontology/entities/{type}/` 目录下创建新 YAML 文件
   - `lifecycle_status` 设为 `UNRESOLVED`
   - `source_evidence_ref` 设为 candidate 的 source_evidence_ref
 - **如果是关系类型**：
-  - 在 `relations/` 目录下创建新 YAML 文件
+  - 在 `global_ontology/relations/` 目录下创建新 YAML 文件
   - `evidence_tier` 设为 `HARD`
   - `source_evidence_refs` 设为 candidate 的 source_evidence_ref
 
