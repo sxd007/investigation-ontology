@@ -20,11 +20,14 @@
 }
 body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-body);font-size:14px;line-height:1.6;min-height:100vh}
 .app{display:flex;flex-direction:column;height:100vh}
+
+/* ── Topbar ──────────────────────────────────────────────── */
 .topbar{background:var(--bg-panel);border-bottom:1px solid var(--border);padding:0 20px;height:52px;display:flex;align-items:center;flex-shrink:0;gap:12px}
 .case-badge{background:var(--amber-dim);border:1px solid var(--amber);color:var(--amber);font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;padding:3px 10px;border-radius:3px;font-weight:600;flex-shrink:0}
 .case-title{font-size:15px;font-weight:600}
 .case-subtitle{font-size:12px;color:var(--text-secondary)}
-.topbar-stats{display:flex;gap:8px;font-size:11px;color:var(--text-dim);margin-left:auto;flex-shrink:0}
+.phase-badge{font-size:10px;color:var(--teal);font-family:var(--font-mono);margin-left:4px;padding:1px 6px;border:1px solid var(--teal-dim);border-radius:3px}
+.topbar-stats{display:flex;gap:8px;font-size:11px;color:var(--text-dim);margin-left:auto;flex-shrink:0;align-items:center}
 .stat-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:2px}
 .dot-ready{background:var(--green);box-shadow:0 0 4px var(--green)}
 .dot-draft{background:var(--amber);box-shadow:0 0 4px var(--amber)}
@@ -32,15 +35,34 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 .dot-active{background:var(--teal);box-shadow:0 0 4px var(--teal)}
 .dot-rejected{background:var(--red);box-shadow:0 0 4px var(--red)}
 .dot-confirmed{background:var(--green);box-shadow:0 0 4px var(--green)}
+
+/* ── 治理状态点 ──────────────────────────────────────────── */
+.dot-unresolved{background:var(--amber);box-shadow:0 0 4px var(--amber)}
+.dot-verified{background:var(--green);box-shadow:0 0 4px var(--green)}
+.dot-disputed{background:var(--red);box-shadow:0 0 4px var(--red)}
+.dot-sealed{background:#daa520;box-shadow:0 0 4px #daa520}
+.dot-unbound{background:#8a8a8a;box-shadow:0 0 4px #8a8a8a}
+
+/* ── Tab 栏 ──────────────────────────────────────────────── */
+.tab-bar{background:var(--bg-panel);border-bottom:1px solid var(--border);padding:0 20px;display:flex;gap:0;flex-shrink:0}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;color:var(--text-secondary);font-size:12px;font-weight:500;padding:8px 16px;cursor:pointer;transition:all .15s;font-family:var(--font-body)}
+.tab-btn:hover{color:var(--text-primary);background:var(--bg-hover)}
+.tab-btn.active{color:var(--teal);border-bottom-color:var(--teal)}
+
+/* ── Workspace ────────────────────────────────────────────── */
 .workspace{flex:1;overflow:hidden;display:flex}
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border-lit);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:#4a6880}
 
+/* ── View panels ─────────────────────────────────────────── */
+.view-panel{flex:1;overflow:hidden;display:none;flex-direction:column}
+.view-panel.active{display:flex}
+
 /* ── XMind 左→右逻辑图 ─────────────────────────────────── */
 .xmind-wrap{flex:1;overflow:auto;display:flex;flex-direction:column}
-.xmind-toolbar{padding:6px 0;flex-shrink:0}
+.xmind-toolbar{padding:6px 0;flex-shrink:0;display:flex;gap:8px;align-items:center}
 .xmind-content{flex:1;position:relative}
 .xmind-card{position:absolute;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:5px 10px;cursor:pointer;transition:all .12s;display:flex;flex-direction:column;gap:1px;overflow:hidden}
 .xmind-card:hover{background:var(--bg-hover);border-color:var(--border-lit);z-index:2}
@@ -48,6 +70,16 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 .xmind-card .x-id{font-family:var(--font-mono);font-size:10px;color:var(--text-id);flex-shrink:0}
 .xmind-card .x-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-left:auto;border:1px solid rgba(0,0,0,.3)}
 .xmind-card .x-title{font-size:11px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;word-break:break-all;color:var(--text-secondary);min-width:0}
+
+/* 治理徽章：节点右上角小圆环 */
+.gov-badge{position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(0,0,0,.4);z-index:1}
+.gov-badge.gov-verified{background:var(--green)}
+.gov-badge.gov-sealed{background:#daa520}
+.gov-badge.gov-unresolved{background:var(--amber)}
+.gov-badge.gov-disputed{background:var(--red)}
+.gov-badge.gov-unbound{background:#8a8a8a}
+.gov-badge:hover{transform:scale(1.5);cursor:help}
+
 .xmind-card-l1{min-width:150px;border-left:3px solid var(--c-finding);z-index:1}
 .xmind-card-l1 .x-title{font-weight:600;color:var(--text-primary);font-size:12px;max-height:33px}
 .xmind-card-l2{min-width:130px;border-left:3px solid var(--c-argument)}
@@ -60,6 +92,81 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 /* ── 折叠按钮 ────────────────────────────────────────── */
 .x-collapse-btn{position:absolute;border:none;background:var(--bg-deep);border:1px solid var(--border);color:var(--text-id);font-size:10px;cursor:pointer;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:3;line-height:1;padding:0;transition:all .12s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
 .x-collapse-btn:hover{background:var(--teal-dim);border-color:var(--teal);color:var(--teal)}
+
+/* ── 边类型颜色 ──────────────────────────────────────────── */
+.edge-derived_from{stroke:#3a5570;stroke-width:1.5;fill:none;stroke-linejoin:round}
+.edge-supported_by{stroke:#52c97a;stroke-width:1.5;fill:none;stroke-linejoin:round}
+.edge-contradicted_by{stroke:#e85c5c;stroke-width:1.5;fill:none;stroke-linejoin:round;stroke-dasharray:5,3}
+.edge-supports{stroke:#52c97a;stroke-width:1.5;fill:none;stroke-linejoin:round}
+.edge-contradicts{stroke:#e85c5c;stroke-width:1.5;fill:none;stroke-linejoin:round;stroke-dasharray:5,3}
+.edge-involves{stroke:#5a8aaa;stroke-width:1;fill:none;stroke-dasharray:3,3;stroke-linejoin:round}
+.edge-corroborated_by{stroke:#7aaa5a;stroke-width:1;fill:none;stroke-linejoin:round}
+.edge-addresses{stroke:#c89050;stroke-width:1;fill:none;stroke-linejoin:round}
+
+/* ── HYP 视图 ────────────────────────────────────────── */
+.hyp-wrap{flex:1;overflow-y:auto;padding:20px}
+.hyp-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:16px;overflow:hidden;transition:all .15s}
+.hyp-card:hover{border-color:var(--border-lit)}
+.hyp-card.warn-border{border-color:var(--amber)}
+.hyp-card-header{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg-panel)}
+.hyp-card-id{font-family:var(--font-mono);font-size:11px;color:var(--text-id);flex-shrink:0}
+.hyp-card-statement{font-size:13px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hyp-card-status{font-size:10px;font-family:var(--font-mono);padding:2px 8px;border-radius:3px}
+.hyp-card-status.active{background:var(--teal-dim);color:var(--teal);border:1px solid var(--teal)}
+.hyp-card-status.confirmed{background:rgba(82,201,122,.15);color:var(--green);border:1px solid var(--green)}
+.hyp-card-status.rejected{background:rgba(232,92,92,.15);color:var(--red);border:1px solid var(--red)}
+.hyp-confidence-bar{width:80px;height:6px;background:var(--bg-deep);border-radius:3px;margin-left:auto;flex-shrink:0;overflow:hidden}
+.hyp-confidence-fill{height:100%;border-radius:3px;transition:width .3s}
+.hyp-card-body{display:flex;gap:0}
+.hyp-side{flex:1;padding:10px 14px;min-width:0}
+.hyp-side-title{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);margin-bottom:6px}
+.hyp-side.support{border-right:2px solid rgba(82,201,122,.3)}
+.hyp-side.contradict{border-left:none}
+.hyp-evidence-item{display:flex;align-items:center;gap:5px;padding:4px 8px;background:var(--bg-deep);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;margin:3px 0;font-size:11px;transition:background .15s}
+.hyp-evidence-item:hover{background:var(--bg-hover)}
+.hyp-evidence-item.support-item{border-color:rgba(82,201,122,.4)}
+.hyp-evidence-item.contradict-item{border-color:rgba(232,92,92,.4)}
+.hyp-evidence-id{font-family:var(--font-mono);font-size:10px;flex-shrink:0}
+.hyp-evidence-id.support-id{color:var(--green)}
+.hyp-evidence-id.contradict-id{color:var(--red)}
+.hyp-no-evidence{font-size:11px;color:var(--text-dim);padding:4px 8px}
+
+/* ── Governance 视图 ──────────────────────────────────── */
+.gov-wrap{flex:1;overflow-y:auto;padding:20px}
+.gov-group{margin-bottom:20px}
+.gov-group-title{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.gov-group-icon{font-size:14px}
+.gov-status-bar{display:flex;gap:4px;height:8px;border-radius:4px;overflow:hidden;background:var(--bg-deep);margin-bottom:8px}
+.gov-status-segment{height:100%;min-width:2px;transition:width .3s}
+.gov-obj-row{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);margin:3px 0;font-size:11px;cursor:pointer;transition:all .12s}
+.gov-obj-row:hover{background:var(--bg-hover)}
+.gov-obj-row.disputed{border-color:rgba(232,92,92,.4)}
+.gov-obj-row.unresolved{border-color:rgba(232,160,32,.4)}
+.gov-obj-id{font-family:var(--font-mono);color:var(--text-id)}
+.gov-obj-type{color:var(--text-secondary)}
+.gov-obj-name{color:var(--text-primary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gov-obj-status{font-size:10px;font-family:var(--font-mono);padding:1px 6px;border-radius:3px}
+.gov-obj-status.VERIFIED{background:rgba(82,201,122,.15);color:var(--green);border:1px solid var(--green)}
+.gov-obj-status.SEALED{background:rgba(218,165,32,.15);color:#daa520;border:1px solid #daa520}
+.gov-obj-status.UNRESOLVED{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber)}
+.gov-obj-status.DISPUTED{background:rgba(232,92,92,.15);color:var(--red);border:1px solid var(--red)}
+
+/* ── Issues 视图 ──────────────────────────────────────── */
+.issues-wrap{flex:1;overflow-y:auto;padding:20px}
+.issues-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.issues-filter-btn{background:var(--bg-deep);border:1px solid var(--border);color:var(--text-dim);font-size:11px;padding:4px 10px;border-radius:var(--radius);cursor:pointer;font-family:var(--font-body);transition:all .12s}
+.issues-filter-btn:hover{border-color:var(--teal);color:var(--teal)}
+.issues-filter-btn.active{border-color:var(--teal);color:var(--teal)}
+.issues-count{font-size:11px;color:var(--text-dim)}
+.issue-row{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);margin:4px 0;font-size:12px;transition:all .12s;cursor:pointer}
+.issue-row:hover{background:var(--bg-hover)}
+.issue-severity{font-size:10px;font-family:var(--font-mono);padding:2px 6px;border-radius:3px;flex-shrink:0}
+.issue-severity.ERROR{background:rgba(232,92,92,.15);color:var(--red);border:1px solid var(--red)}
+.issue-severity.WARN{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber)}
+.issue-severity.INFO{background:rgba(122,170,90,.15);color:#7aaa5a;border:1px solid #7aaa5a}
+.issue-type{font-family:var(--font-mono);font-size:10px;color:var(--text-id)}
+.issue-msg{color:var(--text-secondary);flex:1;min-width:0}
+.issue-node{font-family:var(--font-mono);font-size:10px;color:var(--text-id);flex-shrink:0}
 
 /* ── 详情面板 ────────────────────────────────────────── */
 .detail-panel{flex:0 0 30%;background:var(--bg-panel);border-left:1px solid var(--border);overflow-y:auto;display:none;flex-direction:column}
@@ -85,8 +192,20 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 .panel-body .panel-source:hover{background:var(--bg-hover)}
 .panel-body .panel-source-id{font-family:var(--font-mono);font-size:10px;color:var(--text-id);flex-shrink:0}
 .panel-body .panel-source-excerpt{color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+
+/* ── ontology_ref 详情区 ────────────────────────────────── */
+.panel-ontology-ref{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;margin-bottom:10px}
+.panel-ontology-ref-title{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.panel-ontology-ref-row{display:flex;align-items:center;gap:6px;margin:2px 0;font-size:11px}
+.panel-ontology-ref-key{color:var(--text-dim);font-family:var(--font-mono);font-size:10px;flex-shrink:0}
+.panel-ontology-ref-val{color:var(--text-secondary)}
+
 .btn-sm{background:var(--bg-deep);border:1px solid var(--border);color:var(--text-dim);font-size:11px;padding:3px 10px;border-radius:var(--radius);cursor:pointer;font-family:var(--font-body);transition:all .12s;white-space:nowrap}
 .btn-sm:hover{border-color:var(--teal);color:var(--teal)}
+
+/* ── Tooltip ────────────────────────────────────────── */
+.tooltip{position:fixed;background:var(--bg-panel);border:1px solid var(--border-lit);border-radius:var(--radius);padding:4px 8px;font-size:10px;color:var(--text-secondary);z-index:100;pointer-events:none;opacity:0;transition:opacity .15s}
+.tooltip.show{opacity:1}
 </style>
 </head>
 <body>
@@ -97,13 +216,46 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
       <div class="case-title" id="case-title">—</div>
       <div class="case-subtitle" id="case-subtitle">—</div>
     </div>
+    <span class="phase-badge" id="phase-badge" style="display:none"></span>
     <div class="topbar-stats" id="stats-bar"></div>
   </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="reasoning">推理链</button>
+    <button class="tab-btn" data-tab="hypotheses">假设验证</button>
+    <button class="tab-btn" data-tab="governance">治理状态</button>
+    <button class="tab-btn" data-tab="issues">问题清单</button>
+  </div>
   <div class="workspace">
-    <div class="xmind-wrap" id="view-xmind">
-      <div class="xmind-toolbar"><button class="btn-sm" id="btn-collapse-all" onclick="toggleAllCollapse()">⊟ 全部</button></div>
-      <div id="xmind-content"></div>
+    <!-- Reasoning View -->
+    <div class="view-panel active" id="view-reasoning">
+      <div class="xmind-wrap">
+        <div class="xmind-toolbar">
+          <button class="btn-sm" id="btn-collapse-all" onclick="toggleAllCollapse()">⊟ 全部</button>
+          <button class="btn-sm" id="btn-filter-ready" onclick="toggleReadyOnly()">⦿ 仅 ready</button>
+        </div>
+        <div id="xmind-content"></div>
+      </div>
     </div>
+    <!-- Hypotheses View -->
+    <div class="view-panel" id="view-hypotheses">
+      <div class="hyp-wrap" id="hyp-content"></div>
+    </div>
+    <!-- Governance View -->
+    <div class="view-panel" id="view-governance">
+      <div class="gov-wrap" id="gov-content"></div>
+    </div>
+    <!-- Issues View -->
+    <div class="view-panel" id="view-issues">
+      <div class="issues-wrap">
+        <div class="issues-toolbar">
+          <button class="issues-filter-btn active" onclick="setIssuesFilter('all')" data-filter="all">全部</button>
+          <button class="issues-filter-btn" onclick="setIssuesFilter('blocking')" data-filter="blocking">仅阻塞项</button>
+          <span class="issues-count" id="issues-count"></span>
+        </div>
+        <div id="issues-content"></div>
+      </div>
+    </div>
+    <!-- Detail Panel (shared across views) -->
     <div class="detail-panel" id="detail-panel">
       <div class="panel-header">
         <div class="panel-id" id="panel-id" style="color:var(--c-finding)">—</div>
@@ -114,6 +266,10 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
     </div>
   </div>
 </div>
+
+<!-- Tooltip -->
+<div class="tooltip" id="tooltip"></div>
+
 <script>
 // INJECTION_START_MARKER
 // INJECTION_END_MARKER
@@ -130,49 +286,111 @@ const TYPE_COLORS = {
   HYP:{fill:'#c89050',bg:'rgba(200,144,80,.2)',border:'#d4a868'},
   EVT:{fill:'#7aaa5a',bg:'rgba(122,170,90,.2)',border:'#90c070'},
 };
-const STATUS_LABELS={ready:'就绪',draft:'草稿',superseded:'已取代'};
-const TYPE_LABELS={EV:'原始证据',LS:'线索',ARG:'论据',FND:'结论',ENT:'实体',HYP:'假设',EVT:'事件'};
+
+const STATUS_LABELS = {
+  ready:'就绪', draft:'草稿', superseded:'已取代',
+  active:'活跃', rejected:'已否决', confirmed:'已确认',
+};
+
+const TYPE_LABELS = {EV:'原始证据',LS:'线索',ARG:'论据',FND:'结论',ENT:'实体',HYP:'假设',EVT:'事件'};
+const GOV_STATUS_LABELS = {VERIFIED:'已验证',SEALED:'已封存',UNRESOLVED:'未解决',DISPUTED:'有争议',unbound:'未绑定'};
+const ONTOLOGY_TYPE_LABELS = {Person:'人员',Organization:'组织',Account:'账户',Evidence:'证据',Case:'案件'};
+
+const EDGE_COLORS = {
+  derived_from: {stroke:'#3a5570',dash:''},
+  supported_by: {stroke:'#52c97a',dash:''},
+  contradicted_by: {stroke:'#e85c5c',dash:'5,3'},
+  supports: {stroke:'#52c97a',dash:''},
+  contradicts: {stroke:'#e85c5c',dash:'5,3'},
+  involves: {stroke:'#5a8aaa',dash:'3,3'},
+  corroborated_by: {stroke:'#7aaa5a',dash:''},
+  addresses: {stroke:'#c89050',dash:''},
+};
+
+const GOV_DOT_MAP = {
+  verified:'gov-verified', sealed:'gov-sealed', unresolved:'gov-unresolved',
+  disputed:'gov-disputed', unbound:'gov-unbound', none:'',
+};
+
 const $=id=>document.getElementById(id);
 function typeColor(t){return TYPE_COLORS[t]||{fill:'#666',bg:'rgba(100,100,100,.2)',border:'#888'}}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&#34;')}
 
 // ═══════════════════════════════════════════════════════════════
-// 初始化
+// 初始化 Topbar
 // ═══════════════════════════════════════════════════════════════
-$('case-badge').textContent=CASE_DATA.id;
-$('case-title').textContent=CASE_DATA.title;
-$('case-subtitle').textContent=CASE_DATA.subtitle;
-let st='';
-for(const[k,v]of Object.entries(CASE_DATA.stats.statuses))if(v>0)st+=`<span><span class="stat-dot dot-${k}"></span>${v}</span>`;
-st+=`<span style="color:var(--text-dim)">| ${CASE_DATA.stats.total} 节点</span>`;
-$('stats-bar').innerHTML=st;
+$('case-badge').textContent = CASE_DATA.id;
+$('case-title').textContent = CASE_DATA.title;
+$('case-subtitle').textContent = CASE_DATA.subtitle;
 
-// ═══════════════════════════════════════════════════════════════
-// 折叠状态 + Markdown 渲染
-// ═══════════════════════════════════════════════════════════════
-const collapsedNodes=new Set();
-
-function toggleAllCollapse(){
-  const hasCollapsed=collapsedNodes.size>0;
-  collapsedNodes.clear();
-  if(!hasCollapsed){
-    function collectIds(chain){
-      if(chain.children&&chain.children.length>0){
-        collapsedNodes.add(chain.id);
-        chain.children.forEach(collectIds)
-      }
-    }
-    CHAINS_DATA.forEach(collectIds)
-  }
-  document.getElementById('btn-collapse-all').textContent=hasCollapsed?'⊟ 全部':'⊞ 全部';
-  renderXMind()
+if (CASE_DATA.phase) {
+  $('phase-badge').textContent = CASE_DATA.phase;
+  $('phase-badge').style.display = '';
 }
 
+let st = '';
+for (const [k,v] of Object.entries(CASE_DATA.stats.statuses)) {
+  if (v > 0) st += `<span><span class="stat-dot dot-${k}"></span>${v}</span>`;
+}
+st += `<span style="color:var(--text-dim)">| ${CASE_DATA.stats.total} 节点</span>`;
+
+// 治理统计
+const gov = CASE_DATA.governance || {};
+if (gov.UNRESOLVED > 0) st += `<span style="margin-left:6px"><span class="stat-dot dot-unresolved"></span>${gov.UNRESOLVED}</span>`;
+if (gov.DISPUTED > 0) st += `<span><span class="stat-dot dot-disputed"></span>${gov.DISPUTED}</span>`;
+if (gov.unbound > 0) st += `<span><span class="stat-dot dot-unbound"></span>${gov.unbound}</span>`;
+if (gov.VERIFIED > 0) st += `<span><span class="stat-dot dot-verified"></span>${gov.VERIFIED}</span>`;
+if (gov.SEALED > 0) st += `<span><span class="stat-dot dot-sealed"></span>${gov.SEALED}</span>`;
+
+$('stats-bar').innerHTML = st;
+
+// ═══════════════════════════════════════════════════════════════
+// Tab 切换
+// ═══════════════════════════════════════════════════════════════
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active'));
+    btn.classList.add('active');
+    $('view-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════
+// 折叠状态 + ready 过滤
+// ═══════════════════════════════════════════════════════════════
+const collapsedNodes = new Set();
+let showReadyOnly = false;
+
+function toggleAllCollapse(){
+  const hasCollapsed = collapsedNodes.size > 0;
+  collapsedNodes.clear();
+  if (!hasCollapsed) {
+    function collectIds(chain) {
+      if (chain.children && chain.children.length > 0) {
+        collapsedNodes.add(chain.id);
+        chain.children.forEach(collectIds);
+      }
+    }
+    CHAINS_DATA.forEach(collectIds);
+  }
+  $('btn-collapse-all').textContent = hasCollapsed ? '⊟ 全部' : '⊞ 全部';
+  renderXMind();
+}
+
+function toggleReadyOnly() {
+  showReadyOnly = !showReadyOnly;
+  $('btn-filter-ready').textContent = showReadyOnly ? '⦿ 全部' : '⦿ 仅 ready';
+  renderXMind();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Markdown 渲染
+// ═══════════════════════════════════════════════════════════════
 function mdToHtml(t){
   if(!t)return'';
   let h=esc(t);
 
-  // 1. 保护代码块（先提取，避免被后续规则污染）
   const blocks=[];
   h=h.replace(/```(\w*)\n?([\s\S]*?)```/g,(m,lang,code)=>{
     const idx=blocks.length;
@@ -180,7 +398,6 @@ function mdToHtml(t){
     return '```CODE_BLOCK_'+idx+'```'
   });
 
-  // 2. 表格（| col | col | 格式）
   h=h.replace(/^\|(.+)\|\n\|[-| :]+\|\n((?:\|.+\|\n?)+)/gm,(m,header,body)=>{
     let tbl='<table style="border-collapse:collapse;width:100%;margin:6px 0">';
     tbl+='<thead><tr>';
@@ -198,27 +415,22 @@ function mdToHtml(t){
     return tbl
   });
 
-  // 3. 标题
   h=h.replace(/^#### (.+)$/gm,'<h4>$1</h4>');
   h=h.replace(/^### (.+)$/gm,'<h3>$1</h3>');
   h=h.replace(/^## (.+)$/gm,'<h3>$1</h3>');
   h=h.replace(/^# (.+)$/gm,'<h2>$1</h2>');
 
-  // 4. 行内格式
   h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
   h=h.replace(/\*(.+?)\*/g,'<em>$1</em>');
   h=h.replace(/`([^`]+)`/g,'<code>$1</code>');
   h=h.replace(/\[(.+?)\]\((.+?)\)/g,'<a href="$2" target="_blank" style="color:var(--teal)">$1</a>');
 
-  // 5. 列表
   h=h.replace(/^- (.+)$/gm,'<li>$1</li>');
   h=h.replace(/^(\d+)\. (.+)$/gm,'<li>$2</li>');
   h=h.replace(/((?:<li>.*<\/li>\n?)+)/g,'<ul>$1</ul>');
 
-  // 6. 分割线
   h=h.replace(/---+/g,'<hr style="border-color:var(--border);margin:8px 0">');
 
-  // 7. 段落包装（跳过已经是块级的内容）
   const blockTags='h[2-4]|pre|table|ul|hr';
   const parts=h.split(/\n\n+/);
   if(parts.length>1){
@@ -234,13 +446,25 @@ function mdToHtml(t){
       h='<p>'+t.replace(/\n/g,'<br>')+'</p>'
   }
 
-  // 8. 恢复代码块
   h=h.replace(/```CODE_BLOCK_(\d+)```/g,(m,i)=>blocks[i]||m);
   return h
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 详情面板
+// Tooltip
+// ═══════════════════════════════════════════════════════════════
+function showTooltip(el, text) {
+  const tip = $('tooltip');
+  tip.textContent = text;
+  tip.classList.add('show');
+  const rect = el.getBoundingClientRect();
+  tip.style.left = rect.right + 4 + 'px';
+  tip.style.top = rect.top + 'px';
+}
+function hideTooltip() { $('tooltip').classList.remove('show'); }
+
+// ═══════════════════════════════════════════════════════════════
+// 详情面板（v3: 含 ontology_ref + governance）
 // ═══════════════════════════════════════════════════════════════
 function showDetailPanel(nid){
   const n=NODES_DATA[nid];if(!n)return;
@@ -255,6 +479,26 @@ function showDetailPanel(nid){
 <div class="panel-meta-item"><div class="panel-meta-label">置信度</div><div>${n.confidence||'—'}</div></div>
 <div class="panel-meta-item"><div class="panel-meta-label">生成</div><div>${n.generated_by||'—'}</div></div></div>`;
 
+  // ontology_ref 展示
+  if (n.ontology_ref) {
+    const ref = n.ontology_ref;
+    b += `<div class="panel-ontology-ref"><div class="panel-ontology-ref-title">⬡ 本体绑定</div>`;
+    b += `<div class="panel-ontology-ref-row"><span class="panel-ontology-ref-key">object_id</span><span class="panel-ontology-ref-val"><code>${esc(ref.object_id)}</code></span></div>`;
+    b += `<div class="panel-ontology-ref-row"><span class="panel-ontology-ref-key">object_type</span><span class="panel-ontology-ref-val">${ONTOLOGY_TYPE_LABELS[ref.object_type]||ref.object_type||'—'}</span></div>`;
+    b += `<div class="panel-ontology-ref-row"><span class="panel-ontology-ref-key">lifecycle</span><span class="panel-ontology-ref-val"><span class="stat-dot dot-${(ref.lifecycle_status||'UNRESOLVED').toLowerCase()}"></span>${GOV_STATUS_LABELS[ref.lifecycle_status]||ref.lifecycle_status||'—'}</span></div>`;
+    if (ref.sealed || (n.governance && n.governance.is_sealed))
+      b += `<div class="panel-ontology-ref-row"><span class="panel-ontology-ref-key">sealed</span><span class="panel-ontology-ref-val" style="color:#daa520">✓ 已封存</span></div>`;
+    b += `</div>`;
+  } else if (n.type === 'EV' || n.type === 'ENT') {
+    b += `<div class="panel-ontology-ref" style="border-color:var(--amber-dim)"><div class="panel-ontology-ref-title" style="color:var(--amber)">⚠ 未绑定本体</div><p style="color:var(--text-dim);font-size:11px;margin-top:4px">此节点尚未绑定到本体层对象，治理状态不可追踪</p></div>`;
+  }
+
+  // governance risk
+  if (n.governance && n.governance.risk_level !== 'none') {
+    const riskLabel = {warn:'⚠ 需关注',high:'🔴 高风险',unbound:'⚠ 未绑定'};
+    b += `<p style="color:${n.governance.risk_level==='high'?'var(--red)':'var(--amber)'};font-size:11px">${riskLabel[n.governance.risk_level]||''}</p>`;
+  }
+
   if(n.type==='EV'&&(n.evidence_type||n.collected_at||n.collected_by)){
     b+='<h4>证据信息</h4>';
     if(n.source)b+=`<p>来源: ${esc(n.source)}</p>`;
@@ -265,6 +509,22 @@ function showDetailPanel(nid){
   if(n.body&&n.body!=='---'&&n.body!=='')b+=mdToHtml(n.body);
   else if(n.assertion)b+=`<p style="color:var(--teal);font-style:italic">${esc(n.assertion)}</p>`;
   else b+=`<p style="color:var(--text-dim)">（无详细内容）</p>`;
+
+  // 关系展示
+  if (n.relations && typeof n.relations === 'object') {
+    b += '<h4>关系</h4>';
+    for (const [rt, items] of Object.entries(n.relations)) {
+      if (!Array.isArray(items) || items.length === 0) continue;
+      const rtLabel = {derived_from:'推导自',supports:'支撑',contradicts:'反驳',involves:'涉及',corroborated_by:'被印证',addresses:'应对',supported_by:'被支持',contradicted_by:'被反驳'};
+      b += `<p style="margin:2px 0"><strong>${rtLabel[rt]||rt}</strong>: `;
+      for (const item of items) {
+        const iid = item.id || item;
+        const ic = typeColor(NODES_DATA[iid]?.type || 'EV');
+        b += `<span class="panel-source" onclick="showDetailPanel('${iid}')"><span class="panel-source-id" style="color:${ic.fill}">${iid}</span></span> `;
+      }
+      b += '</p>';
+    }
+  }
 
   if(n.sources&&n.sources.length){
     b+='<h4>来源节点</h4>';
@@ -289,7 +549,7 @@ function closeDetailPanel(){$('detail-panel').classList.remove('open')}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDetailPanel()});
 
 // ═══════════════════════════════════════════════════════════════
-// XMind 左→右逻辑图
+// XMind 左→右逻辑图（v3: 边按 relation_type 分色）
 // ═══════════════════════════════════════════════════════════════
 const XMIND={slotH:74,colW:[160,180,160,140],gap:48,topPad:24,chainGap:28};
 
@@ -302,6 +562,10 @@ function xCountLeaves(chain){
 function xLayoutSubtree(chain,startY,level,xPos){
   const n=NODES_DATA[chain.id];
   if(!n)return null;
+
+  // ready-only 过滤：跳过 draft/superseded 节点
+  if (showReadyOnly && n.status !== 'ready' && level > 0) return null;
+
   const leaves=xCountLeaves(chain);
   const h=leaves*XMIND.slotH;
   const w=XMIND.colW[Math.min(level,XMIND.colW.length-1)];
@@ -334,7 +598,11 @@ function xBuildLayout(){
 
 function xCollectEdges(layout,edges){
   for(const c of layout.children){
-    edges.push({x1:layout.x+layout.w,y1:layout.y+layout.h/2,x2:c.x,y2:c.y+c.h/2,from:layout.id,to:c.id});
+    // 从 EDGES_DATA 找对应边，获取 relation_type
+    const edgeData = EDGES_DATA.find(ed => ed.from === c.id && ed.to === layout.id) ||
+                     EDGES_DATA.find(ed => ed.from === layout.id && ed.to === c.id);
+    const rt = edgeData ? edgeData.relation_type : 'derived_from';
+    edges.push({x1:layout.x+layout.w,y1:layout.y+layout.h/2,x2:c.x,y2:c.y+c.h/2,from:layout.id,to:c.id,relation_type:rt});
     xCollectEdges(c,edges)
   }
 }
@@ -355,11 +623,13 @@ function renderXMind(){
   roots.forEach(r=>xCollectEdges(r,edges));
   const dim=xDimension(roots);
 
-  // SVG 连线 + 卡片 — 放在同一层，共享坐标原点
+  // SVG 连线 — 按 relation_type 分色分线型
   let svgHtml='<svg style="position:absolute;top:0;left:0;pointer-events:none" width="'+dim.w+'" height="'+dim.h+'">';
   for(const e of edges){
     const mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2;
-    svgHtml+=`<path d="M${e.x1},${e.y1} L${mx},${e.y1} L${mx},${e.y2} L${e.x2},${e.y2}" fill="none" stroke="#2a3f56" stroke-width="1.5" stroke-linejoin="round"/>`;
+    const ec = EDGE_COLORS[e.relation_type] || EDGE_COLORS.derived_from;
+    const dashAttr = ec.dash ? ` stroke-dasharray="${ec.dash}"` : '';
+    svgHtml+=`<path d="M${e.x1},${e.y1} L${mx},${e.y1} L${mx},${e.y2} L${e.x2},${e.y2}" fill="none" stroke="${ec.stroke}" stroke-width="1.5"${dashAttr} stroke-linejoin="round"/>`;
     const edgeData=EDGES_DATA.find(ed=>ed.from===e.from&&ed.to===e.to);
     if(edgeData&&edgeData.excerpt){
       svgHtml+=`<text x="${mx}" y="${my-4}" text-anchor="middle" fill="#4a6880" font-size="9">${esc(edgeData.excerpt.slice(0,18))}</text>`
@@ -376,7 +646,12 @@ function renderXMind(){
   let cardsHtml='';
   for(const c of cards){
     const fullTitle=c.node.title||'';
+    // 治理徽章
+    const govClass = c.node.governance ? GOV_DOT_MAP[c.node.governance.risk_level] : '';
+    const govBadge = govClass ? `<span class="gov-badge ${govClass}" data-nid="${c.id}" data-gov="${c.node.governance?.risk_level||''}"></span>` : '';
+
     cardsHtml+=`<div class="xmind-card ${typeLevel(c)}" style="left:${c.x}px;top:${c.y}px;width:${c.w}px;height:${c.h}px" data-id="${c.id}" title="${esc(fullTitle)}">
+      ${govBadge}
       <div class="x-top">
         <span class="x-id">${c.id}</span>
         <span class="x-dot" style="background:${c.node.status==='ready'?'#52c97a':c.node.status==='draft'?'#e8a020':'#4a6880'}"></span>
@@ -385,7 +660,7 @@ function renderXMind(){
     </div>`
   }
 
-  // 折叠按钮（画在连接线起始处）
+  // 折叠按钮
   let btnHtml='';
   function collectBtns(n){
     if(n.hasChildren){
@@ -410,7 +685,195 @@ $('xmind-content').addEventListener('click',e=>{
   }
   const card=e.target.closest('.xmind-card');
   if(card)showDetailPanel(card.dataset.id)
+  const badge=e.target.closest('.gov-badge');
+  if(badge) {
+    const nid = badge.dataset.nid;
+    const gov = badge.dataset.gov;
+    const govLabels = {verified:'VERIFIED — 已验证',sealed:'SEALED — 已封存',unresolved:'UNRESOLVED — 未解决',disputed:'DISPUTED — 有争议',unbound:'未绑定本体对象'};
+    showTooltip(badge, govLabels[gov] || gov);
+    setTimeout(hideTooltip, 2000);
+  }
 });
+
+// ═══════════════════════════════════════════════════════════════
+// Hypotheses View
+// ═══════════════════════════════════════════════════════════════
+function renderHypotheses(){
+  const container = $('hyp-content');
+  if (!HYPOTHESIS_DATA || !HYPOTHESIS_DATA.length) {
+    container.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text-dim);gap:8px;padding:40px"><div style="font-size:36px;opacity:.4">💡</div><div style="font-size:13px">无假设数据</div></div>';
+    return;
+  }
+
+  let html = '';
+  for (const h of HYPOTHESIS_DATA) {
+    const isWarn = !h.coverage.has_support && !h.coverage.has_contradiction;
+    const statusClass = h.status || 'active';
+    const confValue = h.confidence || 0;
+    const confColor = confValue > 0.7 ? '#52c97a' : confValue > 0.3 ? '#e8a020' : '#e85c5c';
+
+    html += `<div class="hyp-card${isWarn?' warn-border':''}">`;
+    html += `<div class="hyp-card-header">`;
+    html += `<span class="hyp-card-id">${h.id}</span>`;
+    html += `<span class="hyp-card-statement">${esc(h.statement)}</span>`;
+    html += `<span class="hyp-card-status ${statusClass}">${STATUS_LABELS[h.status]||h.status}</span>`;
+    if (h.confidence !== null) {
+      html += `<div class="hyp-confidence-bar"><div class="hyp-confidence-fill" style="width:${confValue*100}%;background:${confColor}"></div></div>`;
+    }
+    html += `</div>`;
+
+    html += `<div class="hyp-card-body">`;
+    // 支持证据
+    html += `<div class="hyp-side support"><div class="hyp-side-title" style="color:#52c97a">▸ 支持证据 (${h.coverage.support_count})</div>`;
+    if (h.supported_by.length) {
+      for (const sid of h.supported_by) {
+        const sn = NODES_DATA[sid];
+        const tc = typeColor(sn ? sn.type : 'EV');
+        html += `<div class="hyp-evidence-item support-item" onclick="showDetailPanel('${sid}')"><span class="hyp-evidence-id support-id" style="color:${tc.fill}">${sid}</span>${sn ? `<span style="color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis">${esc(sn.title)}</span>` : ''}</div>`;
+      }
+    } else {
+      html += `<div class="hyp-no-evidence">（无支持证据）</div>`;
+    }
+    html += `</div>`;
+
+    // 反驳证据
+    html += `<div class="hyp-side contradict"><div class="hyp-side-title" style="color:#e85c5c">▸ 反驳证据 (${h.coverage.contradiction_count})</div>`;
+    if (h.contradicted_by.length) {
+      for (const cid of h.contradicted_by) {
+        const cn = NODES_DATA[cid];
+        const tc = typeColor(cn ? cn.type : 'EV');
+        html += `<div class="hyp-evidence-item contradict-item" onclick="showDetailPanel('${cid}')"><span class="hyp-evidence-id contradict-id" style="color:${tc.fill}">${cid}</span>${cn ? `<span style="color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis">${esc(cn.title)}</span>` : ''}</div>`;
+      }
+    } else {
+      html += `<div class="hyp-no-evidence">（无反驳证据）</div>`;
+    }
+    html += `</div>`;
+    html += `</div></div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Governance View
+// ═══════════════════════════════════════════════════════════════
+function renderGovernance(){
+  const container = $('gov-content');
+  if (!ONTOLOGY_DATA || !Object.keys(ONTOLOGY_DATA.objects || {}).length) {
+    // 也检查未绑定的 EV/ENT
+    const unboundNodes = Object.values(NODES_DATA).filter(n => (n.type === 'EV' || n.type === 'ENT') && !n.ontology_ref);
+    if (!unboundNodes.length) {
+      container.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text-dim);gap:8px;padding:40px"><div style="font-size:36px;opacity:.4">🛡️</div><div style="font-size:13px">无本体治理数据</div></div>';
+      return;
+    }
+  }
+
+  const objects = ONTOLOGY_DATA.objects || {};
+  // 按 object_type 分组
+  const groups = {};
+  for (const [oid, obj] of Object.entries(objects)) {
+    const gtype = obj.object_type || 'Other';
+    if (!groups[gtype]) groups[gtype] = [];
+    groups[gtype].push({id: oid, ...obj});
+  }
+  // 加上未绑定的 EV/ENT
+  const unboundNodes = Object.values(NODES_DATA).filter(n => (n.type === 'EV' || n.type === 'ENT') && !n.ontology_ref);
+  if (unboundNodes.length) {
+    groups['Unbound'] = unboundNodes.map(n => ({id: n.id, object_type: n.type === 'EV' ? 'Evidence (unbound)' : 'Entity (unbound)', display_name: n.title, lifecycle_status: 'UNRESOLVED', source_nodes: [n.id]}));
+  }
+
+  const groupIcons = {Person:'👤',Organization:'🏢',Account:'💳',Evidence:'📄',Case:'📁',Unbound:'⚠️'};
+  const groupLabels = {Person:'人员',Organization:'组织',Account:'账户',Evidence:'证据',Case:'案件',Unbound:'未绑定'};
+  const statusColors = {VERIFIED:'#52c97a',SEALED:'#daa520',UNRESOLVED:'#e8a020',DISPUTED:'#e85c5c'};
+  const statusOrder = ['DISPUTED','UNRESOLVED','VERIFIED','SEALED'];
+
+  let html = '';
+  for (const [gtype, items] of Object.entries(groups)) {
+    html += `<div class="gov-group">`;
+    html += `<div class="gov-group-title"><span class="gov-group-icon">${groupIcons[gtype]||'📁'}</span>${groupLabels[gtype]||gtype} (${items.length})</div>`;
+
+    // 状态分布条
+    const statusCounts = {};
+    for (const s of statusOrder) statusCounts[s] = 0;
+    for (const item of items) {
+      const ls = item.lifecycle_status || 'UNRESOLVED';
+      statusCounts[ls] = (statusCounts[ls] || 0) + 1;
+    }
+    html += `<div class="gov-status-bar">`;
+    for (const s of statusOrder) {
+      if (statusCounts[s] > 0) {
+        html += `<div class="gov-status-segment" style="width:${statusCounts[s]/items.length*100}%;background:${statusColors[s]}"></div>`;
+      }
+    }
+    html += `</div>`;
+
+    // 列出对象
+    for (const item of items) {
+      const ls = item.lifecycle_status || 'UNRESOLVED';
+      const isDisputed = ls === 'DISPUTED';
+      const isUnresolved = ls === 'UNRESOLVED';
+      const rowClass = isDisputed ? 'disputed' : isUnresolved ? 'unresolved' : '';
+      const sourceNode = item.source_nodes ? item.source_nodes[0] : '';
+      html += `<div class="gov-obj-row ${rowClass}" onclick="${sourceNode ? `showDetailPanel('${sourceNode}')` : ''}">`;
+      html += `<span class="gov-obj-id">${esc(item.id)}</span>`;
+      html += `<span class="gov-obj-type">${ONTOLOGY_TYPE_LABELS[item.object_type]||item.object_type||''}</span>`;
+      html += `<span class="gov-obj-name">${esc(item.display_name)}</span>`;
+      html += `<span class="gov-obj-status ${ls}">${GOV_STATUS_LABELS[ls]||ls}</span>`;
+      html += `</div>`;
+    }
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Issues View
+// ═══════════════════════════════════════════════════════════════
+let issuesFilter = 'all';
+
+function setIssuesFilter(filter) {
+  issuesFilter = filter;
+  document.querySelectorAll('.issues-filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === filter);
+  });
+  renderIssues();
+}
+
+function renderIssues() {
+  const container = $('issues-content');
+  const issues = GOVERNANCE_ISSUES || [];
+
+  const filtered = issuesFilter === 'blocking'
+    ? issues.filter(i => i.severity === 'ERROR' || i.severity === 'WARN')
+    : issues;
+
+  $('issues-count').textContent = `${filtered.length} / ${issues.length} 项`;
+
+  if (!filtered.length) {
+    container.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;color:var(--text-dim);gap:8px"><div style="font-size:24px;opacity:.4">✅</div><div style="font-size:13px">无阻塞问题</div></div>';
+    return;
+  }
+
+  let html = '';
+  const severityEmoji = {ERROR:'🔴',WARN:'🟡',INFO:'🔵'};
+  // 按 severity 排序：ERROR > WARN > INFO
+  const sorted = [...filtered].sort((a,b) => {
+    const order = {ERROR:0,WARN:1,INFO:2};
+    return (order[a.severity]||3) - (order[b.severity]||3);
+  });
+
+  for (const issue of sorted) {
+    html += `<div class="issue-row" onclick="${issue.node ? `showDetailPanel('${issue.node}')` : ''}">`;
+    html += `<span class="issue-severity ${issue.severity}">${severityEmoji[issue.severity]||issue.severity}</span>`;
+    html += `<span class="issue-type">${esc(issue.type)}</span>`;
+    html += `<span class="issue-msg">${esc(issue.message)}</span>`;
+    html += `<span class="issue-node">${issue.node||''}</span>`;
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+}
 
 // ═══════════════════════════════════════════════════════════════
 // Resize
@@ -422,6 +885,9 @@ window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>renderX
 // Init
 // ═══════════════════════════════════════════════════════════════
 renderXMind();
+renderHypotheses();
+renderGovernance();
+renderIssues();
 </script>
 </body>
 </html>

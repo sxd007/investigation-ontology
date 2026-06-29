@@ -1,21 +1,26 @@
 #!/usr/bin/env python3
 """
-scan-chain.py — 证据链编译与完整性检查工具 (v2)
+scan-chain.py — 证据链编译与完整性检查工具 (v3)
 
 职责:
   1. 从 nodes/ 目录读取所有节点，编译带类型标注的关系图
   2. 追溯证据链（从 finding 到原始证据，按关系类型分组）
   3. 推理链逻辑完整性检查（EV→LS→ARG→FND）
   4. 同步 chain_nodes 索引回 evidence_registry.json
+  5. ontology_ref 绑定检查（EV/ENT 是否绑定了本体对象）
+  6. HYP coverage 检查（active 假设是否有证据支持/反驳）
+  7. 治理 readiness 检查（FND 链中是否存在未验证/争议对象）
 
-关系模型 (v2):
+关系模型 (v3):
   所有关系通过节点 frontmatter 的 relations 字段声明:
-  - derived_from:   推导自/来源于（推理链上游）
-  - supports:       支撑/支持（逻辑下游）
-  - contradicts:    反驳/矛盾
-  - involves:       涉及实体
-  - corroborated_by:被印证（仅 EV）
-  - addresses:      应对竞争假设（仅 HYP）
+  - derived_from:    推导自/来源于（推理链上游）
+  - supports:        支撑/支持（逻辑下游）
+  - contradicts:     反驳/矛盾
+  - involves:        涉及实体
+  - corroborated_by: 被印证（仅 EV）
+  - addresses:       应对竞争假设（仅 HYP）
+  - supported_by:    被支持（HYP 专用，被动型）
+  - contradicted_by: 被反驳（HYP 专用，被动型）
 
 使用:
   scan-chain.py cases/CASE-2026-001/ --list
@@ -25,6 +30,7 @@ scan-chain.py — 证据链编译与完整性检查工具 (v2)
   scan-chain.py cases/CASE-2026-001/ --sync
   scan-chain.py cases/CASE-2026-001/ --graph          # Mermaid 图（对话内快速预览）
   scan-chain.py cases/CASE-2026-001/ --html output.html  # 交互式 HTML（需要 Node.js）
+  scan-chain.py cases/CASE-2026-001/ --validate          # 含 ontology_ref 检查
 """
 
 from pathlib import Path
@@ -53,6 +59,7 @@ VALID_STATUSES = {"draft", "ready", "superseded"}
 RELATION_TYPES = {
     "derived_from", "supports", "contradicts",
     "involves", "corroborated_by", "addresses",
+    "supported_by", "contradicted_by",   # HYP 专用（被动型）
 }
 
 # 推理链规则
@@ -344,6 +351,7 @@ def load_all_nodes(case_dir: Path) -> list[dict]:
             "type": node_type,
             "status": status,
             "relations": normalize_relations(meta),
+            "ontology_ref": meta.get("ontology_ref"),
             "has_old_sources": "sources" in meta,
             "file": str(fpath.relative_to(case_dir)),
         })
@@ -455,6 +463,20 @@ def _build_tree(nid: str, graph: dict, visited: set, depth: int) -> dict:
             "status": node.get("status", "draft"), "children": children}
 
 
+# ── 辅助：收集推理链上所有节点 ID ──
+
+def _collect_chain_ids(nid: str, all_nodes: dict, visited: set) -> list:
+    """沿 derived_from 递归收集推理链上的所有节点 ID。"""
+    if nid in visited:
+        return []
+    visited.add(nid)
+    node = all_nodes.get(nid, {})
+    ids = [nid]
+    for ref_id in flat_ids(node.get("relations", {}), "derived_from"):
+        ids.extend(_collect_chain_ids(ref_id, all_nodes, visited))
+    return ids
+
+
 # ── 完整性检查 ──
 
 def check_integrity(nodes: list[dict]) -> list[dict]:
@@ -508,6 +530,39 @@ def check_integrity(nodes: list[dict]) -> list[dict]:
         if not has_up and not has_down:
             issues.append({"severity": "INFO", "type": "orphan_node",
                            "message": f"{n['id']} 无上下游关联", "node": n["id"]})
+
+    # 治理 readiness 检查（v3 新增）
+    # FND 链中存在 UNRESOLVED / DISPUTED 对象
+    for n in nodes:
+        if n["type"] != "finding":
+            continue
+        chain_ids = _collect_chain_ids(n["id"], all_nodes, set())
+        for cid in chain_ids:
+            cn = all_nodes.get(cid, {})
+            ontology_ref = cn.get("ontology_ref")
+            if not ontology_ref:
+                continue
+            ls = ontology_ref.get("lifecycle_status", "")
+            if ls == "DISPUTED":
+                issues.append({"severity": "ERROR", "type": "disputed_in_finding_chain",
+                               "message": f"{n['id']} (FND) 的推理链中 {cid} 处于 DISPUTED 状态",
+                               "node": n["id"], "depends_on": cid})
+            elif ls == "UNRESOLVED" and cn.get("type") in ("evidence", "entity"):
+                issues.append({"severity": "WARN", "type": "unresolved_in_finding_chain",
+                               "message": f"{n['id']} (FND) 的推理链中 {cid} 尚未 VERIFIED",
+                               "node": n["id"], "depends_on": cid})
+
+    # FND 的 derived_from 链是否全 ready（REVIEWING 门禁前置检查）
+    for n in nodes:
+        if n["type"] != "finding" or n["status"] != "ready":
+            continue
+        chain_ids = _collect_chain_ids(n["id"], all_nodes, set())
+        for cid in chain_ids:
+            cn = all_nodes.get(cid, {})
+            if cn.get("status") == "draft" and cn.get("type") in ("clue", "argument", "evidence"):
+                issues.append({"severity": "WARN", "type": "draft_in_ready_chain",
+                               "message": f"{n['id']} (FND, ready) 的链中 {cid} 仍为 draft",
+                               "node": n["id"], "depends_on": cid})
 
     return issues
 
@@ -589,6 +644,33 @@ def check_chains(nodes: list[dict]) -> list[dict]:
                        "message": f"{pair[0]} 同时对 {pair[1]} 标记 supports 和 contradicts",
                        "node": pair[0], "depends_on": pair[1]})
 
+    # 4. HYP coverage 检查（v3 新增）
+    for n in nodes:
+        if n["type"] != "hypothesis":
+            continue
+        supported_by = flat_ids(n["relations"], "supported_by")
+        contradicted_by = flat_ids(n["relations"], "contradicted_by")
+
+        # active HYP 至少应有 supported_by 或 contradicted_by
+        if n["status"] == "active" and not supported_by and not contradicted_by:
+            issues.append({"severity": "WARN", "type": "unsupported_hypothesis",
+                           "message": f"{n['id']} (HYP, active) 无任何支持或反驳证据",
+                           "node": n["id"]})
+
+        # confirmed HYP 如有未处理 contradicted_by，需说明
+        if n["status"] == "confirmed" and contradicted_by:
+            issues.append({"severity": "WARN", "type": "confirmed_with_contradictions",
+                           "message": f"{n['id']} (HYP, confirmed) 仍存在反驳证据: {contradicted_by}",
+                           "node": n["id"]})
+
+        # rejected HYP 应有足够 contradicted_by 或 addresses 说明
+        if n["status"] == "rejected" and not contradicted_by:
+            addresses = flat_ids(n["relations"], "addresses")
+            if not addresses:
+                issues.append({"severity": "INFO", "type": "rejected_without_contradictions",
+                               "message": f"{n['id']} (HYP, rejected) 无反驳证据，需确认 rejection 理由",
+                               "node": n["id"]})
+
     return issues
 
 
@@ -609,6 +691,9 @@ ID_PATTERN = re.compile(r"^(EV|LS|ARG|FND|ENT|HYP|EVT)-\d{3,}$")
 
 VALID_STATUS_HYP = {"active", "rejected", "confirmed", ""}
 VALID_STATUS_GEN = {"draft", "ready", "superseded", ""}
+
+ONTOLOGY_LIFECYCLE_STATUSES = {"UNRESOLVED", "VERIFIED", "DISPUTED", "SEALED"}
+ONTOLOGY_OBJECT_TYPES = {"Person", "Organization", "Account", "Evidence", "Case"}
 
 ID_PREFIX_MAP = {
     "evidence": "EV", "clue": "LS", "argument": "ARG",
@@ -657,6 +742,30 @@ def validate_node_file(case_dir: Path, rel_path: str) -> list[dict]:
     if "sources" in meta:
         errors.append({"severity": "WARN", "type": "deprecated_field",
                        "message": f"{rel_path}: 'sources' 已废弃，请改用 'relations'"})
+
+    # ontology_ref 检查（v3 新增）
+    ontology_ref = meta.get("ontology_ref")
+    if ontology_ref:
+        if not isinstance(ontology_ref, dict):
+            errors.append({"severity": "WARN", "type": "invalid_ontology_ref",
+                           "message": f"{rel_path}: ontology_ref 应为字典对象"})
+        else:
+            if not ontology_ref.get("object_id"):
+                errors.append({"severity": "WARN", "type": "missing_ontology_ref_field",
+                               "message": f"{rel_path}: ontology_ref 缺少 object_id"})
+            obj_type = ontology_ref.get("object_type", "")
+            if obj_type and obj_type not in ONTOLOGY_OBJECT_TYPES:
+                errors.append({"severity": "WARN", "type": "invalid_ontology_object_type",
+                               "message": f"{rel_path}: ontology_ref.object_type '{obj_type}' 不合法（应为 {ONTOLOGY_OBJECT_TYPES})"})
+            ls = ontology_ref.get("lifecycle_status", "")
+            if ls and ls not in ONTOLOGY_LIFECYCLE_STATUSES:
+                errors.append({"severity": "WARN", "type": "invalid_ontology_lifecycle",
+                               "message": f"{rel_path}: ontology_ref.lifecycle_status '{ls}' 不合法（应为 {ONTOLOGY_LIFECYCLE_STATUSES})"})
+    else:
+        # EV / ENT 应有 ontology_ref
+        if ntype in ("evidence", "entity"):
+            errors.append({"severity": "WARN", "type": "missing_ontology_ref",
+                           "message": f"{rel_path}: {ntype} 节点应包含 ontology_ref 绑定本体对象"})
 
     return errors
 
@@ -738,7 +847,7 @@ def _run_html_injector(case_dir: Path, output: str) -> None:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="scan-chain.py — 证据链编译与完整性检查 (v2 语义关系)",
+        description="scan-chain.py — 证据链编译与完整性检查 (v3 语义关系 + ontology + HYP)",
         epilog="""使用示例:
   scan-chain.py cases/CASE-2026-001/ --list
   scan-chain.py cases/CASE-2026-001/ --trace FND-001
@@ -746,7 +855,8 @@ def main():
   scan-chain.py cases/CASE-2026-001/ --check-chains
   scan-chain.py cases/CASE-2026-001/ --sync
   scan-chain.py cases/CASE-2026-001/ --graph
-  scan-chain.py cases/CASE-2026-001/ --html output.html   # 生成 HTML 交互图""",
+  scan-chain.py cases/CASE-2026-001/ --html output.html   # 生成 HTML 交互图
+  scan-chain.py cases/CASE-2026-001/ --validate           # 含 ontology_ref 检查""",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("case_dir", type=Path, help="案件目录路径")
@@ -758,7 +868,7 @@ def main():
     parser.add_argument("--graph", action="store_true", help="Mermaid 流程图 (带边类型)，用于对话内快速预览")
     parser.add_argument("--html", type=str, metavar="OUTPUT", nargs="?", const="evidence_chain_output.html",
                         help="生成交互式 HTML 可视化图（使用 evidence_chain_injector.js 模板）")
-    parser.add_argument("--validate", action="store_true", help="节点文件结构验证")
+    parser.add_argument("--validate", action="store_true", help="节点文件结构验证（含 ontology_ref 检查）")
 
     args = parser.parse_args()
     case_dir = args.case_dir.resolve()
