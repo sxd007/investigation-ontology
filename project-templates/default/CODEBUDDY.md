@@ -60,8 +60,8 @@ AI **必须始终清楚**自己的定位：
 |------|------|------|
 | `investigation-foundation` | 方法论 | 调查思维框架、假设驱动推理、认知偏差防范 |
 | `case-management` | 流程 | 案件生命周期、门禁控制、质量管控 |
-| `evidence-management` | 证据 | 证据链管理、保管链、可采性判断、ALCOA 原则 |
-| `data-analysis` | 分析 | COSO 框架、异常检测、Benford 定律、趋势分析 |
+| `evidence-management` | 证据 | 证据链管理、保管链、可采性判断、ALCOA 原则、证据链可视化 |
+| `data-analysis` | 分析 | COSO 框架、异常检测、Benford 定律、趋势分析、数据可视化(统计图表) |
 | `order-execution-variance-analysis` | 分析 | 项目执行差异分析 — 合同流/货物流/资金流多维对比，通用链路核查工具 |
 | `investigation-techniques` | 技术 | 财务分析、数字取证、OSINT |
 | `writing-reporting` | 产出 | 报告结构、SCQA 公式、读者适配策略 |
@@ -85,7 +85,7 @@ AI **必须始终清楚**自己的定位：
 | 命令 | 用途 |
 |------|------|
 | `/investigate` | 调查统一入口 — 新案立案、续案回顾、阶段导航 |
-| `/evidence` | 证据管理 — 添加、保管链追踪、可采性评估 |
+| `/evidence` | 证据管理 — 添加、保管链追踪、可采性评估、证据链可视化(`visualize`/`graph`) |
 | `/interview` | 访谈策划与分析 — 提纲、笔录、SCAN 分析 |
 | `/report` | 报告撰写 — 底稿、备忘录、结案报告 |
 | `/analyze` | 数据分析 — 异常检测、趋势分析、关联分析 |
@@ -113,7 +113,8 @@ AI 在以下时刻应主动加载对应技能：
 | 管理案件进展 | `case-management` → 启动案件、阶段框架、门禁管控 |
 | 举报/线索定性 | `fraud-classification` → 判断案件性质 |
 | 制定调查计划 | `investigation-foundation` → 假设驱动推理 |
-| 登记证据 | `evidence-management` → 保管链、可采性 |
+| 登记证据 | `evidence-management` → 保管链、可采性、证据链可视化 |
+| 查看/生成证据链可视化 | `evidence-management` → 证据链可视化（推理链图、假设验证图、治理状态图） |
 | 创建/修改本体对象 | `ontology` → 模型定义、Action 约束、Binding Protocol（处理 global_ontology/entities/、global_ontology/relations/ 时自动激活） |
 | 分析数据 | `data-analysis` → 异常检测方法 |
 | 链路对比分析 | `order-execution-variance-analysis` → 申报与执行记录结构化对比 |

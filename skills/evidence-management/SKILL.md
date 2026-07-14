@@ -1,6 +1,6 @@
 ﻿---
 name: evidence-management
-description: 证据链与调查底稿管理 — 证据识别与收集、链式保管(Custody Chain)、证据可采性评估、底稿编制规范、底稿复核与归档、电子证据保全
+description: 证据链与调查底稿管理 — 证据识别与收集、链式保管(Custody Chain)、证据可采性评估、证据链可视化(推理链图/假设验证/治理状态)、底稿编制规范、底稿复核与归档、电子证据保全
 origin: efio
 ---
 
@@ -37,6 +37,8 @@ origin: efio
 - 编制调查工作底稿
 - 复核他人的调查底稿
 - 准备证据移交或归档
+- 查看/生成证据链可视化（推理链图、假设验证图、治理状态图、问题清单图）
+- 运行证据链完整性检查或推理链逻辑检查
 
 ## 证据管理全生命周期
 
@@ -90,9 +92,23 @@ title 是断言（`谁+动作+事实`），body 是支持该断言的完整材�
 
 v3 多视图调查工具，四个互补 tab：**Reasoning**（推理链 + 边语义分色 + 治理徽章）、**Hypotheses**（HYP 支持/反驳验证）、**Governance**（本体对象生命周期状态）、**Issues**（推理链 + 治理问题清单）。
 
-两种模式：`--graph` 对话内 Mermaid 预览、`--html` 独立交互式 HTML。
+**两种可视化模式：**
 
-> 📖 可视化架构 + scan-chain.py 选项参考：[`references/visualization-guide.md`](references/visualization-guide.md)
+| 模式 | 命令 | 适用场景 | 输出 |
+|------|------|---------|------|
+| 对话内 Mermaid 预览 | `scan-chain.py <case_dir> --graph` | 快速预览推理链结构 | Mermaid 代码块 |
+| 交互式 HTML | `scan-chain.py <case_dir> --html [output.html]` | 完整交互图、汇报展示 | 独立 HTML 文件 |
+
+**生成可视化 HTML 的操作步骤（当用户要求查看证据链可视化时执行）：**
+
+1. 确认案件目录路径（通常为 `cases/CASE-YYYY-NNN/`）
+2. 读取 `evidence_registry.json` 和 `nodes/` 目录确认数据就绪
+3. 执行 `python skills/evidence-management/scripts/scan-chain.py <case_dir> --html <output_path>.html`
+   - 如环境中无 Python，由 AI 读取数据后直接调用 `evidence_chain_injector.js`
+   - 命令：`node skills/evidence-management/templates/evidence-chain-viz/evidence_chain_injector.js <case_dir> <output_path>.html`
+4. 用浏览器打开生成的 HTML 文件
+
+> 📖 可视化架构 + scan-chain.py 完整选项参考：[`references/visualization-guide.md`](references/visualization-guide.md)
 
 ## 工具速查
 
