@@ -216,13 +216,14 @@ function collectIndented(lines, startIdx, baseIndent) {
 }
 
 /**
- * 解析嵌套字典，支持子键含列表（移植自 _parse_nested_dict）。
- * 关键：同时处理 "- id: xxx"（详细格式）和 "- ARG-001"（简单格式）。
+ * 解析嵌套字典，同时支持标量子键（ontology_ref）和列表子键（relations）。
+ * 标量值存储为字符串，列表项 - 触发数组模式。
+ * 同时处理 "- id: xxx"（详细格式）和 "- ARG-001"（简单格式）。
  */
 function parseNestedDict(lines) {
   const result = {};
   let currentKey = null;
-  let currentList = null;
+  let currentVal = null;
   let i = 0;
 
   while (i < lines.length) {
@@ -235,34 +236,42 @@ function parseNestedDict(lines) {
     // 子键: key: value
     const sm = stripped.match(/^(\w[\w_-]*):\s*(.*)/);
     if (sm) {
-      if (currentKey !== null && currentList !== null) {
-        result[currentKey] = currentList;
+      if (currentKey !== null && currentVal !== null) {
+        result[currentKey] = currentVal;
       }
       currentKey = sm[1];
       const val = sm[2].trim();
 
       if (val === '[]') {
-        currentList = [];
+        currentVal = [];
       } else if (val.startsWith('[') && val.endsWith(']')) {
-        currentList = parseInlineList(val);
+        currentVal = parseInlineList(val);
       } else if (val === '' || val === '|') {
-        currentList = [];
+        currentVal = [];  // 占位——列表项可能紧随其后
       } else {
-        currentList = [stripQuotes(val)];
+        currentVal = stripQuotes(val);  // 标量——存储为字符串，不包装成数组
       }
       continue;
     }
 
     // 列表元素: - id: xxx 或 - "value" 或 - ARG-001
     const lst = stripped.match(/^- (.+)/);
-    if (lst && currentKey !== null && currentList !== null) {
+    if (lst && currentKey !== null) {
+      // 若当前值是标量（字符串），转为数组以接纳列表项
+      if (typeof currentVal === 'string') {
+        currentVal = [currentVal];
+      }
+      if (!Array.isArray(currentVal)) {
+        currentVal = [];
+      }
+
       const content = lst[1];
       const kv = content.match(/^(\w[\w_-]*):\s*(.*)/);
       if (kv) {
         // 详细格式: - id: EV-001
         const obj = {};
         obj[kv[1]] = stripQuotes(kv[2].trim());
-        currentList.push(obj);
+        currentVal.push(obj);
 
         // 收集子字段（excerpt, form 等）——仅在更深缩进层
         const itemIndent = indentOf(line);
@@ -273,22 +282,22 @@ function parseNestedDict(lines) {
           if (nxtIndent <= itemIndent) break;
 
           const sub = nxtStripped.match(/^(\w+):\s*(.*)/);
-          if (sub && typeof currentList[currentList.length - 1] === 'object') {
-            currentList[currentList.length - 1][sub[1]] = stripQuotes(sub[2].trim());
+          if (sub && typeof currentVal[currentVal.length - 1] === 'object') {
+            currentVal[currentVal.length - 1][sub[1]] = stripQuotes(sub[2].trim());
             i++;
           } else {
             break;
           }
         }
       } else {
-        // 简单格式: - ARG-001（Bug 1 的修复：Python 版正确处理，现在 JS 版也处理）
-        currentList.push(stripQuotes(content));
+        // 简单格式: - ARG-001
+        currentVal.push(stripQuotes(content));
       }
     }
   }
 
-  if (currentKey !== null && currentList !== null) {
-    result[currentKey] = currentList;
+  if (currentKey !== null && currentVal !== null) {
+    result[currentKey] = currentVal;
   }
   return result;
 }
@@ -345,9 +354,10 @@ function normalizeRelations(raw) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
   const out = {};
   for (const [rt, vals] of Object.entries(raw)) {
-    if (!Array.isArray(vals)) continue;
+    // 安全网：标量值自动包装为数组（如 derived_from: ARG-001 而非列表格式）
+    const arr = Array.isArray(vals) ? vals : (vals ? [vals] : []);
     const cleaned = [];
-    for (const v of vals) {
+    for (const v of arr) {
       if (typeof v === 'string') {
         cleaned.push(v);
       } else if (v && typeof v === 'object' && v.id) {
