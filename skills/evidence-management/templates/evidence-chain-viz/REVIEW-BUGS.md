@@ -496,6 +496,40 @@ alternative_explanations:
 | P2 | Bug 11 | confidence=0 不显示 | 低 |
 | P2 | Bug 12 | 文件过滤不一致 | 低 |
 | P3 | Bug 13-15 | 数据不完整/边界情况 | 中 |
+| **P0** | **Bug 16** | **回退逻辑误排除被 supported_by 引用的节点** | **低** |
+
+---
+
+### Bug 16: `buildAllChains` 回退逻辑误用全关系类型构建 referenced 集合
+
+**文件**：`scan-chain.js` / `evidence_chain_injector.js` `buildAllChains` 函数
+
+**问题**：当无 FND 节点时（早期调查阶段），回退逻辑收集"已被引用"的节点 ID 来排除非链根节点。但收集时遍历了**所有关系类型**（`supported_by`/`involves`/`contradicts` 等），而 `buildChainTree` 只跟随 `derived_from`。
+
+```javascript
+// 之前（错误）：扫描所有关系类型
+for (const items of Object.values(n.relations || {})) {
+    for (const r of items) referenced.add(typeof r === 'object' ? r.id : r);
+}
+```
+
+**影响**：
+- 被 HYP 的 `supported_by` 引用的 EV 被误判为"已在链中"而排除
+- 被 LS 的 `involves` 引用的 ENT 同理（虽然 ENT 本就排除）
+- 早期阶段（PRE_INVESTIGATION，无 FND）的可视化可能只显示孤立节点，丢失实际存在的推理链
+
+**真实案例**：CASE-2026-001 中 EV-001 被 HYP-001 的 `supported_by` 引用 → 被排除；EV-002 无任何引用 → 成为唯一链根 → 可视化只显示 EV-002 孤节点。
+
+**修复**：`referenced` 集合只从 `derived_from`（即 `n.sources`）构建：
+
+```javascript
+// 之后（正确）：只看 derived_from
+for (const n of Object.values(nodes)) {
+    if (n.sources) for (const s of n.sources) referenced.add(s.id);
+}
+```
+
+**注**：此 bug 在原 injector.js 中同样存在，属于移植时原样保留的遗留问题。
 
 ---
 

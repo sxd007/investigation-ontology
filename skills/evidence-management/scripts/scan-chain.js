@@ -975,12 +975,13 @@ function buildChainTree(nodes, rootId, visited) {
 function buildAllChains(nodes) {
   const findings = Object.values(nodes).filter(n => n.typePrefix === 'FND').sort((a, b) => a.id.localeCompare(b.id));
   if (!findings.length) {
+    // 回退逻辑：无 FND 时，从未被 derived_from 引用的节点开始建链。
+    // 注意：只看 derived_from（即 n.sources），不看 supported_by/involves/contradicts 等横向关系。
+    // 否则被 HYP 的 supported_by 引用的 EV 会被误判为"已在链中"而排除，
+    // 导致早期阶段（无 FND）的可视化缺失大量节点。
     const referenced = new Set();
     for (const n of Object.values(nodes)) {
       if (n.sources) for (const s of n.sources) referenced.add(s.id);
-      for (const items of Object.values(n.relations || {})) {
-        for (const r of items) referenced.add(typeof r === 'object' ? r.id : r);
-      }
     }
     return Object.values(nodes)
       .filter(n => !referenced.has(n.id) && !['ENT', 'EVT', 'HYP'].includes(n.typePrefix))
