@@ -1,6 +1,12 @@
 ---
 name: document-parsing
-description: 文档结构化解析 — 将原始文档（扫描件/PDF/图片）转化为结构化的 parsed JSON，确定文档类型、选择解析策略、评估解析质量、管理版本链。输出的 parsed 数据供 evidence-management（创建 EV 节点）和 ontology（创建实体/关系）消费。
+description: >
+  当用户提供原始文档（PDF/扫描件/图片/Word/Excel）需要提取信息或结构化处理时，必须使用本技能。
+  本技能是 OCR MCP 的上层编排者——不要直接调用 paddleOCR-mcp，应由本技能的工作流决定何时调用 OCR。
+  工作流：文档类型识别(INVOICE/CONTRACT/BANK_RECEIPT/...) → 格式感知路由(图片走OCR/数字文档AI直接读取) →
+  schema结构化提取 → 字段级质量评估 → 版本管理 → 写入 raw/parsed/。
+  输出供 evidence-management（创建 EV 节点）和 ontology（创建实体/关系）消费。
+  也可通过 /efio:parse 命令触发。
 origin: efio
 ---
 

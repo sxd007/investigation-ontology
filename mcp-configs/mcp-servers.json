@@ -3,6 +3,7 @@
     "paddleOCR-mcp": {
       "description": "【OCR 文档识别—用户级部署】PaddleOCR pp_structurev3 引擎。对图片和扫描 PDF 做版面分析、文字识别、表格还原、印章识别。需先上传文件到 OCR 服务器获取 localpath，再调用 MCP 工具。注册在 ~/.codebuddy/mcp.json，所有项目可用。",
       "recommendedFor": ["document-parsing"],
+      "usageNotice": "此 MCP 是 document-parsing 技能的解析后端，不应被 AI 直接调用。当用户提交文档需要处理时，应先加载 document-parsing 技能（use_skill 'document-parsing'）或使用 /efio:parse 命令，由技能工作流决定何时调用 OCR。PreToolUse hook 会检测直接调用并发出提醒。",
       "tool": "pp_structurev3",
       "supportedFormats": ["jpg", "jpeg", "png", "tiff", "bmp", "pdf"],
       "deploy": "user-level",

@@ -39,6 +39,7 @@ origin: efio
 - 准备证据移交或归档
 - 查看/生成证据链可视化（推理链图、假设验证图、治理状态图、问题清单图）
 - 运行证据链完整性检查或推理链逻辑检查
+- **证据来源是原始文档（PDF/扫描件/图片）时** → 先调用 [document-parsing](../document-parsing/SKILL.md) 技能解析为结构化 parsed JSON，再用 parsed 结果创建 EV 节点（`/efio:parse <file>` 或 `use_skill "document-parsing"`）
 
 ## 证据管理全生命周期
 
@@ -142,7 +143,7 @@ v3 多视图调查工具，四个互补 tab：**Reasoning**（推理链 + 边语
 
 ## Related
 
-- **Skills:** [调查哲学与方法论](../investigation-foundation/SKILL.md), [写作与报告技巧](../writing-reporting/SKILL.md), [访谈与问话分析](../interview-analysis/SKILL.md), [调查本体论](../ontology/SKILL.md) — 登记证据/实体的本体层操作规范
+- **Skills:** [调查哲学与方法论](../investigation-foundation/SKILL.md), [写作与报告技巧](../writing-reporting/SKILL.md), [访谈与问话分析](../interview-analysis/SKILL.md), [调查本体论](../ontology/SKILL.md) — 登记证据/实体的本体层操作规范, [文档结构化解析](../document-parsing/SKILL.md) — 原始文档先经解析再创建 EV 节点（`/efio:parse`）
 - **Rules:** [证据规则](../../rules/evidence-rules.md), [底稿标准](../../rules/working-paper-standards.md)
 - **Agents:** `evidence-analyzer` for 证据评估, `case-manager` for 底稿复核
 - **Commands:** `/evidence` 证据管理, `/chain-of-custody` 保管链, `/working-paper` 底稿操作

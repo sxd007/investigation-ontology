@@ -151,4 +151,5 @@ Layer 4: audit-binding.sh     → 定期巡检，最终兜底
 | `hooks/hooks.json` | PreToolUse/PostToolUse Hook 配置 |
 | `scripts/validate-ontology-action.sh` | PreToolUse 校验脚本 |
 | `scripts/check-ontology-ref.sh` | PostToolUse 检查脚本 |
+| [document-parsing 技能](../document-parsing/SKILL.md) | 原始文档→parsed JSON→ADMIT_CANDIDATE 实体来源（`/efio:parse`） |
 | `design-phylosophy.md` | 完整设计哲学文档（架构级） |

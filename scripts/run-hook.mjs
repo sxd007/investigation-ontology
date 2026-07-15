@@ -11,6 +11,7 @@
 // 用法：
 //   node run-hook.mjs session-start       # SessionStart
 //   node run-hook.mjs pre-write-naming    # PreToolUse 命名规范提醒
+//   node run-hook.mjs mcp-ocr-guard       # PreToolUse OCR MCP 直接调用拦截提醒
 //   node run-hook.mjs validate-action     # PreToolUse 本体 Action 前置校验
 //   node run-hook.mjs check-ref           # PostToolUse ontology_ref 完整性检查
 //
@@ -98,12 +99,36 @@ function preWriteNaming() {
   }
 }
 
+// ── PreToolUse：拦截直接调用 paddleOCR-mcp，提醒走 document-parsing 技能 ──
+function mcpOcrGuard() {
+  let data = {};
+  try {
+    data = JSON.parse(readStdin() || '{}');
+  } catch {
+    /* ignore */
+  }
+  const toolInput = data?.tool_input || {};
+  const serverName = toolInput?.serverName || '';
+  const toolName = toolInput?.toolName || '';
+
+  if (serverName === 'paddleOCR-mcp' || toolName === 'pp_structurev3') {
+    console.log('[investigation-ontology] ⚠️ 检测到直接调用 paddleOCR-mcp / pp_structurev3。');
+    console.log('[investigation-ontology] OCR MCP 是 document-parsing 技能的解析后端，不应被直接调用。');
+    console.log('[investigation-ontology] 请先加载 document-parsing 技能（use_skill "document-parsing"）或使用 /efio:parse 命令。');
+    console.log('[investigation-ontology] 技能工作流负责：文档类型识别 → 格式路由（仅图片/扫描PDF走OCR）→ schema结构化 → 质量评估 → 版本管理 → 写入 raw/parsed/。');
+    console.log('[investigation-ontology] 如果当前确实是在 document-parsing 技能工作流内调用 OCR（Step 2-3），请忽略此提醒。');
+  }
+}
+
 switch (hook) {
   case 'session-start':
     sessionStart();
     break;
   case 'pre-write-naming':
     preWriteNaming();
+    break;
+  case 'mcp-ocr-guard':
+    mcpOcrGuard();
     break;
   case 'validate-action':
     runScript('validate-ontology-action');

@@ -14,6 +14,7 @@
 | 注册位置 | `~/.codebuddy/mcp.json`（用户级，所有项目可用） |
 | 部署方式 | 用户级部署，无需 API Key |
 | 部署规范 | 见 `mcp-configs/examples/paddleocr-example.json` |
+| **调用约束** | **此 MCP 只能由 document-parsing 技能在 Step 2-3 内部调用。AI 不应直接调用。PreToolUse hook (mcp-ocr-guard) 会检测直接调用并提醒。** |
 
 ### 部署约定
 

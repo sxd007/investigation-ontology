@@ -32,6 +32,19 @@
         ],
         "description": "Remind naming conventions + enforce ontology Action preconditions (cross-platform via node; scripts early-exit on non global_ontology/entities/ global_ontology/relations/ paths)",
         "id": "pre:write:case-file-guard"
+      },
+      {
+        "matcher": "mcp_call_tool",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/scripts/run-hook.mjs\" mcp-ocr-guard",
+            "timeout": 5,
+            "statusMessage": "检查 OCR MCP 调用是否通过 document-parsing 技能…"
+          }
+        ],
+        "description": "When AI directly calls paddleOCR-mcp, remind to use document-parsing skill workflow instead (type identification → format routing → schema structuring → quality → versioning)",
+        "id": "pre:mcp:ocr-skill-guard"
       }
     ],
     "PostToolUse": [
