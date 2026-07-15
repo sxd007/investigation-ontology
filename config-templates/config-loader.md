@@ -25,13 +25,16 @@
    ```
    {PLUGIN_CONFIG_DIR}/team-profile.md
    {PLUGIN_CONFIG_DIR}/evidence-policy.md
+   {PLUGIN_CONFIG_DIR}/ocr-backend.md
    ```
    其中 `{PLUGIN_CONFIG_DIR}` 按上方平台路径表解析。
+   team-profile.md 为必需；evidence-policy.md 和 ocr-backend.md 为可选。
 
 2. 模板路径（插件自带，每次更新被覆盖）：
    ```
    <plugin-root>/config-templates/team-profile.md
    <plugin-root>/config-templates/evidence-policy.md
+   <plugin-root>/config-templates/ocr-backend.md
    ```
 
 3. 唯一豁免此检查的 skill：**cold-start** 自身。其他所有 skill 必须按以下流程执行。
@@ -80,6 +83,10 @@ ELSE:
 ### Step 3: 对 evidence-policy.md 重复 Step 1 的检查
 
 同样四种状态判断。evidence-policy.md 是可选的——如果文件不存在或未配置，skill 使用内置默认值，**不阻止工作流**（不像 team-profile.md 缺失时必需停止）。
+
+### Step 4: 对 ocr-backend.md 重复 Step 1 的检查
+
+同样四种状态判断。ocr-backend.md 是可选的——如果文件不存在，document-parsing 技能回退到端口+1 约定推导（从 MCP URL 推导上传地址），**不阻止工作流**。仅当 OCR 路径实际执行且推导失败时，降级 AI 视觉解析并提示用户运行 `/efio:cold-start` 配置 OCR 后端。
 
 ---
 

@@ -38,12 +38,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/run-hook.mjs\" mcp-ocr-guard",
-            "timeout": 5,
-            "statusMessage": "检查 OCR MCP 调用是否通过 document-parsing 技能…"
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/mcp-ocr-guard.sh\"",
+            "timeout": 5
           }
         ],
-        "description": "When AI directly calls paddleOCR-mcp, remind to use document-parsing skill workflow instead (type identification → format routing → schema structuring → quality → versioning)",
+        "description": "Pre-filter: only spawns node when MCP call targets paddleOCR-mcp. Non-OCR MCP calls exit in ~5ms via shell string check, avoiding ~50ms node startup. When OCR detected, runs full guard logic via run-hook.mjs.",
         "id": "pre:mcp:ocr-skill-guard"
       }
     ],

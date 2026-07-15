@@ -15,6 +15,12 @@
 //   node run-hook.mjs validate-action     # PreToolUse 本体 Action 前置校验
 //   node run-hook.mjs check-ref           # PostToolUse ontology_ref 完整性检查
 //
+// mcp-ocr-guard 性能优化：
+//   hooks.json 中 mcp-ocr-guard 不直接调用 node，而是通过 shell 预过滤脚本
+//   (mcp-ocr-guard.sh / .ps1) 先做快速字符串检查。仅当 stdin 包含
+//   paddleOCR-mcp 或 pp_structurev3 时才启动 node，避免非 OCR MCP 调用的
+//   node 进程启动开销（~50ms → ~5ms）。
+//
 // 文档依据：https://code.claude.com/docs/en/hooks
 // ============================================================================
 
@@ -100,16 +106,33 @@ function preWriteNaming() {
 }
 
 // ── PreToolUse：拦截直接调用 paddleOCR-mcp，提醒走 document-parsing 技能 ──
+//
+// stdin 格式依赖 Hook API 版本。当前预期的 JSON 结构：
+//   { "tool_input": { "serverName": "...", "toolName": "..." }, ... }
+//
+// 如果未来 Hook API 变更导致 stdin 格式变化，本函数会静默跳过（不阻止工作流）。
+// 排查方法：手动运行 `echo '{"tool_input":{"serverName":"paddleOCR-mcp"}}' | node run-hook.mjs mcp-ocr-guard`
+// 验证是否正常输出提醒。如无输出，说明 stdin JSON 路径需更新。
 function mcpOcrGuard() {
+  const raw = readStdin();
+
+  // Fast pre-filter: skip JSON parse entirely for non-OCR MCP calls
+  // (On Windows/CodeBuddy, this is the only filter — avoids full JSON parse)
+  if (!raw || (!raw.includes('paddleOCR-mcp') && !raw.includes('pp_structurev3'))) {
+    return;
+  }
+
   let data = {};
   try {
-    data = JSON.parse(readStdin() || '{}');
+    data = JSON.parse(raw);
   } catch {
-    /* ignore */
+    /* stdin 解析失败 — 静默跳过，不阻止 MCP 调用 */
+    return;
   }
-  const toolInput = data?.tool_input || {};
+  // 兼容多种可能的 stdin 结构：tool_input / toolInput / 直接顶层
+  const toolInput = data?.tool_input || data?.toolInput || data || {};
   const serverName = toolInput?.serverName || '';
-  const toolName = toolInput?.toolName || '';
+  const toolName = toolInput?.toolName || toolInput?.name || '';
 
   if (serverName === 'paddleOCR-mcp' || toolName === 'pp_structurev3') {
     console.log('[investigation-ontology] ⚠️ 检测到直接调用 paddleOCR-mcp / pp_structurev3。');

@@ -1,9 +1,9 @@
 {
   "_title": "PaddleOCR MCP 部署规范与配置示例",
-  "_doc": "实际注册时写入 ~/.codebuddy/mcp.json (CodeBuddy) 或 ~/.claude.json (Claude Code)",
+  "_doc": "MCP 端点注册在各平台 MCP 配置文件：CodeBuddy→~/.codebuddy/mcp.json | Claude Code→~/.claude.json | Codex→.mcp.json 或 ~/.codex/mcp.json。文档投递机制在 {PLUGIN_CONFIG_DIR}/ocr-backend.md 中配置（由 /efio:cold-start 生成，升级不覆盖）。",
 
   "_deployment_spec": {
-    "_comment": "推荐部署拓扑——按此规范部署则零额外配置",
+    "_comment": "推荐部署拓扑——按此规范部署则 ocr-backend.md 选 auto 即可零配置",
     "mcp_endpoint": "http://<host>:<port>/mcp",
     "upload_endpoint": "http://<host>:<port+1>/upload",
     "_examples": {
@@ -13,8 +13,8 @@
     }
   },
 
-  "_config_way_1_convention": {
-    "_comment": "方式一：按部署规范部署，只需注册 MCP URL。AI 自动推导上传地址（同主机、端口+1、/upload）",
+  "_config_layer_1_mcp_registration": {
+    "_comment": "第一层：在各平台 MCP 配置文件中注册 MCP 端点 URL（只注册 URL，不包含上传配置）",
     "mcpServers": {
       "paddleOCR-mcp": {
         "url": "http://<host>:8090/mcp",
@@ -25,23 +25,19 @@
     }
   },
 
-  "_config_way_2_override": {
-    "_comment": "方式二：非标部署（如反向代理合并端口），显式指定 uploadEndpoint 覆盖约定推导",
-    "mcpServers": {
-      "paddleOCR-mcp": {
-        "url": "https://ocr.company.com/mcp",
-        "headers": {
-          "Accept": "application/json, text/event-stream"
-        },
-        "uploadEndpoint": "https://ocr.company.com/api/upload"
-      }
-    }
+  "_config_layer_2_ocr_backend": {
+    "_comment": "第二层：文档投递配置在 {PLUGIN_CONFIG_DIR}/ocr-backend.md（用户配置，升级不覆盖）",
+    "_example_auto": "Upload Method: auto  → 从 MCP URL 推导上传地址（端口+1）",
+    "_example_http": "Upload Method: http, Upload Endpoint: https://ocr.company.com/api/upload, Auth Headers: Authorization: Bearer xxx",
+    "_example_shared_fs": "Upload Method: shared_fs, Shared Path Prefix: /mnt/nas/ocr_uploads/",
+    "_example_custom": "Upload Method: custom, Custom Upload Instructions: <描述投递步骤>"
   },
 
   "_runtime_logic": {
     "_step_1": "AI 检测 pp_structurev3 工具是否可用（MCP 自动发现）",
-    "_step_2": "读取 ~/.codebuddy/mcp.json 中 paddleOCR-mcp 的 URL",
-    "_step_3": "推导上传地址：优先读 uploadEndpoint 字段；无此字段则按约定（同主机、端口+1、/upload）推导",
-    "_step_4": "curl 上传文件 → 获取 localpath → 调用 pp_structurev3(input_data=localpath)"
+    "_step_2": "读取 {PLUGIN_CONFIG_DIR}/ocr-backend.md 获取投递配置",
+    "_step_2_fallback": "ocr-backend.md 不存在时回退：端口+1 约定推导（从 MCP URL 推导）",
+    "_step_3": "按配置投递文件（HTTP 上传 / 共享路径 / 自定义）→ 获取 localpath",
+    "_step_4": "调用 pp_structurev3(input_data=localpath)"
   }
 }

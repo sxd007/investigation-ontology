@@ -54,7 +54,7 @@ investigation-ontology 的 MCP 连接器按部署方式分为三类：
 
 ### 用户级部署（无需操作）
 
-`paddleOCR-mcp` 已注册在 `~/.codebuddy/mcp.json`，所有项目自动可用。提供 PaddleOCR pp_structurev3 引擎，支持图片和扫描 PDF 的 OCR 识别。调用前需先通过上传接口 (`http://<ocr-server-host>:8091/upload`) 将文件上传到 OCR 服务器本地。
+`paddleOCR-mcp` 已注册在用户级 MCP 配置文件中（路径因平台而异），所有项目自动可用。提供 PaddleOCR pp_structurev3 引擎，支持图片和扫描 PDF 的 OCR 识别。文档投递机制（上传地址、认证、方式）在 `{PLUGIN_CONFIG_DIR}/ocr-backend.md` 中配置，由 /efio:cold-start 生成。
 
 详细调用流程见 [skills/document-parsing/references/ocr-mcp-integration.md](skills/document-parsing/references/ocr-mcp-integration.md)。
 

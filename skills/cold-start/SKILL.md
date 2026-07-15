@@ -163,6 +163,32 @@ READY               → "配置已就绪，是否需要：
 
 用户也可选择"暂不配置，稍后用 `/efio:mcp-config` 添加"。
 
+### 2.6 OCR 后端配置
+
+如果 Phase 2.5 检测到 `paddleOCR-mcp` 已注册，引导用户配置 OCR 文档投递机制。写入 `{PLUGIN_CONFIG_DIR}/ocr-backend.md`。
+
+```
+检测到 paddleOCR-mcp 已注册。需要配置文档投递方式。
+
+┌─ OCR 服务器如何接收文件？──────────────────────────────┐
+│  1. 自动推导（标准部署，MCP 端口+1 即上传接口）         │  ← 默认推荐
+│  2. 显式指定上传地址（云服务/反向代理/不同主机）         │
+│  3. 共享文件系统（NFS/SMB 挂载，无需上传）              │
+│  4. 自定义投递方式                                      │
+│  5. 暂不配置（使用默认回退，后续可手动编辑）             │
+└──────────────────────────────────────────────────────┘
+```
+
+根据用户选择，从 `config-templates/ocr-backend.md` 模板生成配置文件并填入对应值：
+
+- 选 1（auto）→ `Upload Method: auto`，其余字段填默认值
+- 选 2（http）→ 追问上传地址和认证信息，填入 `Upload Endpoint` 和 `Auth Headers`
+- 选 3（shared_fs）→ 追问共享路径前缀，填入 `Shared Path Prefix`
+- 选 4（custom）→ 追问投递步骤描述，填入 `Custom Upload Instructions`
+- 选 5 → 跳过，ocr-backend.md 不生成。document-parsing 回退到端口+1 约定推导。输出摘要中显示"OCR 后端: 未配置（端口+1 回退）"。
+
+> ocr-backend.md 是可选配置。不生成时 document-parsing 技能回退到端口+1 约定推导。
+
 ---
 
 ## Phase 3: 验证集成
@@ -183,13 +209,15 @@ READY               → "配置已就绪，是否需要：
 
 首次设置时，按模板结构写入 `{PLUGIN_CONFIG_DIR}/team-profile.md`（路径按平台表解析，见 § 状态检测入口）。模板中所有 `[PLACEHOLDER]` 替换为用户填写值。
 
+如果 Phase 2.6 生成了 OCR 后端配置，同样写入 `{PLUGIN_CONFIG_DIR}/ocr-backend.md`。
+
 ### 4.2 模板合并（升级场景）
 
-插件升级后，`config-templates/team-profile.md` 可能新增了配置项。检测流程：
+插件升级后，`config-templates/team-profile.md` 和 `config-templates/ocr-backend.md` 可能新增了配置项。检测流程：
 
 ```
-1. READ 新模板 (config-templates/team-profile.md)
-2. READ 现有用户配置 ({PLUGIN_CONFIG_DIR}/team-profile.md)
+1. READ 新模板 (config-templates/team-profile.md, config-templates/ocr-backend.md)
+2. READ 现有用户配置 ({PLUGIN_CONFIG_DIR}/team-profile.md, {PLUGIN_CONFIG_DIR}/ocr-backend.md)
 3. 按 H2 节逐节对比:
    - 模板中存在但配置中不存在的节 → 标记为"新配置项"
    - 模板和配置中都存在但配置中有 [PLACEHOLDER] → 标记为"待补全"
@@ -227,6 +255,7 @@ READY               → "配置已就绪，是否需要：
 ║  通信纪律: 已配置    |  审批流程: 已配置                           ║
 ║  角色画像: investigator  |  启用技能: 22 个                        ║
 ║  MCP 集成: 2/3 可用  |  缺失: 自定义搜索服务                       ║
+║  OCR 后端: auto / http / shared_fs / custom / 未配置(端口+1回退)       ║
 ╚══════════════════════════════════════════════════════════════════╝
 ┌─ 推荐的下一步 ──────────────────────────────────────────────────┐
 │  /investigate new    启动第一个案件                              │
@@ -242,7 +271,7 @@ READY               → "配置已就绪，是否需要：
 
 ## 升级说明（发版注意）
 
-每次发版更新 `config-templates/team-profile.md` 时：
+每次发版更新 `config-templates/team-profile.md` 或 `config-templates/ocr-backend.md` 时：
 
 1. **保留模板结构**：所有字段保持 `[PLACEHOLDER]` 标记
 2. **新增字段必须标注"影响技能"**：确保 cold-start 能识别并归入正确的合并流程

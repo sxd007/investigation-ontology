@@ -28,7 +28,8 @@ origin: efio
 详细规则参见 `config-templates/config-loader.md`。
 
 此技能读取的配置项：
-- team-profile「文档解析服务」节：HTTP API / 本地引擎配置（**可选**——OCR 文档识别类 MCP 已在用户级默认注册，不需要 team-profile 配置即可工作）
+- team-profile「文档解析服务」节：HTTP API / 本地引擎配置（**可选**）
+- `{PLUGIN_CONFIG_DIR}/ocr-backend.md`：OCR MCP 的文档投递机制配置（**可选**——不存在时回退到端口+1约定推导，详见 `config-templates/ocr-backend.md`）
 
 ## When to Activate
 
@@ -141,7 +142,49 @@ Step 5 ── 版本管理与写入
         → parsed_by: "ai_vision"
 ```
 
-> OCR MCP 的上传→调用流程、参数说明、错误处理详见 `references/ocr-mcp-integration.md`。
+#### OCR MCP 调用流程（图片 / 扫描 PDF 路径）
+
+> ⚠️ **禁止自行创建 HTTP 服务器、编写上传脚本或搭建 Web 服务。** OCR MCP 已作为独立服务部署，文档投递机制由 `{PLUGIN_CONFIG_DIR}/ocr-backend.md` 配置。
+
+> 📖 **执行 OCR 路径前，必须先读取 `references/ocr-mcp-integration.md`** 获取完整参数说明和错误处理策略。以下为关键步骤速查。
+
+**Step 2a — 读取 OCR 后端配置**
+
+读取 `{PLUGIN_CONFIG_DIR}/ocr-backend.md`（路径按 `config-loader.md § 平台路径` 解析），获取文档投递配置：
+
+| 配置值 | 行为 |
+|--------|------|
+| `Upload Method: auto` | 从 MCP URL 推导上传地址（同主机、端口+1、/upload） |
+| `Upload Method: http` + `Upload Endpoint` | 使用配置中显式指定的上传地址 |
+| `Upload Method: shared_fs` + `Shared Path Prefix` | 文件已在共享路径，无需上传，直接映射路径 |
+| `Upload Method: custom` + `Custom Upload Instructions` | 按自定义指令投递文件 |
+| 配置中有 `Auth Headers` | 上传请求携带相同认证头 |
+
+> ocr-backend.md 不存在时的回退：端口+1 约定推导（从 MCP URL 推导上传地址）→ 推导失败则降级 AI 视觉解析，提示运行 `/efio:cold-start`。
+
+**Step 2b — 投递文件到 OCR 服务器**
+
+根据 Step 2a 的配置投递文件，获取服务器侧路径（localpath）：
+
+- **http / auto 路径**：`curl -X POST <upload-url> [-H "<auth-headers>"] -F "file=@<文件绝对路径>" 2>nul`，从响应 JSON 的 `Localpath Field` 字段提取 localpath
+- **shared_fs 路径**：客户端文件须已在共享文件系统中可访问（如通过 NFS/SMB 挂载）。localpath = `<Shared Path Prefix>` + 文件基本名（basename，不含目录路径）。例如客户端文件 `D:\cases\raw\ev-010.jpg`，`Shared Path Prefix` 为 `/mnt/shared/ocr_uploads/`，则 localpath = `/mnt/shared/ocr_uploads/ev-010.jpg`
+- **custom 路径**：按 `Custom Upload Instructions` 执行
+
+**Step 2c — 调用 MCP 工具**
+
+使用 `mcp_call_tool` 调用 OCR（此调用在 document-parsing 技能工作流内，mcp-ocr-guard hook 的提醒可忽略）：
+
+```
+mcp_call_tool(
+    serverName: "paddleOCR-mcp",
+    toolName: "pp_structurev3",
+    arguments: {
+        "input_data": "<Step 2b 获取的 localpath>",
+        "output_mode": "detailed",
+        "file_type": "image"        // 或 "pdf"
+    }
+)
+```
 
 #### 质量提升策略
 
@@ -285,6 +328,8 @@ raw/parsed/{DOCUMENT_TYPE}-{raw_file_id}_v{version}.json
 
 ## 与其他技能的交互
 
+> **职责边界：** 本 skill 只产出 `raw/parsed/*.json`。创建 EV 证据节点是 evidence-management 的职责，创建本体实体/关系是 ontology 的职责。**不要在解析过程中自动执行这些操作。** 解析完成后提示用户使用 `/evidence add` 和 ontology 技能完成后续注册。
+
 ### 与 evidence-management 的交互
 
 本 skill 的 parsed 输出是 evidence-management skill 创建 EV 节点的数据来源：
@@ -337,7 +382,7 @@ BANK_RECEIPT.amount         实际付款金额 vs 合同约定金额
 
 本 skill 按文件格式自动路由到合适的解析后端：
 
-- **OCR 文档识别类 MCP**（默认，图片/扫描 PDF）：已在用户级注册，开箱即用。调用前需先上传文件到 OCR 服务器。详见 `references/ocr-mcp-integration.md`。不可用时降级为 AI 视觉直接解析。
+- **OCR 文档识别类 MCP**（默认，图片/扫描 PDF）：已在用户级注册，开箱即用。调用流程为：读 `ocr-backend.md` 配置 → 投递文件获取 localpath → 调用 `pp_structurev3`。详见 `references/ocr-mcp-integration.md`。不可用时降级为 AI 视觉直接解析。**不要自行创建 HTTP 服务器或上传脚本。**
 - **AI 直接读取**（默认，数字文档）：Claude 可直接读取数字 PDF、Word、Excel、CSV、纯文本等格式，按 schema 结构化提取字段。
 - **HTTP API / 本地引擎**（可选扩展）：如需配置专业云 OCR 服务或本地引擎，见 `config-templates/team-profile.md`「文档解析服务」节。
 
@@ -350,6 +395,7 @@ BANK_RECEIPT.amount         实际付款金额 vs 合同约定金额
 
 ## References
 
-- `references/ocr-mcp-integration.md` — OCR MCP 完整调用流程（上传→调用→参数→错误处理）
+- `references/ocr-mcp-integration.md` — **OCR MCP 完整调用流程（上传→调用→参数→错误处理）。执行 OCR 路径前必须读取此文件。**
+- `../../config-templates/ocr-backend.md` — OCR 后端配置模板（用户配置在 `{PLUGIN_CONFIG_DIR}/ocr-backend.md`）
 - `../../schemas/document-types/` — 6 种文档类型的完整字段定义
 - `../../docs/document-parsing-design.md` — 完整设计文档

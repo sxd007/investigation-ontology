@@ -564,32 +564,35 @@ fields:
 
 | 类型 | 示例 | 配置位置 | 优先级 |
 |------|------|---------|--------|
-| **MCP 服务（用户级）** | `paddleOCR-mcp`（PaddleOCR pp_structurev3） | `~/.codebuddy/mcp.json` | 最高（默认） |
+| **MCP 服务（用户级）** | `paddleOCR-mcp`（PaddleOCR pp_structurev3） | MCP 端点→平台 MCP 配置；投递机制→`{PLUGIN_CONFIG_DIR}/ocr-backend.md` | 最高（默认） |
 | **HTTP API** | Azure Document Intelligence、百度 OCR、阿里云 OCR | `team-profile.md` | 中（可选扩展） |
 | **本地引擎** | Tesseract、Docling | `team-profile.md` | 低（可选扩展） |
 | **AI 视觉** | Claude 内置视觉能力（无需配置） | 无（fallback） | 兜底 |
 
 ### 8.2 默认 OCR MCP（paddleOCR-mcp）
 
-paddleOCR-mcp 在用户级 `~/.codebuddy/mcp.json` 注册，所有项目开箱即用：
+paddleOCR-mcp 的配置分为两层：
+
+- **MCP 端点注册**：在各平台的 MCP 配置文件中注册 URL（CodeBuddy→`~/.codebuddy/mcp.json` | Claude Code→`~/.claude.json` | Codex→`.mcp.json` 或 `~/.codex/mcp.json`）
+- **文档投递配置**：在 `{PLUGIN_CONFIG_DIR}/ocr-backend.md` 中配置上传地址、认证、投递方式（由 /efio:cold-start 生成，升级不覆盖）
 
 - **工具**：`pp_structurev3`
 - **能力**：版面分析、文字识别、表格还原、印章识别、公式识别
 - **适用格式**：jpg / png / tiff / bmp / pdf（扫描件）
-- **部署规范**：MCP 端点 `http://<host>:<port>/mcp`，上传接口 `http://<host>:<port+1>/upload`（同主机、端口+1约定）
 - **详细调用流程**：见 `skills/document-parsing/references/ocr-mcp-integration.md`
 
 **调用流程概要**：
 
 ```
-1. 读取 ~/.codebuddy/mcp.json 获取 MCP URL，按约定推导上传地址
-2. 上传文件: curl -X POST <upload-url> -F "file=@<file-path>" 2>nul
+1. 读取 {PLUGIN_CONFIG_DIR}/ocr-backend.md 获取投递配置
+   └── 不存在时回退：端口+1 约定推导（从 MCP URL 推导）
+2. 按配置投递文件（HTTP 上传 / 共享路径 / 自定义）
 3. 取得 localpath
 4. 调用 MCP: mcp_call_tool("paddleOCR-mcp", "pp_structurev3", { input_data: localpath, ... })
 5. 将 OCR 结果按 schema 结构化
 ```
 
-用户只需在 `~/.codebuddy/mcp.json` 注册 MCP URL，AI 自动推导上传地址。非标部署可在配置中添加 `uploadEndpoint` 字段覆盖。示例见 `mcp-configs/examples/paddleocr-example.json`。
+标准部署（端口+1约定）用户在 cold-start 时选择 `auto` 即可零配置。非标部署在 `ocr-backend.md` 中选择 `http`/`shared_fs`/`custom` 方式。示例见 `mcp-configs/examples/paddleocr-example.json`。
 
 ### 8.3 格式感知路由
 

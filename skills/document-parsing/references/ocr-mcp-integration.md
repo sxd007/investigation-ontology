@@ -11,42 +11,59 @@
 |------|-----|
 | MCP 服务名 | `paddleOCR-mcp` |
 | MCP 工具名 | `pp_structurev3` |
-| 注册位置 | `~/.codebuddy/mcp.json`（用户级，所有项目可用） |
-| 部署方式 | 用户级部署，无需 API Key |
+| 注册位置 | 用户级 MCP 配置（路径因平台而异，见下表） |
+| 文档投递配置 | `{PLUGIN_CONFIG_DIR}/ocr-backend.md`（用户配置，升级不覆盖） |
 | 部署规范 | 见 `mcp-configs/examples/paddleocr-example.json` |
 | **调用约束** | **此 MCP 只能由 document-parsing 技能在 Step 2-3 内部调用。AI 不应直接调用。PreToolUse hook (mcp-ocr-guard) 会检测直接调用并提醒。** |
+| **⚠️ 禁止行为** | **不要自行创建 HTTP 服务器、编写上传脚本或搭建 Web 服务。OCR MCP 已作为独立服务部署，文档投递机制由 ocr-backend.md 配置。** |
 
-### 部署约定
+### MCP 配置文件位置（按平台）
 
-PaddleOCR MCP 部署遵循以下端口约定：
+MCP 端点 URL 注册在各平台的 MCP 配置文件中。文档投递机制（上传地址、认证、方式）单独配置在 `{PLUGIN_CONFIG_DIR}/ocr-backend.md`。
+
+| 平台 | 检测方式 | MCP 配置文件（注册 URL） | 用户配置目录 |
+|------|---------|------------------------|------------|
+| CodeBuddy | `$CODEBUDDY_PLUGIN_ROOT` 有值 | `~/.codebuddy/mcp.json` | `~/.codebuddy/plugins/config/efio` |
+| Claude Code | `$CLAUDE_PLUGIN_ROOT` 有值 | `~/.claude.json` | `~/.claude/plugins/config/efio` |
+| Codex | `$INVESTIGATION_ONTOLOGY_ROOT` 有值 | `.mcp.json` 或 `~/.codex/mcp.json` | `~/.codex/plugins/config/efio` |
+| 无法判断 | — | 按上述顺序依次尝试 | `~/.investigation-ontology/config` |
+
+> MCP 配置文件只负责注册 MCP 端点 URL。如何将文件投递到 OCR 服务器（上传地址、认证头、上传方式）由 `ocr-backend.md` 配置，该文件在用户配置目录中，插件更新不会覆盖。
+
+### 部署约定（端口+1）
+
+PaddleOCR MCP 标准部署遵循以下端口约定（ocr-backend.md 中 `Upload Method: auto` 时自动推导）：
 
 | 服务 | URL 模式 | 说明 |
 |------|---------|------|
-| MCP 端点 | `http://<host>:<port>/mcp` | 用户在 `~/.codebuddy/mcp.json` 中注册 |
-| 上传接口 | `http://<host>:<port+1>/upload` | AI 从 MCP URL 自动推导，无需额外配置 |
+| MCP 端点 | `http://<host>:<port>/mcp` | 用户在 MCP 配置文件中注册 |
+| 上传接口 | `http://<host>:<port+1>/upload` | 从 MCP URL 自动推导 |
 
-按此规范部署后，用户只需在 `~/.codebuddy/mcp.json` 注册 MCP URL，AI 运行时自动推导上传地址。
-
-**非标部署**（如反向代理合并端口）：在 MCP 配置中添加 `uploadEndpoint` 字段显式指定上传地址，AI 优先读取此字段。
+**非标部署**：在 `ocr-backend.md` 中设置 `Upload Method: http` 并显式指定 `Upload Endpoint`，或使用 `shared_fs` / `custom` 方式。
 
 ---
 
 ## 2. 调用流程
 
-OCR MCP 不能直接接收客户端文件路径——文件必须先上传到 OCR 服务器本地，获取服务器侧的 localpath 后再调用 MCP 工具。
+OCR MCP 不能直接接收客户端文件路径——文件必须先投递到 OCR 服务器本地，获取服务器侧的 localpath 后再调用 MCP 工具。投递机制由 `{PLUGIN_CONFIG_DIR}/ocr-backend.md` 配置。
 
 ### 流程图
 
 ```
 客户端文件 (d:/cases/raw/ev-010.jpg)
     │
-    │  Step 0: 获取上传地址
-    │  读取 ~/.codebuddy/mcp.json 中 paddleOCR-mcp 的配置
-    │  ├── 有 uploadEndpoint 字段 → 直接使用
-    │  └── 无此字段 → 从 MCP URL 推导（同主机、端口+1、/upload 路径）
+    │  Step 0: 读取 OCR 后端配置
+    │  读取 {PLUGIN_CONFIG_DIR}/ocr-backend.md
+    │  ├── Upload Method: auto → 从 MCP URL 推导（端口+1）
+    │  ├── Upload Method: http → 使用显式 Upload Endpoint
+    │  ├── Upload Method: shared_fs → 无需上传，路径映射
+    │  ├── Upload Method: custom → 按自定义指令
+    │  └── ocr-backend.md 不存在 → 回退：端口+1 推导 → 推导失败则降级 AI 视觉
     │
-    │  Step 1: 上传文件
-    │  curl -X POST <upload-url> -F "file=@<file-path>" 2>nul
+    │  Step 1: 投递文件（按配置方式）
+    │  http/auto: curl -X POST <upload-url> [-H "<auth>"] -F "file=@<file>" 2>nul
+    │  shared_fs: localpath = <prefix> + basename(file)
+    │  custom: 按自定义指令
     │
     ▼
 OCR 服务器返回 localpath
@@ -72,35 +89,56 @@ MCP 返回结构化 OCR 结果
     parsed_by: "ocr_mcp"
 ```
 
-### Step 0: 获取上传地址
+### Step 0: 读取 OCR 后端配置
 
-读取 `~/.codebuddy/mcp.json`（或 `~/.claude.json`），找到 `paddleOCR-mcp` 的配置：
+读取 `{PLUGIN_CONFIG_DIR}/ocr-backend.md`（路径按 `config-loader.md § 平台路径` 解析），获取文档投递配置。
 
-```json
-{
-  "paddleOCR-mcp": {
-    "url": "http://10.0.0.1:8090/mcp",     // MCP 端点
-    "uploadEndpoint": "http://10.0.0.1:8091/upload"  // 可选，非标部署时显式指定
-  }
-}
+配置示例（标准部署）：
+
+```yaml
+Upload Method: auto              # 从 MCP URL 推导上传地址
+Auth Headers: none               # 无需认证
+Localpath Field: path            # 上传响应中 localpath 的 JSON 字段名
 ```
 
-推导逻辑：
-1. 有 `uploadEndpoint` 字段 → 直接使用
-2. 无此字段 → 从 `url` 推导：同主机、端口+1、路径改为 `/upload`
-   - 例：`http://10.0.0.1:8090/mcp` → `http://10.0.0.1:8091/upload`
-   - 例：`http://localhost:8090/mcp` → `http://localhost:8091/upload`
-   - 例：`https://ocr.company.com:8090/mcp` → `https://ocr.company.com:8091/upload`
+配置示例（云服务 + API Key）：
 
-### Step 1: 上传文件
+```yaml
+Upload Method: http
+Upload Endpoint: https://ocr.company.com/api/upload
+Auth Headers: Authorization: Bearer sk-xxxxxxxx
+Localpath Field: data.filepath
+```
+
+> ocr-backend.md 不存在时的回退：
+> 1. 从 MCP URL 推导：同主机、端口+1、路径改为 `/upload`
+> 2. 推导失败 → 降级 AI 视觉解析，提示运行 `/efio:cold-start`
+
+### Step 1: 投递文件
+
+根据 ocr-backend.md 的 `Upload Method` 投递文件：
+
+**http / auto 路径**（HTTP 上传）：
 
 ```bash
+# 无认证
 curl -X POST <upload-url> -F "file=@<file-path>" 2>nul
+
+# 有认证（ocr-backend.md 中配置了 Auth Headers 时）
+curl -X POST <upload-url> -H "Authorization: Bearer xxx" -F "file=@<file-path>" 2>nul
 ```
 
-- `<file-path>` 替换为客户端文件的绝对路径
-- `2>nul` 抑制 stderr（Windows PowerShell 环境）
-- 返回值中包含服务器侧的 localpath，需要提取
+从响应 JSON 中按 `Localpath Field`（默认 `path`）提取 localpath。
+
+**shared_fs 路径**（共享文件系统）：
+
+客户端文件须已在共享文件系统中可访问（如通过 NFS/SMB 挂载，客户端和 OCR 服务器挂载了同一共享目录）。无需上传。localpath = `<Shared Path Prefix>` + 文件基本名（basename，不含目录路径）。
+
+例：客户端文件 `D:\cases\raw\ev-010.jpg`，`Shared Path Prefix` 为 `/mnt/shared/ocr_uploads/` → localpath = `/mnt/shared/ocr_uploads/ev-010.jpg`
+
+**custom 路径**：
+
+按 `Custom Upload Instructions` 中的描述执行。
 
 ### Step 2: 调用 pp_structurev3
 
@@ -193,7 +231,9 @@ OCR MCP 失败
 |------|------|------|
 | 上传超时 / 无响应 | OCR 服务器不可达 | 降级 AI 视觉 |
 | localpath 为空 | 上传成功但响应解析失败 | 降级 AI 视觉 |
-| MCP 工具未找到 | 未注册在 ~/.codebuddy/mcp.json | 降级 AI 视觉，提示用户检查配置 |
+| MCP 工具未找到 | 未注册在 MCP 配置文件中 | 降级 AI 视觉，提示用户检查配置 |
+| 上传地址不可推导 | ocr-backend.md 不存在且无法从 MCP URL 推导上传地址 | 降级 AI 视觉，提示运行 /efio:cold-start 配置 OCR 后端 |
+| 上传被拒绝 (401/403) | 认证头缺失或无效 | 检查 ocr-backend.md 的 Auth Headers 配置 |
 | MCP 调用超时 | 文件过大或服务器负载高 | 重试一次 → 降级 AI 视觉 |
 | 返回结果为空 | 文件无法识别 | 降级 AI 视觉 |
 
@@ -214,5 +254,5 @@ OCR MCP 失败
 
 - OCR 服务器 (`<ocr-server-host>`) 应在**内网环境**运行，不应暴露到公网
 - 上传的调查文件（发票、合同等）包含敏感商业信息，OCR 服务器应定期清理上传的临时文件
-- `~/.codebuddy/mcp.json` 中的 MCP 配置不含 API Key，但 OCR 服务器地址不应泄露到外部
+- MCP 配置文件中的 MCP 配置可能含认证信息，不应泄露到外部
 - parsed 文件中的 OCR 结果与 raw 文件同级权限管理

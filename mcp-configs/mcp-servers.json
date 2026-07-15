@@ -1,14 +1,15 @@
 {
   "mcpServers": {
     "paddleOCR-mcp": {
-      "description": "【OCR 文档识别—用户级部署】PaddleOCR pp_structurev3 引擎。对图片和扫描 PDF 做版面分析、文字识别、表格还原、印章识别。需先上传文件到 OCR 服务器获取 localpath，再调用 MCP 工具。注册在 ~/.codebuddy/mcp.json，所有项目可用。",
+      "description": "【OCR 文档识别—用户级部署】PaddleOCR pp_structurev3 引擎。对图片和扫描 PDF 做版面分析、文字识别、表格还原、印章识别。需先上传文件到 OCR 服务器获取 localpath，再调用 MCP 工具。注册在用户级 MCP 配置文件中（路径因平台而异），所有项目可用。",
       "recommendedFor": ["document-parsing"],
       "usageNotice": "此 MCP 是 document-parsing 技能的解析后端，不应被 AI 直接调用。当用户提交文档需要处理时，应先加载 document-parsing 技能（use_skill 'document-parsing'）或使用 /efio:parse 命令，由技能工作流决定何时调用 OCR。PreToolUse hook 会检测直接调用并发出提醒。",
       "tool": "pp_structurev3",
       "supportedFormats": ["jpg", "jpeg", "png", "tiff", "bmp", "pdf"],
       "deploy": "user-level",
-      "configPath": "~/.codebuddy/mcp.json",
-      "setupGuide": "用户在 ~/.codebuddy/mcp.json 中注册 paddleOCR-mcp，填写 MCP 端点 URL。上传地址按部署约定自动推导（同主机、端口+1、/upload 路径），或在配置中显式指定 uploadEndpoint 字段覆盖。详见 mcp-configs/examples/paddleocr-example.json。",
+      "configPath": "{PLUGIN_CONFIG_DIR}/ocr-backend.md",
+      "mcpConfigPath": "平台 MCP 配置文件（如 ~/.codebuddy/mcp.json）",
+      "setupGuide": "用户在平台对应的 MCP 配置文件中注册 paddleOCR-mcp 的 URL。文档投递方式（上传地址、认证、上传方法）在 ocr-backend.md 中配置，由 /efio:cold-start 生成。详见 mcp-configs/examples/paddleocr-example.json。",
       "integrationCheck": "上传测试图片并调用 pp_structurev3 验证返回",
       "fallback": "AI 视觉直接解析文档图片",
       "exampleConfig": "mcp-configs/examples/paddleocr-example.json",
@@ -133,7 +134,7 @@
   "deployment_map": {
     "description": "各 MCP 的部署方式一览",
     "map": [
-      { "name": "paddleOCR-mcp", "deploy": "用户级（~/.codebuddy/mcp.json）", "auth": "无需API Key" },
+      { "name": "paddleOCR-mcp", "deploy": "用户级（路径因平台而异）", "auth": "通常无需API Key（如有认证需在headers中配置）" },
       { "name": "浏览/搜索/文件/推理", "deploy": "Claude Code 内置", "auth": "无需API Key" },
       { "name": "investigation-fs", "deploy": "用户手动配置", "auth": "无需API Key" },
       { "name": "brave-search", "deploy": "用户手动配置", "auth": "BRAVE_API_KEY（免费，2000次/月）" },
