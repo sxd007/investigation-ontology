@@ -1,0 +1,399 @@
+# 合同 Schema（Contract）
+# 适用范围：采购/销售/服务/租赁/工程/代理等常见商业合同
+#
+# 设计原则：
+#   - 可稳提取的字段结构化存储（封面首部、签约主体、签署页）
+#   - 正文按预设标准节原味存储，不做过度解析
+#   - 标准节缺失自动标注为风险信号
+#   - 嵌入的表格保留行列结构，不 flatten
+#
+# 合同解析结果分为五层：
+#   1. 封面可稳字段
+#   2. 签约主体（parties[]）
+#   3. 正文条款（sections[] + tables[]）
+#   4. 节缺失检测（missing_sections_warnings[]）
+#   5. 附件（attachments[]）
+
+document_type: CONTRACT
+description: "商业合同（含采购/销售/服务/租赁/工程/代理等）"
+version: "1.0"
+
+# ============================================================
+# 第一层：封面/首页可稳提取字段
+# 位置固定，OCR 提取可靠性较高
+# ============================================================
+fields:
+  # ---------- 合同标识 ----------
+  - name: contract_no
+    label: 合同编号
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "企业内部的合同编号，用于关联订单/付款/发票"
+
+  - name: contract_title
+    label: 合同名称
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "合同封面或首页的标题"
+
+  - name: contract_type
+    label: 合同类型
+    type: enum
+    required: false
+    confidence_tracking: true
+    description: "按业务场景分类。非必填——类型不明确的合同可留空，由后续 skill 按 sections 内容判断"
+    enum_values:
+      - value: "purchase"         # 采购合同
+      - value: "sales"            # 销售合同
+      - value: "service"          # 服务合同/咨询服务
+      - value: "lease"            # 租赁合同
+      - value: "construction"     # 工程合同/施工合同
+      - value: "agency"           # 代理合同/经销合同
+      - value: "labor"            # 劳务合同
+      - value: "confidentiality"  # 保密协议/NDA
+      - value: "cooperation"      # 合作协议/战略协议
+      - value: "framework"        # 框架协议/年度合同
+      - value: "other"            # 其他
+
+  # ---------- 关键日期（首页或签署页） ----------
+  - name: signing_date
+    label: 签订日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: true
+    confidence_tracking: true
+    description: "合同签署日期（通常在合同尾部签署页）"
+
+  - name: effective_date
+    label: 生效日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: false
+    confidence_tracking: true
+    description: "合同约定的生效日期，可能与签订日不同。如合同首页未载明，从 sections 中提取"
+
+  - name: expiry_date
+    label: 终止日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: false
+    confidence_tracking: true
+    description: "合同有效期截止日"
+
+  # ---------- 金额 ----------
+  - name: contract_amount
+    label: 合同金额
+    type: decimal
+    required: false
+    confidence_tracking: true
+    description: >
+      合同总金额。非必填——部分合同（框架协议、开口合同）不约定具体金额。
+      金额可能出现在首页、签署页或价款条款中。
+
+  - name: amount_in_words
+    label: 金额大写
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "中文大写金额，用于核验小写金额是否正确"
+
+  - name: currency
+    label: 币种
+    type: string
+    required: false
+    confidence_tracking: true
+    default: "CNY"
+
+  - name: tax_inclusive
+    label: 是否含税
+    type: boolean
+    required: false
+    confidence_tracking: true
+    description: "合同金额是否为含税价。在首页或价款条款中注明"
+
+# ============================================================
+# 第二层：签约主体（Parties）
+# 出现在合同首页和签署页，位置固定，可结构化提取
+# ============================================================
+parties:
+  description: "签约主体信息。从合同首页首部和尾部签署页两个位置提取并融合"
+  items:
+    type: object
+    properties:
+      - name: party_role
+        label: 角色
+        type: enum
+        required: true
+        enum_values:
+          - value: "party_a"
+            label: 甲方
+          - value: "party_b"
+            label: 乙方
+          - value: "party_c"
+            label: 丙方
+          - value: "party_d"
+            label: 丁方
+
+      # ---- 基本信息（合同首页首部）----
+      - name: name
+        label: 主体名称（全称）
+        type: string
+        required: true
+        confidence_tracking: true
+        description: "合同载明的企业/个人全称"
+
+      - name: unified_social_credit_code
+        label: 统一社会信用代码
+        type: string
+        required: false
+        confidence_tracking: true
+        description: "18位。个人签约方无此字段"
+
+      - name: legal_representative
+        label: 法定代表人
+        type: string
+        required: false
+        confidence_tracking: true
+
+      - name: address
+        label: 地址
+        type: string
+        required: false
+        confidence_tracking: false
+
+      - name: contact_person
+        label: 联系人
+        type: string
+        required: false
+        confidence_tracking: true
+
+      - name: phone
+        label: 联系电话
+        type: string
+        required: false
+        confidence_tracking: true
+
+      - name: email
+        label: 电子邮箱
+        type: string
+        required: false
+        confidence_tracking: false
+
+      # ---- 签署页信息（合同尾部）----
+      - name: signing_info
+        label: 签署页信息
+        type: object
+        required: false
+        confidence_tracking: true
+        description: "从合同尾部签署页提取的信息。签署页可能和首页首部信息不同（如签章人与法定代表人不是同一人），因此独立存储"
+        properties:
+          - name: signatory
+            label: 签署人姓名
+            type: string
+            description: "合同末尾签字/签章处的个人姓名"
+          - name: signatory_title
+            label: 签署人职务
+            type: string
+            description: "如'法定代表人'、'授权代表'、'委托代理人'"
+          - name: seal_name
+            label: 盖章名称
+            type: string
+            description: >
+              合同末尾的盖章单位名称文本。
+              与 name（主体名称）不一致时，是挂靠/转包/冒用资质的关键异常信号。
+              当前 OCR 对印章识别能力有限，强依赖扫描件质量。人工复核时重点检查此项。
+          - name: seal_type
+            label: 印章类型
+            type: enum
+            enum_values:
+              - value: "contract_seal"
+                label: 合同专用章
+              - value: "official_seal"
+                label: 公章
+              - value: "invoice_seal"
+                label: 发票专用章
+              - value: "personal_seal"
+                label: 个人名章
+              - value: "electronic_seal"
+                label: 电子印章
+              - value: "unidentified"
+                label: 无法识别
+          - name: bank_name
+            label: 开户行名称
+            type: string
+            description: "收款账户的开户行，与资金流向追踪相关"
+          - name: bank_account
+            label: 银行账号
+            type: string
+            description: >
+              收款银行账号（脱敏存储？由下游 skill 按密级策略处理）。
+              与发票/付款记录中的账号比对，是资金流向核查的关键数据点。
+
+# ============================================================
+# 第三层：正文条款（Sections）
+# 按预设标准节匹配存储，不解析字段
+# 每节可能包含嵌入的表格
+# ============================================================
+sections:
+  description: >
+    合同正文按条款/章节目录切分存储。每节匹配预设标准节类型。
+    未匹配到任何标准节的标题归为 other_clause，原文保留，不丢失信息。
+  items:
+    type: object
+    properties:
+      # ---- 标准节匹配 ----
+      - name: section_id
+        label: 标准节 ID
+        type: enum
+        required: true
+        enum_values:
+          - value: "subject"              # 合同标的/项目内容/服务范围
+          - value: "price_payment"        # 合同价款/付款方式/费用
+          - value: "delivery_acceptance"  # 交付/验收/交货
+          - value: "quality"              # 质量标准/质保/售后
+          - value: "rights_obligations"   # 双方权利义务
+          - value: "penalty"              # 违约责任/赔偿
+          - value: "dispute"              # 争议解决/管辖/仲裁
+          - value: "confidentiality"      # 保密
+          - value: "term"                 # 合同期限/有效期
+          - value: "termination"          # 合同解除/终止
+          - value: "force_majeure"        # 不可抗力
+          - value: "intellectual_property" # 知识产权
+          - value: "non_compete"          # 竞业限制/排他
+          - value: "notices"              # 通知/送达
+          - value: "signature"            # 签署页（合同末尾）
+          - value: "other_clause"         # 未匹配的条款
+
+      - name: section_title
+        label: 原标题
+        type: string
+        required: true
+        description: "合同原文中的条款标题，如'第一条 付款方式'"
+
+      - name: content
+        label: 条款正文
+        type: text
+        required: true
+        description: "该条款的完整正文内容，原文保留"
+
+      - name: tables
+        label: 嵌入的表格
+        type: array
+        required: false
+        description: "条款正文中嵌入的表格，保留行列结构。不 flatten"
+        items:
+          type: object
+          properties:
+            - name: table_index
+              label: 表格序号（节内）
+              type: integer
+            - name: caption
+              label: 表格标题
+              type: string
+              description: "如'付款计划表'、'设备清单'"
+            - name: table_type
+              label: 推测的表格类型
+              type: enum
+              required: false
+              enum_values:
+                - value: "payment_schedule"   # 付款计划表
+                - value: "price_list"         # 价格清单
+                - value: "equipment_list"     # 设备/货物清单
+                - value: "delivery_schedule"  # 交付计划表
+                - value: "service_level"      # 服务水平/SLA
+                - value: "milestone"          # 里程碑计划
+                - value: "other"              # 其他
+            - name: headers
+              label: 表头
+              type: array
+              items:
+                type: string
+            - name: rows
+              label: 数据行
+              type: array
+              items:
+                type: array
+                items:
+                  type: string
+
+# ============================================================
+# 第四层：标准节缺失检测
+# ============================================================
+missing_sections_warnings:
+  description: >
+    当合同正文中未检测到某些标准节时，生成风险警告。
+    每个警告说明缺失的节和可能的业务风险。
+    用于发现"草签合同"、"模板不完整"、"故意省略关键条款"等情形。
+  items:
+    type: object
+    properties:
+      - name: missing_section_id
+        label: 缺失的标准节 ID
+        type: enum
+        required: true
+        enum_values:
+          - value: "subject"
+          - value: "price_payment"
+          - value: "delivery_acceptance"
+          - value: "penalty"
+          - value: "dispute"
+          - value: "signature"
+
+      - name: warning
+        label: 风险描述
+        type: text
+        required: true
+        description: "该节缺失可能代表的业务风险"
+
+      - name: severity
+        label: 严重程度
+        type: enum
+        required: true
+        enum_values:
+          - value: "high"
+          - value: "medium"
+          - value: "low"
+
+# ============================================================
+# 第五层：附件
+# ============================================================
+attachments:
+  description: >
+    合同附件处理分两种情况：
+    1. 附件与合同在同一 PDF 中 → 记录 raw_range（页范围）+ 尽力提取
+    2. 附件是独立文件 → 通过 related_raw_files 引用其他 raw 路径
+  items:
+    type: object
+    properties:
+      - name: attachment_no
+        label: 附件编号
+        type: string
+        description: "如'附件一'、'附件A'"
+
+      - name: title
+        label: 附件名称
+        type: string
+
+      - name: content_type
+        label: 内容类型
+        type: enum
+        enum_values:
+          - value: "table"        # 表格（报价单、清单等）
+          - value: "text"         # 纯文本（技术规格、合同条款等）
+          - value: "drawing"      # 图纸
+          - value: "certificate"  # 资质证书
+          - value: "other"
+
+      - name: raw_range
+        label: 在原始 PDF 中的页范围
+        type: string
+        required: false
+        description: "如'第8-12页'。仅附件与合同同PDF时适用"
+
+      - name: related_raw_file
+        label: 独立附件的 raw 路径
+        type: string
+        required: false
+        description: "附件为独立文件时，指向 raw/ 目录的路径。该文件应有自己的 parsed 文件"

@@ -270,6 +270,31 @@
       "stability": "beta"
     },
     {
+      "id": "document-parsing",
+      "kind": "skills",
+      "description": "文档结构化解析 — 将原始文档（扫描件/PDF/图片）转化为结构化 parsed JSON，支持 OCR MCP 集成、格式感知路由、版本管理。输出供 evidence-management 和 ontology 消费。",
+      "paths": [
+        "skills/document-parsing",
+        "schemas/document-types",
+        "docs/document-parsing-design.md"
+      ],
+      "targets": [
+        "claude",
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
+      ],
+      "dependencies": [
+        "evidence-management",
+        "ontology"
+      ],
+      "defaultInstall": true,
+      "cost": "medium",
+      "stability": "beta"
+    },
+    {
       "id": "case-management",
       "kind": "skills",
       "description": "调查流程与案件管理 — 案件生命周期管理、质量管控、团队协作、时间线管理、风险管理",

@@ -1,0 +1,180 @@
+# 银行回单 Schema（Bank Receipt）
+# 适用范围：银行转账回单、电子回单、代发回单、柜台业务回单
+#
+# 调查视角重点关注：
+#   - 付款人/收款人（是谁在转钱）
+#   - 金额（转了多少）
+#   - 摘要/用途（为什么转钱——常包含合同号、发票号等关联信息）
+#   - 交易流水号（用于与银行流水核对）
+
+document_type: BANK_RECEIPT
+description: "银行回单（含转账回单/电子回单/代发回单/柜台回单）"
+version: "1.0"
+
+fields:
+  # ============================================================
+  # 交易标识
+  # ============================================================
+  - name: transaction_no
+    label: 交易流水号
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "银行内部流水号，用于与银行流水清单（BANK_STATEMENT）逐笔核对的唯一键"
+
+  - name: voucher_no
+    label: 凭证号
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "银行回单的凭证编号，部分银行系统使用"
+
+  - name: transaction_type
+    label: 交易类型
+    type: enum
+    required: true
+    confidence_tracking: true
+    enum_values:
+      - value: "transfer"           # 转账（跨行/同行）
+      - value: "collection"         # 收款/入账
+      - value: "payment"            # 付款/出账
+      - value: "salary"             # 代发工资
+      - value: "agency_payment"     # 代付
+      - value: "cash_deposit"       # 现金存款
+      - value: "cash_withdrawal"    # 现金取款
+      - value: "fee"                # 手续费/利息
+      - value: "other"
+
+  # ============================================================
+  # 日期与时间
+  # ============================================================
+  - name: transaction_date
+    label: 交易日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: true
+    confidence_tracking: true
+
+  - name: transaction_time
+    label: 交易时间
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "精确到时分秒，如 14:23:05。部分回单仅显示日期无时间"
+
+  # ============================================================
+  # 付款方（转出方）
+  # ============================================================
+  - name: payer_name
+    label: 付款人名称
+    type: string
+    required: true
+    confidence_tracking: true
+
+  - name: payer_account
+    label: 付款人账号
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "付款银行账号。调查中常部分脱敏显示（如 ****1234），脱敏时填写展示值即可"
+
+  - name: payer_bank
+    label: 付款人开户行
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "如'中国银行北京分行海淀支行'"
+
+  # ============================================================
+  # 收款方（转入方）
+  # ============================================================
+  - name: payee_name
+    label: 收款人名称
+    type: string
+    required: true
+    confidence_tracking: true
+
+  - name: payee_account
+    label: 收款人账号
+    type: string
+    required: true
+    confidence_tracking: true
+
+  - name: payee_bank
+    label: 收款人开户行
+    type: string
+    required: false
+    confidence_tracking: true
+
+  # ============================================================
+  # 金额
+  # ============================================================
+  - name: amount
+    label: 交易金额
+    type: decimal
+    required: true
+    confidence_tracking: true
+    description: "交易金额（正数=转入/收入，负数=转出/支出，以回单标注为准）"
+
+  - name: amount_in_words
+    label: 金额大写
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "用于核验小写金额"
+
+  - name: currency
+    label: 币种
+    type: string
+    required: true
+    confidence_tracking: true
+    default: "CNY"
+
+  # ============================================================
+  # 余额
+  # ============================================================
+  - name: balance_after
+    label: 交易后余额
+    type: decimal
+    required: false
+    confidence_tracking: true
+    description: "该笔交易完成后账户余额。部分回单不显示余额"
+
+  # ============================================================
+  # 摘要与用途（调查关键字段）
+  # ============================================================
+  - name: purpose
+    label: 摘要/用途
+    type: text
+    required: false
+    confidence_tracking: true
+    description: >
+      银行回单的"摘要"或"用途"栏。调查关键字段——
+      常包含合同号、发票号、订单号、项目名称等关联信息。
+      摘要模糊（如仅写"往来款"、"货款"）本身可能是一个异常信号。
+
+  # ============================================================
+  # 交易渠道
+  # ============================================================
+  - name: channel
+    label: 交易渠道
+    type: enum
+    required: false
+    confidence_tracking: true
+    enum_values:
+      - value: "counter"        # 柜面
+      - value: "online_banking" # 网银
+      - value: "mobile_banking" # 手机银行
+      - value: "cross_bank"     # 跨行（大额实时/小额批量）
+      - value: "self_service"   # 自助设备
+      - value: "other"
+
+  # ============================================================
+  # 银行签章
+  # ============================================================
+  - name: bank_seal_name
+    label: 银行盖章名称
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "回单上的银行电子/物理印章。电子回单的印章可直接验证真伪"

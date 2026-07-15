@@ -1,13 +1,16 @@
 {
   "mcpServers": {
-    "investigation-pdf": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-pdf"],
-      "description": "【PDF文档分析—自动部署】读取合同、发票、报告等PDF文件，提取文本和元数据。用于证据文件分析和文档审查。无需API Key，自动在 .mcp.json 中注册。",
-      "recommendedFor": ["evidence-management", "writing-reporting", "data-analysis"],
-      "integrationCheck": "读取PDF文件提取文本",
-      "fallback": "直接阅读PDF文件",
-      "deploy": "auto",
+    "paddleOCR-mcp": {
+      "description": "【OCR 文档识别—用户级部署】PaddleOCR pp_structurev3 引擎。对图片和扫描 PDF 做版面分析、文字识别、表格还原、印章识别。需先上传文件到 OCR 服务器获取 localpath，再调用 MCP 工具。注册在 ~/.codebuddy/mcp.json，所有项目可用。",
+      "recommendedFor": ["document-parsing"],
+      "tool": "pp_structurev3",
+      "supportedFormats": ["jpg", "jpeg", "png", "tiff", "bmp", "pdf"],
+      "deploy": "user-level",
+      "configPath": "~/.codebuddy/mcp.json",
+      "setupGuide": "用户在 ~/.codebuddy/mcp.json 中注册 paddleOCR-mcp，填写 MCP 端点 URL。上传地址按部署约定自动推导（同主机、端口+1、/upload 路径），或在配置中显式指定 uploadEndpoint 字段覆盖。详见 mcp-configs/examples/paddleocr-example.json。",
+      "integrationCheck": "上传测试图片并调用 pp_structurev3 验证返回",
+      "fallback": "AI 视觉直接解析文档图片",
+      "exampleConfig": "mcp-configs/examples/paddleocr-example.json",
       "_status": "real"
     }
   },
@@ -42,7 +45,7 @@
     }
   },
   "user_configurable": {
-    "description": "以下 MCP 服务器需要用户自行配置（添加到项目 .mcp.json 或 ~/.claude.json）。需要API Key的已标注获取方式。",
+    "description": "以下 MCP 服务器需要用户自行配置（添加到项目 .mcp.json 或 ~/.codebuddy/mcp.json）。需要API Key的已标注获取方式。注册通道选择参见 docs/mcp注册指南.md。",
     "servers": {
       "investigation-fs": {
         "command": "npx",
@@ -129,7 +132,7 @@
   "deployment_map": {
     "description": "各 MCP 的部署方式一览",
     "map": [
-      { "name": "investigation-pdf", "deploy": "自动部署（.mcp.json）", "auth": "无需API Key" },
+      { "name": "paddleOCR-mcp", "deploy": "用户级（~/.codebuddy/mcp.json）", "auth": "无需API Key" },
       { "name": "浏览/搜索/文件/推理", "deploy": "Claude Code 内置", "auth": "无需API Key" },
       { "name": "investigation-fs", "deploy": "用户手动配置", "auth": "无需API Key" },
       { "name": "brave-search", "deploy": "用户手动配置", "auth": "BRAVE_API_KEY（免费，2000次/月）" },
@@ -140,9 +143,9 @@
     ]
   },
   "_docs": {
-    "purpose": "investigation-ontology MCP 完整能力目录。auto-deploy 的服务器已注册到 .mcp.json 自动加载；builtin 是 Claude Code 内置能力无需配置；user_configurable 需要用户自行添加到 .mcp.json 或 ~/.claude.json。",
+    "purpose": "investigation-ontology MCP 完整能力目录。user-level 的服务器注册在 ~/.codebuddy/mcp.json 全局可用；builtin 是 Claude Code 内置能力无需配置；user_configurable 需要用户自行添加到 .mcp.json 或 ~/.codebuddy/mcp.json。注册通道选择参见 docs/mcp注册指南.md。",
     "usage": "调查员参考此目录了解可用的 MCP 能力，然后运行 /efio:cold-start --check-integrations 检查当前环境状态。",
     "risk_warning": "涉及敏感调查数据的 MCP（如 investigation-db、investigation-fs）务必限定访问范围，避免泄露案件数据。",
-    "key_design": "所有技能引用 MCP 时按能力类型描述（如'PDF分析工具'），不写具体工具名。此目录是唯一的 MCP 名称到能力类型的映射记录。"
+    "key_design": "所有技能引用 MCP 时按能力类型描述（如'OCR 文档识别工具'），不写具体工具名。此目录是唯一的 MCP 名称到能力类型的映射记录。"
   }
 }

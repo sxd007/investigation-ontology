@@ -1,0 +1,12 @@
+# parse-document.py 依赖（⚠️ 脚本已废弃，见 docs/document-parsing-design.md 第 9 节）
+# 基础依赖
+pyyaml>=5.4,<7.0
+
+# OCR 调用（必须，由 ocr_client.py 管理）
+requests>=2.28
+
+# 可选 OCR 引擎 SDK
+# azure-ai-documentintelligence>=1.0.0  # Azure Document Intelligence
+# baidu-aip>=4.16.0                     # 百度 OCR
+# pytesseract>=0.3.10                  # Tesseract 本地 OCR
+# pdf2image>=1.16                      # PDF 转图片

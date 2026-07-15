@@ -1,4 +1,4 @@
-﻿# Connectors — 调查工具连接器
+# Connectors — 调查工具连接器
 
 investigation-ontology 的 MCP 连接器生态。每个连接器为调查技能提供外部数据或工具能力。
 
@@ -8,18 +8,18 @@ investigation-ontology 的 MCP 连接器按部署方式分为三类：
 
 | 类别 | 说明 | 配置方式 |
 |------|------|---------|
-| **🟢 自动部署** | 插件自带，无需任何配置即可使用 | 通过项目 `.mcp.json` 自动加载 |
-| **🔵 内置能力** | Claude Code 原生工具，无需 MCP 配置 | 直接使用（WebSearch、WebFetch 等） |
-| **🟡 用户配置** | 需要用户手动注册，部分需要 API Key | 添加到 `.mcp.json` 或 `~/.claude.json` |
+| **🔵 用户级部署** | 注册在用户级 MCP 配置，所有项目可用 | `~/.codebuddy/mcp.json` 自动加载 |
+| **内置能力** | Claude Code 原生工具，无需 MCP 配置 | 直接使用（WebSearch、WebFetch 等） |
+| **🟡 用户配置** | 需要用户手动注册，部分需要 API Key | 添加到 `.mcp.json` 或 `~/.codebuddy/mcp.json` |
 | **⚪ 占位** | 有需求但暂无成熟社区包 | 待社区生态成熟后接入 |
 
 ## 当前状态总览
 
-### 🟢 自动部署
+### 🔵 用户级部署（所有项目可用）
 
-| 连接器 | 包名 | 用途 | 认证方式 |
-|--------|------|------|---------|
-| **investigation-pdf** | `@modelcontextprotocol/server-pdf` | PDF文档读取、文本提取 | 无需 |
+| 连接器 | 服务端点 | 用途 | 认证方式 |
+|--------|---------|------|---------|
+| **paddleOCR-mcp** | `http://<ocr-server-host>:8090/mcp` | OCR 文档识别（PaddleOCR pp_structurev3）：版面分析、文字识别、表格还原、印章识别 | 无需 |
 
 ### 🔵 内置能力（无需配置）
 
@@ -52,9 +52,11 @@ investigation-ontology 的 MCP 连接器按部署方式分为三类：
 
 ## 配置指南
 
-### 自动部署（无需操作）
+### 用户级部署（无需操作）
 
-`investigation-pdf` 已在项目级 `.mcp.json`（由 `/investigate new` 从 `project-templates/default/.mcp.json` 部署到案件项目根目录）中注册，每次启动 Claude Code 时自动加载。
+`paddleOCR-mcp` 已注册在 `~/.codebuddy/mcp.json`，所有项目自动可用。提供 PaddleOCR pp_structurev3 引擎，支持图片和扫描 PDF 的 OCR 识别。调用前需先通过上传接口 (`http://<ocr-server-host>:8091/upload`) 将文件上传到 OCR 服务器本地。
+
+详细调用流程见 [skills/document-parsing/references/ocr-mcp-integration.md](skills/document-parsing/references/ocr-mcp-integration.md)。
 
 ### 用户配置（按需添加）
 

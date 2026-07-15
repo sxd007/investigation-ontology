@@ -1,0 +1,224 @@
+# 采购订单 Schema（Purchase Order）
+# 适用范围：ERP 采购订单、手工采购单、请购单
+#
+# 调查视角重点关注：
+#   - 供应商（与合同乙方是否一致——不一致可能是违规转包）
+#   - 数量/金额（系统申报值 vs 实际执行值的第一对比源）
+#   - 交付地址（与签收单地址比对）
+#   - 审批人（内部人员行为分析）
+
+document_type: PURCHASE_ORDER
+description: "采购订单（含 ERP 采购订单/手工采购单/请购单）"
+version: "1.0"
+
+fields:
+  # ============================================================
+  # 订单标识
+  # ============================================================
+  - name: po_no
+    label: 订单编号
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "系统内订单号，用于关联合同/发票/付款"
+
+  - name: po_date
+    label: 订单日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: true
+    confidence_tracking: true
+
+  - name: po_type
+    label: 订单类型
+    type: enum
+    required: false
+    confidence_tracking: true
+    enum_values:
+      - value: "standard"         # 标准采购订单
+      - value: "framework"        # 框架协议下订单
+      - value: "urgent"           # 紧急采购/特批
+      - value: "consignment"      # 代销/寄售
+      - value: "service"          # 服务采购
+      - value: "asset"            # 固定资产采购
+      - value: "other"
+
+  # ============================================================
+  # 交易主体
+  # ============================================================
+  - name: buyer_name
+    label: 采购方（买方）名称
+    type: string
+    required: true
+    confidence_tracking: true
+
+  - name: buyer_department
+    label: 采购部门
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "发起采购的部门。调查关键——异常采购常由非业务部门发起"
+
+  - name: buyer_requester
+    label: 申请人
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "采购申请发起人"
+
+  - name: supplier_name
+    label: 供应商名称
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "订单上的供应商。与合同乙方不一致时是异常信号"
+
+  - name: supplier_code
+    label: 供应商编码
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "ERP 系统中的供应商编码，用于系统交叉查询"
+
+  # ============================================================
+  # 审批链（调查关键）
+  # ============================================================
+  - name: approver
+    label: 审批人
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "订单审批人。调查关键——审批异常绕过（如越级审批、替代审批）可能涉及舞弊"
+
+  - name: approval_level
+    label: 审批层级
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "如'部门经理→总监→总经理'。正常情况按金额分级审批"
+
+  # ============================================================
+  # 金额
+  # ============================================================
+  - name: total_amount
+    label: 订单总金额
+    type: decimal
+    required: true
+    confidence_tracking: true
+    description: "订单合计金额（含税）。与对应合同金额/发票金额比对"
+
+  - name: currency
+    label: 币种
+    type: string
+    required: true
+    confidence_tracking: true
+    default: "CNY"
+
+  - name: tax_inclusive
+    label: 是否含税
+    type: boolean
+    required: false
+    confidence_tracking: true
+
+  # ============================================================
+  # 交付信息
+  # ============================================================
+  - name: delivery_address
+    label: 交货地址
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "订单要求的交货地址。与签收单实际地址比对"
+
+  - name: expected_delivery_date
+    label: 要求交货日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: false
+    confidence_tracking: true
+    description: "订单要求的最晚交货日期。与实际签收日期比对可知是否延期"
+
+  - name: shipping_method
+    label: 运输方式
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "如'物流配送'、'自提'、'快递'"
+
+  # ============================================================
+  # 商品明细
+  # ============================================================
+  - name: line_items
+    label: 订单明细
+    type: array
+    required: true
+    confidence_tracking: true
+    description: "订单中的采购物品清单"
+    items:
+      type: object
+      properties:
+        - name: line_no
+          label: 行号
+          type: integer
+
+        - name: description
+          label: 物品名称
+          type: string
+          required: true
+
+        - name: specification
+          label: 规格型号
+          type: string
+
+        - name: unit
+          label: 单位
+          type: string
+
+        - name: quantity
+          label: 订购数量
+          type: decimal
+          required: true
+
+        - name: unit_price
+          label: 单价
+          type: decimal
+          required: true
+
+        - name: amount
+          label: 金额
+          type: decimal
+          required: true
+
+  # ============================================================
+  # 关联信息
+  # ============================================================
+  - name: contract_ref_no
+    label: 关联合同编号
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "本订单对应的合同编号。无关联合同的采购订单本身是异常信号"
+
+  - name: project_name
+    label: 项目名称
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "采购归属的项目。调查关键——虚构项目采购是常见舞弊手段"
+
+  - name: cost_center
+    label: 成本中心
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "费用归属的成本中心/预算科目。用于追踪费用异常分配"
+
+  # ============================================================
+  # 付款条件
+  # ============================================================
+  - name: payment_terms_text
+    label: 付款条件
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "订单约定的付款条件（如'货到30天付款'）。与合同付款条款比对"

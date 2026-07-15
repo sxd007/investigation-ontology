@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parsed 复核工具 — OCR 逐页对照</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; height:100vh; display:flex; flex-direction:column; background:#f5f5f5; overflow:hidden; }
+
+/* ── 工具栏 ── */
+.toolbar { background:#fff; border-bottom:1px solid #ddd; padding:8px 16px; display:flex; align-items:center; gap:12px; flex-shrink:0; flex-wrap:wrap; }
+.toolbar .title { font-size:15px; font-weight:600; color:#333; }
+.toolbar button { background:#f0f0f0; border:1px solid #ccc; border-radius:4px; padding:4px 10px; cursor:pointer; font-size:12px; }
+.toolbar button:hover { background:#e0e0e0; }
+.toolbar .badge { padding:3px 8px; border-radius:10px; font-size:11px; font-weight:500; }
+.toolbar .badge.doc-type { background:#e8f4fd; color:#1a73e8; }
+.toolbar .badge.full { background:#e6f7e6; color:#1a7d1a; }
+.toolbar .badge.review { background:#fff3e0; color:#e65100; }
+.toolbar .file-info { font-size:11px; color:#888; flex:1; min-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* ── 主区域 ── */
+.main { display:flex; flex:1; overflow:hidden; }
+
+/* ── 左侧：PDF/图片 ── */
+.left-panel { flex:1; display:flex; flex-direction:column; background:#e0e0e0; min-width:0; max-width:50%; position:relative; }
+.left-panel .viewer-header { background:#fff; padding:4px 10px; border-bottom:1px solid #ddd; display:flex; align-items:center; gap:6px; font-size:12px; flex-shrink:0; }
+.left-panel .viewer-header button { background:#f0f0f0; border:1px solid #ccc; border-radius:3px; padding:2px 8px; cursor:pointer; font-size:12px; }
+.left-panel .viewer-content { flex:1; overflow:auto; display:flex; justify-content:center; padding:12px; position:relative; }
+#pdfContainer { position:relative; display:inline-block; }
+#pdfContainer canvas, #pdfContainer img { box-shadow:0 2px 8px rgba(0,0,0,0.15); background:#fff; display:block; }
+#pdfContainer img { max-width:100%; }
+#bboxOverlay { position:absolute; top:0; left:0; pointer-events:none; }
+#bboxOverlay .bbox-rect { position:absolute; border:2px solid rgba(255,152,0,0.7); background:rgba(255,152,0,0.1); cursor:pointer; pointer-events:auto; border-radius:2px; }
+#bboxOverlay .bbox-rect:hover { background:rgba(255,152,0,0.3); border-color:#ff6f00; }
+#bboxOverlay .bbox-rect.active { background:rgba(33,150,243,0.3); border-color:#1565c0; }
+#bboxOverlay .bbox-rect.seal { border-color:rgba(233,30,99,0.7); background:rgba(233,30,99,0.1); }
+#bboxOverlay .bbox-rect.seal:hover { background:rgba(233,30,99,0.25); }
+
+.left-panel .vlm-badge { position:absolute; top:16px; right:20px; background:rgba(255,152,0,0.85); color:#fff; padding:3px 8px; border-radius:4px; font-size:11px; pointer-events:none; z-index:10; }
+.left-panel .drop-hint { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#999; font-size:14px; gap:8px; }
+.left-panel .drop-hint .icon { font-size:40px; opacity:0.3; }
+
+/* ── 右侧：OCR 按页对照 ── */
+.right-panel { flex:1; min-width:420px; display:flex; flex-direction:column; background:#fff; border-left:1px solid #ddd; }
+.right-panel .right-tabs { display:flex; border-bottom:1px solid #ddd; background:#fafafa; flex-shrink:0; }
+.right-panel .right-tabs .tab { padding:8px 16px; font-size:12px; cursor:pointer; border-bottom:2px solid transparent; color:#666; font-weight:500; }
+.right-panel .right-tabs .tab.active { border-bottom-color:#1a73e8; color:#1a73e8; }
+.right-panel .right-tabs .tab:hover { color:#333; }
+.right-panel .right-content { flex:1; overflow-y:auto; position:relative; }
+.right-panel .right-content .page-content { display:none; }
+.right-panel .right-content .page-content.active { display:block; }
+
+/* ── OCR 内容区 ── */
+.ocr-page { display:none; padding:16px; }
+.ocr-page.active { display:block; }
+.ocr-page .page-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; padding-bottom:8px; border-bottom:2px solid #e0e0e0; }
+.ocr-page .page-header .page-num { font-size:15px; font-weight:700; color:#333; }
+.ocr-page .page-header .route-badge { font-size:11px; padding:2px 8px; border-radius:10px; }
+.ocr-page .page-header .route-badge.vlm { background:#fff3e0; color:#e65100; }
+.ocr-page .page-header .route-badge.table { background:#e8f5e9; color:#2e7d32; }
+.ocr-page .page-header .timing { font-size:11px; color:#999; margin-left:auto; }
+.ocr-page .page-text { font-size:18px; line-height:2.0; font-family:SimSun,STSong,serif; white-space:pre-wrap; word-break:break-word; color:#222; background:#fafafa; border:1px solid #eee; border-radius:6px; padding:14px 16px; }
+.ocr-page .layout-blocks { margin-top:8px; display:flex; flex-wrap:wrap; gap:4px; }
+.ocr-page .layout-blocks .lb-tag { font-size:10px; padding:2px 6px; border-radius:3px; cursor:pointer; }
+.ocr-page .layout-blocks .lb-tag.table { background:#e8f5e9; color:#2e7d32; border:1px solid #a5d6a7; }
+.ocr-page .layout-blocks .lb-tag.seal { background:#fce4ec; color:#c62828; border:1px solid #ef9a9a; }
+.ocr-page .layout-blocks .lb-tag.header_image { background:#e3f2fd; color:#1565c0; border:1px solid #90caf9; }
+.ocr-page .layout-blocks .lb-tag:hover { opacity:0.8; }
+
+/* ── 提取字段区 ── */
+.fields-panel { display:none; padding:16px; }
+.fields-panel.active { display:block; }
+.field-card { margin-bottom:8px; padding:10px 14px; border:1px solid #e8e8e8; border-radius:8px; background:#fafafa; }
+.field-card .field-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:3px; }
+.field-card .field-name { font-size:12px; font-weight:600; color:#333; }
+.field-card .field-value { font-size:14px; color:#222; word-break:break-all; }
+.field-card .field-value.missing { color:#c62828; font-style:italic; }
+.field-card .conf-bar { height:4px; border-radius:2px; margin:4px 0; background:#e0e0e0; }
+.field-card .conf-bar .fill { height:100%; border-radius:2px; }
+.field-card .conf-bar .fill.high { background:#4caf50; }
+.field-card .conf-bar .fill.medium { background:#ff9800; }
+.field-card .conf-bar .fill.low { background:#f44336; }
+.field-card .field-meta { font-size:11px; color:#999; margin-top:2px; }
+
+/* ── 表格区 ── */
+.tables-panel { display:none; padding:16px; }
+.tables-panel.active { display:block; }
+.table-card { margin-bottom:12px; border:1px solid #e0e0e0; border-radius:8px; overflow-x:auto; }
+.table-card .table-title { padding:8px 12px; background:#f5f5f5; font-size:12px; font-weight:600; color:#555; border-bottom:1px solid #e0e0e0; }
+.table-card table { width:100%; border-collapse:collapse; font-size:13px; }
+.table-card th { background:#f5f5f5; padding:7px 10px; text-align:left; border:1px solid #d0d0d0; font-weight:600; white-space:nowrap; position:sticky; top:0; }
+.table-card td { padding:5px 10px; border:1px solid #e0e0e0; }
+.table-card tbody tr:nth-child(even) { background:#fafafa; }
+.table-card tbody tr:hover { background:#e3f2fd; }
+.table-card tbody tr td:first-child { font-weight:500; color:#555; }
+
+/* ── 同步滚动标记 ── */
+.sync-indicator { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; pointer-events:none; opacity:0; transition:opacity 0.3s; z-index:100; }
+.sync-indicator.show { opacity:1; }
+
+/* ── 滚动条 ── */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:#ccc; border-radius:3px; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span class="title">OCR 逐页对照</span>
+  <button onclick="document.getElementById('rawInput').click()">Raw 文档</button>
+  <input type="file" id="rawInput" accept=".pdf,.jpg,.jpeg,.png,.bmp" style="display:none">
+  <button onclick="document.getElementById('originalInput').click()">OCR 原始响应</button>
+  <input type="file" id="originalInput" accept=".json" style="display:none">
+  <button onclick="document.getElementById('parsedInput').click()">Parsed JSON</button>
+  <input type="file" id="parsedInput" accept=".json" style="display:none">
+  <span class="file-info" id="fileInfo">拖拽文件到对应区域</span>
+  <span class="badge doc-type" id="docTypeBadge" style="display:none"></span>
+  <span class="badge" id="statusBadge" style="display:none"></span>
+</div>
+
+<div class="main">
+  <!-- 左侧：PDF/图片 -->
+  <div class="left-panel" id="leftPanel">
+    <div class="viewer-header" id="viewerHeader" style="display:none">
+      <button onclick="zoomOut()">−</button>
+      <span id="zoomLevel">100%</span>
+      <button onclick="zoomIn()">+</button>
+      <button onclick="fitPage()" title="适应宽度">⊡</button>
+      <button onclick="rotatePage()" title="旋转当前页">↻</button>
+      <button onclick="rotateAllPages()" title="旋转全部页">↻*</button>
+      <span style="color:#ccc">|</span>
+      <button onclick="prevPage()">◀</button>
+      <input type="number" id="pageInput" value="1" min="1" style="width:44px;text-align:center;font-size:12px;padding:2px">
+      <span class="page-info">/ <span id="totalPages">0</span></span>
+      <button onclick="nextPage()">▶</button>
+    </div>
+    <div class="viewer-content" id="viewerContent">
+      <div class="drop-hint" id="dropHint">
+        <div class="icon">📄</div>
+        <div>拖拽 Raw 文档到此处</div>
+        <div style="font-size:12px;color:#bbb">PDF / JPG / PNG</div>
+      </div>
+      <div id="pdfContainer" style="display:none">
+        <canvas id="pdfCanvas"></canvas>
+        <img id="imageView" style="display:none;max-width:100%">
+        <div id="bboxOverlay"></div>
+      </div>
+      <div class="vlm-badge" id="vlmBadge" style="display:none">⚠ VLM</div>
+    </div>
+  </div>
+
+  <!-- 右侧 -->
+  <div class="right-panel">
+    <div class="right-tabs">
+      <div class="tab active" data-tab="ocr" onclick="switchTab('ocr')">📝 OCR 对照</div>
+      <div class="tab" data-tab="fields" onclick="switchTab('fields')">🔑 提取字段</div>
+      <div class="tab" data-tab="tables" onclick="switchTab('tables')">📊 表格</div>
+    </div>
+    <div class="right-content" id="rightContent">
+      <!-- OCR 页 -->
+      <div class="page-content active" id="ocrPages"></div>
+<!-- 字段页 -->
+  <div class="page-content" id="fieldsPage"><div style="padding:40px 20px;text-align:center;color:#bbb;font-size:14px">加载 Parsed JSON 后显示提取字段<br><span style="font-size:12px">点击上方"Parsed JSON"按钮加载</span></div></div>
+  <!-- 表格页 -->
+  <div class="page-content" id="tablesPage"><div style="padding:40px 20px;text-align:center;color:#bbb;font-size:14px">加载 Parsed JSON 后显示结构化表格<br><span style="font-size:12px">点击上方"Parsed JSON"按钮加载</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="sync-indicator" id="syncIndicator">已同步</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ════════════════════════════════════════════════════════
+//  状态
+// ════════════════════════════════════════════════════════
+const state = {
+  rawFile: null,    // File object
+  rawType: null,    // 'pdf' | 'image'
+  original: null,   // parsed OCR 原始响应 JSON
+  parsed: null,     // pipeline 输出 JSON
+  pdfDoc: null,
+  currentPage: 1,
+  scale: 1.5,
+  pageRotations: {}, // { pageNum: rotation } 每页独立旋转
+  globalRotation: 0, // 全局旋转（影响所有页）
+  totalOCRPgs: 0,
+  bboxElements: [],
+  _tableColMode: 'normal', // 'normal' | 'reverse' | 'rotate'
+  _syncing: false,
+};
+
+// ════════════════════════════════════════════════════════
+//  文件加载
+// ════════════════════════════════════════════════════════
+
+document.getElementById('rawInput').addEventListener('change', async e => {
+  if (e.target.files[0]) await loadRawFile(e.target.files[0]);
+});
+document.getElementById('originalInput').addEventListener('change', async e => {
+  if (e.target.files[0]) await loadOriginalFile(e.target.files[0]);
+});
+document.getElementById('parsedInput').addEventListener('change', async e => {
+  if (e.target.files[0]) await loadParsedFile(e.target.files[0]);
+});
+
+// 拖拽
+const leftPanel = document.getElementById('leftPanel');
+leftPanel.addEventListener('dragover', e => { e.preventDefault(); leftPanel.classList.add('drag-over'); });
+leftPanel.addEventListener('dragleave', () => leftPanel.classList.remove('drag-over'));
+leftPanel.addEventListener('drop', async e => {
+  e.preventDefault(); leftPanel.classList.remove('drag-over');
+  for (const f of e.dataTransfer.files) {
+    if (f.name.endsWith('.json')) {
+      // 判断是 original 还是 parsed
+      const text = await f.text();
+      try {
+        const j = JSON.parse(text);
+        if (j.document_type || j.parsed_id) await loadParsedFile(f);
+        else await loadOriginalFile(f);
+      } catch { await loadOriginalFile(f); }
+    } else await loadRawFile(f);
+  }
+});
+
+// ════════════════════════════════════════════════════════
+//  URL 参数自动加载
+// ════════════════════════════════════════════════════════
+async function autoLoad() {
+  const p = new URLSearchParams(location.search);
+  const rawPath = p.get('raw');
+  const originalPath = p.get('original');
+  const parsedPath = p.get('parsed');
+  try {
+    if (rawPath) {
+      const r = await fetch(rawPath);
+      if (r.ok) await loadRawFile(new File([await r.blob()], rawPath.split('/').pop()));
+    }
+    if (originalPath) {
+      const r = await fetch(originalPath);
+      if (r.ok) await loadOriginalFile(new File([await r.text()], originalPath.split('/').pop()));
+    }
+    if (parsedPath) {
+      const r = await fetch(parsedPath);
+      if (r.ok) await loadParsedFile(new File([await r.text()], parsedPath.split('/').pop()));
+    }
+  } catch(e) { console.warn('autoLoad:', e.message); }
+}
+document.addEventListener('DOMContentLoaded', autoLoad);
+
+// ════════════════════════════════════════════════════════
+//  Raw 文件加载
+// ════════════════════════════════════════════════════════
+async function loadRawFile(file) {
+  state.rawFile = file;
+  document.getElementById('fileInfo').textContent = file.name + ' (' + fmtSize(file.size) + ')';
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (ext === 'pdf') {
+    state.rawType = 'pdf';
+    await loadPDF(file);
+  } else if (['jpg','jpeg','png','bmp','webp'].includes(ext)) {
+    state.rawType = 'image';
+    loadImage(file);
+  }
+}
+
+async function loadPDF(file) {
+  const buf = await file.arrayBuffer();
+  state.pdfDoc = await pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise;
+  state.currentPage = 1;
+  document.getElementById('totalPages').textContent = state.pdfDoc.numPages;
+  document.getElementById('viewerHeader').style.display = 'flex';
+  document.getElementById('pageInput').max = state.pdfDoc.numPages;
+  document.getElementById('pdfContainer').style.display = 'inline-block';
+  document.getElementById('dropHint').style.display = 'none';
+  document.getElementById('imageView').style.display = 'none';
+  renderPage();
+}
+function loadImage(file) {
+  const r = new FileReader();
+  r.onload = e => {
+    document.getElementById('imageView').src = e.target.result;
+    document.getElementById('imageView').style.display = 'block';
+    document.getElementById('pdfCanvas').style.display = 'none';
+    document.getElementById('viewerHeader').style.display = 'none';
+    document.getElementById('pdfContainer').style.display = 'inline-block';
+    document.getElementById('dropHint').style.display = 'none';
+  };
+  r.readAsDataURL(file);
+}
+
+// ════════════════════════════════════════════════════════
+//  PDF 渲染 + Bbox
+// ════════════════════════════════════════════════════════
+function getEffectiveRotation() {
+  const pageRot = state.pageRotations[state.currentPage] || 0;
+  return (pageRot + state.globalRotation) % 360;
+}
+
+async function renderPage() {
+  if (!state.pdfDoc) return;
+  const page = await state.pdfDoc.getPage(state.currentPage);
+  const canvas = document.getElementById('pdfCanvas');
+  const ctx = canvas.getContext('2d');
+  // 始终以 0° 渲染（viewport 不带 rotation）
+  const vp = page.getViewport({ scale: state.scale });
+  canvas.width = vp.width;
+  canvas.height = vp.height;
+  canvas.style.display = 'block';
+  canvas.style.transform = '';
+  document.getElementById('imageView').style.display = 'none';
+  document.getElementById('pdfContainer').style.width = vp.width + 'px';
+  document.getElementById('pdfContainer').style.height = vp.height + 'px';
+
+  await page.render({ canvasContext: ctx, viewport: vp }).promise;
+  document.getElementById('pageInput').value = state.currentPage;
+  document.getElementById('zoomLevel').textContent = Math.round(state.scale * 100) + '%';
+
+  // CSS transform 旋转整个容器（canvas + overlay 一起转，坐标自动对齐）
+  const rot = getEffectiveRotation();
+  const container = document.getElementById('pdfContainer');
+  if (rot > 0) {
+    container.style.transformOrigin = 'center center';
+    container.style.transform = 'rotate(' + rot + 'deg)';
+  } else {
+    container.style.transform = '';
+  }
+
+  drawBboxes();
+  syncOcrPage();
+  updateVlmBadge();
+}
+
+function rotatePage() {
+  const cur = state.pageRotations[state.currentPage] || 0;
+  state.pageRotations[state.currentPage] = (cur + 90) % 360;
+  if (state.rawType === 'pdf') renderPage();
+  else rotateImageView();
+}
+
+function rotateAllPages() {
+  state.globalRotation = (state.globalRotation + 90) % 360;
+  state.pageRotations = {}; // 清空单页旋转，全部由 global 控制
+  if (state.rawType === 'pdf') renderPage();
+  else rotateImageView();
+}
+
+function rotateImageView() {
+  const img = document.getElementById('imageView');
+  if (!img.src) return;
+  const rot = getEffectiveRotation();
+  img.style.transform = 'rotate(' + rot + 'deg)';
+  img.style.transformOrigin = 'center center';
+}
+
+function drawBboxes() {
+  const overlay = document.getElementById('bboxOverlay');
+  overlay.innerHTML = '';
+  const canvas = document.getElementById('pdfCanvas');
+  const cw = canvas.width || 1;
+  const ch = canvas.height || 1;
+  // PDF.js 原生 rotation 后 canvas 尺寸已正确，无需 swap
+  const dispW = cw;
+  const dispH = ch;
+  overlay.style.width = dispW + 'px';
+  overlay.style.height = dispH + 'px';
+  state.bboxElements = [];
+  if (!state.original) return;
+  const pages = state.original.data?.pages || [];
+  const pg = pages.find(p => p.page === state.currentPage);
+  if (!pg) return;
+  const lbs = pg.layout_blocks || [];
+  if (!lbs.length) return;
+
+  // 对该页所有 bbox 取最大值作为 OCR 图像尺寸参考
+  let maxX = 0, maxY = 0;
+  for (const lb of lbs) {
+    const b = lb.bbox;
+    if (b && b.length >= 4) {
+      if (b[2] > maxX) maxX = b[2];
+      if (b[3] > maxY) maxY = b[3];
+    }
+  }
+  if (maxX === 0 || maxY === 0) return;
+
+  for (const lb of lbs) {
+    const bbox = lb.bbox;
+    if (!bbox || bbox.length < 4) continue;
+    // 归一化坐标
+    let nx = bbox[0] / maxX;
+    let ny = bbox[1] / maxY;
+    let nw = (bbox[2] - bbox[0]) / maxX;
+    let nh = (bbox[3] - bbox[1]) / maxY;
+
+    // CSS transform 旋转容器，canvas+overlay 一起转，坐标无需变换
+    const x = nx * dispW;
+    const y = ny * dispH;
+    const w = nw * dispW;
+    const h = nh * dispH;
+    if (w < 3 || h < 3) continue;
+    const tag = lb.label || 'unknown';
+    const div = document.createElement('div');
+    div.className = 'bbox-rect ' + (tag === 'seal' ? 'seal' : '');
+    div.title = tag + ' (score: ' + (lb.score||0).toFixed(2) + ')';
+    div.style.left = x + 'px'; div.style.top = y + 'px';
+    div.style.width = w + 'px'; div.style.height = h + 'px';
+    div.dataset.tag = tag;
+    div.dataset.score = lb.score || 0;
+    div.onclick = () => highlightBbox(div, lb);
+    overlay.appendChild(div);
+    state.bboxElements.push({ el: div, data: lb });
+  }
+}
+
+function highlightBbox(el, lb) {
+  document.querySelectorAll('.bbox-rect').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  showSync('区域: ' + (lb.label||'unknown') + ' score=' + (lb.score||'?').toFixed(2));
+}
+
+function updateVlmBadge() {
+  const badge = document.getElementById('vlmBadge');
+  if (!state.original) { badge.style.display = 'none'; return; }
+  const pages = state.original.data?.pages || [];
+  const pg = pages.find(p => p.page === state.currentPage);
+  badge.style.display = pg && pg.route === 'vlm' ? 'block' : 'none';
+}
+
+// ════════════════════════════════════════════════════════
+//  OCR 原始响应加载
+// ════════════════════════════════════════════════════════
+async function loadOriginalFile(file) {
+  const text = await file.text();
+  try { state.original = JSON.parse(text); }
+  catch(e) { alert('OCR 原始响应解析失败: ' + e.message); return; }
+  const pgs = state.original.data?.pages || [];
+  state.totalOCRPgs = pgs.length;
+  renderOcrPages();
+  renderTables(); // 从 original 提取表格
+  if (state.parsed) renderFields();
+  syncOcrPage();
+}
+
+// ════════════════════════════════════════════════════════
+//  OCR 逐页渲染（右侧）
+// ════════════════════════════════════════════════════════
+function renderOcrPages() {
+  const container = document.getElementById('ocrPages');
+  const pages = state.original.data?.pages || [];
+  if (!pages.length) { container.innerHTML = '<div style="padding:20px;color:#999">无 OCR 数据</div>'; return; }
+  let html = '';
+  for (const p of pages) {
+    const pn = p.page || 0;
+    const route = p.route || '?';
+    const text = p.text || '(无文本)';
+    const md = p.markdown || '';
+    const lbs = p.layout_blocks || [];
+    const timing = p.timing_ms || 0;
+    // table 页用 text（纯文本），不用 markdown（含 HTML 标签）
+    const displayText = text;
+
+    html += '<div class="ocr-page" data-page="' + pn + '">';
+    html += '<div class="page-header">';
+    html += '<span class="page-num">第 ' + pn + ' 页</span>';
+    html += '<span class="route-badge ' + route + '">' + route.toUpperCase() + '</span>';
+    html += '<span class="timing">' + (timing/1000).toFixed(1) + 's</span>';
+    html += '</div>';
+    if (route === 'table') {
+      html += '<div onclick="switchTab(\'tables\')" style="margin-bottom:8px;padding:6px 12px;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:4px;font-size:12px;color:#2e7d32;cursor:pointer" title="点击切换">📊 此页为表格数据 — 点击切换到 <b>📊 表格</b> 标签查看结构化视图 →</div>';
+    }
+    html += '<div class="page-text" data-page="' + pn + '" data-route="' + route + '">' + escHtml(displayText) + '</div>';
+    if (lbs.length) {
+      html += '<div class="layout-blocks">';
+      for (const lb of lbs) {
+        const tag = lb.label || 'unknown';
+        const score = lb.score || 0;
+        html += '<span class="lb-tag ' + tag + '" onclick="focusBbox(' + pn + ',\'' + tag + '\',' + score + ')" title="bbox: [' + (lb.bbox||[]).join(',') + ']">' + tag + ' (' + score.toFixed(2) + ')</span>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  container.innerHTML = html;
+  // 激活第一页
+  document.querySelectorAll('.ocr-page').forEach(el => el.classList.remove('active'));
+  const first = container.querySelector('.ocr-page');
+  if (first) first.classList.add('active');
+}
+
+function focusBbox(pageNum, tag, score) {
+  if (state.pdfDoc) {
+    state.currentPage = pageNum;
+    renderPage();
+    // 高亮对应的 bbox
+    setTimeout(() => {
+      const els = document.querySelectorAll('.bbox-rect');
+      for (const el of els) {
+        if (el.dataset.tag === tag && parseFloat(el.dataset.score || 0) === score) {
+          el.classList.add('active');
+          el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          break;
+        }
+      }
+    }, 300);
+  }
+  showSync('定位到第 ' + pageNum + ' 页 ' + tag + ' 区域');
+}
+
+// ════════════════════════════════════════════════════════
+//  左右页面对齐
+// ════════════════════════════════════════════════════════
+function syncOcrPage() {
+  // 右侧滚动到当前 PDF 页对应位置
+  const target = document.querySelector('.ocr-page[data-page="' + state.currentPage + '"]');
+  if (target) {
+    document.querySelectorAll('.ocr-page').forEach(el => el.classList.remove('active'));
+    target.classList.add('active');
+    target.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
+}
+
+// ════════════════════════════════════════════════════════
+//  Parsed JSON 加载
+// ════════════════════════════════════════════════════════
+async function loadParsedFile(file) {
+  const text = await file.text();
+  try { state.parsed = JSON.parse(text); }
+  catch(e) { alert('Parsed JSON 解析失败: ' + e.message); return; }
+  // badges
+  const dt = document.getElementById('docTypeBadge');
+  dt.textContent = state.parsed.document_type || '?';
+  dt.style.display = 'inline-block';
+  const st = document.getElementById('statusBadge');
+  const s = state.parsed.parsed_status || 'unknown';
+  st.textContent = s === 'full' ? '自动通过' : s === 'human_review_required' ? '待复核' : '质量不足';
+  st.className = 'badge ' + (s === 'full' ? 'full' : 'review');
+  st.style.display = 'inline-block';
+  if (state.original) renderFields();
+  if (state.original) renderTables();
+}
+
+function renderFields() {
+  const p = state.parsed;
+  const fields = p.fields || {};
+  const container = document.getElementById('fieldsPage');
+  let html = '<div style="padding:16px">';
+  // 元信息
+  html += '<div style="margin-bottom:12px;font-size:12px;color:#666;line-height:1.8">';
+  html += '<div>解析ID: ' + (p.parsed_id||'-') + '</div>';
+  html += '<div>引擎: ' + (p.parsed_by||'-') + ' | 时间: ' + (p.parsed_at||'-') + '</div>';
+  const layout = p.meta?.layout;
+  if (layout) html += '<div>版面: ' + layout.total_blocks + ' blocks (' + layout.table_blocks + ' table, ' + layout.seal_blocks + ' seal)</div>';
+  html += '</div>';
+  // 字段卡片
+  const keys = Object.keys(fields);
+  if (keys.length) {
+    for (const k of keys) {
+      const f = fields[k];
+      if (!f || f.value === undefined || f.value === null || f.value === '') continue;
+      const conf = f.confidence || 0;
+      const cls = conf >= 0.85 ? 'high' : conf >= 0.6 ? 'medium' : 'low';
+      html += '<div class="field-card">';
+      html += '<div class="field-header"><span class="field-name">' + k + '</span><span style="font-size:11px;color:#999">' + Math.round(conf*100) + '%</span></div>';
+      html += '<div class="field-value">' + escHtml(String(f.value)) + '</div>';
+      html += '<div class="conf-bar"><div class="fill ' + cls + '" style="width:' + Math.round(conf*100) + '%"></div></div>';
+      if (f.raw_text) html += '<div class="field-meta">原文: ' + escHtml(String(f.raw_text).slice(0,120)) + '</div>';
+      html += '</div>';
+    }
+  }
+  // 缺失字段
+  const missing = p.missing_sections_warnings || [];
+  if (missing.length) {
+    html += '<div style="margin-top:16px;font-size:12px;font-weight:600;color:#e65100">⚠ 缺失警告 ' + missing.length + ' 项</div>';
+    for (const w of missing) {
+      html += '<div style="margin:4px 0;padding:6px 10px;background:#fffbe6;border:1px solid #ffcc02;border-radius:4px;font-size:12px">[' + (w.severity||'?') + '] ' + (w.warning||w.missing_section_id||'') + '</div>';
+    }
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function extractTablesFromOriginal() {
+  // 从 original 响应的 elements 中提取表格
+  const tables = [];
+  if (!state.original) return tables;
+  const pages = state.original.data?.pages || [];
+  for (const p of pages) {
+    const elems = p.elements || [];
+    for (const e of elems) {
+      if (e.type === 'table' && e.content?.html) {
+        // 解析 HTML 表格
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(e.content.html, 'text/html');
+        const trs = doc.querySelectorAll('table tr');
+        const headers = [];
+        const rows = [];
+        let firstRow = true;
+        for (const tr of trs) {
+          const cells = [];
+          tr.querySelectorAll('td, th').forEach(td => cells.push(td.textContent.trim()));
+          if (!cells.length) continue;
+          if (firstRow && cells.some(c => isNaN(parseFloat(c.replace(/[,.]/g,''))))) {
+            headers.push(...cells);
+            firstRow = false;
+          } else {
+            rows.push(cells);
+          }
+        }
+        tables.push({
+          page: p.page || 0,
+          bbox: e.bbox || null,
+          headers: headers,
+          rows: rows,
+          row_count: rows.length,
+          source: 'original',
+        });
+      }
+    }
+  }
+  return tables;
+}
+
+function renderTables() {
+  const container = document.getElementById('tablesPage');
+
+  let tables = state.parsed?.tables || [];
+  let source = 'parsed';
+  if (!tables.length) {
+    tables = extractTablesFromOriginal();
+    source = 'original';
+  }
+
+  if (!tables.length) {
+    const msg = state.original
+      ? '原始 OCR 响应中未检测到结构化表格'
+      : '加载原始 OCR 响应或 Parsed JSON 后显示结构化表格';
+    container.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#bbb;font-size:14px">' + msg + '</div>';
+    return;
+  }
+
+  // 列修正模式: 'normal' | 'reverse' | 'rotate'
+  const colMode = state._tableColMode || 'normal';
+
+  let html = '<div style="padding:16px">';
+  if (source === 'original') {
+    html += '<div style="margin-bottom:10px;padding:6px 12px;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:4px;font-size:12px;color:#2e7d32">表格从原始 OCR 响应直接提取</div>';
+  }
+  html += '<div style="margin-bottom:10px">';
+  html += '<button onclick="cycleColMode()" style="background:#f0f0f0;border:1px solid #ccc;border-radius:4px;padding:4px 12px;cursor:pointer;font-size:12px">';
+  if (colMode === 'normal') html += '↔ 修正列序（旋转表格）';
+  else if (colMode === 'rotate') html += '↩ 反转列序';
+  else html += '✔ 恢复原始';
+  html += '</button><span style="font-size:11px;color:#999;margin-left:8px">当前: ' + colMode + '</span>';
+  html += '</div>';
+
+  function applyColMode(arr, mode) {
+    if (mode === 'reverse') return [...arr].reverse();
+    if (mode === 'rotate') {
+      const half = Math.floor(arr.length / 2);
+      return [...arr.slice(half), ...arr.slice(0, half)];
+    }
+    return arr;
+  }
+
+  for (let i = 0; i < tables.length; i++) {
+    const t = tables[i];
+    const headers = applyColMode(t.headers, colMode);
+    const rows = t.rows.map(r => applyColMode(r, colMode));
+    html += '<div class="table-card">';
+    html += '<div class="table-title">表格 ' + (i+1) + ' — 第 ' + t.page + ' 页 (' + t.row_count + '行 x ' + headers.length + '列)' + (t.bbox ? ' bbox:[' + t.bbox.map(v=>Math.round(v)).join(',') + ']' : '') + '</div>';
+    html += '<table><thead><tr>';
+    for (const h of headers) html += '<th>' + escHtml(h) + '</th>';
+    html += '</tr></thead><tbody>';
+    for (const row of rows) {
+      html += '<tr>';
+      for (let j = 0; j < Math.max(headers.length, row.length); j++) {
+        html += '<td>' + escHtml(row[j] || '') + '</td>';
+      }
+      html += '</tr>';
+    }
+    html += '</tbody></table></div>';
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function toggleTableReverse() {
+  state._tableReversed = !state._tableReversed;
+  renderTables();
+}
+
+// ════════════════════════════════════════════════════════
+//  Tab 切换
+// ════════════════════════════════════════════════════════
+function switchTab(name) {
+  document.querySelectorAll('.right-tabs .tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  // 处理特殊命名: ocr → ocrPages (带s)
+  const suffix = name === 'ocr' ? 'Pages' : 'Page';
+  document.querySelectorAll('.right-content .page-content').forEach(p => p.classList.toggle('active', p.id === name + suffix));
+}
+
+// ════════════════════════════════════════════════════════
+//  页面导航
+// ════════════════════════════════════════════════════════
+function prevPage() { if (state.pdfDoc && state.currentPage > 1) { state.currentPage--; renderPage(); } }
+function nextPage() { if (state.pdfDoc && state.currentPage < state.pdfDoc.numPages) { state.currentPage++; renderPage(); } }
+document.getElementById('pageInput').addEventListener('change', () => {
+  const n = parseInt(document.getElementById('pageInput').value);
+  if (n >= 1 && n <= (state.pdfDoc?.numPages||1)) { state.currentPage = n; renderPage(); }
+});
+function zoomIn() { state.scale = Math.min(state.scale + 0.25, 5); if (state.rawType === 'pdf') renderPage(); }
+function zoomOut() { state.scale = Math.max(state.scale - 0.25, 0.25); if (state.rawType === 'pdf') renderPage(); }
+async function fitPage() {
+  if (!state.pdfDoc) return;
+  const page = await state.pdfDoc.getPage(1);
+  const vp = page.getViewport({ scale: 1 });
+  const cw = document.querySelector('.viewer-content').clientWidth - 40;
+  state.scale = cw / vp.width;
+  renderPage();
+}
+
+// ════════════════════════════════════════════════════════
+//  鼠标滚轮翻页（左侧PDF区域）
+// ════════════════════════════════════════════════════════
+document.querySelector('.left-panel .viewer-content').addEventListener('wheel', e => {
+  if (!state.pdfDoc) return;
+  // 只有当内容已滚动到最顶部或最底部时才触发翻页
+  const el = document.querySelector('.left-panel .viewer-content');
+  const atTop = el.scrollTop <= 0;
+  const atBottom = el.scrollTop >= el.scrollHeight - el.clientHeight - 5;
+  if (e.deltaY < 0 && atTop && state.currentPage > 1) {
+    e.preventDefault();
+    prevPage();
+  } else if (e.deltaY > 0 && atBottom && state.currentPage < state.pdfDoc.numPages) {
+    e.preventDefault();
+    nextPage();
+  }
+});
+
+// ════════════════════════════════════════════════════════
+//  键盘快捷键
+// ════════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') prevPage();
+  if (e.key === 'ArrowRight') nextPage();
+  if (e.key === '+' || e.key === '=') zoomIn();
+  if (e.key === '-') zoomOut();
+});
+
+// ════════════════════════════════════════════════════════
+//  工具函数
+// ════════════════════════════════════════════════════════
+function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function fmtSize(b) { if (b < 1024) return b + 'B'; if (b < 1048576) return (b/1024).toFixed(1) + 'KB'; return (b/1048576).toFixed(1) + 'MB'; }
+let syncTimer;
+function showSync(msg) {
+  const el = document.getElementById('syncIndicator');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => el.classList.remove('show'), 2000);
+}
+</script>
+</body>
+</html>

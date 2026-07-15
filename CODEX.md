@@ -42,10 +42,12 @@ Codex 版本在 `.codex-plugin/` 目录下包含 `mcp.json` 配置，自动加�
 ```json
 {
   "mcpServers": {
-    "investigation-pdf": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-pdf"],
-      "description": "PDF 文档分析"
+    "paddleOCR-mcp": {
+      "url": "http://<ocr-server-host>:8090/mcp",
+      "headers": {
+        "Accept": "application/json, text/event-stream"
+      },
+      "description": "OCR 文档识别（PaddleOCR pp_structurev3）"
     }
   }
 }
@@ -53,7 +55,7 @@ Codex 版本在 `.codex-plugin/` 目录下包含 `mcp.json` 配置，自动加�
 
 配置文件路径：`/.codex-plugin/mcp.json`（由 `plugin.json` 的 `mcpServers: "./mcp.json"` 字段引用）。
 
-这在 Codex 中提供 PDF 提取和分析能力，用于证据文件处理。
+这在 Codex 中提供 OCR 文档识别能力，用于证据文件处理。调用前需先通过上传接口上传文件。
 
 ---
 

@@ -1,0 +1,324 @@
+# 中国增值税发票 Schema（Invoice）
+# 适用范围：增值税专用发票、普通发票、电子发票、数电票、机动车/二手车发票
+#
+# 发票分类由两个正交维度描述：
+#   tax_category — 税务功能（决定是否能抵扣进项）
+#   form_type    — 载体形态（决定验真方式和存储介质）
+#
+# 验真参数字段映射（不同票种验真时传的参数不同）：
+#   专票             → 不含税金额 (subtotal_ex_tax)
+#   普票/电子普票/卷票  → 校验码后6位 (check_code)
+#   机动车            → 不含税价 (subtotal_ex_tax)
+#   二手车            → 车价合计 (total_amount)
+#   数电票            → 数电票号码 (invoice_no, 20位)
+
+document_type: INVOICE
+description: "中国增值税发票（含专票/普票/电子票/数电票/机动车票）"
+version: "1.0"
+
+# ============================================================
+# 字段定义
+# ============================================================
+fields:
+  # ============================================================
+  # 发票分类（两个正交维度）
+  # ============================================================
+  - name: tax_category
+    label: 税务类别
+    type: enum
+    required: true
+    confidence_tracking: true
+    description: "按税务功能分类，决定能否抵扣进项"
+    enum_values:
+      - value: "special_vat"
+        label: 增值税专用发票（含纸质+电子）
+        can_deduct: true
+      - value: "normal_vat"
+        label: 增值税普通发票（含纸质+电子+卷票+通行费票）
+        can_deduct: false
+      - value: "motor_vehicle"
+        label: 机动车销售统一发票
+        can_deduct: true
+      - value: "used_vehicle"
+        label: 二手车销售统一发票
+        can_deduct: null  # 视情况
+
+  - name: form_type
+    label: 载体形态
+    type: enum
+    required: true
+    confidence_tracking: true
+    description: "按发票的物理/电子形态分类"
+    enum_values:
+      - value: "paper"
+        label: 纸质发票（传统税控盘开具）
+      - value: "electronic"
+        label: 电子发票（非数电票，OFD/PDF格式）
+      - value: "digital_unified"
+        label: 数电票/全电发票（新版本，20位号码）
+      - value: "roll"
+        label: 卷式发票
+      - value: "toll_road"
+        label: 通行费发票（高速公路）
+
+  # ============================================================
+  # 票头标识层（验真必传字段）
+  # ============================================================
+  - name: invoice_no
+    label: 发票号码
+    type: string
+    required: true
+    confidence_tracking: true
+    description: >
+      传统专票/普票为8位；数电票为20位。
+      统一存储原始号码，不做格式转换。
+      机动车发票和二手车发票号码规则另有不同。
+
+  - name: invoice_code
+    label: 发票代码
+    type: string
+    required: false
+    confidence_tracking: true
+    description: >
+      10位或12位。数电票此字段为空。
+      机动车发票代码为12位，二手车发票代码为"12位"。
+
+  - name: check_code
+    label: 校验码
+    type: string
+    required: false
+    confidence_tracking: true
+    description: >
+      普票/电子普票/卷票/通行费票——验真必传（取后6位）。
+      专票无此字段（验真时传 subtotal_ex_tax 代替）。
+      数电票无此字段。
+
+  # ============================================================
+  # 日期
+  # ============================================================
+  - name: invoice_date
+    label: 开票日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: true
+    confidence_tracking: true
+
+  # ============================================================
+  # 购买方（甲方/买方）
+  # ============================================================
+  - name: payer_name
+    label: 购买方名称
+    type: string
+    required: true
+    confidence_tracking: true
+
+  - name: payer_tax_id
+    label: 购买方纳税人识别号
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "企业必填，个人消费者可为空"
+
+  - name: payer_address_phone
+    label: 购买方地址、电话
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "专票必填，格式通常为'地址 电话'"
+
+  - name: payer_bank_account
+    label: 购买方开户行及账号
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "专票必填"
+
+  # ============================================================
+  # 销售方（乙方/卖方）
+  # ============================================================
+  - name: payee_name
+    label: 销售方名称
+    type: string
+    required: true
+    confidence_tracking: true
+
+  - name: payee_tax_id
+    label: 销售方纳税人识别号
+    type: string
+    required: true
+    confidence_tracking: true
+
+  - name: payee_address_phone
+    label: 销售方地址、电话
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "专票/普票均必填"
+
+  - name: payee_bank_account
+    label: 销售方开户行及账号
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "专票/普票均必填"
+
+  # ============================================================
+  # 销售方发票专用章（调查关键字段）
+  # ============================================================
+  - name: payee_seal_name
+    label: 销售方发票专用章名称
+    type: string
+    required: false
+    confidence_tracking: true
+    description: >
+      发票上的销售方发票专用章文字内容。
+      与 payee_name（销售方名称）不一致时，
+      是渠道舞弊/挂靠经营/代开发票的关键信号。
+      电子发票/数电票无需物理盖章，此字段可为空。
+
+  # ============================================================
+  # 金额（Header 级汇总）
+  # ============================================================
+  - name: subtotal_ex_tax
+    label: 合计金额（不含税）
+    type: decimal
+    required: true
+    confidence_tracking: true
+    description: "不含税合计金额。专票验真时以此字段代替校验码。"
+
+  - name: total_tax
+    label: 合计税额
+    type: decimal
+    required: true
+    confidence_tracking: true
+
+  - name: total_amount
+    label: 价税合计（小写）
+    type: decimal
+    required: true
+    confidence_tracking: true
+    description: "价税合计 = subtotal_ex_tax + total_tax。二手车验真时传此字段。"
+
+  - name: total_amount_cn
+    label: 价税合计（大写）
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "中文大写金额，用于核验小写金额是否正确"
+
+  # ============================================================
+  # 商品明细（Line Items）
+  # ============================================================
+  - name: line_items
+    label: 商品明细
+    type: array
+    required: false
+    confidence_tracking: true
+    description: "货物或应税劳务、服务明细行"
+    items:
+      type: object
+      properties:
+        - name: line_no
+          label: 行号
+          type: integer
+
+        - name: description
+          label: 货物或应税劳务名称
+          type: string
+          required: true
+
+        - name: specification
+          label: 规格型号
+          type: string
+
+        - name: unit
+          label: 单位
+          type: string
+
+        - name: quantity
+          label: 数量
+          type: decimal
+
+        - name: unit_price
+          label: 单价
+          type: decimal
+
+        - name: amount
+          label: 金额
+          type: decimal
+          required: true
+
+        - name: tax_rate
+          label: 税率
+          type: string
+          description: "如 13%、6%、免税、不征税、0%"
+
+        - name: tax_amount
+          label: 税额
+          type: decimal
+
+  # ============================================================
+  # 签章与人员
+  # ============================================================
+  - name: issuer
+    label: 开票人
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "发票标准字段，一般由财务操作人员填写"
+
+  - name: reviewer
+    label: 复核人
+    type: string
+    required: false
+    confidence_tracking: true
+
+  - name: receiver
+    label: 收款人
+    type: string
+    required: false
+    confidence_tracking: true
+
+  # ============================================================
+  # 备注
+  # ============================================================
+  - name: remarks
+    label: 备注
+    type: text
+    required: false
+    confidence_tracking: true
+    description: >
+      备注栏内容。调查关键字段——
+      建筑服务、运输服务、不动产销售等行业强制填写合同号/项目地址/起运地等。
+      异常发票的备注栏常缺失关键信息或填写异常。
+
+  # ============================================================
+  # 机动车/二手车 专用字段
+  # ============================================================
+  - name: vehicle_vin
+    label: 车辆识别代号（VIN）
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "机动车/二手车发票专用——车辆唯一识别码"
+
+  - name: vehicle_model
+    label: 车辆型号
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "机动车/二手车发票专用"
+
+  - name: vehicle_engine_no
+    label: 发动机号码
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "机动车/二手车发票专用"
+
+  - name: vehicle_certificate_no
+    label: 合格证号
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "机动车发票专用——新车合格证编号"

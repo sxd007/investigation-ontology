@@ -1,4 +1,4 @@
-﻿---
+---
 name: cold-start
 description: 首次设置向导 — 引导调查员完成团队配置、证据策略、集成检查和偏好设置。写入持久化配置路径，所有技能依赖此配置运行。支持中断恢复、升级合并和增量更新。
 origin: efio
@@ -151,58 +151,17 @@ READY               → "配置已就绪，是否需要：
 
 ## Phase 2.5: MCP 环境配置
 
-用户选定角色画像后，进入 MCP 配置选择阶段。目标：根据用户需求，动态生成 `.mcp.json` 文件。
+用户选定角色画像后，检查已有 MCP 配置，引导用户按需补充。
 
-### 2.5.1 MCP 能力概览
+1. **检查已有配置** — 读取用户级 (`~/.codebuddy/mcp.json`) 和项目级 (`.mcp.json`) 配置，展示当前状态
+2. **能力补充建议** — 对比 `mcp-configs/mcp-servers.json`，展示尚未配置的可选 MCP
+3. **选择注册通道** — 引导用户按决策树选择用户级或项目级（通用能力→用户级，案件专用→项目级）
+4. **写入配置** — 按选择的通道写入对应配置文件
+5. **验证与记录** — 验证可用性，记录到 team-profile.md 集成状态表
 
-读取 `mcp-configs/mcp-servers.json`，展示"已确认可用的 MCP"列表给用户：
+> 详细流程和示例见 `references/mcp-configuration.md`。注册通道选择策略见 `docs/mcp注册指南.md`。
 
-**提问**："你的调查工作中需要以下哪些能力？（可多选）"
-
-```
-[ ] investigation-pdf (v1.7.4)
-    → 能力: PDF 文档分析（合同、发票、报告等）
-    → 调查场景: 证据文档审查、合同条款提取
-    → 不可用时: 手动打开 PDF 文件
-
-[ ] sequential-thinking
-    → 能力: 分步推理（复杂逻辑推演）
-    → 调查场景: 假设推演、证据链因果验证、时间线推断
-    → 不可用时: 模型直接完成推理
-
-[ ] web-search (已内置)
-    → 能力: 互联网搜索
-    → 调查场景: OSINT 公开信息检索、背景调查
-    → 不可用时: 浏览器手动搜索
-
-[ ] file-system (已内置)
-    → 能力: 文件系统操作
-    → 调查场景: 证据底稿存取、案件文件检索
-    → 不可用时: 手动指定文件路径
-```
-
-用户可选中多个 MCP，也可选择"暂不配置，稍后手动编辑 .mcp.json"。
-
-### 2.5.2 生成配置文件
-
-根据用户选择，按照 `mcp-servers.json` 的定义，拼装用户的 `.mcp.json`：
-
-```json
-{
-  "mcpServers": {
-    "investigation-pdf": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-pdf"]
-    },
-    "sequential-thinking": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
-    }
-  }
-}
-```
-
-保存到项目根目录（从 `project-templates/default/.mcp.json` 复制后修改）。
+用户也可选择"暂不配置，稍后用 `/efio:mcp-config` 添加"。
 
 ---
 
@@ -211,25 +170,10 @@ READY               → "配置已就绪，是否需要：
 检查已配置的 MCP 服务器的可用性。运行 `--check-integrations` 时仅执行此阶段。
 
 对用户选定的各 MCP 逐一验证：
+- **HTTP/SSE 类型**：检查服务端点可达性
+- **stdio 类型**：检查命令可执行性
 
-```bash
-npx -y @modelcontextprotocol/server-<name> --version
-```
-
-输出示例：
-```
-已配置的 MCP 服务器：
-
-✓ investigation-pdf (v1.7.4)    — 文件系统操作类 MCP
-✓ sequential-thinking (ready)   — 推理辅助类 MCP
-✗ 自定义 HTTP MCP (连接失败)    — 网络搜索类 MCP
-  → 建议: 检查服务端点配置是否正确
-
-已内置的能力：
-✓ web-search                    — 互联网搜索
-✓ file-system                   — 文件读写
-✓ chrome-devtools               — 浏览器控制
-```
+输出按用户级 / 项目级分组展示，标记 ✓ 可用 / ✗ 故障。详细示例见 `references/mcp-configuration.md` 第 5 节。
 
 ---
 
@@ -258,17 +202,7 @@ npx -y @modelcontextprotocol/server-<name> --version
 
 ### 4.3 MCP 状态记录
 
-在 team-profile.md 的"MCP 集成状态"节记录验证结果：
-
-```markdown
-## MCP 集成状态
-
-| MCP 服务器 | 状态 | 版本 | 备注 |
-|----------|------|------|------|
-| investigation-pdf | ✓ 可用 | v1.7.4 | - |
-| sequential-thinking | ✓ 可用 | latest | - |
-| 自定义 HTTP 搜索 | ✗ 不可用 | - | 服务端点无响应 |
-```
+在 team-profile.md 的"集成状态"节记录验证结果（含注册通道列）。表格式样见 `references/mcp-configuration.md` 第 6 节。
 
 ### 4.4 项目上下文文件
 

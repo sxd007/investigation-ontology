@@ -1,0 +1,188 @@
+# 签收单/送货单 Schema（Delivery Note）
+# 适用范围：送货单、签收单、发货单、收货确认单
+#
+# 调查视角重点关注：
+#   - 收货方/签收人（谁收到了货）
+#   - 收货地址（货送到了哪——与合同约定的交付地址是否一致）
+#   - 签收日期（是否在合同约定期限内）
+#   - 货物明细（实际收到的货与合同/订单是否一致）
+
+document_type: DELIVERY_NOTE
+description: "签收单/送货单（含送货单/签收单/发货单/收货确认单）"
+version: "1.0"
+
+fields:
+  # ============================================================
+  # 单据标识
+  # ============================================================
+  - name: delivery_note_no
+    label: 签收单/送货单号
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "企业内部单据编号，用于关联订单/合同"
+
+  - name: delivery_type
+    label: 单据类型
+    type: enum
+    required: false
+    confidence_tracking: true
+    enum_values:
+      - value: "delivery_note"     # 送货单（发货方出具）
+      - value: "receipt_note"      # 签收单（收货方签收）
+      - value: "dispatch_order"    # 发货单/出库单
+      - value: "goods_receipt"     # 收货确认单/入库单
+      - value: "waybill"           # 运单（物流公司出具）
+      - value: "other"
+
+  # ============================================================
+  # 日期
+  # ============================================================
+  - name: delivery_date
+    label: 发货日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: false
+    confidence_tracking: true
+    description: "发货方发出的日期"
+
+  - name: receipt_date
+    label: 签收日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: true
+    confidence_tracking: true
+    description: >
+      收货方实际签收日期。
+      与 delivery_date（发货日）间隔过短或过长均为异常信号。
+
+  - name: receipt_time
+    label: 签收时间
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "精确签收时间（如有）。配合日志数据可做交叉验证"
+
+  # ============================================================
+  # 发货方
+  # ============================================================
+  - name: shipper_name
+    label: 发货方名称
+    type: string
+    required: true
+    confidence_tracking: true
+
+  - name: shipper_contact
+    label: 发货方联系方式
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "发货方联系人/电话"
+
+  # ============================================================
+  # 收货方（调查关键）
+  # ============================================================
+  - name: receiver_name
+    label: 收货方名称
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "签收单上的收货单位/公司名称"
+
+  - name: receiver_contact_person
+    label: 签收人姓名
+    type: string
+    required: true
+    confidence_tracking: true
+    description: >
+      实际签收人姓名。调查关键字段——
+      与合同约定的联系人/授权签收人不一致时，可作为线索追踪。
+
+  - name: receiver_phone
+    label: 签收人电话
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "签收人联系电话，用于身份核实和关联分析"
+
+  # ============================================================
+  # 收货地址（调查关键）
+  # ============================================================
+  - name: delivery_address
+    label: 收货地址
+    type: string
+    required: true
+    confidence_tracking: true
+    description: >
+      实际送达地址。调查关键字段——
+      与合同约定的交付地址不一致时，可能涉及窜货/虚假交付/货物挪用。
+
+  # ============================================================
+  # 货物明细
+  # ============================================================
+  - name: line_items
+    label: 货物明细
+    type: array
+    required: true
+    confidence_tracking: true
+    description: "实际交付的货物清单"
+    items:
+      type: object
+      properties:
+        - name: line_no
+          label: 行号
+          type: integer
+
+        - name: description
+          label: 货物名称
+          type: string
+          required: true
+
+        - name: specification
+          label: 规格型号
+          type: string
+
+        - name: unit
+          label: 单位
+          type: string
+
+        - name: quantity
+          label: 签收数量
+          type: decimal
+          required: true
+          description: "实际签收的数量。与订单数量不一致是关键差异信号"
+
+        - name: delivery_quantity
+          label: 发货数量
+          type: decimal
+          required: false
+          description: "发货方列明的发货数量，与签收数量对比可发现短少/溢货"
+
+  # ============================================================
+  # 签章
+  # ============================================================
+  - name: receiver_seal_name
+    label: 收货方盖章名称
+    type: string
+    required: false
+    confidence_tracking: true
+    description: >
+      签收单上的收货方公章/签收章。
+      盖章单位与合同乙方不一致时，可能涉及转包/挂靠。
+
+  - name: has_signature
+    label: 是否有签收人签字
+    type: boolean
+    required: false
+    confidence_tracking: false
+    description: "签收人是否签字确认。无签字的签收单证明力弱"
+
+  # ============================================================
+  # 备注
+  # ============================================================
+  - name: remarks
+    label: 备注
+    type: text
+    required: false
+    confidence_tracking: true
+    description: "签收备注，如'部分拒收'、'包装破损'、'代签'等异常记录"

@@ -1,0 +1,47 @@
+{
+  "_title": "PaddleOCR MCP 部署规范与配置示例",
+  "_doc": "实际注册时写入 ~/.codebuddy/mcp.json (CodeBuddy) 或 ~/.claude.json (Claude Code)",
+
+  "_deployment_spec": {
+    "_comment": "推荐部署拓扑——按此规范部署则零额外配置",
+    "mcp_endpoint": "http://<host>:<port>/mcp",
+    "upload_endpoint": "http://<host>:<port+1>/upload",
+    "_examples": {
+      "internal_ip": "MCP=http://10.0.0.1:8090/mcp, Upload=http://10.0.0.1:8091/upload",
+      "localhost": "MCP=http://localhost:8090/mcp, Upload=http://localhost:8091/upload",
+      "domain_with_tls": "MCP=https://ocr.company.com:8090/mcp, Upload=https://ocr.company.com:8091/upload"
+    }
+  },
+
+  "_config_way_1_convention": {
+    "_comment": "方式一：按部署规范部署，只需注册 MCP URL。AI 自动推导上传地址（同主机、端口+1、/upload）",
+    "mcpServers": {
+      "paddleOCR-mcp": {
+        "url": "http://<host>:8090/mcp",
+        "headers": {
+          "Accept": "application/json, text/event-stream"
+        }
+      }
+    }
+  },
+
+  "_config_way_2_override": {
+    "_comment": "方式二：非标部署（如反向代理合并端口），显式指定 uploadEndpoint 覆盖约定推导",
+    "mcpServers": {
+      "paddleOCR-mcp": {
+        "url": "https://ocr.company.com/mcp",
+        "headers": {
+          "Accept": "application/json, text/event-stream"
+        },
+        "uploadEndpoint": "https://ocr.company.com/api/upload"
+      }
+    }
+  },
+
+  "_runtime_logic": {
+    "_step_1": "AI 检测 pp_structurev3 工具是否可用（MCP 自动发现）",
+    "_step_2": "读取 ~/.codebuddy/mcp.json 中 paddleOCR-mcp 的 URL",
+    "_step_3": "推导上传地址：优先读 uploadEndpoint 字段；无此字段则按约定（同主机、端口+1、/upload）推导",
+    "_step_4": "curl 上传文件 → 获取 localpath → 调用 pp_structurev3(input_data=localpath)"
+  }
+}

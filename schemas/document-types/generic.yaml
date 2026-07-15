@@ -1,0 +1,65 @@
+# 通用文档 Schema（GENERIC）
+# 适用范围：任何无预定义格式的文档（手写便条、截图、非标准表格、邮件正文等）
+document_type: GENERIC
+description: "无预定义格式的通用文档 — 仅做 OCR 文本提取，不做结构化字段识别"
+version: "1.0"
+
+fields:
+  - name: raw_text
+    label: OCR 原始全文
+    type: text
+    required: true
+    confidence_tracking: false
+    description: "整篇文档的 OCR 识别全文"
+
+  - name: raw_text_blocks
+    label: OCR 文本分块
+    type: array
+    required: false
+    confidence_tracking: false
+    description: "按版面位置分块的文本，保留阅读顺序"
+    items:
+      type: object
+      properties:
+        - name: block_text
+          label: 块文本
+          type: text
+        - name: position
+          label: 页面位置
+          type: object
+          properties:
+            - name: x1; x2; y1; y2
+              type: integer
+        - name: block_type
+          label: 块类型
+          type: enum
+          enum_values:
+            - value: paragraph
+            - value: table
+            - value: header
+            - value: footer
+            - value: list
+
+  - name: detected_language
+    label: 检测语言
+    type: string
+    required: false
+    confidence_tracking: false
+
+  - name: page_count
+    label: 页数
+    type: integer
+    required: false
+    confidence_tracking: false
+
+  - name: enriched_fields
+    label: 后续补充的结构化字段
+    type: object
+    required: false
+    confidence_tracking: false
+    additional_properties: true
+    description: >
+      由人工或 LLM 在后续分析中补充的结构化提取。
+      当一份文档最初被识别为 GENERIC，
+      但后来发现其中包含可以标准化的字段时，
+      在此对象中补充，不修改原始 raw_text。

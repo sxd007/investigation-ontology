@@ -141,7 +141,7 @@ Codex 用户安装
     │    (环境变量: ${INVESTIGATION_ONTOLOGY_ROOT}/${HOME})
     ├─ mcpServers: "./.mcp.json"
     │              ↓
-    │         investigation-pdf
+    │         paddleOCR-mcp (用户级 ~/.codebuddy/mcp.json)
     └─ interface: {...}
 ```
 

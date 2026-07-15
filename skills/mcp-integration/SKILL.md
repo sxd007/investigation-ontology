@@ -126,6 +126,7 @@ origin: efio
 这与 claude-for-legal 的写法一致：条件式、类型化、始终带 fallback。
 
 ## Related
+- **注册指南:** [docs/mcp注册指南.md](../../docs/mcp注册指南.md) — MCP 注册通道（用户级/项目级/插件级/CLI）和选择策略
 - **配置详情:** [mcp-configs/mcp-servers.json](../../mcp-configs/mcp-servers.json), [.mcp.json](../../.mcp.json)
 - **文档:** [capability-surface-selection.md](../../docs/capability-surface-selection.md)
 - **Skills:** 所有 8 个领域技能均遵循本原则
