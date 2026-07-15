@@ -32,7 +32,7 @@ description: 证据管理 — 链式保管、证据清单、证据评估、证�
 
 ### /evidence integrity
 
-运行 `skills/evidence-management/scripts/scan-chain.py --integrity` 检查：
+运行 `skills/evidence-management/scripts/scan-chain.js --integrity` 检查：
 
 - 所有 finding 的 sources 链是否完整
 - 是否有 draft 节点阻塞 ready finding
@@ -46,12 +46,12 @@ description: 证据管理 — 链式保管、证据清单、证据评估、证�
 
 1. 确认案件目录路径（通常为 `cases/CASE-YYYY-NNN/`）
 2. 读取 `evidence_registry.json` 和 `nodes/` 目录确认数据就绪
-3. 执行 `python skills/evidence-management/scripts/scan-chain.py <case_dir> --html <output_path>.html`
-   - 如环境中无 Python，直接调用 injector：`node skills/evidence-management/templates/evidence-chain-viz/evidence_chain_injector.js <case_dir> <output_path>.html`
+3. 执行 `node skills/evidence-management/scripts/scan-chain.js <case_dir> --html <output_path>.html`
+   - 如环境中无 Node.js，由 AI 读取节点数据后按 `--json-dump` 格式直接注入 HTML 模板
 4. 用浏览器打开生成的 HTML 文件
 
 ### /evidence graph
 
 在对话内生成 Mermaid 推理链预览图。
 
-执行 `python skills/evidence-management/scripts/scan-chain.py <case_dir> --graph`，输出 Mermaid 代码块在对话中渲染。
+执行 `node skills/evidence-management/scripts/scan-chain.js <case_dir> --graph`，输出 Mermaid 代码块在对话中渲染。

@@ -108,10 +108,10 @@ derived_from:
 
 **规则**：
 - 关系只向下声明：每个节点声明自己的上游依赖，不维护"谁引用了我"的字段
-- 反向追溯由 `scan-chain.py` 自动计算
-- FND 的 `derived_from` 应为 ARG 节点，而非直接引用 EV 节点（`scan-chain.py --check-chains` 会检查此项）
+- 反向追溯由 `scan-chain.js` 自动计算
+- FND 的 `derived_from` 应为 ARG 节点，而非直接引用 EV 节点（`scan-chain.js --check-chains` 会检查此项）
 - 矛盾关系通过 HYP 的 `contradicted_by` 或 LS/ARG 的 `contradicts` 字段显式处理
-- `supports` 和 `contradicts` 不应指向同一个目标（`scan-chain.py --check-chains` 会警告冲突）
+- `supports` 和 `contradicts` 不应指向同一个目标（`scan-chain.js --check-chains` 会警告冲突）
 
 ## 节点内容生成规范
 

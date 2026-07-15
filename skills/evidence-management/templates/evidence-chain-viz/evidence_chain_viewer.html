@@ -630,7 +630,7 @@ function renderXMind(){
     const ec = EDGE_COLORS[e.relation_type] || EDGE_COLORS.derived_from;
     const dashAttr = ec.dash ? ` stroke-dasharray="${ec.dash}"` : '';
     svgHtml+=`<path d="M${e.x1},${e.y1} L${mx},${e.y1} L${mx},${e.y2} L${e.x2},${e.y2}" fill="none" stroke="${ec.stroke}" stroke-width="1.5"${dashAttr} stroke-linejoin="round"/>`;
-    const edgeData=EDGES_DATA.find(ed=>ed.from===e.from&&ed.to===e.to);
+    const edgeData=EDGES_DATA.find(ed=>(ed.from===e.from&&ed.to===e.to)||(ed.from===e.to&&ed.to===e.from));
     if(edgeData&&edgeData.excerpt){
       svgHtml+=`<text x="${mx}" y="${my-4}" text-anchor="middle" fill="#4a6880" font-size="9">${esc(edgeData.excerpt.slice(0,18))}</text>`
     }
@@ -654,7 +654,7 @@ function renderXMind(){
       ${govBadge}
       <div class="x-top">
         <span class="x-id">${c.id}</span>
-        <span class="x-dot" style="background:${c.node.status==='ready'?'#52c97a':c.node.status==='draft'?'#e8a020':'#4a6880'}"></span>
+        <span class="x-dot" style="background:${{ready:'#52c97a',draft:'#e8a020',superseded:'#4a6880',active:'#4ecdc4',confirmed:'#52c97a',rejected:'#e85c5c'}[c.node.status]||'#4a6880'}"></span>
       </div>
       <span class="x-title">${esc(fullTitle)}</span>
     </div>`

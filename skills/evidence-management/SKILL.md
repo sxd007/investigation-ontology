@@ -96,32 +96,32 @@ v3 多视图调查工具，四个互补 tab：**Reasoning**（推理链 + 边语
 
 | 模式 | 命令 | 适用场景 | 输出 |
 |------|------|---------|------|
-| 对话内 Mermaid 预览 | `scan-chain.py <case_dir> --graph` | 快速预览推理链结构 | Mermaid 代码块 |
-| 交互式 HTML | `scan-chain.py <case_dir> --html [output.html]` | 完整交互图、汇报展示 | 独立 HTML 文件 |
+| 对话内 Mermaid 预览 | `scan-chain.js <case_dir> --graph` | 快速预览推理链结构 | Mermaid 代码块 |
+| 交互式 HTML | `scan-chain.js <case_dir> --html [output.html]` | 完整交互图、汇报展示 | 独立 HTML 文件 |
 
 **生成可视化 HTML 的操作步骤（当用户要求查看证据链可视化时执行）：**
 
 1. 确认案件目录路径（通常为 `cases/CASE-YYYY-NNN/`）
 2. 读取 `evidence_registry.json` 和 `nodes/` 目录确认数据就绪
-3. 执行 `python skills/evidence-management/scripts/scan-chain.py <case_dir> --html <output_path>.html`
-   - 如环境中无 Python，由 AI 读取数据后直接调用 `evidence_chain_injector.js`
-   - 命令：`node skills/evidence-management/templates/evidence-chain-viz/evidence_chain_injector.js <case_dir> <output_path>.html`
+3. 执行 `node skills/evidence-management/scripts/scan-chain.js <case_dir> --html <output_path>.html`
+   - 如环境中无 Node.js，由 AI 读取节点数据后按 `--json-dump` 格式直接注入 HTML 模板
 4. 用浏览器打开生成的 HTML 文件
 
-> 📖 可视化架构 + scan-chain.py 完整选项参考：[`references/visualization-guide.md`](references/visualization-guide.md)
+> 📖 可视化架构 + scan-chain.js 完整选项参考：[`references/visualization-guide.md`](references/visualization-guide.md)
 
 ## 工具速查
 
 | 命令 | 用途 |
 |------|------|
-| `scan-chain.py <case_dir> --list` | 列出所有节点和关系 |
-| `scan-chain.py <case_dir> --trace FND-001` | 追溯 FND-001 完整证据链 |
-| `scan-chain.py <case_dir> --integrity` | 完整性检查（含 v3 治理 readiness） |
-| `scan-chain.py <case_dir> --check-chains` | 推理链逻辑检查（含 v3 HYP coverage） |
-| `scan-chain.py <case_dir> --validate` | 节点结构验证（含 v3 ontology_ref 检查） |
-| `scan-chain.py <case_dir> --sync` | 同步 chain_nodes 索引回 registry |
-| `scan-chain.py <case_dir> --graph` | Mermaid 图预览 |
-| `scan-chain.py <case_dir> --html output.html` | 交互式 HTML（需 Node.js） |
+| `scan-chain.js <case_dir> --list` | 列出所有节点和关系 |
+| `scan-chain.js <case_dir> --trace FND-001` | 追溯 FND-001 完整证据链 |
+| `scan-chain.js <case_dir> --integrity` | 完整性检查（含 v3 治理 readiness） |
+| `scan-chain.js <case_dir> --check-chains` | 推理链逻辑检查（含 v3 HYP coverage） |
+| `scan-chain.js <case_dir> --validate` | 节点结构验证（含 v3 ontology_ref 检查） |
+| `scan-chain.js <case_dir> --sync` | 同步 chain_nodes 索引回 registry |
+| `scan-chain.js <case_dir> --graph` | Mermaid 图预览 |
+| `scan-chain.js <case_dir> --html output.html` | 交互式 HTML |
+| `scan-chain.js <case_dir> --json-dump data.json` | JSON 数据输出（AI fallback 用） |
 
 > 完整选项说明见 `references/visualization-guide.md`
 

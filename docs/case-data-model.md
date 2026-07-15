@@ -127,7 +127,7 @@ CLOSED              更新 status         更新 closed            归档       
 **关键规则**：
 - 节点类型由 frontmatter 中的 `type` 字段决定，不按类型分子目录
 - 关系通过 `relations` 字段向上游声明（每种关系有独立语义类型），不维护反向引用
-- `scan-chain.py` 可编译关系图、追溯链、检查完整性
+- `scan-chain.js` 可编译关系图、追溯链、检查完整性
 
 ---
 

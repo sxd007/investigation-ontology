@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """
+⚠️ DEPRECATED: 此脚本已迁移到 scan-chain.js（Node.js 统一版）。
+   新案件请使用: node scan-chain.js <case_dir> [options]
+   本文件保留用于向后兼容，不再接收功能更新。
+
 scan-chain.py — 证据链编译与完整性检查工具 (v3)
 
 职责:

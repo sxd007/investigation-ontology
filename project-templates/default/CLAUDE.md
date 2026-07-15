@@ -227,7 +227,7 @@ AI 在以下时刻应主动加载对应技能：
 - ✅ 从收到举报信息的那一刻起，创建 `evidence_registry.json` 和 `nodes/` 目录
 - ✅ 第一项证据就是举报信息本身：在 evidence_registry.json 注册为 EV-001，在 `nodes/EV-001.md`（或 `.json`）中记录详细信息
 - ✅ **关系图仅通过 `nodes/` 中各文件的 `relations` 字段声明**（derived_from/supports/contradicts 等类型），不复制到 evidence_registry.json 中
-- ✅ 使用 `skills/evidence-management/scripts/scan-chain.py` 编译关系图、追溯链、检查完整性
+- ✅ 使用 `skills/evidence-management/scripts/scan-chain.js` 编译关系图、追溯链、检查完整性
 
 #### 本体层操作
 
@@ -355,7 +355,7 @@ AI 在以下时刻应主动加载对应技能：
 - [ ] README.md 已更新
 - [ ] evidence_registry.json 存在且 chain_nodes 索引完整
 - [ ] nodes/ 目录包含全部证据链节点（LS → ARG → FND）
-- [ ] 证据链完整性检查通过（`skills/evidence-management/scripts/scan-chain.py --integrity` 无 ERROR）
+- [ ] 证据链完整性检查通过（`skills/evidence-management/scripts/scan-chain.js --integrity` 无 ERROR）
 - [ ] 放弃/关闭理由已在 meta.json 中记录
 - [ ] 高风险目标已标注
 - [ ] **本体层校验**：运行 `scripts/audit-binding.sh <case_id>`，无 ERROR

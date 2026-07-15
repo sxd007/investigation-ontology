@@ -275,7 +275,7 @@ origin: efio
 | `contact_data_obtained`         | 系统外数据的获取结果已记录                                                                      |
 | `statement_quality_reviewed`    | 关键访谈笔录已按独立第三人视角审查                                                                  |
 | `adversarial_behavior_assessed` | 已识别并记录对抗行为                                                                         |
-| `evidence_chain_integrity`      | `skills/evidence-management/scripts/scan-chain.py --integrity` 无 ERROR（无缺失引用、无断裂链） |
+| `evidence_chain_integrity`      | `skills/evidence-management/scripts/scan-chain.js --integrity` 无 ERROR（无缺失引用、无断裂链） |
 
 **关键设计**：
 

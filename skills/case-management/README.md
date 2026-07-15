@@ -140,7 +140,7 @@ case-manager：确认后更新 checklist → CHANGELOG 记录
 |------|----------------|--------|--------|
 | INIT | `information_gaps_documented` | 信息缺口必须分类标注（待调取/举报人无/原因未说明），不能留空 | 逐条标注每个缺口的类型 |
 | PRE | `evidence_gap_assessed` | 每条 unavailable 的情报必须归因（调查方缺口/被调查方缺口）并做 confidence 降级 | 老实承认哪些数据拿不到 |
-| FIELDWORK | `evidence_chain_integrity` | 必须运行 `scan-chain.py --integrity` 无 ERROR | 修复断裂的引用链 |
+| FIELDWORK | `evidence_chain_integrity` | 必须运行 `scan-chain.js --integrity` 无 ERROR | 修复断裂的引用链 |
 | REVIEWING | `suspected_findings_resolved` | 所有 suspected 的 finding 必须处置 | 要么补证据提升置信度，要么明确说明为何保留 suspected |
 
 ### 4.3 门禁不过时怎么办
