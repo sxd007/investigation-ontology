@@ -389,7 +389,7 @@ function toggleReadyOnly() {
 // ═══════════════════════════════════════════════════════════════
 function mdToHtml(t){
   if(!t)return'';
-  let h=esc(t);
+  let h=esc(t).replace(/\r/g,'');
 
   const blocks=[];
   h=h.replace(/```(\w*)\n?([\s\S]*?)```/g,(m,lang,code)=>{

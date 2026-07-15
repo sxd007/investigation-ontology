@@ -133,7 +133,7 @@ function parseFrontmatterText(content) {
   if (end === -1) return null;
 
   const raw = content.slice(3, end).replace(/\r/g, '').trim();
-  const body = content.slice(end + 3).trim();
+  const body = content.slice(end + 3).replace(/\r/g, '').trim();
   const lines = raw.split('\n');
 
   const result = {};
