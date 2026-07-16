@@ -11,17 +11,21 @@ $ErrorActionPreference = "Stop"
 $raw = [Console]::In.ReadToEnd()
 try { $hookInput = $raw | ConvertFrom-Json } catch { exit 0 }
 
+# 提取 file_path（兼容 CodeBuddy 的 filePath 和 Claude Code 的 file_path）
 $filePath = $hookInput.tool_input.file_path
+if (-not $filePath) { $filePath = $hookInput.tool_input.filePath }
+if (-not $filePath) { $filePath = $hookInput.tool_input.path }
 $toolName = $hookInput.tool_name
 $cwd = $hookInput.cwd
 
-# 提取 payload（Write: content, Edit: new_string）
+# 提取 payload（Write: content, Edit: new_string, CodeBuddy: content/new_str）
+$payload = ""
 if ($hookInput.tool_input.PSObject.Properties.Name -contains "content") {
     $payload = $hookInput.tool_input.content
 } elseif ($hookInput.tool_input.PSObject.Properties.Name -contains "new_string") {
     $payload = $hookInput.tool_input.new_string
-} else {
-    $payload = ""
+} elseif ($hookInput.tool_input.PSObject.Properties.Name -contains "new_str") {
+    $payload = $hookInput.tool_input.new_str
 }
 
 # ── 路径匹配：只处理 global_ontology/entities/ 和 global_ontology/relations/ ──

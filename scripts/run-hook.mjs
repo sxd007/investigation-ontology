@@ -2,7 +2,7 @@
 // ============================================================================
 // run-hook.mjs — 跨平台 Hook 启动器
 //
-// Claude Code 的 hooks.json 通过 `node run-hook.mjs <hook>` 调用本文件。
+// Claude Code / CodeBuddy 的 hooks.json 通过 `node run-hook.mjs <hook>` 调用本文件。
 // node 在 Windows / macOS / Linux 上行为一致且始终在 PATH 中，因此用它作为
 // 统一入口：简单逻辑（SessionStart、命名提醒）直接在 JS 中实现；复杂的本体
 // 校验逻辑则按操作系统分发到已有的 .sh（bash）或 .ps1（PowerShell）脚本，
@@ -15,22 +15,19 @@
 //   node run-hook.mjs validate-action     # PreToolUse 本体 Action 前置校验
 //   node run-hook.mjs check-ref           # PostToolUse ontology_ref 完整性检查
 //
-// mcp-ocr-guard 性能优化：
-//   hooks.json 中 mcp-ocr-guard 不直接调用 node，而是通过 shell 预过滤脚本
-//   (mcp-ocr-guard.sh / .ps1) 先做快速字符串检查。仅当 stdin 包含
-//   paddleOCR-mcp 或 pp_structurev3 时才启动 node，避免非 OCR MCP 调用的
-//   node 进程启动开销（~50ms → ~5ms）。
-//
 // 文档依据：https://code.claude.com/docs/en/hooks
 // ============================================================================
 
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import os from 'node:os';
 
 const hook = process.argv[2];
-const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT || process.cwd();
+// 优先用平台注入的环境变量；都没有时从脚本自身位置推导（scripts/ 的上级即插件根目录）
+const __scriptDir = dirname(fileURLToPath(import.meta.url));
+const pluginRoot = process.env.CODEBUDDY_PLUGIN_ROOT || process.env.CLAUDE_PLUGIN_ROOT || join(__scriptDir, '..');
 const isWin = process.platform === 'win32';
 
 function readStdin() {
@@ -60,7 +57,10 @@ function runScript(base) {
 
 // ── SessionStart：检查配置状态、统计活跃案件、给出可执行提示 ──────
 function sessionStart() {
-  const cfg = join(os.homedir(), '.claude', 'plugins', 'config', 'investigation-ontology', 'team-profile.md');
+  // CodeBuddy: ~/.codebuddy/plugins/config/efio/team-profile.md
+  // Claude Code: ~/.claude/plugins/config/cc-investigation/team-profile.md
+  const cfgCodeBuddy = join(os.homedir(), '.codebuddy', 'plugins', 'config', 'efio', 'team-profile.md');
+  const cfgClaude = join(os.homedir(), '.claude', 'plugins', 'config', 'cc-investigation', 'team-profile.md');
   let active = 0;
   try {
     const casesDir = join(process.cwd(), 'cases');
@@ -71,10 +71,15 @@ function sessionStart() {
     /* ignore */
   }
   let ready = false;
-  try {
-    ready = existsSync(cfg) && !readFileSync(cfg, 'utf8').includes('[PLACEHOLDER]');
-  } catch {
-    /* ignore */
+  for (const cfg of [cfgCodeBuddy, cfgClaude]) {
+    try {
+      if (existsSync(cfg) && !readFileSync(cfg, 'utf8').includes('[PLACEHOLDER]')) {
+        ready = true;
+        break;
+      }
+    } catch {
+      /* ignore */
+    }
   }
   if (ready) {
     console.log('[investigation-ontology] 调查工具包已加载。');
@@ -96,7 +101,9 @@ function preWriteNaming() {
   } catch {
     /* ignore */
   }
-  const fp = data?.tool_input?.file_path || '';
+  // 兼容 CodeBuddy (filePath) 和 Claude Code (file_path) 两种字段命名
+  const ti = data?.tool_input || {};
+  const fp = ti.file_path || ti.filePath || ti.path || '';
   const cwd = data?.cwd || process.cwd();
   if (/(^|[/\\])cases[/\\]/.test(fp) || /(^|[/\\])cases([/\\]|$)/.test(cwd)) {
     console.log(
@@ -106,18 +113,10 @@ function preWriteNaming() {
 }
 
 // ── PreToolUse：拦截直接调用 paddleOCR-mcp，提醒走 document-parsing 技能 ──
-//
-// stdin 格式依赖 Hook API 版本。当前预期的 JSON 结构：
-//   { "tool_input": { "serverName": "...", "toolName": "..." }, ... }
-//
-// 如果未来 Hook API 变更导致 stdin 格式变化，本函数会静默跳过（不阻止工作流）。
-// 排查方法：手动运行 `echo '{"tool_input":{"serverName":"paddleOCR-mcp"}}' | node run-hook.mjs mcp-ocr-guard`
-// 验证是否正常输出提醒。如无输出，说明 stdin JSON 路径需更新。
 function mcpOcrGuard() {
   const raw = readStdin();
 
   // Fast pre-filter: skip JSON parse entirely for non-OCR MCP calls
-  // (On Windows/CodeBuddy, this is the only filter — avoids full JSON parse)
   if (!raw || (!raw.includes('paddleOCR-mcp') && !raw.includes('pp_structurev3'))) {
     return;
   }
@@ -129,7 +128,6 @@ function mcpOcrGuard() {
     /* stdin 解析失败 — 静默跳过，不阻止 MCP 调用 */
     return;
   }
-  // 兼容多种可能的 stdin 结构：tool_input / toolInput / 直接顶层
   const toolInput = data?.tool_input || data?.toolInput || data || {};
   const serverName = toolInput?.serverName || '';
   const toolName = toolInput?.toolName || toolInput?.name || '';

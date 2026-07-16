@@ -9,7 +9,10 @@ $ErrorActionPreference = "Stop"
 $raw = [Console]::In.ReadToEnd()
 try { $hookInput = $raw | ConvertFrom-Json } catch { exit 0 }
 
+# 提取 file_path（兼容 CodeBuddy 的 filePath 和 Claude Code 的 file_path）
 $filePath = $hookInput.tool_input.file_path
+if (-not $filePath) { $filePath = $hookInput.tool_input.filePath }
+if (-not $filePath) { $filePath = $hookInput.tool_input.path }
 $cwd = $hookInput.cwd
 
 # ── 路径匹配：只检查 ENT 和 EV 节点 ──────────────────────────────

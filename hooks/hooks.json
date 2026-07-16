@@ -16,7 +16,7 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Write|Edit",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
@@ -42,13 +42,13 @@
             "timeout": 5
           }
         ],
-        "description": "OCR MCP guard: detects direct paddleOCR-mcp calls and reminds to use document-parsing skill. On Windows/PowerShell, shell-level pre-filter has encoding issues with JSON pipes, so node is spawned for every MCP call (~50ms overhead). The guard function early-exits for non-OCR calls after a quick stdin check. Claude Code uses a bash pre-filter (mcp-ocr-guard.sh) to avoid this overhead.",
+        "description": "OCR MCP guard: detects direct paddleOCR-mcp calls and reminds to use document-parsing skill.",
         "id": "pre:mcp:ocr-skill-guard"
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "Write|Edit",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
