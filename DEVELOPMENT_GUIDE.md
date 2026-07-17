@@ -4,6 +4,14 @@
 
 **跨平台说明：** 本指南适用于所有三个平台（Claude Code、CodeBuddy、Codex）。关于平台特定的差异（hooks 配置、MCP 设置、环境变量等），详见 [`docs/ARCHITECTURE_NOTES.md`](docs/ARCHITECTURE_NOTES.md)。
 
+> **⚠️ 开发前必读：** 修改平台配置（hooks、plugin.json、MCP）前，**务必查阅对应平台的官方文档**，不要凭推测修改。各平台规范有差异，错误配置会导致 hooks 静默失效。
+>
+> | 平台 | 官方文档 | 关键参考 |
+> |------|---------|---------|
+> | **CodeBuddy** | [插件开发指南](https://www.codebuddy.cn/docs/zh/cli/plugins) · [插件参考文档](https://www.codebuddy.cn/docs/cli/plugins-reference) · [Hook 参考指南](https://www.codebuddy.cn/docs/zh/cli/hooks) · [工具参考](https://www.codebuddy.cn/docs/cli/tools-reference) | hooks 必须在 `hooks/hooks.json`（插件根目录）；只有 `plugin.json` 在 `.codebuddy-plugin/` 内；matcher 用规范工具名 `Write\|Edit\|MultiEdit`；Windows 强制 Git Bash 执行 |
+> | **Claude Code** | [Claude Code 文档](https://docs.anthropic.com/en/docs/claude-code) | `.claude-plugin/` 为元数据目录 |
+> | **Codex** | [Codex 文档](https://github.com/openai/codex) | `.codex-plugin/` 为元数据目录 |
+
 ***
 
 ## 一、项目架构三分法
@@ -161,7 +169,10 @@ investigation-ontology/
 ├── agents/                         ← 子代理定义（自动发现）
 ├── commands/                       ← 斜杠命令（自动发现）
 ├── rules/                          ← 调查准则与规范
-├── hooks/                          ← 生命周期钩子（自动发现）
+├── hooks/                          ← CodeBuddy hooks（hooks/hooks.json，官方规范位置）
+├── .codebuddy-plugin/              ← CodeBuddy 元数据（只有 plugin.json）
+├── .claude-plugin/                 ← Claude Code 元数据 + hooks
+├── .codex-plugin/                  ← Codex 元数据 + hooks
 ├── schemas/                        ← 案件数据模型 JSON Schema
 ├── docs/                           ← 跨技能索引文档
 ├── manifests/                      ← 安装模块化体系
@@ -182,11 +193,13 @@ investigation-ontology/
 - `.claude-plugin/plugin.json` — Claude Code 入口
 - `.codebuddy-plugin/plugin.json` — CodeBuddy 入口  
 - `.codex-plugin/plugin.json` — Codex 入口
-- `hooks/hooks.json` — Claude Code hooks（环境变量：`${CLAUDE_PLUGIN_ROOT}`）
-- `hooks/codebuddy-hooks.json` — CodeBuddy hooks（环境变量：`${CODEBUDDY_PLUGIN_ROOT}`）
-- `hooks.json` — Codex hooks（环境变量：`${INVESTIGATION_ONTOLOGY_ROOT}`）
+- `hooks/hooks.json` — CodeBuddy hooks（环境变量：`${CODEBUDDY_PLUGIN_ROOT}`，[官方规范](https://www.codebuddy.cn/docs/zh/cli/plugins)：hooks 必须在插件根目录 `hooks/` 下）
+- `.claude-plugin/hooks.json` — Claude Code hooks（环境变量：`${CLAUDE_PLUGIN_ROOT}`）
+- `.codex-plugin/hooks.json` — Codex hooks（环境变量：`${INVESTIGATION_ONTOLOGY_ROOT}`）
 - `.mcp.json` — Codex MCP 配置（根目录）
 - `project-templates/default/.mcp.json` — 用户项目模板副本（分发用）
+
+> **⚠️ CodeBuddy hooks 位置**：官方文档明确要求 hooks 文件放在插件根目录的 `hooks/hooks.json`，**不能**放在 `.codebuddy-plugin/` 目录内。`.codebuddy-plugin/` 只能放 `plugin.json`。详见 [插件开发指南](https://www.codebuddy.cn/docs/zh/cli/plugins)。
 
 **修改这些文件时的同步检查：**
 - 修改 hooks 业务逻辑 → 同步更新 Node.js 版本（`scripts/run-hook.mjs`）和 Shell 版本（`scripts/*.sh`）

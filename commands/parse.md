@@ -34,7 +34,7 @@ description: 文档解析 — 将原始文档（PDF/扫描件/图片）结构化
 无匹配 → AI 视觉判断 → 无法识别 → GENERIC
 ```
 
-支持的类型：INVOICE / CONTRACT / BANK_RECEIPT / DELIVERY_NOTE / PURCHASE_ORDER / GENERIC
+支持的类型：INVOICE / CONTRACT / BANK_RECEIPT / BANK_STATEMENT / DELIVERY_NOTE / PURCHASE_ORDER / REIMBURSEMENT / PAYROLL / APPROVAL / GENERIC
 
 ### Step 2: 选择解析策略（格式感知路由）
 
@@ -51,27 +51,13 @@ description: 文档解析 — 将原始文档（PDF/扫描件/图片）结构化
 
 > ⚠️ **禁止自行创建 HTTP 服务器、编写上传脚本或搭建 Web 服务。** OCR MCP 已作为独立服务部署，文档投递机制由 `{PLUGIN_CONFIG_DIR}/ocr-backend.md` 配置。
 
-**Step 2a — 读取 OCR 后端配置**
+> 📖 投递配置与错误处理的**唯一权威来源**是 `references/ocr-mcp-integration.md`。以下仅为三步速查（勿在本命令与 SKILL.md 中重复维护上传细节）：
 
-读取 `{PLUGIN_CONFIG_DIR}/ocr-backend.md`（路径按 `config-loader.md § 平台路径` 解析），获取文档投递配置：
-
-| 配置值 | 行为 |
-|--------|------|
-| `Upload Method: auto` | 从 MCP URL 推导上传地址（同主机、端口+1、/upload） |
-| `Upload Method: http` + `Upload Endpoint` | 使用配置中显式指定的上传地址 |
-| `Upload Method: shared_fs` + `Shared Path Prefix` | 文件已在共享路径，无需上传，直接映射路径 |
-| `Upload Method: custom` + `Custom Upload Instructions` | 按自定义指令投递文件 |
-| 配置中有 `Auth Headers` | 上传请求携带相同认证头 |
-
-> ocr-backend.md 不存在时的回退：端口+1 约定推导（从 MCP URL 推导上传地址）→ 推导失败则降级 AI 视觉解析，提示运行 `/efio:cold-start`。
-
-**Step 2b — 投递文件到 OCR 服务器**
-
-根据 Step 2a 的配置投递文件，获取服务器侧路径（localpath）：
-
-- **http / auto 路径**：`curl -X POST <upload-url> [-H "<auth-headers>"] -F "file=@<文件绝对路径>" 2>nul`，从响应 JSON 的 `Localpath Field` 字段提取 localpath
-- **shared_fs 路径**：客户端文件须已在共享文件系统中可访问（如通过 NFS/SMB 挂载）。localpath = `<Shared Path Prefix>` + 文件基本名（basename，不含目录路径）。例如客户端文件 `D:\cases\raw\ev-010.jpg`，`Shared Path Prefix` 为 `/mnt/shared/ocr_uploads/`，则 localpath = `/mnt/shared/ocr_uploads/ev-010.jpg`
-- **custom 路径**：按 `Custom Upload Instructions` 执行
+| 步骤 | 动作速查 | 权威细节 |
+|------|---------|---------|
+| **2a 读配置** | 读 `{PLUGIN_CONFIG_DIR}/ocr-backend.md` 决定投递方式（auto/http/shared_fs/custom）。不存在时端口+1 回退，再失败降级 AI 视觉 | `ocr-mcp-integration.md § 2 · Step 0` |
+| **2b 投递文件** | 按配置投递，取服务器侧 localpath（http/auto 用 curl 上传；shared_fs 做路径映射） | `ocr-mcp-integration.md § 2 · Step 1` |
+| **2c 调用工具** | `mcp_call_tool` 调用 `pp_structurev3`，见下 | `ocr-mcp-integration.md § 2 · Step 2` |
 
 **Step 2c — 调用 MCP 工具**
 
@@ -105,7 +91,30 @@ mcp_call_tool(
 
 写入 `raw/parsed/{DOCUMENT_TYPE}-{raw_file_id}_v{version}.json`，维护 supersedes/superseded_by 版本链。
 
-### Step 6: 解析后提示（Post-Parse）
+### Step 6: 复核工具（自动）
+
+根据 Step 4 的质量评估结果决定行为：
+
+```
+parsed_status?
+    │
+    ├── "human_review_required" 或 "quality_too_low"
+    │   └── 自动打开复核工具
+    │       1. 启动 review-server.py:
+    │          python scripts/review-server.py --port 8899 \
+    │            --root <case-dir> \
+    │            --template <plugin>/skills/document-parsing/templates
+    │       2. 生成 URL 并通过 preview_url 打开:
+    │          http://localhost:8899/parsed-review.html?raw=raw/ev-010.jpg&ocr=raw/ocr_output/ev-010_ocr_v1.json&parsed=raw/parsed/INVOICE-ev-010_v1.json
+    │       3. 提示用户：复核工具已打开，左侧查看原始文档，右侧可编辑字段和表格
+    │
+    └── "full"
+        └── 不自动打开
+            在输出摘要中提供 URL 供用户手动打开
+            （用户可用 --review 参数强制打开）
+```
+
+### Step 7: 解析后提示（Post-Parse）
 
 > ⚠️ **本命令到此结束。** `/efio:parse` 只产出 `raw/parsed/*.json`，不创建认知层节点（EV/ENT）或本体层对象（entities/relations）。
 
@@ -144,6 +153,7 @@ mcp_call_tool(
 ## Files Written
 
 - `raw/parsed/{TYPE}-{raw_id}_v{n}.json` — 解析结果
+- `raw/ocr_output/{raw_id}_ocr_v{n}.json` — OCR 原始输出（仅 OCR MCP 路径）
 
 ## Related
 

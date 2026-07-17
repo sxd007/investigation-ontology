@@ -3,8 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Parsed 复核工具 — OCR 逐页对照</title>
+<title>Parsed 复核工具 — 三层对照与编辑</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/turndown/dist/turndown.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/turndown-plugin-gfm@1.0.2/dist/turndown-plugin-gfm.js"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; height:100vh; display:flex; flex-direction:column; background:#f5f5f5; overflow:hidden; }
@@ -18,32 +21,34 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .toolbar .badge.doc-type { background:#e8f4fd; color:#1a73e8; }
 .toolbar .badge.full { background:#e6f7e6; color:#1a7d1a; }
 .toolbar .badge.review { background:#fff3e0; color:#e65100; }
+.toolbar .badge.edit-count { background:#fff3e0; color:#e65100; display:none; }
+.toolbar button.save-btn { background:#1a73e8; color:#fff; border-color:#1a73e8; font-weight:600; }
+.toolbar button.save-btn:disabled { background:#ccc; color:#999; border-color:#ccc; cursor:not-allowed; }
+.toolbar button.save-ocr-btn { background:#1a7d1a; color:#fff; border-color:#1a7d1a; font-weight:600; }
+.toolbar button.save-ocr-btn:hover { background:#166b16; }
+.toolbar button.reparse-btn { background:#fff; color:#e65100; border-color:#ffcc80; }
 .toolbar .file-info { font-size:11px; color:#888; flex:1; min-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 /* ── 主区域 ── */
 .main { display:flex; flex:1; overflow:hidden; }
 
+/* ── 左右可拖动分隔条 ── */
+.divider { flex:0 0 6px; cursor:col-resize; background:#d0d0d0; position:relative; z-index:5; transition:background .15s; }
+.divider::before { content:''; position:absolute; left:-4px; right:-4px; top:0; bottom:0; }
+.divider:hover, .divider.dragging { background:#1a73e8; }
+
 /* ── 左侧：PDF/图片 ── */
-.left-panel { flex:1; display:flex; flex-direction:column; background:#e0e0e0; min-width:0; max-width:50%; position:relative; }
+.left-panel { flex:0 0 auto; width:50%; display:flex; flex-direction:column; background:#e0e0e0; min-width:220px; position:relative; }
 .left-panel .viewer-header { background:#fff; padding:4px 10px; border-bottom:1px solid #ddd; display:flex; align-items:center; gap:6px; font-size:12px; flex-shrink:0; }
 .left-panel .viewer-header button { background:#f0f0f0; border:1px solid #ccc; border-radius:3px; padding:2px 8px; cursor:pointer; font-size:12px; }
-.left-panel .viewer-content { flex:1; overflow:auto; display:flex; justify-content:center; padding:12px; position:relative; }
+.left-panel .viewer-content { flex:1; overflow:auto; text-align:center; padding:12px; position:relative; }
 #pdfContainer { position:relative; display:inline-block; }
 #pdfContainer canvas, #pdfContainer img { box-shadow:0 2px 8px rgba(0,0,0,0.15); background:#fff; display:block; }
-#pdfContainer img { max-width:100%; }
-#bboxOverlay { position:absolute; top:0; left:0; pointer-events:none; }
-#bboxOverlay .bbox-rect { position:absolute; border:2px solid rgba(255,152,0,0.7); background:rgba(255,152,0,0.1); cursor:pointer; pointer-events:auto; border-radius:2px; }
-#bboxOverlay .bbox-rect:hover { background:rgba(255,152,0,0.3); border-color:#ff6f00; }
-#bboxOverlay .bbox-rect.active { background:rgba(33,150,243,0.3); border-color:#1565c0; }
-#bboxOverlay .bbox-rect.seal { border-color:rgba(233,30,99,0.7); background:rgba(233,30,99,0.1); }
-#bboxOverlay .bbox-rect.seal:hover { background:rgba(233,30,99,0.25); }
-
-.left-panel .vlm-badge { position:absolute; top:16px; right:20px; background:rgba(255,152,0,0.85); color:#fff; padding:3px 8px; border-radius:4px; font-size:11px; pointer-events:none; z-index:10; }
 .left-panel .drop-hint { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#999; font-size:14px; gap:8px; }
 .left-panel .drop-hint .icon { font-size:40px; opacity:0.3; }
 
-/* ── 右侧：OCR 按页对照 ── */
-.right-panel { flex:1; min-width:420px; display:flex; flex-direction:column; background:#fff; border-left:1px solid #ddd; }
+/* ── 右侧 ── */
+.right-panel { flex:1 1 0; min-width:320px; display:flex; flex-direction:column; background:#fff; border-left:1px solid #ddd; }
 .right-panel .right-tabs { display:flex; border-bottom:1px solid #ddd; background:#fafafa; flex-shrink:0; }
 .right-panel .right-tabs .tab { padding:8px 16px; font-size:12px; cursor:pointer; border-bottom:2px solid transparent; color:#666; font-weight:500; }
 .right-panel .right-tabs .tab.active { border-bottom-color:#1a73e8; color:#1a73e8; }
@@ -52,49 +57,97 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .right-panel .right-content .page-content { display:none; }
 .right-panel .right-content .page-content.active { display:block; }
 
-/* ── OCR 内容区 ── */
-.ocr-page { display:none; padding:16px; }
-.ocr-page.active { display:block; }
-.ocr-page .page-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; padding-bottom:8px; border-bottom:2px solid #e0e0e0; }
-.ocr-page .page-header .page-num { font-size:15px; font-weight:700; color:#333; }
-.ocr-page .page-header .route-badge { font-size:11px; padding:2px 8px; border-radius:10px; }
-.ocr-page .page-header .route-badge.vlm { background:#fff3e0; color:#e65100; }
-.ocr-page .page-header .route-badge.table { background:#e8f5e9; color:#2e7d32; }
-.ocr-page .page-header .timing { font-size:11px; color:#999; margin-left:auto; }
-.ocr-page .page-text { font-size:18px; line-height:2.0; font-family:SimSun,STSong,serif; white-space:pre-wrap; word-break:break-word; color:#222; background:#fafafa; border:1px solid #eee; border-radius:6px; padding:14px 16px; }
-.ocr-page .layout-blocks { margin-top:8px; display:flex; flex-wrap:wrap; gap:4px; }
-.ocr-page .layout-blocks .lb-tag { font-size:10px; padding:2px 6px; border-radius:3px; cursor:pointer; }
-.ocr-page .layout-blocks .lb-tag.table { background:#e8f5e9; color:#2e7d32; border:1px solid #a5d6a7; }
-.ocr-page .layout-blocks .lb-tag.seal { background:#fce4ec; color:#c62828; border:1px solid #ef9a9a; }
-.ocr-page .layout-blocks .lb-tag.header_image { background:#e3f2fd; color:#1565c0; border:1px solid #90caf9; }
-.ocr-page .layout-blocks .lb-tag:hover { opacity:0.8; }
+/* ── OCR Output 区 ── */
+.ocr-info-bar { display:flex; gap:16px; padding:10px 16px; background:#f5f5f5; border-bottom:1px solid #e0e0e0; font-size:11px; color:#666; }
+.ocr-html-container { padding:8px; }
+
+/* ── Markdown 编辑器 ── */
+.md-editor-bar { display:flex; align-items:center; gap:8px; padding:6px 12px; background:#f5f5f5; border-bottom:1px solid #e0e0e0; flex-shrink:0; }
+.md-editor-bar .md-mode-btn { padding:3px 10px; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-size:12px; background:#fff; }
+.md-editor-bar .md-mode-btn.active { background:#1a73e8; color:#fff; border-color:#1a73e8; }
+.md-editor-bar .md-status { font-size:11px; color:#999; margin-left:auto; }
+.md-textarea { width:100%; min-height:500px; border:1px solid #e0e0e0; border-radius:0 0 6px 6px; padding:12px; font-family:"Consolas","Courier New",monospace; font-size:13px; line-height:1.8; resize:vertical; outline:none; }
+.md-textarea:focus { border-color:#1a73e8; box-shadow:0 0 0 2px rgba(26,115,232,0.1); }
+
+/* 可编辑渲染区 */
+.md-edit-area { flex:1; overflow-y:auto; padding:16px; min-height:500px; font-size:14px; line-height:1.8; }
+.md-edit-area table { width:100%; border-collapse:collapse; margin:8px 0; font-size:13px; }
+.md-edit-area th, .md-edit-area td { border:1px solid #d0d0d0; padding:6px 10px; text-align:left; position:relative; }
+.md-edit-area th { background:#f5f5f5; font-weight:600; }
+.md-edit-area tbody tr:nth-child(even) { background:#fafafa; }
+.md-edit-area th[contenteditable], .md-edit-area td[contenteditable] { cursor:text; }
+.md-edit-area th[contenteditable]:focus, .md-edit-area td[contenteditable]:focus { outline:2px solid #1a73e8; background:#e8f4fd; }
+.md-edit-area .row-action-col { width:60px; text-align:center; background:#f0f0f0 !important; }
+.md-edit-area .row-action { display:inline-block; padding:2px 6px; margin:0 2px; border-radius:3px; font-size:11px; cursor:pointer; }
+.md-edit-area .row-action:hover { background:#ccc; }
+.md-edit-area .col-add-btn { cursor:pointer; font-size:14px; color:#4caf50; }
+.md-edit-area p { margin:8px 0; }
+.md-edit-area[contenteditable]:focus { outline:none; }
+
+/* 预览区（现在同时承担"可编辑渲染区"的角色，复用上面 .md-edit-area 的交互样式） */
+.md-preview-area { flex:1; overflow-y:auto; padding:16px; min-height:500px; font-size:14px; line-height:1.8; }
+.md-preview-area table { width:100%; border-collapse:collapse; margin:8px 0; font-size:13px; }
+.md-preview-area th, .md-preview-area td { border:1px solid #d0d0d0; padding:6px 10px; text-align:left; }
+.md-preview-area th { background:#f5f5f5; font-weight:600; }
+.md-preview-area tbody tr:nth-child(even) { background:#fafafa; }
+
+/* ── 可编辑表格块 ── */
+.table-block-wrap { position:relative; margin:14px 0; }
+.table-block-toolbar { display:flex; gap:6px; align-items:center; margin-bottom:4px; }
+.table-block-toolbar button { font-size:11px; padding:2px 8px; border:1px solid #ccc; border-radius:4px; background:#fff; cursor:pointer; color:#555; }
+.table-block-toolbar button:hover { background:#f0f0f0; }
+.table-block-toolbar button.merge-btn { color:#1a73e8; border-color:#1a73e8; }
+.table-block-toolbar button.split-btn { color:#e65100; border-color:#ffcc80; }
+.table-block-toolbar .hint { font-size:11px; color:#999; }
+.md-preview-area .edit-table th, .md-preview-area .edit-table td { position:relative; cursor:cell; }
+.md-preview-area .edit-table th[contenteditable]:focus, .md-preview-area .edit-table td[contenteditable]:focus { outline:2px solid #1a73e8; background:#e8f4fd; z-index:1; }
+.md-preview-area .edit-table td.cell-selected, .md-preview-area .edit-table th.cell-selected { background:#cfe6ff !important; outline:1px dashed #1a73e8; }
+.cell-hover-actions { position:absolute; top:1px; right:1px; display:flex; gap:1px; opacity:0; transition:opacity .1s; }
+.md-preview-area .edit-table th:hover .cell-hover-actions,
+.md-preview-area .edit-table td:hover .cell-hover-actions { opacity:1; }
+.cell-hover-actions span { background:#fff; border:1px solid #ccc; border-radius:2px; font-size:9px; line-height:1; padding:2px 3px; cursor:pointer; color:#666; }
+.cell-hover-actions span:hover { background:#f0f0f0; color:#1a73e8; }
+.row-add-line, .col-add-line { text-align:center; }
+.row-add-line td { padding:0; border:none; background:transparent; }
+.row-add-btn-inline { display:block; width:100%; text-align:center; font-size:11px; color:#4caf50; cursor:pointer; padding:2px 0; }
+.row-add-btn-inline:hover { background:#e8f5e9; }
+.col-add-btn-th { cursor:pointer; font-size:14px; color:#4caf50; width:28px; text-align:center; }
+/* 可编辑的非表格文本块（段落/标题等） */
+.md-text-block { padding:2px 4px; border-radius:4px; }
+.md-text-block:hover { background:#fafcff; }
+.md-text-block:focus { outline:2px solid #1a73e8; background:#f5f9ff; }
+.md-text-block p { margin:8px 0; }
 
 /* ── 提取字段区 ── */
-.fields-panel { display:none; padding:16px; }
-.fields-panel.active { display:block; }
 .field-card { margin-bottom:8px; padding:10px 14px; border:1px solid #e8e8e8; border-radius:8px; background:#fafafa; }
+.field-card.edited { border-color:#ff9800; background:#fff8e1; }
 .field-card .field-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:3px; }
 .field-card .field-name { font-size:12px; font-weight:600; color:#333; }
-.field-card .field-value { font-size:14px; color:#222; word-break:break-all; }
-.field-card .field-value.missing { color:#c62828; font-style:italic; }
+.field-card .field-value { font-size:14px; color:#222; word-break:break-all; cursor:text; min-height:20px; border-radius:4px; padding:2px 4px; }
+.field-card .field-value:hover { background:#f0f7ff; }
+.field-card .field-value:focus { outline:2px solid #1a73e8; border-radius:4px; background:#e8f4fd; }
+.field-card.edited .field-value { background:#fff3e0; }
 .field-card .conf-bar { height:4px; border-radius:2px; margin:4px 0; background:#e0e0e0; }
 .field-card .conf-bar .fill { height:100%; border-radius:2px; }
 .field-card .conf-bar .fill.high { background:#4caf50; }
 .field-card .conf-bar .fill.medium { background:#ff9800; }
 .field-card .conf-bar .fill.low { background:#f44336; }
 .field-card .field-meta { font-size:11px; color:#999; margin-top:2px; }
+.meta-bar { margin-bottom:12px; font-size:12px; color:#666; line-height:1.8; padding:0 16px; padding-top:12px; }
 
 /* ── 表格区 ── */
-.tables-panel { display:none; padding:16px; }
-.tables-panel.active { display:block; }
 .table-card { margin-bottom:12px; border:1px solid #e0e0e0; border-radius:8px; overflow-x:auto; }
 .table-card .table-title { padding:8px 12px; background:#f5f5f5; font-size:12px; font-weight:600; color:#555; border-bottom:1px solid #e0e0e0; }
 .table-card table { width:100%; border-collapse:collapse; font-size:13px; }
-.table-card th { background:#f5f5f5; padding:7px 10px; text-align:left; border:1px solid #d0d0d0; font-weight:600; white-space:nowrap; position:sticky; top:0; }
+.table-card th { background:#f5f5f5; padding:7px 10px; text-align:left; border:1px solid #d0d0d0; font-weight:600; white-space:nowrap; }
 .table-card td { padding:5px 10px; border:1px solid #e0e0e0; }
 .table-card tbody tr:nth-child(even) { background:#fafafa; }
-.table-card tbody tr:hover { background:#e3f2fd; }
-.table-card tbody tr td:first-child { font-weight:500; color:#555; }
+.table-card td[contenteditable]:focus,
+.table-card th[contenteditable]:focus { outline:2px solid #1a73e8; background:#e8f4fd; }
+.table-card .row-action-col { width:50px; text-align:center; background:#f5f5f5; cursor:default; }
+.table-card .row-action { display:inline-block; padding:2px 6px; margin:0 2px; border-radius:3px; font-size:11px; cursor:pointer; }
+.table-card .row-action:hover { background:#e0e0e0; }
+.table-card .col-add-btn { cursor:pointer; font-size:14px; color:#4caf50; }
 
 /* ── 同步滚动标记 ── */
 .sync-indicator { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; pointer-events:none; opacity:0; transition:opacity 0.3s; z-index:100; }
@@ -104,21 +157,27 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 ::-webkit-scrollbar { width:5px; }
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:#ccc; border-radius:3px; }
+
+.placeholder { padding:40px 20px; text-align:center; color:#bbb; font-size:14px; }
 </style>
 </head>
 <body>
 
 <div class="toolbar">
-  <span class="title">OCR 逐页对照</span>
+  <span class="title">Parsed 复核工具</span>
   <button onclick="document.getElementById('rawInput').click()">Raw 文档</button>
   <input type="file" id="rawInput" accept=".pdf,.jpg,.jpeg,.png,.bmp" style="display:none">
-  <button onclick="document.getElementById('originalInput').click()">OCR 原始响应</button>
-  <input type="file" id="originalInput" accept=".json" style="display:none">
+  <button onclick="document.getElementById('ocrInput').click()">OCR Output</button>
+  <input type="file" id="ocrInput" accept=".json" style="display:none">
   <button onclick="document.getElementById('parsedInput').click()">Parsed JSON</button>
   <input type="file" id="parsedInput" accept=".json" style="display:none">
   <span class="file-info" id="fileInfo">拖拽文件到对应区域</span>
   <span class="badge doc-type" id="docTypeBadge" style="display:none"></span>
   <span class="badge" id="statusBadge" style="display:none"></span>
+  <span class="badge edit-count" id="editCountBadge">0 处修改</span>
+  <button class="save-ocr-btn" onclick="saveOcrEdits()" title="将修正后的 OCR Markdown 写回 output 文件（生成新版本）">✅ 确认 OCR 修改</button>
+  <button id="saveBtn" class="save-btn" onclick="saveCorrections()" disabled>💾 保存字段/表格</button>
+  <button class="reparse-btn" onclick="triggerReparse()" title="保存 OCR 修改并请求 AI 重新解析">🔄 保存并重新解析</button>
 </div>
 
 <div class="main">
@@ -131,8 +190,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
       <button onclick="fitPage()" title="适应宽度">⊡</button>
       <button onclick="rotatePage()" title="旋转当前页">↻</button>
       <button onclick="rotateAllPages()" title="旋转全部页">↻*</button>
-      <span style="color:#ccc">|</span>
-      <button onclick="prevPage()">◀</button>
+      <span id="pageNavSep" style="color:#ccc">|</span>
+      <button onclick="prevPage()" id="prevBtn">◀</button>
       <input type="number" id="pageInput" value="1" min="1" style="width:44px;text-align:center;font-size:12px;padding:2px">
       <span class="page-info">/ <span id="totalPages">0</span></span>
       <button onclick="nextPage()">▶</button>
@@ -145,27 +204,30 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
       </div>
       <div id="pdfContainer" style="display:none">
         <canvas id="pdfCanvas"></canvas>
-        <img id="imageView" style="display:none;max-width:100%">
-        <div id="bboxOverlay"></div>
+        <img id="imageView" style="display:none">
       </div>
-      <div class="vlm-badge" id="vlmBadge" style="display:none">⚠ VLM</div>
     </div>
   </div>
+
+  <div class="divider" id="divider" title="拖动调整左右宽度"></div>
 
   <!-- 右侧 -->
   <div class="right-panel">
     <div class="right-tabs">
-      <div class="tab active" data-tab="ocr" onclick="switchTab('ocr')">📝 OCR 对照</div>
+      <div class="tab active" data-tab="ocr" onclick="switchTab('ocr')">📝 OCR Output</div>
       <div class="tab" data-tab="fields" onclick="switchTab('fields')">🔑 提取字段</div>
       <div class="tab" data-tab="tables" onclick="switchTab('tables')">📊 表格</div>
     </div>
     <div class="right-content" id="rightContent">
-      <!-- OCR 页 -->
-      <div class="page-content active" id="ocrPages"></div>
-<!-- 字段页 -->
-  <div class="page-content" id="fieldsPage"><div style="padding:40px 20px;text-align:center;color:#bbb;font-size:14px">加载 Parsed JSON 后显示提取字段<br><span style="font-size:12px">点击上方"Parsed JSON"按钮加载</span></div></div>
-  <!-- 表格页 -->
-  <div class="page-content" id="tablesPage"><div style="padding:40px 20px;text-align:center;color:#bbb;font-size:14px">加载 Parsed JSON 后显示结构化表格<br><span style="font-size:12px">点击上方"Parsed JSON"按钮加载</span></div></div>
+      <div class="page-content active" id="ocrPage">
+        <div class="placeholder">加载 OCR Output 后显示<br><span style="font-size:12px">点击上方"OCR Output"按钮加载</span></div>
+      </div>
+      <div class="page-content" id="fieldsPage">
+        <div class="placeholder">加载 Parsed JSON 后显示提取字段<br><span style="font-size:12px">点击上方"Parsed JSON"按钮加载</span></div>
+      </div>
+      <div class="page-content" id="tablesPage">
+        <div class="placeholder">加载 Parsed JSON 后显示结构化表格<br><span style="font-size:12px">点击上方"Parsed JSON"按钮加载</span></div>
+      </div>
     </div>
   </div>
 </div>
@@ -179,30 +241,31 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 //  状态
 // ════════════════════════════════════════════════════════
 const state = {
-  rawFile: null,    // File object
-  rawType: null,    // 'pdf' | 'image'
-  original: null,   // parsed OCR 原始响应 JSON
-  parsed: null,     // pipeline 输出 JSON
+  rawFile: null,
+  rawType: null,
+  rawPath: null,
+  ocr: null,       // OCR output JSON { content, page_count, ... }
+  ocrPath: null,
+  parsed: null,    // parsed JSON
+  parsedPath: null,
   pdfDoc: null,
   currentPage: 1,
   scale: 1.5,
-  pageRotations: {}, // { pageNum: rotation } 每页独立旋转
-  globalRotation: 0, // 全局旋转（影响所有页）
-  totalOCRPgs: 0,
-  bboxElements: [],
-  _tableColMode: 'normal', // 'normal' | 'reverse' | 'rotate'
-  _syncing: false,
+  pageRotations: {},
+  globalRotation: 0,
+  _tableEdits: new Set(),
+  _mdBlocks: [],                                   // OCR markdown 按块（文本/表格）拆分后的结构，单一数据源
+  _tableSelection: { blockIndex: null, cells: new Set() }, // 预览区表格多选合并用的选区状态
 };
 
 // ════════════════════════════════════════════════════════
-//  文件加载
+//  文件加载事件
 // ════════════════════════════════════════════════════════
-
 document.getElementById('rawInput').addEventListener('change', async e => {
   if (e.target.files[0]) await loadRawFile(e.target.files[0]);
 });
-document.getElementById('originalInput').addEventListener('change', async e => {
-  if (e.target.files[0]) await loadOriginalFile(e.target.files[0]);
+document.getElementById('ocrInput').addEventListener('change', async e => {
+  if (e.target.files[0]) await loadOcrFile(e.target.files[0]);
 });
 document.getElementById('parsedInput').addEventListener('change', async e => {
   if (e.target.files[0]) await loadParsedFile(e.target.files[0]);
@@ -210,19 +273,18 @@ document.getElementById('parsedInput').addEventListener('change', async e => {
 
 // 拖拽
 const leftPanel = document.getElementById('leftPanel');
-leftPanel.addEventListener('dragover', e => { e.preventDefault(); leftPanel.classList.add('drag-over'); });
-leftPanel.addEventListener('dragleave', () => leftPanel.classList.remove('drag-over'));
+leftPanel.addEventListener('dragover', e => { e.preventDefault(); });
 leftPanel.addEventListener('drop', async e => {
-  e.preventDefault(); leftPanel.classList.remove('drag-over');
+  e.preventDefault();
   for (const f of e.dataTransfer.files) {
     if (f.name.endsWith('.json')) {
-      // 判断是 original 还是 parsed
       const text = await f.text();
       try {
         const j = JSON.parse(text);
-        if (j.document_type || j.parsed_id) await loadParsedFile(f);
-        else await loadOriginalFile(f);
-      } catch { await loadOriginalFile(f); }
+        if (j.parsed_id || j.document_type) await loadParsedFile(f);
+        else if (j.ocr_id || j.content) await loadOcrFile(f);
+        else await loadOcrFile(f);
+      } catch { await loadOcrFile(f); }
     } else await loadRawFile(f);
   }
 });
@@ -233,18 +295,21 @@ leftPanel.addEventListener('drop', async e => {
 async function autoLoad() {
   const p = new URLSearchParams(location.search);
   const rawPath = p.get('raw');
-  const originalPath = p.get('original');
+  const ocrPath = p.get('ocr');
   const parsedPath = p.get('parsed');
   try {
     if (rawPath) {
+      state.rawPath = rawPath;
       const r = await fetch(rawPath);
       if (r.ok) await loadRawFile(new File([await r.blob()], rawPath.split('/').pop()));
     }
-    if (originalPath) {
-      const r = await fetch(originalPath);
-      if (r.ok) await loadOriginalFile(new File([await r.text()], originalPath.split('/').pop()));
+    if (ocrPath) {
+      state.ocrPath = ocrPath;
+      const r = await fetch(ocrPath);
+      if (r.ok) await loadOcrFile(new File([await r.text()], ocrPath.split('/').pop()));
     }
     if (parsedPath) {
+      state.parsedPath = parsedPath;
       const r = await fetch(parsedPath);
       if (r.ok) await loadParsedFile(new File([await r.text()], parsedPath.split('/').pop()));
     }
@@ -280,21 +345,41 @@ async function loadPDF(file) {
   document.getElementById('imageView').style.display = 'none';
   renderPage();
 }
+
 function loadImage(file) {
   const r = new FileReader();
   r.onload = e => {
-    document.getElementById('imageView').src = e.target.result;
-    document.getElementById('imageView').style.display = 'block';
+    const img = document.getElementById('imageView');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    img.style.transform = '';
     document.getElementById('pdfCanvas').style.display = 'none';
-    document.getElementById('viewerHeader').style.display = 'none';
+    // 显示工具栏（但隐藏翻页部分）
+    document.getElementById('viewerHeader').style.display = 'flex';
+    document.getElementById('pageNavSep').style.display = 'none';
+    document.getElementById('prevBtn').style.display = 'none';
+    document.getElementById('pageInput').style.display = 'none';
+    document.querySelector('.page-info').style.display = 'none';
     document.getElementById('pdfContainer').style.display = 'inline-block';
     document.getElementById('dropHint').style.display = 'none';
+    // 重置缩放和旋转
+    state.scale = 1;
+    state.pageRotations = {};
+    state.globalRotation = 0;
+    document.getElementById('zoomLevel').textContent = '100%';
+    // 等图片加载后设置初始尺寸并适应宽度
+    img.onload = () => {
+      state._imgNaturalW = img.naturalWidth;
+      state._imgNaturalH = img.naturalHeight;
+      img.style.maxWidth = 'none';   // 去掉 100% 上限，否则放大无效、无法滑动
+      fitPage();                     // 初始适应宽度
+    };
   };
   r.readAsDataURL(file);
 }
 
 // ════════════════════════════════════════════════════════
-//  PDF 渲染 + Bbox
+//  PDF 渲染
 // ════════════════════════════════════════════════════════
 function getEffectiveRotation() {
   const pageRot = state.pageRotations[state.currentPage] || 0;
@@ -306,7 +391,6 @@ async function renderPage() {
   const page = await state.pdfDoc.getPage(state.currentPage);
   const canvas = document.getElementById('pdfCanvas');
   const ctx = canvas.getContext('2d');
-  // 始终以 0° 渲染（viewport 不带 rotation）
   const vp = page.getViewport({ scale: state.scale });
   canvas.width = vp.width;
   canvas.height = vp.height;
@@ -315,12 +399,9 @@ async function renderPage() {
   document.getElementById('imageView').style.display = 'none';
   document.getElementById('pdfContainer').style.width = vp.width + 'px';
   document.getElementById('pdfContainer').style.height = vp.height + 'px';
-
   await page.render({ canvasContext: ctx, viewport: vp }).promise;
   document.getElementById('pageInput').value = state.currentPage;
   document.getElementById('zoomLevel').textContent = Math.round(state.scale * 100) + '%';
-
-  // CSS transform 旋转整个容器（canvas + overlay 一起转，坐标自动对齐）
   const rot = getEffectiveRotation();
   const container = document.getElementById('pdfContainer');
   if (rot > 0) {
@@ -329,10 +410,6 @@ async function renderPage() {
   } else {
     container.style.transform = '';
   }
-
-  drawBboxes();
-  syncOcrPage();
-  updateVlmBadge();
 }
 
 function rotatePage() {
@@ -344,7 +421,7 @@ function rotatePage() {
 
 function rotateAllPages() {
   state.globalRotation = (state.globalRotation + 90) % 360;
-  state.pageRotations = {}; // 清空单页旋转，全部由 global 控制
+  state.pageRotations = {};
   if (state.rawType === 'pdf') renderPage();
   else rotateImageView();
 }
@@ -353,174 +430,741 @@ function rotateImageView() {
   const img = document.getElementById('imageView');
   if (!img.src) return;
   const rot = getEffectiveRotation();
-  img.style.transform = 'rotate(' + rot + 'deg)';
+  // 旋转 + 缩放一起应用
+  img.style.transform = 'rotate(' + rot + 'deg) scale(' + state.scale + ')';
   img.style.transformOrigin = 'center center';
-}
-
-function drawBboxes() {
-  const overlay = document.getElementById('bboxOverlay');
-  overlay.innerHTML = '';
-  const canvas = document.getElementById('pdfCanvas');
-  const cw = canvas.width || 1;
-  const ch = canvas.height || 1;
-  // PDF.js 原生 rotation 后 canvas 尺寸已正确，无需 swap
-  const dispW = cw;
-  const dispH = ch;
-  overlay.style.width = dispW + 'px';
-  overlay.style.height = dispH + 'px';
-  state.bboxElements = [];
-  if (!state.original) return;
-  const pages = state.original.data?.pages || [];
-  const pg = pages.find(p => p.page === state.currentPage);
-  if (!pg) return;
-  const lbs = pg.layout_blocks || [];
-  if (!lbs.length) return;
-
-  // 对该页所有 bbox 取最大值作为 OCR 图像尺寸参考
-  let maxX = 0, maxY = 0;
-  for (const lb of lbs) {
-    const b = lb.bbox;
-    if (b && b.length >= 4) {
-      if (b[2] > maxX) maxX = b[2];
-      if (b[3] > maxY) maxY = b[3];
-    }
-  }
-  if (maxX === 0 || maxY === 0) return;
-
-  for (const lb of lbs) {
-    const bbox = lb.bbox;
-    if (!bbox || bbox.length < 4) continue;
-    // 归一化坐标
-    let nx = bbox[0] / maxX;
-    let ny = bbox[1] / maxY;
-    let nw = (bbox[2] - bbox[0]) / maxX;
-    let nh = (bbox[3] - bbox[1]) / maxY;
-
-    // CSS transform 旋转容器，canvas+overlay 一起转，坐标无需变换
-    const x = nx * dispW;
-    const y = ny * dispH;
-    const w = nw * dispW;
-    const h = nh * dispH;
-    if (w < 3 || h < 3) continue;
-    const tag = lb.label || 'unknown';
-    const div = document.createElement('div');
-    div.className = 'bbox-rect ' + (tag === 'seal' ? 'seal' : '');
-    div.title = tag + ' (score: ' + (lb.score||0).toFixed(2) + ')';
-    div.style.left = x + 'px'; div.style.top = y + 'px';
-    div.style.width = w + 'px'; div.style.height = h + 'px';
-    div.dataset.tag = tag;
-    div.dataset.score = lb.score || 0;
-    div.onclick = () => highlightBbox(div, lb);
-    overlay.appendChild(div);
-    state.bboxElements.push({ el: div, data: lb });
-  }
-}
-
-function highlightBbox(el, lb) {
-  document.querySelectorAll('.bbox-rect').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  showSync('区域: ' + (lb.label||'unknown') + ' score=' + (lb.score||'?').toFixed(2));
-}
-
-function updateVlmBadge() {
-  const badge = document.getElementById('vlmBadge');
-  if (!state.original) { badge.style.display = 'none'; return; }
-  const pages = state.original.data?.pages || [];
-  const pg = pages.find(p => p.page === state.currentPage);
-  badge.style.display = pg && pg.route === 'vlm' ? 'block' : 'none';
+  // 旋转后如果是 90/270 度，图片显示尺寸需要交换宽高
+  // 用 max-width 控制不溢出即可，scale 已设置实际渲染尺寸
 }
 
 // ════════════════════════════════════════════════════════
-//  OCR 原始响应加载
+//  OCR Output 加载与渲染（Markdown 源码编辑 + 实时预览）
 // ════════════════════════════════════════════════════════
-async function loadOriginalFile(file) {
+async function loadOcrFile(file) {
   const text = await file.text();
-  try { state.original = JSON.parse(text); }
-  catch(e) { alert('OCR 原始响应解析失败: ' + e.message); return; }
-  const pgs = state.original.data?.pages || [];
-  state.totalOCRPgs = pgs.length;
-  renderOcrPages();
-  renderTables(); // 从 original 提取表格
-  if (state.parsed) renderFields();
-  syncOcrPage();
-}
-
-// ════════════════════════════════════════════════════════
-//  OCR 逐页渲染（右侧）
-// ════════════════════════════════════════════════════════
-function renderOcrPages() {
-  const container = document.getElementById('ocrPages');
-  const pages = state.original.data?.pages || [];
-  if (!pages.length) { container.innerHTML = '<div style="padding:20px;color:#999">无 OCR 数据</div>'; return; }
-  let html = '';
-  for (const p of pages) {
-    const pn = p.page || 0;
-    const route = p.route || '?';
-    const text = p.text || '(无文本)';
-    const md = p.markdown || '';
-    const lbs = p.layout_blocks || [];
-    const timing = p.timing_ms || 0;
-    // table 页用 text（纯文本），不用 markdown（含 HTML 标签）
-    const displayText = text;
-
-    html += '<div class="ocr-page" data-page="' + pn + '">';
-    html += '<div class="page-header">';
-    html += '<span class="page-num">第 ' + pn + ' 页</span>';
-    html += '<span class="route-badge ' + route + '">' + route.toUpperCase() + '</span>';
-    html += '<span class="timing">' + (timing/1000).toFixed(1) + 's</span>';
-    html += '</div>';
-    if (route === 'table') {
-      html += '<div onclick="switchTab(\'tables\')" style="margin-bottom:8px;padding:6px 12px;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:4px;font-size:12px;color:#2e7d32;cursor:pointer" title="点击切换">📊 此页为表格数据 — 点击切换到 <b>📊 表格</b> 标签查看结构化视图 →</div>';
-    }
-    html += '<div class="page-text" data-page="' + pn + '" data-route="' + route + '">' + escHtml(displayText) + '</div>';
-    if (lbs.length) {
-      html += '<div class="layout-blocks">';
-      for (const lb of lbs) {
-        const tag = lb.label || 'unknown';
-        const score = lb.score || 0;
-        html += '<span class="lb-tag ' + tag + '" onclick="focusBbox(' + pn + ',\'' + tag + '\',' + score + ')" title="bbox: [' + (lb.bbox||[]).join(',') + ']">' + tag + ' (' + score.toFixed(2) + ')</span>';
-      }
-      html += '</div>';
-    }
-    html += '</div>';
+  try {
+    state.ocr = JSON.parse(text);
+  } catch(e) {
+    state.ocr = { content: text, page_count: 1, engine: 'unknown' };
   }
-  container.innerHTML = html;
-  // 激活第一页
-  document.querySelectorAll('.ocr-page').forEach(el => el.classList.remove('active'));
-  const first = container.querySelector('.ocr-page');
-  if (first) first.classList.add('active');
+  // 初始化 turndown（HTML→Markdown）
+  if (!state._turndown && typeof TurndownService !== 'undefined') {
+    state._turndown = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced' });
+    if (typeof turndownPluginGfm !== 'undefined') {
+      state._turndown.use(turndownPluginGfm.gfm);
+    }
+  }
+  renderOcrContent();
 }
 
-function focusBbox(pageNum, tag, score) {
-  if (state.pdfDoc) {
-    state.currentPage = pageNum;
-    renderPage();
-    // 高亮对应的 bbox
-    setTimeout(() => {
-      const els = document.querySelectorAll('.bbox-rect');
-      for (const el of els) {
-        if (el.dataset.tag === tag && parseFloat(el.dataset.score || 0) === score) {
-          el.classList.add('active');
-          el.scrollIntoView({ block: 'center', behavior: 'smooth' });
-          break;
+function renderOcrContent() {
+  const container = document.getElementById('ocrPage');
+  if (!state.ocr) {
+    container.innerHTML = '<div class="placeholder">加载 OCR Output 后显示</div>';
+    return;
+  }
+
+  const rawContent = state.ocr.content || '';
+  const pages = state.ocr.page_count || 1;
+
+  // OCR content（paddleocr-mcp / pp_structurev3 的 HTML 输出）→ 增强 Markdown
+  // 关键：HTML 表格里的 rowspan/colspan 合并结构会被完整保留（转成 >> / ^^ 标记），
+  // 不再走 GFM turndown（GFM 表格不支持合并单元格，会把结构冲垮）。
+  const markdown = ocrContentToMarkdown(rawContent);
+  state._ocrMarkdownOriginal = markdown;
+  state._ocrMarkdown = markdown;
+
+  // 构建 UI
+  container.innerHTML = '';
+  container.style.display = 'flex';
+  container.style.flexDirection = 'column';
+
+  // 信息栏
+  const infoBar = document.createElement('div');
+  infoBar.className = 'ocr-info-bar';
+  infoBar.innerHTML = '<span>引擎: ' + escHtml(state.ocr.engine || '?') + '</span>'
+    + '<span>时间: ' + escHtml(state.ocr.ocr_at || '?') + '</span>'
+    + '<span>页数: ' + pages + '</span>'
+    + '<span style="color:#e65100;font-weight:600">✏️ 左右两侧均可编辑，改完点"🔄 重新解析"</span>';
+  container.appendChild(infoBar);
+
+  // 模式切换栏
+  const editorBar = document.createElement('div');
+  editorBar.className = 'md-editor-bar';
+
+  const splitBtn = document.createElement('button');
+  splitBtn.className = 'md-mode-btn active';
+  splitBtn.textContent = '⊞ 分屏编辑';
+  splitBtn.onclick = () => setMdMode('split');
+
+  const srcBtn = document.createElement('button');
+  srcBtn.className = 'md-mode-btn';
+  srcBtn.textContent = '📝 仅源码';
+  srcBtn.onclick = () => setMdMode('source');
+
+  const previewBtn = document.createElement('button');
+  previewBtn.className = 'md-mode-btn';
+  previewBtn.textContent = '👁 仅预览（可编辑）';
+  previewBtn.onclick = () => setMdMode('preview');
+
+  const status = document.createElement('span');
+  status.className = 'md-status';
+  status.id = 'mdStatus';
+  status.textContent = '就绪';
+
+  editorBar.appendChild(splitBtn);
+  editorBar.appendChild(srcBtn);
+  editorBar.appendChild(previewBtn);
+  editorBar.appendChild(status);
+  container.appendChild(editorBar);
+
+  // 内容容器（flex 左右分屏）
+  const contentWrap = document.createElement('div');
+  contentWrap.style.flex = '1';
+  contentWrap.style.display = 'flex';
+  contentWrap.style.overflow = 'hidden';
+
+  // 左：Markdown 源码编辑
+  const srcArea = document.createElement('textarea');
+  srcArea.className = 'md-textarea';
+  srcArea.id = 'mdSrcArea';
+  srcArea.value = markdown;
+  srcArea.style.flex = '1';
+  srcArea.style.borderRadius = '0';
+  srcArea.addEventListener('input', () => {
+    state._ocrMarkdown = srcArea.value;
+    document.getElementById('mdStatus').textContent = '已修改';
+    // 源码变化时，重新切块解析并刷新预览（预览区可编辑状态被整体重建）
+    updateMdPreview();
+  });
+
+  // 右：Markdown 渲染预览（可编辑）
+  const previewArea = document.createElement('div');
+  previewArea.className = 'md-preview-area md-edit-area';
+  previewArea.id = 'mdPreviewArea';
+  previewArea.style.flex = '1';
+  previewArea.style.borderLeft = '1px solid #e0e0e0';
+
+  contentWrap.appendChild(srcArea);
+  contentWrap.appendChild(previewArea);
+  container.appendChild(contentWrap);
+
+  // 初次按块解析并渲染可编辑预览
+  state._mdBlocks = parseMarkdownIntoBlocks(markdown);
+  state._tableSelection = { blockIndex: null, cells: new Set() };
+  renderBlocksIntoPreview(previewArea);
+}
+
+// ── 源码 → 预览：整体重新切块解析并渲染 ──
+function updateMdPreview() {
+  const preview = document.getElementById('mdPreviewArea');
+  const src = document.getElementById('mdSrcArea');
+  if (!preview || !src) return;
+  state._mdBlocks = parseMarkdownIntoBlocks(src.value);
+  state._tableSelection = { blockIndex: null, cells: new Set() };
+  renderBlocksIntoPreview(preview);
+}
+
+function setMdMode(mode) {
+  const srcArea = document.getElementById('mdSrcArea');
+  const previewArea = document.getElementById('mdPreviewArea');
+  if (!srcArea || !previewArea) return;
+
+  document.querySelectorAll('.md-mode-btn').forEach(b => b.classList.remove('active'));
+
+  if (mode === 'split') {
+    srcArea.style.display = 'block';
+    srcArea.style.flex = '1';
+    previewArea.style.display = 'block';
+    previewArea.style.flex = '1';
+    document.querySelectorAll('.md-mode-btn')[0].classList.add('active');
+  } else if (mode === 'source') {
+    srcArea.style.display = 'block';
+    srcArea.style.flex = '1';
+    previewArea.style.display = 'none';
+    document.querySelectorAll('.md-mode-btn')[1].classList.add('active');
+  } else if (mode === 'preview') {
+    srcArea.style.display = 'none';
+    previewArea.style.display = 'block';
+    previewArea.style.flex = '1';
+    document.querySelectorAll('.md-mode-btn')[2].classList.add('active');
+  }
+}
+
+// 收集 OCR output 修改后的内容（Markdown）
+function collectOcrEdits() {
+  const srcArea = document.getElementById('mdSrcArea');
+  if (srcArea) {
+    state._ocrMarkdown = srcArea.value;
+  }
+  return state._ocrMarkdown;
+}
+
+// ════════════════════════════════════════════════════════
+//  OCR content(HTML) → 增强 Markdown
+//  paddleocr-mcp 的 pp_structurev3 输出为 HTML（表格含 rowspan/colspan）。
+//   · 文本 / 标题 → 普通 markdown 文本块
+//   · 表格 → 按网格模型解析，序列化为带 >> / ^^ 合并标记的增强表格
+// ════════════════════════════════════════════════════════
+function ocrContentToMarkdown(content) {
+  const cleaned = String(content || '').replace(/\n*Pages:\s*\d+\s*$/i, '').trim();
+  if (!cleaned) return '';
+  const looksHtml = /<table|<div|<p\b|<br|<h[1-6]|<span|<html|<body|<ul|<ol|<li/i.test(cleaned);
+  if (!looksHtml) return cleaned; // 已经是 markdown / 纯文本，原样返回
+  let doc;
+  try {
+    doc = new DOMParser().parseFromString(cleaned, 'text/html');
+  } catch(e) {
+    return cleaned.replace(/<[^>]+>/g, ' ').replace(/[ \t]+\n/g, '\n').trim();
+  }
+  const blocks = [];
+  collectBlocksFromDom(doc.body, blocks);
+  const out = [];
+  for (const b of blocks) {
+    const md = (b.md || '').trim();
+    if (md) out.push(md);
+  }
+  return out.join('\n\n');
+}
+
+function collectBlocksFromDom(root, blocks) {
+  root.childNodes.forEach(node => {
+    if (node.nodeType === 3) { // 文本节点
+      const t = node.textContent.replace(/\s+/g, ' ').trim();
+      if (t) blocks.push({ type: 'text', md: t });
+    } else if (node.nodeType === 1) { // 元素节点
+      const tag = node.tagName.toLowerCase();
+      if (tag === 'table') {
+        blocks.push({ type: 'table', md: htmlTableToEnhancedMd(node) });
+      } else if (/^h[1-6]$/.test(tag)) {
+        const t = node.textContent.replace(/\s+/g, ' ').trim();
+        if (t) blocks.push({ type: 'text', md: '#'.repeat(+tag[1]) + ' ' + t });
+      } else if (tag === 'br' || tag === 'script' || tag === 'style') {
+        // 忽略
+      } else {
+        collectBlocksFromDom(node, blocks);
+      }
+    }
+  });
+}
+
+// HTML <table>（含 rowspan/colspan）→ 网格模型 → 增强 Markdown
+function htmlTableToEnhancedMd(tableEl) {
+  const trs = Array.from(tableEl.querySelectorAll('tr'));
+  const nrows = trs.length;
+  if (!nrows) return '';
+  const occupied = Array.from({ length: nrows }, () => []);
+  const owners = [];
+  let ncols = 0;
+  trs.forEach((tr, r) => {
+    let c = 0;
+    Array.from(tr.children).forEach(cellEl => {
+      if (!/^(td|th)$/i.test(cellEl.tagName)) return;
+      while (occupied[r][c]) c++;
+      const rowspan = Math.max(1, parseInt(cellEl.getAttribute('rowspan') || '1', 10) || 1);
+      const colspan = Math.max(1, parseInt(cellEl.getAttribute('colspan') || '1', 10) || 1);
+      const contentText = cellEl.textContent.replace(/\s+/g, ' ').trim();
+      owners.push({ r, c, rowspan, colspan, content: contentText, isHeader: r === 0 });
+      for (let rr = r; rr < r + rowspan && rr < nrows; rr++) {
+        for (let cc = c; cc < c + colspan; cc++) occupied[rr][cc] = true;
+      }
+      c += colspan;
+      if (c > ncols) ncols = c;
+    });
+  });
+  if (!ncols) return '';
+  const model = buildGridFromOwners(owners, nrows, ncols, new Array(ncols).fill(null));
+  return serializeTableModel(model);
+}
+
+// ════════════════════════════════════════════════════════
+//  Markdown 分块模型：整份 Markdown 拆成 [文本块 | 表格块] 的有序列表
+//  表格块用扩展语法表示合并单元格：
+//    >>  单元格内容为此标记时，表示"和左边单元格横向合并"（colspan）
+//    ^^  单元格内容为此标记时，表示"和上边单元格纵向合并"（rowspan）
+//  这两个标记只在我们的编辑器里识别；标准 GFM 渲染器会把它们当普通文本显示。
+// ════════════════════════════════════════════════════════
+
+function isTableSepLine(line) {
+  const s = line.trim();
+  if (!s) return false;
+  let t = s;
+  if (t.startsWith('|')) t = t.slice(1);
+  if (t.endsWith('|')) t = t.slice(0, -1);
+  const cells = t.split('|');
+  return cells.length > 0 && cells.every(c => /^\s*:?-+:?\s*$/.test(c));
+}
+
+function splitTableRow(line) {
+  let s = line.trim();
+  if (s.startsWith('|')) s = s.slice(1);
+  if (s.endsWith('|') && !s.endsWith('\\|')) s = s.slice(0, -1);
+  const cells = [];
+  let cur = '';
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === '\\' && s[i+1] === '|') { cur += '|'; i++; continue; }
+    if (s[i] === '|') { cells.push(cur.trim()); cur = ''; continue; }
+    cur += s[i];
+  }
+  cells.push(cur.trim());
+  return cells;
+}
+
+// 从"实体格清单(owners)"重建完整网格（含 covered 占位），是所有表格结构变更操作的统一出口
+function buildGridFromOwners(owners, nrows, ncols, aligns) {
+  const grid = Array.from({length: nrows}, () => new Array(ncols).fill(null));
+  owners.forEach(o => {
+    if (o.r < 0 || o.r >= nrows || o.c < 0 || o.c >= ncols) return; // 越界的丢弃
+    const rowspan = Math.max(1, Math.min(o.rowspan, nrows - o.r));
+    const colspan = Math.max(1, Math.min(o.colspan, ncols - o.c));
+    grid[o.r][o.c] = { content: o.content, rowspan, colspan, isHeader: o.r === 0 };
+    for (let rr = o.r; rr < o.r + rowspan; rr++) {
+      for (let cc = o.c; cc < o.c + colspan; cc++) {
+        if (rr === o.r && cc === o.c) continue;
+        grid[rr][cc] = { covered: true, ownerR: o.r, ownerC: o.c };
+      }
+    }
+  });
+  for (let r = 0; r < nrows; r++) {
+    for (let c = 0; c < ncols; c++) {
+      if (!grid[r][c]) grid[r][c] = { content: '', rowspan: 1, colspan: 1, isHeader: r === 0 };
+    }
+  }
+  return { ncols, nrows, grid, aligns };
+}
+
+function extractOwners(model) {
+  const owners = [];
+  for (let r = 0; r < model.nrows; r++) {
+    for (let c = 0; c < model.ncols; c++) {
+      const cell = model.grid[r][c];
+      if (cell && !cell.covered) owners.push({ r, c, rowspan: cell.rowspan, colspan: cell.colspan, content: cell.content, isHeader: cell.isHeader });
+    }
+  }
+  return owners;
+}
+
+// 解析一个表格块的原始文本行，生成带 span 信息的模型
+function buildTableModel(headerCells, aligns, bodyRowsCells) {
+  const rawGrid = [headerCells, ...bodyRowsCells];
+  const ncols = Math.max(aligns.length, ...rawGrid.map(r => r.length));
+  rawGrid.forEach(r => { while (r.length < ncols) r.push(''); });
+  while (aligns.length < ncols) aligns.push(null);
+  const nrows = rawGrid.length;
+  const consumed = Array.from({length: nrows}, () => new Array(ncols).fill(false));
+  const owners = [];
+  for (let r = 0; r < nrows; r++) {
+    for (let c = 0; c < ncols; c++) {
+      if (consumed[r][c]) continue;
+      const raw = rawGrid[r][c];
+      if (raw === '>>' || raw === '^^') { consumed[r][c] = true; continue; } // 孤立标记（无主格），当空格处理
+      let colspan = 1;
+      while (c + colspan < ncols && !consumed[r][c+colspan] && rawGrid[r][c+colspan] === '>>') colspan++;
+      let rowspan = 1;
+      rowLoop:
+      while (r + rowspan < nrows) {
+        for (let cc = c; cc < c + colspan; cc++) {
+          if (rawGrid[r+rowspan][cc] !== '^^') break rowLoop;
         }
+        rowspan++;
       }
-    }, 300);
+      for (let rr = r; rr < r + rowspan; rr++) for (let cc = c; cc < c + colspan; cc++) consumed[rr][cc] = true;
+      owners.push({ r, c, rowspan, colspan, content: raw, isHeader: r === 0 });
+    }
   }
-  showSync('定位到第 ' + pageNum + ' 页 ' + tag + ' 区域');
+  return buildGridFromOwners(owners, nrows, ncols, aligns);
+}
+
+function parseTableBlockFromLines(lines, start, end) {
+  const headerCells = splitTableRow(lines[start]);
+  const sepCells = splitTableRow(lines[start+1]);
+  const aligns = sepCells.map(c => {
+    const t = c.trim();
+    const left = t.startsWith(':'), right = t.endsWith(':');
+    if (left && right) return 'center';
+    if (right) return 'right';
+    if (left) return 'left';
+    return null;
+  });
+  const bodyRowsCells = [];
+  for (let i = start + 2; i <= end; i++) bodyRowsCells.push(splitTableRow(lines[i]));
+  return buildTableModel(headerCells, aligns, bodyRowsCells);
+}
+
+function findTableBlocks(lines) {
+  const blocks = [];
+  let i = 0;
+  while (i < lines.length) {
+    if (i + 1 < lines.length && lines[i].includes('|') && isTableSepLine(lines[i+1])) {
+      const start = i;
+      let end = i + 1;
+      let j = i + 2;
+      while (j < lines.length && lines[j].trim() !== '' && lines[j].includes('|')) { end = j; j++; }
+      blocks.push({ start, end });
+      i = end + 1;
+    } else i++;
+  }
+  return blocks;
+}
+
+function parseMarkdownIntoBlocks(markdown) {
+  const lines = markdown.split('\n');
+  const tblRanges = findTableBlocks(lines);
+  const blocks = [];
+  let cursor = 0;
+  for (const { start, end } of tblRanges) {
+    if (start > cursor) blocks.push({ type: 'text', raw: lines.slice(cursor, start).join('\n') });
+    blocks.push({ type: 'table', raw: lines.slice(start, end + 1).join('\n'), model: parseTableBlockFromLines(lines, start, end) });
+    cursor = end + 1;
+  }
+  if (cursor < lines.length) blocks.push({ type: 'text', raw: lines.slice(cursor).join('\n') });
+  if (!blocks.length) blocks.push({ type: 'text', raw: '' });
+  return blocks;
+}
+
+// 显示宽度（CJK 全角字符按 2 计），用于对齐 markdown 源码，让表格源码整洁可读
+function isWideChar(ch) {
+  const c = ch.codePointAt(0);
+  return c >= 0x1100 && (
+    c <= 0x115F || c === 0x2329 || c === 0x232A ||
+    (c >= 0x2E80 && c <= 0xA4CF && c !== 0x303F) ||
+    (c >= 0xAC00 && c <= 0xD7A3) ||
+    (c >= 0xF900 && c <= 0xFAFF) ||
+    (c >= 0xFE30 && c <= 0xFE4F) ||
+    (c >= 0xFF00 && c <= 0xFF60) ||
+    (c >= 0xFFE0 && c <= 0xFFE6) ||
+    (c >= 0x20000 && c <= 0x3FFFD)
+  );
+}
+function cellDisplayWidth(s) { let w = 0; for (const ch of String(s)) w += isWideChar(ch) ? 2 : 1; return w; }
+function padCell(s, width) { const p = width - cellDisplayWidth(s); return p > 0 ? s + ' '.repeat(p) : s; }
+
+function serializeTableModel(model) {
+  const escapeCell = s => String(s == null ? '' : s).replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
+  // 先生成 token 矩阵（合并占位用 >> / ^^）
+  const tokens = [];
+  for (let r = 0; r < model.nrows; r++) {
+    tokens[r] = [];
+    for (let c = 0; c < model.ncols; c++) {
+      const cell = model.grid[r][c];
+      tokens[r][c] = cell.covered ? (cell.ownerR === r ? '>>' : '^^') : escapeCell(cell.content);
+    }
+  }
+  // 按列计算最大显示宽度（分隔线至少 3），逐列右侧补空格对齐
+  const widths = [];
+  for (let c = 0; c < model.ncols; c++) {
+    let w = 3;
+    for (let r = 0; r < model.nrows; r++) w = Math.max(w, cellDisplayWidth(tokens[r][c]));
+    widths[c] = w;
+  }
+  const lines = [];
+  for (let r = 0; r < model.nrows; r++) {
+    lines.push('| ' + tokens[r].map((t, c) => padCell(t, widths[c])).join(' | ') + ' |');
+    if (r === 0) {
+      const sep = model.aligns.map((a, c) => {
+        const w = widths[c];
+        if (a === 'center') return ':' + '-'.repeat(Math.max(1, w - 2)) + ':';
+        if (a === 'right')  return '-'.repeat(Math.max(1, w - 1)) + ':';
+        if (a === 'left')   return ':' + '-'.repeat(Math.max(1, w - 1));
+        return '-'.repeat(w);
+      });
+      lines.push('| ' + sep.join(' | ') + ' |');
+    }
+  }
+  return lines.join('\n');
+}
+
+function syncBlocksToSource() {
+  const md = state._mdBlocks.map(b => b.type === 'table' ? serializeTableModel(b.model) : b.raw).join('\n');
+  state._ocrMarkdown = md;
+  const srcArea = document.getElementById('mdSrcArea');
+  if (srcArea && document.activeElement !== srcArea) srcArea.value = md;
+  const status = document.getElementById('mdStatus');
+  if (status) status.textContent = '已修改';
+}
+
+function syncTableBlockToSource(blockIndex) {
+  const block = state._mdBlocks[blockIndex];
+  block.raw = serializeTableModel(block.model);
+  syncBlocksToSource();
 }
 
 // ════════════════════════════════════════════════════════
-//  左右页面对齐
+//  可编辑预览区渲染
 // ════════════════════════════════════════════════════════
-function syncOcrPage() {
-  // 右侧滚动到当前 PDF 页对应位置
-  const target = document.querySelector('.ocr-page[data-page="' + state.currentPage + '"]');
-  if (target) {
-    document.querySelectorAll('.ocr-page').forEach(el => el.classList.remove('active'));
-    target.classList.add('active');
-    target.scrollIntoView({ block: 'start', behavior: 'smooth' });
+
+function renderBlocksIntoPreview(container) {
+  container.innerHTML = '';
+  state._mdBlocks.forEach((block, idx) => {
+    if (block.type === 'table') {
+      container.appendChild(renderTableBlockDom(idx));
+    } else {
+      const div = document.createElement('div');
+      div.className = 'md-text-block';
+      div.dataset.blockIndex = idx;
+      div.contentEditable = 'true';
+      div.innerHTML = block.raw.trim() ? marked.parse(block.raw) : '<p><br></p>';
+      let debounce;
+      div.addEventListener('input', () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => {
+          try {
+            block.raw = state._turndown ? state._turndown.turndown(div.innerHTML) : div.innerText;
+          } catch(e) { block.raw = div.innerText; }
+          syncBlocksToSource();
+        }, 400);
+      });
+      sanitizePaste(div);
+      container.appendChild(div);
+    }
+  });
+}
+
+function renderTableBlockDom(blockIndex) {
+  const block = state._mdBlocks[blockIndex];
+  const model = block.model;
+  const wrap = document.createElement('div');
+  wrap.className = 'table-block-wrap';
+  wrap.dataset.blockIndex = blockIndex;
+
+  const toolbar = document.createElement('div');
+  toolbar.className = 'table-block-toolbar';
+  const mergeBtn = document.createElement('button');
+  mergeBtn.className = 'merge-btn';
+  mergeBtn.textContent = '🔗 合并选中单元格';
+  mergeBtn.onclick = () => mergeSelectedCells(blockIndex);
+  const clearBtn = document.createElement('button');
+  clearBtn.textContent = '取消选择';
+  clearBtn.onclick = () => clearSelection(blockIndex);
+  const hint = document.createElement('span');
+  hint.className = 'hint';
+  hint.textContent = 'Ctrl/Cmd + 点击 多选单元格后可合并；已合并单元格悬浮可拆分';
+  toolbar.appendChild(mergeBtn);
+  toolbar.appendChild(clearBtn);
+  toolbar.appendChild(hint);
+  wrap.appendChild(toolbar);
+
+  const table = document.createElement('table');
+  table.className = 'edit-table';
+  const thead = document.createElement('thead');
+  const tbody = document.createElement('tbody');
+
+  for (let r = 0; r < model.nrows; r++) {
+    const tr = document.createElement('tr');
+    for (let c = 0; c < model.ncols; c++) {
+      const cell = model.grid[r][c];
+      if (cell.covered) continue; // 被合并覆盖的位置不渲染 DOM 节点
+      const tag = r === 0 ? 'th' : 'td';
+      const el = document.createElement(tag);
+      if (cell.rowspan > 1) el.rowSpan = cell.rowspan;
+      if (cell.colspan > 1) el.colSpan = cell.colspan;
+      el.contentEditable = 'true';
+      el.dataset.r = r;
+      el.dataset.c = c;
+
+      const textNode = document.createTextNode(cell.content);
+      el.appendChild(textNode);
+
+      el.addEventListener('input', () => {
+        // 只取文本内容写回模型，悬浮操作按钮是单独的 contenteditable=false 元素，不会被算进去
+        const actionsEl = el.querySelector('.cell-hover-actions');
+        const clone = el.cloneNode(true);
+        const act = clone.querySelector('.cell-hover-actions');
+        if (act) act.remove();
+        cell.content = clone.textContent;
+        syncTableBlockToSource(blockIndex);
+      });
+      sanitizePaste(el);
+      el.addEventListener('click', e => {
+        if (e.ctrlKey || e.metaKey) {
+          e.preventDefault();
+          toggleCellSelection(blockIndex, r, c, el);
+        }
+      });
+
+      // 悬浮操作按钮
+      const actions = document.createElement('span');
+      actions.className = 'cell-hover-actions';
+      actions.contentEditable = 'false';
+      if (cell.rowspan > 1 || cell.colspan > 1) {
+        const splitB = document.createElement('span');
+        splitB.textContent = '拆分';
+        splitB.title = '拆分为独立单元格';
+        splitB.addEventListener('mousedown', ev => { ev.preventDefault(); ev.stopPropagation(); splitCell(blockIndex, r, c); });
+        actions.appendChild(splitB);
+      }
+      const insRow = document.createElement('span');
+      insRow.textContent = '+行';
+      insRow.title = '在下方插入一行';
+      insRow.addEventListener('mousedown', ev => { ev.preventDefault(); ev.stopPropagation(); insertRowAt(blockIndex, r + cell.rowspan); });
+      const delRow = document.createElement('span');
+      delRow.textContent = '−行';
+      delRow.title = '删除本行';
+      delRow.addEventListener('mousedown', ev => { ev.preventDefault(); ev.stopPropagation(); deleteRowAt(blockIndex, r); });
+      const delCol = document.createElement('span');
+      delCol.textContent = '−列';
+      delCol.title = '删除本列';
+      delCol.addEventListener('mousedown', ev => { ev.preventDefault(); ev.stopPropagation(); deleteColAt(blockIndex, c); });
+      actions.appendChild(insRow);
+      actions.appendChild(delRow);
+      actions.appendChild(delCol);
+      el.appendChild(actions);
+
+      if (state._tableSelection.blockIndex === blockIndex && state._tableSelection.cells.has(r + ',' + c)) {
+        el.classList.add('cell-selected');
+      }
+      tr.appendChild(el);
+    }
+    (r === 0 ? thead : tbody).appendChild(tr);
   }
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+
+  // 末尾快捷添加行/列
+  const bottomBar = document.createElement('div');
+  bottomBar.style.cssText = 'display:flex;gap:10px;margin-top:4px;';
+  const addRowBtn = document.createElement('span');
+  addRowBtn.className = 'row-add-btn-inline';
+  addRowBtn.textContent = '+ 在末尾添加一行';
+  addRowBtn.style.cssText = 'flex:1;border:1px dashed #ccc;border-radius:4px;';
+  addRowBtn.onclick = () => insertRowAt(blockIndex, model.nrows);
+  const addColBtn = document.createElement('span');
+  addColBtn.className = 'row-add-btn-inline';
+  addColBtn.textContent = '+ 在末尾添加一列';
+  addColBtn.style.cssText = 'flex:1;border:1px dashed #ccc;border-radius:4px;';
+  addColBtn.onclick = () => insertColAt(blockIndex, model.ncols);
+  bottomBar.appendChild(addRowBtn);
+  bottomBar.appendChild(addColBtn);
+  wrap.appendChild(bottomBar);
+
+  return wrap;
+}
+
+function rerenderTableBlock(blockIndex) {
+  const oldWrap = document.querySelector('.table-block-wrap[data-block-index="' + blockIndex + '"]');
+  const newWrap = renderTableBlockDom(blockIndex);
+  if (oldWrap && oldWrap.parentNode) oldWrap.parentNode.replaceChild(newWrap, oldWrap);
+  syncTableBlockToSource(blockIndex);
+}
+
+// ── 单元格多选与合并 / 拆分 ──
+function toggleCellSelection(blockIndex, r, c, el) {
+  const sel = state._tableSelection;
+  if (sel.blockIndex !== blockIndex) { sel.blockIndex = blockIndex; sel.cells = new Set(); }
+  const key = r + ',' + c;
+  if (sel.cells.has(key)) { sel.cells.delete(key); el.classList.remove('cell-selected'); }
+  else { sel.cells.add(key); el.classList.add('cell-selected'); }
+}
+
+function clearSelection(blockIndex) {
+  state._tableSelection = { blockIndex: null, cells: new Set() };
+  rerenderTableBlockNoSync(blockIndex);
+}
+
+function rerenderTableBlockNoSync(blockIndex) {
+  const oldWrap = document.querySelector('.table-block-wrap[data-block-index="' + blockIndex + '"]');
+  const newWrap = renderTableBlockDom(blockIndex);
+  if (oldWrap && oldWrap.parentNode) oldWrap.parentNode.replaceChild(newWrap, oldWrap);
+}
+
+function mergeSelectedCells(blockIndex) {
+  const sel = state._tableSelection;
+  if (sel.blockIndex !== blockIndex || sel.cells.size < 2) { alert('请先按住 Ctrl/Cmd 点选 2 个以上单元格，再合并'); return; }
+  const model = state._mdBlocks[blockIndex].model;
+  let minR = Infinity, maxR = -1, minC = Infinity, maxC = -1;
+  sel.cells.forEach(k => {
+    const [r, c] = k.split(',').map(Number);
+    const cell = model.grid[r][c];
+    const or = cell.covered ? cell.ownerR : r;
+    const oc = cell.covered ? cell.ownerC : c;
+    const owner = model.grid[or][oc];
+    minR = Math.min(minR, or); maxR = Math.max(maxR, or + owner.rowspan - 1);
+    minC = Math.min(minC, oc); maxC = Math.max(maxC, oc + owner.colspan - 1);
+  });
+  const parts = [];
+  for (let r = minR; r <= maxR; r++) {
+    for (let c = minC; c <= maxC; c++) {
+      const cell = model.grid[r][c];
+      if (!cell.covered && cell.content) parts.push(cell.content);
+    }
+  }
+  model.grid[minR][minC] = { content: parts.join(' '), rowspan: maxR - minR + 1, colspan: maxC - minC + 1, isHeader: minR === 0 };
+  for (let r = minR; r <= maxR; r++) {
+    for (let c = minC; c <= maxC; c++) {
+      if (r === minR && c === minC) continue;
+      model.grid[r][c] = { covered: true, ownerR: minR, ownerC: minC };
+    }
+  }
+  state._tableSelection = { blockIndex: null, cells: new Set() };
+  rerenderTableBlock(blockIndex);
+}
+
+function splitCell(blockIndex, r, c) {
+  const model = state._mdBlocks[blockIndex].model;
+  const cell = model.grid[r][c];
+  if (!cell || cell.covered) return;
+  const { rowspan, colspan, content } = cell;
+  for (let rr = r; rr < r + rowspan; rr++) {
+    for (let cc = c; cc < c + colspan; cc++) {
+      model.grid[rr][cc] = { content: (rr === r && cc === c) ? content : '', rowspan: 1, colspan: 1, isHeader: rr === 0 };
+    }
+  }
+  rerenderTableBlock(blockIndex);
+}
+
+// ── 行 / 列 增删（基于"实体格清单"重建，正确处理跨越合并区域的情况）──
+function insertRowAt(blockIndex, atRow) {
+  const model = state._mdBlocks[blockIndex].model;
+  atRow = Math.max(1, Math.min(atRow, model.nrows)); // 不允许插到表头(第0行)之上
+  const owners = extractOwners(model);
+  owners.forEach(o => {
+    if (o.r >= atRow) o.r += 1;
+    else if (o.r < atRow && atRow < o.r + o.rowspan) o.rowspan += 1;
+  });
+  state._mdBlocks[blockIndex].model = buildGridFromOwners(owners, model.nrows + 1, model.ncols, model.aligns);
+  rerenderTableBlock(blockIndex);
+}
+
+function deleteRowAt(blockIndex, r) {
+  const model = state._mdBlocks[blockIndex].model;
+  if (r === 0) { alert('不能删除表头行'); return; }
+  if (model.nrows <= 2) { alert('至少保留一行数据'); return; }
+  const owners = extractOwners(model).filter(o => !(o.rowspan === 1 && o.r === r));
+  owners.forEach(o => {
+    if (o.r > r) o.r -= 1;
+    else if (o.r <= r && r < o.r + o.rowspan) o.rowspan -= 1;
+  });
+  state._mdBlocks[blockIndex].model = buildGridFromOwners(owners, model.nrows - 1, model.ncols, model.aligns);
+  rerenderTableBlock(blockIndex);
+}
+
+function insertColAt(blockIndex, atCol) {
+  const model = state._mdBlocks[blockIndex].model;
+  atCol = Math.max(0, Math.min(atCol, model.ncols));
+  const owners = extractOwners(model);
+  owners.forEach(o => {
+    if (o.c >= atCol) o.c += 1;
+    else if (o.c < atCol && atCol < o.c + o.colspan) o.colspan += 1;
+  });
+  const aligns = model.aligns.slice();
+  aligns.splice(atCol, 0, null);
+  state._mdBlocks[blockIndex].model = buildGridFromOwners(owners, model.nrows, model.ncols + 1, aligns);
+  rerenderTableBlock(blockIndex);
+}
+
+function deleteColAt(blockIndex, c) {
+  const model = state._mdBlocks[blockIndex].model;
+  if (model.ncols <= 1) { alert('至少保留一列'); return; }
+  const owners = extractOwners(model).filter(o => !(o.colspan === 1 && o.c === c));
+  owners.forEach(o => {
+    if (o.c > c) o.c -= 1;
+    else if (o.c <= c && c < o.c + o.colspan) o.colspan -= 1;
+  });
+  const aligns = model.aligns.slice();
+  aligns.splice(c, 1);
+  state._mdBlocks[blockIndex].model = buildGridFromOwners(owners, model.nrows, model.ncols - 1, aligns);
+  rerenderTableBlock(blockIndex);
 }
 
 // ════════════════════════════════════════════════════════
@@ -530,167 +1174,490 @@ async function loadParsedFile(file) {
   const text = await file.text();
   try { state.parsed = JSON.parse(text); }
   catch(e) { alert('Parsed JSON 解析失败: ' + e.message); return; }
-  // badges
+
   const dt = document.getElementById('docTypeBadge');
   dt.textContent = state.parsed.document_type || '?';
   dt.style.display = 'inline-block';
+
   const st = document.getElementById('statusBadge');
   const s = state.parsed.parsed_status || 'unknown';
   st.textContent = s === 'full' ? '自动通过' : s === 'human_review_required' ? '待复核' : '质量不足';
   st.className = 'badge ' + (s === 'full' ? 'full' : 'review');
   st.style.display = 'inline-block';
-  if (state.original) renderFields();
-  if (state.original) renderTables();
+
+  renderFields();
+  renderTables();
 }
 
+// ════════════════════════════════════════════════════════
+//  提取字段渲染（可编辑）
+// ════════════════════════════════════════════════════════
 function renderFields() {
   const p = state.parsed;
+  if (!p) return;
   const fields = p.fields || {};
   const container = document.getElementById('fieldsPage');
-  let html = '<div style="padding:16px">';
+  container.innerHTML = '';
+
   // 元信息
-  html += '<div style="margin-bottom:12px;font-size:12px;color:#666;line-height:1.8">';
-  html += '<div>解析ID: ' + (p.parsed_id||'-') + '</div>';
-  html += '<div>引擎: ' + (p.parsed_by||'-') + ' | 时间: ' + (p.parsed_at||'-') + '</div>';
-  const layout = p.meta?.layout;
-  if (layout) html += '<div>版面: ' + layout.total_blocks + ' blocks (' + layout.table_blocks + ' table, ' + layout.seal_blocks + ' seal)</div>';
-  html += '</div>';
-  // 字段卡片
+  const metaBar = document.createElement('div');
+  metaBar.className = 'meta-bar';
+  metaBar.innerHTML = '<div>解析ID: ' + escHtml(p.parsed_id || '-') + '</div>'
+    + '<div>引擎: ' + escHtml(p.parsed_by || '-') + ' | 时间: ' + escHtml(p.parsed_at || '-') + '</div>'
+    + (p.source_ocr ? '<div>OCR输出: ' + escHtml(p.source_ocr) + '</div>' : '');
+  container.appendChild(metaBar);
+
   const keys = Object.keys(fields);
-  if (keys.length) {
-    for (const k of keys) {
-      const f = fields[k];
-      if (!f || f.value === undefined || f.value === null || f.value === '') continue;
-      const conf = f.confidence || 0;
-      const cls = conf >= 0.85 ? 'high' : conf >= 0.6 ? 'medium' : 'low';
-      html += '<div class="field-card">';
-      html += '<div class="field-header"><span class="field-name">' + k + '</span><span style="font-size:11px;color:#999">' + Math.round(conf*100) + '%</span></div>';
-      html += '<div class="field-value">' + escHtml(String(f.value)) + '</div>';
-      html += '<div class="conf-bar"><div class="fill ' + cls + '" style="width:' + Math.round(conf*100) + '%"></div></div>';
-      if (f.raw_text) html += '<div class="field-meta">原文: ' + escHtml(String(f.raw_text).slice(0,120)) + '</div>';
-      html += '</div>';
+  for (const k of keys) {
+    const f = fields[k];
+    if (!f || f.value === undefined || f.value === null || f.value === '') continue;
+    const conf = f.confidence || 0;
+    const cls = conf >= 0.85 ? 'high' : conf >= 0.6 ? 'medium' : 'low';
+    const isCorrected = f.human_corrected === true;
+
+    // 用 DOM API 创建，确保 contenteditable 生效
+    const card = document.createElement('div');
+    card.className = 'field-card' + (isCorrected ? ' edited' : '');
+    card.dataset.field = k;
+
+    const header = document.createElement('div');
+    header.className = 'field-header';
+    header.innerHTML = '<span class="field-name">' + escHtml(k) + '</span><span style="font-size:11px;color:#999">' + Math.round(conf*100) + '%</span>';
+
+    const valueDiv = document.createElement('div');
+    valueDiv.className = 'field-value';
+    valueDiv.contentEditable = 'true';
+    valueDiv.dataset.original = String(f.value);
+    valueDiv.textContent = String(f.value);
+    valueDiv.addEventListener('input', function() { markFieldEdited(this); });
+    sanitizePaste(valueDiv);
+
+    const confBar = document.createElement('div');
+    confBar.className = 'conf-bar';
+    const fill = document.createElement('div');
+    fill.className = 'fill ' + cls;
+    fill.style.width = Math.round(conf*100) + '%';
+    confBar.appendChild(fill);
+
+    card.appendChild(header);
+    card.appendChild(valueDiv);
+    card.appendChild(confBar);
+
+    if (f.raw_text) {
+      const meta = document.createElement('div');
+      meta.className = 'field-meta';
+      meta.textContent = '原文: ' + String(f.raw_text).slice(0, 120);
+      card.appendChild(meta);
     }
+
+    container.appendChild(card);
   }
-  // 缺失字段
+
+  // 缺失警告
   const missing = p.missing_sections_warnings || [];
   if (missing.length) {
-    html += '<div style="margin-top:16px;font-size:12px;font-weight:600;color:#e65100">⚠ 缺失警告 ' + missing.length + ' 项</div>';
+    const warnDiv = document.createElement('div');
+    warnDiv.style.cssText = 'margin:16px;padding:0 16px;font-size:12px;font-weight:600;color:#e65100';
+    warnDiv.textContent = '⚠ 缺失警告 ' + missing.length + ' 项';
+    container.appendChild(warnDiv);
     for (const w of missing) {
-      html += '<div style="margin:4px 0;padding:6px 10px;background:#fffbe6;border:1px solid #ffcc02;border-radius:4px;font-size:12px">[' + (w.severity||'?') + '] ' + (w.warning||w.missing_section_id||'') + '</div>';
+      const item = document.createElement('div');
+      item.style.cssText = 'margin:4px 16px;padding:6px 10px;background:#fffbe6;border:1px solid #ffcc02;border-radius:4px;font-size:12px';
+      item.textContent = '[' + (w.severity || '?') + '] ' + (w.warning || w.missing_section_id || '');
+      container.appendChild(item);
     }
   }
-  html += '</div>';
-  container.innerHTML = html;
 }
 
-function extractTablesFromOriginal() {
-  // 从 original 响应的 elements 中提取表格
-  const tables = [];
-  if (!state.original) return tables;
-  const pages = state.original.data?.pages || [];
-  for (const p of pages) {
-    const elems = p.elements || [];
-    for (const e of elems) {
-      if (e.type === 'table' && e.content?.html) {
-        // 解析 HTML 表格
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(e.content.html, 'text/html');
-        const trs = doc.querySelectorAll('table tr');
-        const headers = [];
-        const rows = [];
-        let firstRow = true;
-        for (const tr of trs) {
-          const cells = [];
-          tr.querySelectorAll('td, th').forEach(td => cells.push(td.textContent.trim()));
-          if (!cells.length) continue;
-          if (firstRow && cells.some(c => isNaN(parseFloat(c.replace(/[,.]/g,''))))) {
-            headers.push(...cells);
-            firstRow = false;
-          } else {
-            rows.push(cells);
-          }
-        }
-        tables.push({
-          page: p.page || 0,
-          bbox: e.bbox || null,
-          headers: headers,
-          rows: rows,
-          row_count: rows.length,
-          source: 'original',
-        });
-      }
-    }
+function markFieldEdited(el) {
+  const card = el.closest('.field-card');
+  const original = el.dataset.original;
+  const current = el.textContent;
+  if (current !== original) {
+    card.classList.add('edited');
+  } else {
+    // 检查是否与原始值相同（可能之前被人工修正过）
+    const fieldName = card.dataset.field;
+    const fieldData = state.parsed?.fields?.[fieldName];
+    const realOriginal = fieldData?._original_value !== undefined ? String(fieldData._original_value) : original;
+    if (current === realOriginal) card.classList.remove('edited');
+    else card.classList.add('edited');
   }
-  return tables;
+  updateEditCount();
 }
 
+// ════════════════════════════════════════════════════════
+//  表格渲染（可编辑）
+// ════════════════════════════════════════════════════════
 function renderTables() {
   const container = document.getElementById('tablesPage');
+  if (!state.parsed) return;
 
-  let tables = state.parsed?.tables || [];
-  let source = 'parsed';
+  let tables = state.parsed.tables || [];
   if (!tables.length) {
-    tables = extractTablesFromOriginal();
-    source = 'original';
-  }
-
-  if (!tables.length) {
-    const msg = state.original
-      ? '原始 OCR 响应中未检测到结构化表格'
-      : '加载原始 OCR 响应或 Parsed JSON 后显示结构化表格';
-    container.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#bbb;font-size:14px">' + msg + '</div>';
+    container.innerHTML = '<div class="placeholder">无结构化表格数据</div>';
     return;
   }
 
-  // 列修正模式: 'normal' | 'reverse' | 'rotate'
-  const colMode = state._tableColMode || 'normal';
-
-  let html = '<div style="padding:16px">';
-  if (source === 'original') {
-    html += '<div style="margin-bottom:10px;padding:6px 12px;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:4px;font-size:12px;color:#2e7d32">表格从原始 OCR 响应直接提取</div>';
-  }
-  html += '<div style="margin-bottom:10px">';
-  html += '<button onclick="cycleColMode()" style="background:#f0f0f0;border:1px solid #ccc;border-radius:4px;padding:4px 12px;cursor:pointer;font-size:12px">';
-  if (colMode === 'normal') html += '↔ 修正列序（旋转表格）';
-  else if (colMode === 'rotate') html += '↩ 反转列序';
-  else html += '✔ 恢复原始';
-  html += '</button><span style="font-size:11px;color:#999;margin-left:8px">当前: ' + colMode + '</span>';
-  html += '</div>';
-
-  function applyColMode(arr, mode) {
-    if (mode === 'reverse') return [...arr].reverse();
-    if (mode === 'rotate') {
-      const half = Math.floor(arr.length / 2);
-      return [...arr.slice(half), ...arr.slice(0, half)];
-    }
-    return arr;
-  }
+  container.innerHTML = '';
+  const wrapper = document.createElement('div');
+  wrapper.style.padding = '16px';
 
   for (let i = 0; i < tables.length; i++) {
     const t = tables[i];
-    const headers = applyColMode(t.headers, colMode);
-    const rows = t.rows.map(r => applyColMode(r, colMode));
-    html += '<div class="table-card">';
-    html += '<div class="table-title">表格 ' + (i+1) + ' — 第 ' + t.page + ' 页 (' + t.row_count + '行 x ' + headers.length + '列)' + (t.bbox ? ' bbox:[' + t.bbox.map(v=>Math.round(v)).join(',') + ']' : '') + '</div>';
-    html += '<table><thead><tr>';
-    for (const h of headers) html += '<th>' + escHtml(h) + '</th>';
-    html += '</tr></thead><tbody>';
-    for (const row of rows) {
-      html += '<tr>';
-      for (let j = 0; j < Math.max(headers.length, row.length); j++) {
-        html += '<td>' + escHtml(row[j] || '') + '</td>';
-      }
-      html += '</tr>';
+    const headers = t.headers || [];
+    const rows = t.rows || [];
+
+    const card = document.createElement('div');
+    card.className = 'table-card';
+    card.dataset.tableIndex = i;
+
+    const title = document.createElement('div');
+    title.className = 'table-title';
+    title.textContent = '表格 ' + (i + 1) + (t.page ? ' — 第 ' + t.page + ' 页' : '') + ' (' + rows.length + '行 x ' + headers.length + '列)';
+    card.appendChild(title);
+
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const theadRow = document.createElement('tr');
+
+    for (let j = 0; j < headers.length; j++) {
+      const th = document.createElement('th');
+      th.contentEditable = 'true';
+      th.textContent = headers[j];
+      const idx = i, colIdx = j;
+      th.addEventListener('input', function() { markTableEdited(idx); });
+      sanitizePaste(th);
+      th.title = '双击表头删除本列';
+      th.addEventListener('dblclick', function() { deleteColumn(idx, colIdx); });
+      theadRow.appendChild(th);
     }
-    html += '</tbody></table></div>';
+    // 添加列按钮
+    const addColTh = document.createElement('th');
+    addColTh.className = 'row-action-col';
+    const addColBtn = document.createElement('span');
+    addColBtn.className = 'col-add-btn';
+    addColBtn.textContent = '+';
+    addColBtn.title = '添加列';
+    const idx2 = i;
+    addColBtn.addEventListener('click', function() { addColumn(idx2); });
+    addColTh.appendChild(addColBtn);
+    theadRow.appendChild(addColTh);
+    thead.appendChild(theadRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    for (let r = 0; r < rows.length; r++) {
+      const tr = document.createElement('tr');
+      tr.dataset.row = r;
+      for (let j = 0; j < Math.max(headers.length, rows[r].length); j++) {
+        const td = document.createElement('td');
+        td.contentEditable = 'true';
+        td.textContent = rows[r][j] || '';
+        const ti = i;
+        td.addEventListener('input', function() { markTableEdited(ti); });
+        sanitizePaste(td);
+        tr.appendChild(td);
+      }
+      // 行操作
+      const actionTd = document.createElement('td');
+      actionTd.className = 'row-action-col';
+      const ti2 = i, ri = r;
+      const insertBtn = document.createElement('span');
+      insertBtn.className = 'row-action';
+      insertBtn.textContent = '⬇+';
+      insertBtn.title = '下方插入行';
+      insertBtn.addEventListener('click', function() { insertRow(ti2, ri); });
+      const delBtn = document.createElement('span');
+      delBtn.className = 'row-action';
+      delBtn.textContent = '✕';
+      delBtn.title = '删除行';
+      delBtn.addEventListener('click', function() { deleteRow(ti2, ri); });
+      actionTd.appendChild(insertBtn);
+      actionTd.appendChild(delBtn);
+      tr.appendChild(actionTd);
+      tbody.appendChild(tr);
+    }
+    table.appendChild(tbody);
+    card.appendChild(table);
+    wrapper.appendChild(card);
   }
-  html += '</div>';
-  container.innerHTML = html;
+
+  container.appendChild(wrapper);
 }
 
-function toggleTableReverse() {
-  state._tableReversed = !state._tableReversed;
-  renderTables();
+function markTableEdited(tableIndex) {
+  state._tableEdits.add(tableIndex);
+  updateEditCount();
+}
+
+function insertRow(tableIndex, afterRow) {
+  const tbody = document.querySelector('[data-table-index="' + tableIndex + '"] table tbody');
+  if (!tbody) return;
+  const newRow = tbody.insertRow(afterRow + 1);
+  const colCount = tbody.rows[0] ? tbody.rows[0].cells.length - 1 : 1; // -1 for action col
+  for (let i = 0; i < colCount; i++) {
+    const cell = newRow.insertCell();
+    cell.contentEditable = 'true';
+    cell.dataset.table = tableIndex;
+    cell.dataset.type = 'cell';
+    cell.oninput = () => markTableEdited(tableIndex);
+  }
+  const actionCell = newRow.insertCell();
+  actionCell.className = 'row-action-col';
+  const newRowIndex = afterRow + 1;
+  actionCell.innerHTML = '<span class="row-action" onclick="insertRow(' + tableIndex + ', ' + newRowIndex + ')" title="下方插入行">⬇+</span> <span class="row-action" onclick="deleteRow(' + tableIndex + ', ' + newRowIndex + ')" title="删除行">✕</span>';
+  markTableEdited(tableIndex);
+}
+
+function deleteRow(tableIndex, rowIndex) {
+  const tbody = document.querySelector('[data-table-index="' + tableIndex + '"] table tbody');
+  if (!tbody || tbody.rows.length <= 1) return;
+  tbody.deleteRow(rowIndex);
+  // 重新编号 action 中的 onclick
+  tbody.querySelectorAll('tr').forEach((tr, i) => {
+    const actionCell = tr.lastElementChild;
+    if (actionCell) {
+      actionCell.innerHTML = '<span class="row-action" onclick="insertRow(' + tableIndex + ', ' + i + ')" title="下方插入行">⬇+</span> <span class="row-action" onclick="deleteRow(' + tableIndex + ', ' + i + ')" title="删除行">✕</span>';
+    }
+  });
+  markTableEdited(tableIndex);
+}
+
+function addColumn(tableIndex) {
+  const tableCard = document.querySelector('[data-table-index="' + tableIndex + '"]');
+  if (!tableCard) return;
+  const table = tableCard.querySelector('table');
+  // thead
+  const theadRow = table.querySelector('thead tr');
+  const newTh = document.createElement('th');
+  newTh.contentEditable = 'true';
+  newTh.dataset.table = tableIndex;
+  newTh.dataset.type = 'header';
+  newTh.oninput = () => markTableEdited(tableIndex);
+  theadRow.insertBefore(newTh, theadRow.lastElementChild); // before action col
+  // tbody
+  table.querySelectorAll('tbody tr').forEach(tr => {
+    const td = document.createElement('td');
+    td.contentEditable = 'true';
+    td.dataset.table = tableIndex;
+    td.dataset.type = 'cell';
+    td.oninput = () => markTableEdited(tableIndex);
+    tr.insertBefore(td, tr.lastElementChild);
+  });
+  markTableEdited(tableIndex);
+}
+
+function deleteColumn(tableIndex, colIndex) {
+  const tableCard = document.querySelector('[data-table-index="' + tableIndex + '"]');
+  if (!tableCard) return;
+  const table = tableCard.querySelector('table');
+  const theadRow = table.querySelector('thead tr');
+  // 至少保留一列（不算行操作列）
+  if (theadRow.children.length - 1 <= 1) { alert('至少保留一列'); return; }
+  theadRow.children[colIndex].remove();
+  table.querySelectorAll('tbody tr').forEach(tr => { tr.children[colIndex] && tr.children[colIndex].remove(); });
+  markTableEdited(tableIndex);
+}
+
+function serializeTable(tableIndex) {
+  const tableCard = document.querySelector('[data-table-index="' + tableIndex + '"]');
+  if (!tableCard) return null;
+  const headers = [];
+  tableCard.querySelectorAll('thead th:not(.row-action-col)').forEach(th => headers.push(th.textContent.trim()));
+  const rows = [];
+  tableCard.querySelectorAll('tbody tr').forEach(tr => {
+    const cells = [];
+    tr.querySelectorAll('td:not(.row-action-col)').forEach(td => cells.push(td.textContent.trim()));
+    rows.push(cells);
+  });
+  return { headers, rows, row_count: rows.length };
+}
+
+// ════════════════════════════════════════════════════════
+//  保存功能
+// ════════════════════════════════════════════════════════
+function updateEditCount() {
+  const fieldEdits = document.querySelectorAll('.field-card.edited').length;
+  const tableEdits = state._tableEdits.size;
+  const total = fieldEdits + tableEdits;
+  const badge = document.getElementById('editCountBadge');
+  const btn = document.getElementById('saveBtn');
+  if (total > 0) {
+    badge.textContent = total + ' 处修改待保存';
+    badge.style.display = 'inline-block';
+    btn.disabled = false;
+  } else {
+    badge.style.display = 'none';
+    btn.disabled = true;
+  }
+}
+
+function collectCorrections() {
+  const corrections = { fields: [], tables: [] };
+  // 字段修改
+  document.querySelectorAll('.field-card.edited').forEach(card => {
+    const fieldName = card.dataset.field;
+    const valueEl = card.querySelector('.field-value');
+    const original = valueEl.dataset.original;
+    const corrected = valueEl.textContent;
+    if (corrected !== original) {
+      corrections.fields.push({ field: fieldName, original_value: original, corrected_value: corrected });
+    }
+  });
+  // 表格修改
+  state._tableEdits.forEach(tableIndex => {
+    const serialized = serializeTable(tableIndex);
+    if (serialized) corrections.tables.push({ table_index: tableIndex, ...serialized });
+  });
+  return corrections;
+}
+
+async function saveCorrections() {
+  const corrections = collectCorrections();
+  if (corrections.fields.length === 0 && corrections.tables.length === 0) {
+    showSync('无修改需要保存');
+    return;
+  }
+
+  const payload = {
+    action: 'human_review_correction',
+    parsed_file: state.parsedPath || '',
+    parsed_id: state.parsed?.parsed_id || '',
+    corrections: corrections,
+    reviewer: 'auditor',
+  };
+
+  try {
+    const btn = document.getElementById('saveBtn');
+    btn.textContent = '保存中...';
+    btn.disabled = true;
+
+    const response = await fetch('/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const result = await response.json();
+
+    if (result.success) {
+      showSync('✅ 已保存为 v' + result.new_version + ': ' + result.file);
+      // 重载新版本
+      const r = await fetch(result.file);
+      if (r.ok) {
+        state.parsedPath = result.file;
+        await loadParsedFile(new File([await r.text()], result.file.split('/').pop()));
+      }
+      // 清除编辑标记
+      document.querySelectorAll('.field-card.edited').forEach(c => c.classList.remove('edited'));
+      state._tableEdits = new Set();
+      updateEditCount();
+    } else {
+      throw new Error(result.error || '未知错误');
+    }
+  } catch(e) {
+    showSync('❌ 保存失败: ' + e.message);
+    alert('保存失败: ' + e.message + '\n\n如果通过 file:// 打开，需要启动 review-server.py');
+  } finally {
+    const btn = document.getElementById('saveBtn');
+    btn.textContent = '💾 保存修改';
+    btn.disabled = false;
+  }
+}
+
+async function triggerReparse() {
+  // 1. 先收集 OCR output iframe 中的修改内容
+  const editedContent = collectOcrEdits();
+  if (!editedContent) {
+    alert('无法获取 OCR Output 内容');
+    return;
+  }
+
+  // 2. 检查是否有修改（与初始转换的 markdown 比较，注意不能拿 state._ocrMarkdown 比，
+  //    因为 collectOcrEdits() 刚把 state._ocrMarkdown 设成了 editedContent 本身，会恒等）
+  const originalContent = state._ocrMarkdownOriginal || '';
+  const hasChanges = editedContent !== originalContent;
+
+  if (!hasChanges) {
+    alert('OCR Output 未做修改，无需重新解析');
+    return;
+  }
+
+  if (!confirm('检测到 OCR Output 有修改。\n\n将执行：\n1. 保存修改后的 OCR Output（生成新版本）\n2. 通知 AI 从修正后的 OCR Output 重新解析\n\n确认继续？')) return;
+
+  try {
+    // 3. 先保存修改后的 OCR Output
+    const saveResp = await fetch('/save-ocr', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ocr_file: state.ocrPath || '',
+        content: editedContent,
+      }),
+    });
+
+    if (!saveResp.ok) throw new Error('保存 OCR 修改失败: HTTP ' + saveResp.status);
+    const saveResult = await saveResp.json();
+    showSync('✅ OCR Output 已保存为 ' + saveResult.file);
+
+    // 4. 触发重解析
+    const reparseResp = await fetch('/reparse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ocr_file: saveResult.file || state.ocrPath || '',
+        raw_file: state.rawPath || '',
+        parsed_id: state.parsed?.parsed_id || '',
+      }),
+    });
+
+    if (!reparseResp.ok) throw new Error('重解析请求失败: HTTP ' + reparseResp.status);
+    const reparseResult = await reparseResp.json();
+    showSync('🔄 ' + reparseResult.message);
+
+    // 5. 更新 state 中的 ocrPath
+    if (saveResult.file) {
+      state.ocrPath = saveResult.file;
+      state._ocrMarkdownOriginal = editedContent;
+    }
+  } catch(e) {
+    showSync('❌ ' + e.message);
+    alert(e.message + '\n\n如果通过 file:// 打开，需要启动 review-server.py');
+  }
+}
+
+// 仅保存 OCR Markdown 修改到 output 文件（不触发重新解析）
+async function saveOcrEdits() {
+  const content = collectOcrEdits();
+  if (!content) { alert('无 OCR 内容可保存'); return; }
+  if (content === (state._ocrMarkdownOriginal || '')) { showSync('OCR Output 未修改'); return; }
+  if (!state.ocrPath) {
+    alert('未通过 URL/服务器加载 OCR 文件，无法写回。\n\n请用 review-server.py 打开，或手动复制源码。');
+    return;
+  }
+  try {
+    const resp = await fetch('/save-ocr', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ocr_file: state.ocrPath, content }),
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const result = await resp.json();
+    if (result.success) {
+      showSync('✅ OCR Output 已保存为 ' + result.file);
+      state.ocrPath = result.file;
+      state._ocrMarkdownOriginal = content;
+      const st = document.getElementById('mdStatus');
+      if (st) st.textContent = '已保存 v' + result.new_version;
+    } else {
+      throw new Error(result.error || '未知错误');
+    }
+  } catch(e) {
+    showSync('❌ 保存失败: ' + e.message);
+    alert('保存失败: ' + e.message + '\n\n如果通过 file:// 打开，需要启动 review-server.py');
+  }
 }
 
 // ════════════════════════════════════════════════════════
@@ -698,9 +1665,7 @@ function toggleTableReverse() {
 // ════════════════════════════════════════════════════════
 function switchTab(name) {
   document.querySelectorAll('.right-tabs .tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-  // 处理特殊命名: ocr → ocrPages (带s)
-  const suffix = name === 'ocr' ? 'Pages' : 'Page';
-  document.querySelectorAll('.right-content .page-content').forEach(p => p.classList.toggle('active', p.id === name + suffix));
+  document.querySelectorAll('.right-content .page-content').forEach(p => p.classList.toggle('active', p.id === name + 'Page'));
 }
 
 // ════════════════════════════════════════════════════════
@@ -712,39 +1677,54 @@ document.getElementById('pageInput').addEventListener('change', () => {
   const n = parseInt(document.getElementById('pageInput').value);
   if (n >= 1 && n <= (state.pdfDoc?.numPages||1)) { state.currentPage = n; renderPage(); }
 });
-function zoomIn() { state.scale = Math.min(state.scale + 0.25, 5); if (state.rawType === 'pdf') renderPage(); }
-function zoomOut() { state.scale = Math.max(state.scale - 0.25, 0.25); if (state.rawType === 'pdf') renderPage(); }
+function zoomIn() { state.scale = Math.min(state.scale + 0.25, 5); applyZoom(); }
+function zoomOut() { state.scale = Math.max(state.scale - 0.25, 0.25); applyZoom(); }
+function applyZoom() {
+  document.getElementById('zoomLevel').textContent = Math.round(state.scale * 100) + '%';
+  if (state.rawType === 'pdf') {
+    renderPage();
+  } else if (state.rawType === 'image') {
+    const img = document.getElementById('imageView');
+    if (img && img.src) {
+      const rot = getEffectiveRotation();
+      // 旋转和缩放一起应用
+      img.style.width = (state._imgNaturalW || img.naturalWidth) * state.scale + 'px';
+      img.style.height = 'auto';
+      img.style.transform = 'rotate(' + rot + 'deg)';
+      img.style.transformOrigin = 'center center';
+    }
+  }
+}
 async function fitPage() {
-  if (!state.pdfDoc) return;
-  const page = await state.pdfDoc.getPage(1);
-  const vp = page.getViewport({ scale: 1 });
   const cw = document.querySelector('.viewer-content').clientWidth - 40;
-  state.scale = cw / vp.width;
-  renderPage();
+  if (state.rawType === 'pdf' && state.pdfDoc) {
+    const page = await state.pdfDoc.getPage(1);
+    const vp = page.getViewport({ scale: 1 });
+    state.scale = cw / vp.width;
+    renderPage();
+  } else if (state.rawType === 'image') {
+    const img = document.getElementById('imageView');
+    if (img && img.naturalWidth) {
+      state._imgNaturalW = img.naturalWidth;
+      state.scale = cw / img.naturalWidth;
+      applyZoom();
+    }
+  }
 }
 
-// ════════════════════════════════════════════════════════
-//  鼠标滚轮翻页（左侧PDF区域）
-// ════════════════════════════════════════════════════════
+// 鼠标滚轮翻页
 document.querySelector('.left-panel .viewer-content').addEventListener('wheel', e => {
   if (!state.pdfDoc) return;
-  // 只有当内容已滚动到最顶部或最底部时才触发翻页
   const el = document.querySelector('.left-panel .viewer-content');
   const atTop = el.scrollTop <= 0;
   const atBottom = el.scrollTop >= el.scrollHeight - el.clientHeight - 5;
-  if (e.deltaY < 0 && atTop && state.currentPage > 1) {
-    e.preventDefault();
-    prevPage();
-  } else if (e.deltaY > 0 && atBottom && state.currentPage < state.pdfDoc.numPages) {
-    e.preventDefault();
-    nextPage();
-  }
+  if (e.deltaY < 0 && atTop && state.currentPage > 1) { e.preventDefault(); prevPage(); }
+  else if (e.deltaY > 0 && atBottom && state.currentPage < state.pdfDoc.numPages) { e.preventDefault(); nextPage(); }
 });
 
-// ════════════════════════════════════════════════════════
-//  键盘快捷键
-// ════════════════════════════════════════════════════════
+// 键盘快捷键
 document.addEventListener('keydown', e => {
+  if (e.target.contentEditable === 'true' || e.target.tagName === 'INPUT') return;
   if (e.key === 'ArrowLeft') prevPage();
   if (e.key === 'ArrowRight') nextPage();
   if (e.key === '+' || e.key === '=') zoomIn();
@@ -754,7 +1734,16 @@ document.addEventListener('keydown', e => {
 // ════════════════════════════════════════════════════════
 //  工具函数
 // ════════════════════════════════════════════════════════
+// 粘贴净化：contenteditable 元素粘贴时强制只取纯文本，避免带入外部样式/标签
+function sanitizePaste(el) {
+  el.addEventListener('paste', e => {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, text);
+  });
+}
 function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function escAttr(s) { return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function fmtSize(b) { if (b < 1024) return b + 'B'; if (b < 1048576) return (b/1024).toFixed(1) + 'KB'; return (b/1048576).toFixed(1) + 'MB'; }
 let syncTimer;
 function showSync(msg) {
@@ -762,8 +1751,39 @@ function showSync(msg) {
   el.textContent = msg;
   el.classList.add('show');
   clearTimeout(syncTimer);
-  syncTimer = setTimeout(() => el.classList.remove('show'), 2000);
+  syncTimer = setTimeout(() => el.classList.remove('show'), 3000);
 }
+
+// ── 左右分隔条：拖动调整左右窗口宽度 ──
+(function initDivider() {
+  const divider = document.getElementById('divider');
+  const left = document.getElementById('leftPanel');
+  const main = document.querySelector('.main');
+  if (!divider || !left || !main) return;
+  let dragging = false;
+  divider.addEventListener('mousedown', e => {
+    dragging = true;
+    divider.classList.add('dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const rect = main.getBoundingClientRect();
+    const min = 220, max = rect.width - 320;
+    let w = e.clientX - rect.left;
+    w = Math.max(min, Math.min(w, max));
+    left.style.width = w + 'px';
+  });
+  window.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    divider.classList.remove('dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  });
+})();
 </script>
 </body>
 </html>

@@ -165,6 +165,37 @@ OCR 返回的 `detailed` 结果包含：
 
 将这些结果按文档类型 schema 映射为结构化字段。
 
+> **MCP 实际返回格式**：pp_structurev3 通过 MCP 协议返回 content blocks（text 类型），内容为 HTML 格式的识别结果 + 末尾 `Pages: N` 摘要。底层 Python API 返回包含 `layout_det_res.boxes[].coordinate` 的完整结构化 JSON，但 MCP 封装层当前仅输出 markdown/HTML 格式，bbox 数据未透传。
+
+### Step 3.5: 持久化 OCR 原始输出
+
+> 仅 OCR MCP 路径执行。AI 直接读取 / AI 视觉路径跳过。
+
+**操作步骤**：
+
+1. 从 MCP 返回的 content blocks 中提取所有 text block 内容，拼接为完整文本
+2. 从文本末尾提取页数：正则 `/Pages:\s*(\d+)/`
+3. 确定版本号（与 parsed 版本号对齐）
+4. 构造 OCR output JSON：
+   ```json
+   {
+     "ocr_id": "OCR-{raw_id}-v{version}",
+     "source_raw": "<raw 文件相对路径>",
+     "engine": "pp_structurev3",
+     "engine_endpoint": "<MCP URL>",
+     "ocr_at": "<ISO 8601 时间>",
+     "output_mode": "detailed",
+     "content": "<MCP 返回的完整文本>",
+     "page_count": <N>,
+     "supersedes": "<旧版本 ocr_id 或 null>",
+     "superseded_by": null
+   }
+   ```
+5. 写入 `raw/ocr_output/{raw_id}_ocr_v{version}.json`
+6. 在 parsed JSON 中增加 `source_ocr` 字段指向此文件
+
+**版本规则**：OCR output 版本号与 parsed 版本号保持一致。
+
 ---
 
 ## 3. 参数说明

@@ -1,0 +1,159 @@
+# 银行流水明细表 Schema（Bank Statement）
+# 适用范围：银行账户交易明细、对账单、流水清单（多笔逐行交易）
+#
+# 与 BANK_RECEIPT 的区别：
+#   BANK_RECEIPT  = 单笔交易的回单凭证（一张回单一笔）
+#   BANK_STATEMENT = 一个账户在一段周期内的多笔逐行流水（一表多笔）
+#
+# 调查视角重点关注：
+#   - 逐笔与回单核对（transaction_no 作为核对唯一键）
+#   - 资金流向（大额进出、频繁进出、快进快出/过渡账户）
+#   - 异常金额（整数大额、临界规避金额）
+#   - 对手方集中（资金归集/分散的对手账户）
+
+document_type: BANK_STATEMENT
+description: "银行账户交易流水明细表/对账单（一个账户一段周期多笔交易）"
+version: "1.0"
+
+fields:
+  # ============================================================
+  # 账户信息
+  # ============================================================
+  - name: account_name
+    label: 账户名称/户名
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "本流水所属账户的户名。与调查主体比对"
+
+  - name: account_no
+    label: 账号
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "本流水所属账号。常部分脱敏，填写展示值即可"
+
+  - name: bank_name
+    label: 开户行
+    type: string
+    required: false
+    confidence_tracking: true
+
+  - name: currency
+    label: 币种
+    type: string
+    required: true
+    confidence_tracking: true
+    default: "CNY"
+
+  # ============================================================
+  # 对账周期与余额
+  # ============================================================
+  - name: period_start
+    label: 对账起始日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: false
+    confidence_tracking: true
+
+  - name: period_end
+    label: 对账截止日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: false
+    confidence_tracking: true
+
+  - name: opening_balance
+    label: 期初余额
+    type: decimal
+    required: false
+    confidence_tracking: true
+
+  - name: closing_balance
+    label: 期末余额
+    type: decimal
+    required: false
+    confidence_tracking: true
+    description: "期末余额。应满足：期初 + 贷方合计 - 借方合计 = 期末，用于校验流水完整性"
+
+  # ============================================================
+  # 交易明细（调查核心）
+  # ============================================================
+  - name: transactions
+    label: 交易明细
+    type: array
+    required: true
+    confidence_tracking: true
+    description: "逐行交易记录。调查核心——资金流向分析与逐笔回单核对"
+    items:
+      type: object
+      properties:
+        - name: line_no
+          label: 行号
+          type: integer
+
+        - name: transaction_date
+          label: 交易日期
+          type: date
+          format: "YYYY-MM-DD"
+          required: true
+
+        - name: transaction_time
+          label: 交易时间
+          type: string
+          description: "精确到时分秒（如有）。用于识别快进快出/过渡账户"
+
+        - name: transaction_no
+          label: 交易流水号
+          type: string
+          description: "银行流水号。与 BANK_RECEIPT 回单逐笔核对的唯一键"
+
+        - name: summary
+          label: 摘要/用途
+          type: string
+          description: "交易摘要。常含合同号/发票号；摘要笼统（如'往来款'）是异常信号"
+
+        - name: counterparty_name
+          label: 对方户名
+          type: string
+          description: "交易对手方名称。对手方集中是资金归集/分散信号"
+
+        - name: counterparty_account
+          label: 对方账号
+          type: string
+
+        - name: debit_amount
+          label: 借方发生额（支出）
+          type: decimal
+          description: "本账户支出/转出金额"
+
+        - name: credit_amount
+          label: 贷方发生额（收入）
+          type: decimal
+          description: "本账户收入/转入金额"
+
+        - name: balance
+          label: 交易后余额
+          type: decimal
+
+  # ============================================================
+  # 合计
+  # ============================================================
+  - name: total_debit
+    label: 借方发生额合计
+    type: decimal
+    required: false
+    confidence_tracking: true
+
+  - name: total_credit
+    label: 贷方发生额合计
+    type: decimal
+    required: false
+    confidence_tracking: true
+
+  - name: transaction_count
+    label: 交易笔数
+    type: integer
+    required: false
+    confidence_tracking: true
+    description: "本表交易总笔数。与逐行明细数比对，校验是否漏行"

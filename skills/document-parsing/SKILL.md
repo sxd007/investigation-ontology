@@ -41,7 +41,7 @@ origin: efio
 
 ## 核心工作流
 
-本 skill 的核心产出是将一份 raw 文件转化为对应文档类型的 parsed JSON。整个流程由五个步骤组成：
+本 skill 的核心产出是将一份 raw 文件转化为对应文档类型的 parsed JSON。整个流程由七个步骤组成：
 
 ```
 收到 raw 文件
@@ -59,12 +59,21 @@ Step 3 ── 执行解析
     │       OCR MCP 调用 / AI 直接读取 / AI 视觉 fallback
     │
     ▼
+Step 3.5 ── 持久化 OCR 原始输出
+    │       MCP 返回内容保存到 raw/ocr_output/（仅 OCR MCP 路径）
+    │
+    ▼
 Step 4 ── 质量评估
     │       字段级置信度检查 → 通过/待复核/重试
     │
     ▼
 Step 5 ── 版本管理与写入
-            检查历史版本 → 生成 v1/v2/v3 → 写入 raw/parsed/
+    │       检查历史版本 → 生成 v1/v2/v3 → 写入 raw/parsed/
+    │
+    ▼
+Step 6 ── 复核工具
+            confidence 低 → 自动启动 review-server + 打开 parsed-review.html
+            confidence 高 → 输出 URL 供手动打开
 ```
 
 ### Step 1: 确定文档类型
@@ -80,9 +89,13 @@ Step 5 ── 版本管理与写入
     ├── 文件名包含类型关键词
     │   ├── *发票* → INVOICE
     │   ├── *合同* → CONTRACT
-    │   ├── *回单* / *流水* / *付款凭证* → BANK_RECEIPT
+    │   ├── *回单* / *付款凭证* → BANK_RECEIPT
+    │   ├── *流水* / *对账单* / *明细* → BANK_STATEMENT
     │   ├── *签收* / *送货* / *发货* / *收货* → DELIVERY_NOTE
     │   ├── *订单* / *采购* / *PO* → PURCHASE_ORDER
+    │   ├── *报销* / *费用* → REIMBURSEMENT
+    │   ├── *工资* / *薪酬* / *花名册* → PAYROLL
+    │   ├── *审批* / *申请单* / *用款* → APPROVAL
     │   └── 无匹配 → 进入 AI 视觉判断
     │
     ├── AI 视觉判断
@@ -101,9 +114,13 @@ Step 5 ── 版本管理与写入
 |---------|------------|---------|
 | INVOICE | `invoice.yaml` | 增值税专用/普通发票、数电票、机动车/二手车发票 |
 | CONTRACT | `contract.yaml` | 采购/销售/服务/租赁/工程/代理合同 |
-| BANK_RECEIPT | `bank_receipt.yaml` | 银行转账回单、电子回单、代发回单 |
+| BANK_RECEIPT | `bank_receipt.yaml` | 银行转账回单、电子回单、代发回单（单笔） |
+| BANK_STATEMENT | `bank_statement.yaml` | 银行流水明细表、对账单、交易明细（多笔逐行） |
 | DELIVERY_NOTE | `delivery_note.yaml` | 送货单、签收单、发货单、运单 |
 | PURCHASE_ORDER | `purchase_order.yaml` | ERP 采购订单、手工采购单、请购单 |
+| REIMBURSEMENT | `reimbursement.yaml` | 差旅/招待/办公/交通等费用报销单 |
+| PAYROLL | `payroll.yaml` | 工资表、薪酬发放表、员工花名册、代发明细 |
+| APPROVAL | `approval.yaml` | 付款/采购/费用/用款等 OA 审批流程单 |
 | GENERIC | `generic.yaml` | 无预定义格式的兜底——仅做 OCR 文本提取 |
 
 ### Step 2: 选择解析策略（格式感知路由）
@@ -148,27 +165,13 @@ Step 5 ── 版本管理与写入
 
 > 📖 **执行 OCR 路径前，必须先读取 `references/ocr-mcp-integration.md`** 获取完整参数说明和错误处理策略。以下为关键步骤速查。
 
-**Step 2a — 读取 OCR 后端配置**
+投递配置与错误处理的**唯一权威来源**是 `references/ocr-mcp-integration.md`。以下仅为三步速查，切勿在本文件或 `parse.md` 中重复维护上传细节：
 
-读取 `{PLUGIN_CONFIG_DIR}/ocr-backend.md`（路径按 `config-loader.md § 平台路径` 解析），获取文档投递配置：
-
-| 配置值 | 行为 |
-|--------|------|
-| `Upload Method: auto` | 从 MCP URL 推导上传地址（同主机、端口+1、/upload） |
-| `Upload Method: http` + `Upload Endpoint` | 使用配置中显式指定的上传地址 |
-| `Upload Method: shared_fs` + `Shared Path Prefix` | 文件已在共享路径，无需上传，直接映射路径 |
-| `Upload Method: custom` + `Custom Upload Instructions` | 按自定义指令投递文件 |
-| 配置中有 `Auth Headers` | 上传请求携带相同认证头 |
-
-> ocr-backend.md 不存在时的回退：端口+1 约定推导（从 MCP URL 推导上传地址）→ 推导失败则降级 AI 视觉解析，提示运行 `/efio:cold-start`。
-
-**Step 2b — 投递文件到 OCR 服务器**
-
-根据 Step 2a 的配置投递文件，获取服务器侧路径（localpath）：
-
-- **http / auto 路径**：`curl -X POST <upload-url> [-H "<auth-headers>"] -F "file=@<文件绝对路径>" 2>nul`，从响应 JSON 的 `Localpath Field` 字段提取 localpath
-- **shared_fs 路径**：客户端文件须已在共享文件系统中可访问（如通过 NFS/SMB 挂载）。localpath = `<Shared Path Prefix>` + 文件基本名（basename，不含目录路径）。例如客户端文件 `D:\cases\raw\ev-010.jpg`，`Shared Path Prefix` 为 `/mnt/shared/ocr_uploads/`，则 localpath = `/mnt/shared/ocr_uploads/ev-010.jpg`
-- **custom 路径**：按 `Custom Upload Instructions` 执行
+| 步骤 | 动作速查 | 权威细节 |
+|------|---------|---------|
+| **2a 读配置** | 读 `{PLUGIN_CONFIG_DIR}/ocr-backend.md` 决定投递方式（auto/http/shared_fs/custom）。不存在时端口+1 回退，再失败降级 AI 视觉并提示 `/efio:cold-start` | `ocr-mcp-integration.md § 2 · Step 0` |
+| **2b 投递文件** | 按配置投递，取服务器侧 localpath（http/auto 用 curl 上传；shared_fs 做路径映射） | `ocr-mcp-integration.md § 2 · Step 1` |
+| **2c 调用工具** | `mcp_call_tool` 调用 `pp_structurev3`，见下 | `ocr-mcp-integration.md § 2 · Step 2` |
 
 **Step 2c — 调用 MCP 工具**
 
@@ -239,6 +242,51 @@ mcp_call_tool(
 | force_majeure | 不可抗力 | — |
 | other_clause | （未匹配） | 原文保留 |
 
+### Step 3.5: 持久化 OCR 原始输出
+
+> 仅当 Step 3 使用了 OCR MCP 路径时执行。AI 直接读取 / AI 视觉路径跳过此步骤。
+
+**目的**：将 pp_structurev3 的原始返回内容持久化到文件，供复核工具对比展示和 B 级重解析出口使用。
+
+**MCP 返回格式说明**：
+
+pp_structurev3 通过 MCP 协议返回 content blocks（text 类型），内容为：
+- HTML 格式的识别结果（表格、文本等），如 `<div>...<table>...</table>...</div>`
+- 末尾的 `Pages: N` 摘要
+
+> **MCP 能力自适应（重要）**：技能的解析与可视化能力应向上兼容更强的 MCP，而**不应被当前部署的 MCP 能力反向锁死**。
+>
+> - 当前 `pp_structurev3` MCP 封装层仅输出 HTML 格式结果，未透传 bbox 坐标（其底层 Python API 本可返回 `layout_det_res.boxes[].coordinate`）。因此默认复核工具只做"文本/表格并排"对比，不做原文区域高亮——这是**当前部署的限制，不是技能的设计上限**。
+> - **若检测到 MCP 返回了结构化坐标数据**（如 `bbox` / `layout_blocks` / `elements[].bbox` / 完整 JSON），说明用户部署了能力更强的 OCR 后端。此时应：
+>   1. 将坐标数据一并持久化进 ocr_output JSON（新增 `layout` 字段，与 `content` 并列）；
+>   2. **主动提醒用户**："检测到当前 OCR 后端已提供版面坐标，可启用『原文区域高亮』的增强可视化复核。是否需要据此升级复核模板？"
+> - 不要因为默认模板不消费 bbox，就在持久化时丢弃 MCP 已提供的更丰富数据。
+
+**操作步骤**：
+
+1. 从 MCP 返回的 content blocks 中提取所有 text block 内容，拼接为完整文本
+2. 从文本末尾提取页数：正则 `/Pages:\s*(\d+)/`
+3. 确定版本号：与 parsed 文件版本号对齐（检查 `raw/ocr_output/` 下已有版本）
+4. 构造 OCR output JSON：
+   ```json
+   {
+     "ocr_id": "OCR-{raw_id}-v{version}",
+     "source_raw": "<raw 文件相对路径>",
+     "engine": "pp_structurev3",
+     "engine_endpoint": "<MCP URL>",
+     "ocr_at": "<ISO 8601 时间>",
+     "output_mode": "detailed",
+     "content": "<MCP 返回的完整文本>",
+     "page_count": <N>,
+     "supersedes": "<旧版本 ocr_id 或 null>",
+     "superseded_by": null
+   }
+   ```
+5. 写入 `raw/ocr_output/{raw_id}_ocr_v{version}.json`
+6. 在 parsed JSON 中增加 `source_ocr` 字段指向此文件（相对路径）
+
+**版本规则**：OCR output 版本号与 parsed 版本号保持一致。重解析时同时生成新的 ocr_output 和 parsed 文件。
+
 ### Step 4: 质量评估
 
 解析完成后按以下标准评估质量：
@@ -302,6 +350,37 @@ raw/parsed/{DOCUMENT_TYPE}-{raw_file_id}_v{version}.json
 - `raw/parsed/CONTRACT-ev-011_v1.json` — 合同解析
 - `raw/parsed/GENERIC-ev-012_v1.json` — 通用兜底
 
+### Step 6: 复核工具
+
+根据 Step 4 的质量评估结果决定行为：
+
+```
+parsed_status?
+    │
+    ├── "human_review_required" 或 "quality_too_low"
+    │   └── 自动打开复核工具
+    │       1. 启动 review-server.py:
+    │          python scripts/review-server.py --port 8899 \
+    │            --root <case-dir> \
+    │            --template <plugin>/skills/document-parsing/templates
+    │       2. 生成 URL 并通过 preview_url 打开:
+    │          http://localhost:8899/parsed-review.html?raw=raw/ev-010.jpg&ocr=raw/ocr_output/ev-010_ocr_v1.json&parsed=raw/parsed/INVOICE-ev-010_v1.json
+    │       3. 提示用户：复核工具已打开，左侧查看原始文档，右侧可编辑字段和表格
+    │
+    └── "full"
+        └── 不自动打开
+            在输出摘要中提供 URL 供用户手动打开
+            （用户可用 --review 参数强制打开）
+```
+
+**review-server.py 自动端口选择**：默认 8899，被占用时自动递增到 8900、8901...
+
+**人工修正后的版本管理**：用户在复核工具中修改字段或表格后点击"保存修改"，review-server.py 会：
+1. 读取当前 parsed v1
+2. 创建 v2，设 `supersedes: v1`, `parsed_by: "human_review"`, `human_review.corrections[]`
+3. 更新 v1 的 `superseded_by: v2`
+4. 前端自动重载 v2
+
 ## parsed 文件格式总览
 
 所有文档类型的 parsed 文件共享以下顶层结构。具体字段因文档类型而异，见对应 schema 文件。
@@ -311,6 +390,7 @@ raw/parsed/{DOCUMENT_TYPE}-{raw_file_id}_v{version}.json
   "parsed_id": "PARSE-INVOICE-ev-010-v1",
   "document_type": "INVOICE",
   "source_raw": "raw/ev-010_invoice.pdf",
+  "source_ocr": "raw/ocr_output/ev-010_ocr_v1.json",
   "parsed_by": "ocr_mcp",            // ocr_mcp | ai_direct | ai_vision | human_review
   "parsed_status": "full",           // full | human_review_required | quality_too_low
   "parsed_at": "2026-06-30T09:15:00Z",
@@ -344,15 +424,21 @@ parsed.fields.payer/payee      ENT 节点 + Relation 线索
 
 ### 与 ontology 的交互
 
-本 skill 不直接创建任何本体对象。parsed 中的实体信息由 ontology skill 通过 ADMIT_CANDIDATE Action 写入本体层：
+本 skill 不直接创建任何本体对象，也**不预设实体的本体类型**。parsed 只提供"结构 + 角色"——例如合同的 `parties[].party_role`（甲方/乙方）、回单的 `payer_name`/`payee_name`（付款方/收款方）、报销的 `applicant_name`、审批的 `approver_name`、账号类字段等。
+
+**实体究竟是 Person、Organization 还是 Account，由 ontology 层读取这些结构化事实后独立判断**，通过 ADMIT_CANDIDATE 写入本体层（Entity UNRESOLVED），再由 RESOLVE_ENTITY（需人）裁决身份。
 
 ```
-parsed 中的信息              ontology skill 的操作
-─────────────────           ──────────────────────
-payer_name / payee_name     ADMIT_CANDIDATE → Organization (UNRESOLVED)
-signatory                   ADMIT_CANDIDATE → Person (UNRESOLVED)
-bank_account                ADMIT_CANDIDATE → Account (UNRESOLVED)
+parsed 提供                          ontology 独立判断并写入
+（结构 + 角色，不含本体类型）        ──────────────────────
+────────────────────────            读取名称/统一社会信用代码/
+主体名称字段 + 角色标注              身份证/账号等上下文
+账号类字段                          → ADMIT_CANDIDATE → Entity(UNRESOLVED)
+                                    本体类型（Person/Organization/Account）
+                                    由 ontology 认定，解析层不预设
 ```
+
+> **分工边界**：解析层负责"谁扮演什么角色"（role），本体层负责"这个角色主体是什么本体类型"（type）。解析层**不得**在 parsed 或本文档中把某字段预设为 Person / Organization / Account。
 
 ### 与 order-execution-variance-analysis 的交互
 
@@ -376,7 +462,9 @@ BANK_RECEIPT.amount         实际付款金额 vs 合同约定金额
 | `--type INVOICE` | 指定文档类型，跳过类型识别步骤 |
 | `--reparse` | 对已有 parsed 文件的 raw 重新解析 |
 | `--review` | 查看待人工复核的 parsed 文件列表 |
-| **`templates/parsed-review.html`** | 打开复核工具——左侧 raw 图像预览，右侧 parsed 字段对比
+| `--review <parsed-file>` | 打开复核工具查看指定 parsed 文件 |
+| **`scripts/review-server.py`** | 复核 HTTP 服务器（自动启动，也可手动运行） |
+| **`templates/parsed-review.html`** | 复核工具——左侧 raw 图像，右侧 OCR output + parsed 字段 + 表格（可编辑） |
 
 ## 解析后端
 
@@ -389,13 +477,13 @@ BANK_RECEIPT.amount         实际付款金额 vs 合同约定金额
 ## Related
 
 - **Docs:** `../../docs/document-parsing-design.md` — 完整设计文档（含 schema 格式、版本管理、OCR 配置体系）
-- **Schemas:** `../../schemas/document-types/` — 6 种文档类型的字段定义
+- **Schemas:** `../../schemas/document-types/` — 10 种文档类型的字段定义
 - **Skills:** [证据链与底稿管理](../evidence-management/SKILL.md) — 消费 parsed 创建 EV 节点；[调查本体论](../ontology/SKILL.md) — 消费 parsed 创建本体实体/关系；[项目执行差异分析](../order-execution-variance-analysis/SKILL.md) — 消费 parsed 进行对比分析
-- **Commands:** `/cold-start` — 首次设置引导 OCR 服务配置
+- **Commands:** `/efio:cold-start` — 首次设置引导 OCR 服务配置
 
 ## References
 
 - `references/ocr-mcp-integration.md` — **OCR MCP 完整调用流程（上传→调用→参数→错误处理）。执行 OCR 路径前必须读取此文件。**
 - `../../config-templates/ocr-backend.md` — OCR 后端配置模板（用户配置在 `{PLUGIN_CONFIG_DIR}/ocr-backend.md`）
-- `../../schemas/document-types/` — 6 种文档类型的完整字段定义
+- `../../schemas/document-types/` — 10 种文档类型的完整字段定义
 - `../../docs/document-parsing-design.md` — 完整设计文档

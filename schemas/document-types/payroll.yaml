@@ -1,0 +1,170 @@
+# 工资表/花名册 Schema（Payroll）
+# 适用范围：工资表、薪酬发放表、员工花名册、代发工资明细表
+#
+# 调查视角重点关注：
+#   - 员工明细（是否存在幽灵员工/虚假员工——工号、身份证、账号异常集中）
+#   - 实发金额与银行账号（多人工资代发到同一账号是资金归集信号）
+#   - 异常高薪/异常调整（与岗位不匹配的薪酬）
+#   - 制表人/审批人（工资表编制与审批是否分离）
+
+document_type: PAYROLL
+description: "工资表/薪酬发放表/员工花名册（含代发工资明细）"
+version: "1.0"
+
+fields:
+  # ============================================================
+  # 表头标识
+  # ============================================================
+  - name: company_name
+    label: 单位名称
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "发放工资的单位。与用工主体/合同签约主体比对"
+
+  - name: pay_period
+    label: 工资所属期间
+    type: string
+    required: true
+    confidence_tracking: true
+    description: "如'2026-06'或'2026年第2季度'。用于跨期比对人数/金额波动"
+
+  - name: pay_date
+    label: 发放日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: false
+    confidence_tracking: true
+
+  - name: department
+    label: 部门
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "本表覆盖的部门。整表为同一部门时填写"
+
+  # ============================================================
+  # 员工明细（调查核心）
+  # ============================================================
+  - name: line_items
+    label: 工资明细
+    type: array
+    required: true
+    confidence_tracking: true
+    description: "逐个员工的工资发放明细。调查核心——识别幽灵员工与资金归集"
+    items:
+      type: object
+      properties:
+        - name: line_no
+          label: 行号
+          type: integer
+
+        - name: employee_name
+          label: 员工姓名
+          type: string
+          required: true
+
+        - name: employee_id
+          label: 工号
+          type: string
+          description: "员工工号。工号缺失/不连续/重复是异常信号"
+
+        - name: id_card_masked
+          label: 身份证号（脱敏）
+          type: string
+          description: "常部分脱敏显示。多人共用或明显编造是幽灵员工信号，填写展示值即可"
+
+        - name: position
+          label: 岗位/职务
+          type: string
+
+        - name: gross_pay
+          label: 应发工资
+          type: decimal
+          required: true
+
+        - name: base_salary
+          label: 基本工资
+          type: decimal
+
+        - name: bonus
+          label: 奖金/绩效
+          type: decimal
+
+        - name: allowance
+          label: 补贴/津贴
+          type: decimal
+
+        - name: social_insurance
+          label: 社保代扣
+          type: decimal
+
+        - name: tax
+          label: 个税代扣
+          type: decimal
+
+        - name: net_pay
+          label: 实发工资
+          type: decimal
+          required: true
+
+        - name: bank_account
+          label: 银行账号
+          type: string
+          description: "工资代发账号。多名员工共用同一账号是资金归集重点信号"
+
+        - name: bank_name
+          label: 开户行
+          type: string
+
+  # ============================================================
+  # 合计
+  # ============================================================
+  - name: total_headcount
+    label: 总人数
+    type: integer
+    required: false
+    confidence_tracking: true
+    description: "本表员工总数。与花名册/社保人数比对，差异可能是幽灵员工"
+
+  - name: total_gross_pay
+    label: 应发合计
+    type: decimal
+    required: false
+    confidence_tracking: true
+
+  - name: total_net_pay
+    label: 实发合计
+    type: decimal
+    required: false
+    confidence_tracking: true
+    description: "实发工资合计。与银行代发回单金额比对"
+
+  - name: currency
+    label: 币种
+    type: string
+    required: true
+    confidence_tracking: true
+    default: "CNY"
+
+  # ============================================================
+  # 编制与审批（职责分离）
+  # ============================================================
+  - name: prepared_by
+    label: 制表人
+    type: string
+    required: false
+    confidence_tracking: true
+
+  - name: reviewed_by
+    label: 审核人
+    type: string
+    required: false
+    confidence_tracking: true
+
+  - name: approved_by
+    label: 审批人
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "工资表审批人。编制人与审批人为同一人时，职责分离失效是内控缺陷信号"

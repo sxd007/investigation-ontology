@@ -1,52 +1,66 @@
-# 文档结构化解析设计（Document Parsing Design）
+# Document Parsing — 设计与实现要点
 
-> **版本:** v1.0  
-> **日期:** 2026-06-30  
-> **状态:** 设计提案  
-> **关联:** `design-phylosophy.md`（本体/认知分层）、`skills/evidence-management/`（消费者）、`skills/ontology/`（消费者）
+> 版本: v1.1 — 2026-07-17（已完成 OCR 输出持久化、复核闭环、schema 扩展）
 
----
+目标：构建可审计、可回溯的文档解析流水线，输出供 `evidence-management` 与 `ontology` 消费的 high-quality parsed JSON，同时保持解析层与本体层职责清晰分离。
 
-## 目录
+概览
+- 三层证据模型：
+  - `raw/`：原始文件（PDF/图片/Office）
+  - `raw/ocr_output/`：OCR 或后端解析中间产物（Append-only，按版本保存）
+  - `raw/parsed/`：按文档类型 schema 的结构化解析结果（按版本保存，含 `supersedes`/`superseded_by`）
 
-1. [设计动机](#1-设计动机)
-2. [核心概念：三层证据模型](#2-核心概念三层证据模型)
-3. [架构总览](#3-架构总览)
-4. [文档类型 Schema（插件全局）](#4-文档类型-schema插件全局)
-5. [Parsed 文件格式规范](#5-parsed-文件格式规范)
-6. [版本管理](#6-版本管理)
-7. [GENERIC 兜底机制](#7-generic-兜底机制)
-8. [OCR 服务配置体系](#8-ocr-服务配置体系)
-9. [~~Pipeline: parse-document.py~~（已废弃）](#9-pipeline-parse-documentpy-已废弃)
-10. [Skill: document-parsing](#10-skill-document-parsing)
-11. [与现有架构的交互](#11-与现有架构的交互)
-12. [边界与约束](#12-边界与约束)
-13. [实现路线图](#13-实现路线图)
+职责边界
+- `document-parsing`：产出结构化字段与角色（role），并持久化 OCR 原始输出；**不负责预设本体类型（Person/Organization/Account）**。
+- `ontology`：消费 parsed，独立判断实体/类型并通过 `ADMIT_CANDIDATE` 写入（UNRESOLVED），由人工或下游流程 `RESOLVE_ENTITY`。
 
----
+关键原则（已落实）
+- Append-only 可审计：OCR output 与 parsed 均以版本追加写入，旧版本不覆盖。
+- 最小耦合：解析层仅产出结构与角色，本体层单独负责类型决策。
+- MCP 自适应：若后端返回布局/坐标（bbox），解析层应持久化并提示升级 UI；当前 MCP 返回 HTML（无 bbox），前端使用 iframe 渲染并以文本/表格并排对比为主。
+- 人工复核闭环：低置信度字段触发 `review-server.py` 启动复核界面；人工修改保存为 parsed v{n+1}（记录 `human_review.corrections[]`）。
 
-## 1. 设计动机
+持久化规范（摘要）
+- OCR output 示例如下（路径：`raw/ocr_output/{raw_id}_ocr_v{n}.json`）：
 
-### 1.1 当前架构的跳跃
+  {
+    "ocr_id": "OCR-{raw_id}-v{n}",
+    "source_raw": "raw/ev-010.jpg",
+    "engine": "pp_structurev3",
+    "engine_endpoint": "http://...",
+    "ocr_at": "2026-07-17T...Z",
+    "output_mode": "detailed",
+    "content": "<html>...表格 HTML...</html>\n\nPages: 1",
+    "page_count": 1,
+    "supersedes": null,
+    "superseded_by": null
+  }
 
-```
-当前实际路径：
++- parsed JSON: 顶层新增 `source_ocr` 字段指向对应 OCR output 文件；保留 `parsed_id` / `parsed_by` / `parsed_at` / `fields` / `tables` / `human_review` 等。
+- 版本规则：OCR output 与 parsed 版本号保持对齐；人工复核或重解析生成 v{n+1} 并在旧版本写入 `superseded_by`。
 
-扫描件/PDF (raw/) 
-    → [OCR/解析] 
-        → 直接跳到认知层 EV 节点 / 本体层 Evidence
-            ↑ 中间结果不标准化、不持久化、不可审计
-```
+运行与快速使用（概要）
+- 解析（示例）: `efio parse <case-dir> --type INVOICE` 或通过 `commands/parse.md` 的命令行入口。
+- 自动复核：当 `parsed_status` = `human_review_required`，解析器可启动 `scripts/review-server.py` 并打开浏览器到：
+  `http://localhost:8899/parsed-review.html?raw=raw/ev-010.jpg&ocr=raw/ocr_output/ev-010_ocr_v1.json&parsed=raw/parsed/INVOICE-ev-010_v1.json`
+- review-server：轻量 HTTP 静态服 + POST `/save`（写回 parsed v2）+ POST `/save-ocr`（写回 ocr_output v2）+ `/shutdown`。
 
-这个跳跃导致三个问题无法解决：
+已知限制
+- 当前 MCP（pp_structurev3）仅返回 HTML/文本，不透传 bbox/layout_blocks，因此无法在原始文件像素级做区域高亮对比；前端以 iframe 渲染 HTML 并做文本/表格并排对比作为降级方案。
 
-| 问题 | 后果 |
-|------|------|
-| **OCR 置信度无处存放** | 金额识别 92% 还是 60%？没人知道。发现错了无法追溯原始 OCR 输出 |
-| **字段级审计轨迹缺失** | 调查员改了哪个字段？改之前是什么？只能留在 AI 对话日志里 |
-| **多版本无管理** | 同一张发票 OCR 引擎升级后重新解析，旧结果去哪了？谁覆盖了谁？ |
+开发者注意点
+- 支持新文档类型：在 `schemas/document-types/` 新增 `{type}.yaml`，确保关键字段含 `confidence_tracking`。
+- 若 MCP 将来返回 bbox：解析层写入 `ocr_output.layout`，并启用更丰富的前端高亮模板。
 
-### 1.2 不可绕过的设计约束
+变更记录（重要）
+- 2026-07-16：实现 OCR 原始输出持久化与 parsed 引用 `source_ocr`。
+- 2026-07-16：添加 `review-server.py` 与 `/save` `/save-ocr` 复核闭环。
+- 2026-07-17：扩展 schema（新增 reimbursement/payroll/approval/bank_statement），并合并技能内重复 docs 到仓库根 docs。 
+
+参考
+- `cc-investigation-ontology/skills/document-parsing/`（实现代码与资产）
+- `cc-investigation-ontology/schemas/document-types/`（schema 列表）
+
 
 | # | 约束 | 来源 |
 |---|------|------|

@@ -1,0 +1,215 @@
+# 报销单 Schema（Reimbursement）
+# 适用范围：差旅报销单、招待费报销单、办公费用报销单、交通费报销单、通用费用报销单
+#
+# 调查视角重点关注：
+#   - 报销人/审批链（谁在报、谁批的——审批绕过是舞弊信号）
+#   - 报销事由（模糊或与岗位无关是异常信号）
+#   - 明细与关联发票（报销金额 vs 发票金额是否一致，是否重复报销、虚开发票配套）
+#   - 收款账户（是否报销到非本人账户——可能是资金归集）
+
+document_type: REIMBURSEMENT
+description: "费用报销单（含差旅/招待/办公/交通/通用费用报销）"
+version: "1.0"
+
+fields:
+  # ============================================================
+  # 单据标识
+  # ============================================================
+  - name: reimbursement_no
+    label: 报销单号
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "系统内报销单号，用于关联审批单/付款凭证"
+
+  - name: reimbursement_type
+    label: 报销类型
+    type: enum
+    required: true
+    confidence_tracking: true
+    enum_values:
+      - value: "travel"          # 差旅费
+      - value: "entertainment"   # 业务招待费
+      - value: "office"          # 办公费用
+      - value: "transportation"  # 交通费
+      - value: "meeting"         # 会议费
+      - value: "training"        # 培训费
+      - value: "welfare"         # 福利费
+      - value: "other"
+
+  - name: reimbursement_date
+    label: 报销日期
+    type: date
+    format: "YYYY-MM-DD"
+    required: true
+    confidence_tracking: true
+
+  # ============================================================
+  # 报销人与部门
+  # ============================================================
+  - name: applicant_name
+    label: 报销人姓名
+    type: string
+    required: true
+    confidence_tracking: true
+
+  - name: applicant_department
+    label: 报销人部门
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "报销费用归属部门。费用类型与部门职能不匹配是异常信号"
+
+  - name: applicant_employee_id
+    label: 报销人工号
+    type: string
+    required: false
+    confidence_tracking: true
+
+  # ============================================================
+  # 报销事由与金额
+  # ============================================================
+  - name: purpose
+    label: 报销事由
+    type: text
+    required: true
+    confidence_tracking: true
+    description: >
+      费用发生的事由说明。调查关键字段——
+      事由模糊（如仅写"业务需要"）、与岗位职能无关、
+      或与实际发票内容不符，均为异常信号。
+
+  - name: total_amount
+    label: 报销总金额
+    type: decimal
+    required: true
+    confidence_tracking: true
+    description: "报销合计金额。与关联发票金额、审批金额比对"
+
+  - name: currency
+    label: 币种
+    type: string
+    required: true
+    confidence_tracking: true
+    default: "CNY"
+
+  # ============================================================
+  # 报销明细
+  # ============================================================
+  - name: line_items
+    label: 报销明细
+    type: array
+    required: true
+    confidence_tracking: true
+    description: "报销单中的费用明细清单"
+    items:
+      type: object
+      properties:
+        - name: line_no
+          label: 行号
+          type: integer
+
+        - name: expense_date
+          label: 费用发生日期
+          type: date
+          format: "YYYY-MM-DD"
+
+        - name: expense_type
+          label: 费用类型
+          type: string
+          description: "如'住宿费'、'餐饮费'、'市内交通'"
+
+        - name: description
+          label: 费用说明
+          type: string
+
+        - name: amount
+          label: 金额
+          type: decimal
+          required: true
+
+        - name: invoice_ref_no
+          label: 关联发票号
+          type: string
+          description: "该明细对应的发票号码。用于与 INVOICE 解析结果核对，识别重复报销/虚开"
+
+  # ============================================================
+  # 关联单据
+  # ============================================================
+  - name: attached_invoice_count
+    label: 附件发票张数
+    type: integer
+    required: false
+    confidence_tracking: true
+    description: "报销单声明的附件发票数量。与实际关联发票数比对"
+
+  - name: contract_ref_no
+    label: 关联合同/订单编号
+    type: string
+    required: false
+    confidence_tracking: true
+
+  - name: approval_ref_no
+    label: 关联审批单号
+    type: string
+    required: false
+    confidence_tracking: true
+
+  # ============================================================
+  # 收款信息（调查关键）
+  # ============================================================
+  - name: payee_name
+    label: 收款人姓名
+    type: string
+    required: false
+    confidence_tracking: true
+    description: "报销款项收款人。与报销人不一致是重点异常信号（可能资金归集）"
+
+  - name: payee_account
+    label: 收款账号
+    type: string
+    required: false
+    confidence_tracking: true
+
+  - name: payee_bank
+    label: 收款开户行
+    type: string
+    required: false
+    confidence_tracking: true
+
+  # ============================================================
+  # 审批链（调查关键）
+  # ============================================================
+  - name: approval_chain
+    label: 审批链
+    type: array
+    required: false
+    confidence_tracking: true
+    description: "报销单上的审批签字节点。审批绕过/越级/替签是舞弊信号"
+    items:
+      type: object
+      properties:
+        - name: node_role
+          label: 审批角色
+          type: string
+          description: "如'部门经理'、'财务审核'、'总经理'"
+
+        - name: approver_name
+          label: 审批人
+          type: string
+
+        - name: approval_opinion
+          label: 审批意见
+          type: string
+
+        - name: approval_date
+          label: 审批日期
+          type: date
+          format: "YYYY-MM-DD"
+
+  - name: cost_center
+    label: 成本中心
+    type: string
+    required: false
+    confidence_tracking: false
+    description: "费用归属的成本中心/预算科目。用于追踪费用异常分配"
