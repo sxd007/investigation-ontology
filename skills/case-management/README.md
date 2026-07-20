@@ -275,6 +275,7 @@ case-manager：确认后更新 checklist → CHANGELOG 记录
 | 门禁清单 schema | `schemas/checklist.schema.json` | checklist.yaml 字段约束和枚举值 |
 | 案件元数据 schema | `schemas/meta.schema.json` | meta.json 字段约束 |
 | CHANGELOG 规则 | `references/changelog-rules.md` | 变更记录的 action 分类和写入规范 |
+| 时间线可视化指南 | `references/case-timeline-visualization.md` | 事件筛选标准、分类模型、去重逻辑、布局规范、生成流程 |
 | 意图评分框架 | `references/intent-scoring.md` | 评分公式、权重表、阈值区间详细说明 |
 | 案件管理代理 | `agents/case-manager.md` | case-manager 的完整职责和流程定义 |
 | 调查方案代理 | `agents/investigation-planner.md` | INIT/PRE 阶段的方案生成逻辑 |

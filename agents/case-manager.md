@@ -67,6 +67,9 @@ All case files reside under `cases/{case_id}/`:
   1. {基于门禁状态的具体建议}
   2. {建议调用的 agent 或命令}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+如已生成时间线，附加提示：
+📊 进度时间线: cases/{case_id}/case_timeline_h.html（用 /case timeline 刷新）
 ```
 
 如果案件处于 SUSPENDED，输出挂起原因和时长。
@@ -152,7 +155,31 @@ On rollback (REVIEWING → FIELDWORK), update `checklist.reviewing.suspected_fin
 3. [证据] 调取资料后用 evidence-analyzer 登记
 4. 完成后用 case-manager 更新门禁状态
 ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+
+📊 时间线已更新: cases/{case_id}/case_timeline_h.html
+   用浏览器打开查看最新进度时间轴。
 ```
+
+### 8. Timeline Generation — 时间线生成
+
+每次阶段转换成功后，自动触发案件进度时间线生成：
+
+1. 执行 `python skills/case-management/scripts/generate_timeline_h_html.py cases/{case_id}/`
+2. 告知用户时间线已更新，提示用浏览器打开 `cases/{case_id}/case_timeline_h.html`
+3. 如环境中无 Python，由 AI 读取 `evidence_registry.json` + `CHANGELOG.json` 后按 `references/case-timeline-visualization.md` 的布局规范手动生成 HTML
+
+**触发条件汇总**：
+
+| 场景 | 动作 |
+|------|------|
+| 阶段推进成功（Step 7） | 自动生成横向时间轴 HTML |
+| 阶段回退（REVIEWING→FIELDWORK） | 自动生成，标记回退事件 |
+| 案件挂起/恢复/放弃/结案 | 自动生成最终版时间线 |
+| 用户执行 `/case timeline` | 按需生成（由命令处理程序触发） |
+
+**不触发的场景**：门禁检查未通过（无状态变更，不需要更新时间线）。
+
+> 📖 时间线生成的事件筛选标准、分类模型和布局规范见 `skills/case-management/references/case-timeline-visualization.md`
 
 ## 交付确认
 
@@ -172,6 +199,7 @@ On rollback (REVIEWING → FIELDWORK), update `checklist.reviewing.suspected_fin
    - **FIELDWORK → REVIEWING** → `evidence-analyzer` 做最终充分性审查
    - **REVIEWING → CLOSED** → `report-writer` 输出正式调查报告
    - **门禁未通过** → 说明缺什么，建议调用哪个 agent 或命令来补
+   - **任何状态变更后** → 自动生成时间线（见 Step 8），提示用户查看
 
 ## Gate Failure Handling
 
@@ -194,7 +222,7 @@ When a transition request is rejected:
 ## Interaction with Other Agents
 
 - **investigation-planner**: Sets investigation objectives in `meta.json`; case-manager validates that objectives are defined before PRE_INVESTIGATION entry
-- **evidence-analyzer**: Populates `evidence_registry.json` findings; case-manager reads findings array to support `suspected_findings_resolved` check
+- **evidence-analyzer**: Populates `evidence_registry.json` findings; case-manager reads findings array to support `suspected_findings_resolved` check; evidence-analyzer 在重要证据入库后可触发时间线增量更新（调用 `scripts/generate_timeline_h_html.py`）
 - **report-writer**: Consumes finalized `evidence_registry.json` to produce reports; case-manager ensures CLOSED status before archival
 - **fraud-type-classifier**: Provides `fraud_type` classification that may inform `investigation_objectives` matching
 
@@ -213,6 +241,7 @@ The output of a case-manager action is a structured decision message:
 ✓ 门禁条件全部满足，本次变更加以记录。
 已更新：meta.json (status + last_activity)
 已归档：decision_log → evidence_registry.json
+已生成：case_timeline_h.html（进度时间线）
 
 {如果未通过}
 ✗ 以下门禁条件尚未满足：

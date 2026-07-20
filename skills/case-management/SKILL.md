@@ -33,6 +33,7 @@ origin: efio
 - 管理调查资源（人员/时间/预算）
 - 进行结案审查
 - 设计调查流程和标准操作程序(SOP)
+- 生成或查看案件进度时间线可视化（`/case timeline`）
 
 ## 案件生命周期
 
@@ -145,21 +146,52 @@ origin: efio
 正常 → 黄色预警 (风险升高) → 橙色预警 (需要协助) → 红色预警 (紧急)
 ```
 
-## 时间线管理
+## 案件时间线可视化
 
-### 时间线构建方法
+案件进度时间线是**案件看板**，不是操作日志——让调查员一眼看清：案件推进到哪了、关键里程碑是什么、卡在哪里、下一步是什么。
 
-1. **收集所有时间戳** — 文档日期、系统日志、通讯记录、财务凭证
-2. **建立事件主干** — 按时间顺序排列关键事件
-3. **填充细节层** — 补充次要事件、通讯记录、人员活动
-4. **标识异常** — 时间矛盾、不合理间隙、异常顺序
-5. **可视化呈现** — 甘特图/时间线图
+**与证据链可视化的分工**：时间线管"进程"（什么时候发生了什么有进程意义的事），证据链可视化（`/evidence visualization`）管"证明"（结论怎么被证据支撑的）。两者互补，不互相替代。
 
-### 常用工具方法
+### 工具速查
 
-- **电子表格** — 最简单的案件跟踪工具
-- **甘特图** — 调查进度与里程碑
-- **看板/Kanban** — 任务管理（待办/进行中/待复核/已完成）
+| 命令 | 输出文件 | 用途 |
+|------|---------|------|
+| `python scripts/generate_timeline_h_html.py <case_dir>` | `case_timeline_h.html` | 横向时间轴（主推荐） |
+| `python scripts/generate_timeline_v_html.py <case_dir>` | `case_timeline.html` | 纵向列表（备用） |
+| `python scripts/generate_timeline.py <case_dir>` | `case_timeline_mermaid.md` | Mermaid 版（IDE 原生渲染，备用） |
+
+> 脚本路径相对于 `skills/case-management/`。`<case_dir>` 为案件目录（如 `cases/INV-202606-01/`）。
+
+### 生成时机
+
+| 时机 | 触发方式 | 说明 |
+|------|---------|------|
+| 阶段转换时 | 自动（case-manager 触发） | INIT→PRE, PRE→FIELDWORK 等转段后自动生成 |
+| 用户请求时 | `/case timeline [case#]` | 按需生成 |
+| 重要证据入库时 | 自动（evidence-analyzer 触发） | 新 EV 入库后增量更新 |
+
+### 生成步骤
+
+1. 确认案件目录路径（通常为 `cases/{case_id}/`）
+2. 读取 `evidence_registry.json` 和 `CHANGELOG.json` 确认数据就绪
+3. 执行 `python skills/case-management/scripts/generate_timeline_h_html.py <case_dir>`
+   - 如环境中无 Python，由 AI 读取 `evidence_registry.json` + `CHANGELOG.json` 后按可视化指南规范手动生成
+4. 用浏览器打开生成的 HTML 文件
+5. AI 在脚本基线上补充语义判断（合并摘要、`investigation_action` 分类为 🔑 关键发现或 ⚠️ 阻塞）
+
+### 事件分类模型
+
+时间线只收录**推动案件进程的关键事件**，分 5 类：
+
+| 类型 | 标记 | 颜色 | 典型场景 |
+|------|------|------|---------|
+| 🏁 里程碑 | `✅` | 绿色 | 阶段转换、门禁完成、计划获批 |
+| 📄 证据获取 | `📄` | 橙色 | 新证据入库 |
+| 🔑 关键发现 | `🔑` | 紫色 | 改变调查方向的分析突破 |
+| ⚠️ 阻塞 | `⚠️` | 红色 | 阻止或威胁进展的事项 |
+| 📥 外部输入 | `📥` | 蓝色 | 外部主动提供的线索/材料 |
+
+> 📖 完整可视化指南（事件筛选标准、去重逻辑、布局规范、与证据链协作）：[`references/case-timeline-visualization.md`](references/case-timeline-visualization.md)
 
 ***
 
@@ -396,6 +428,8 @@ origin: efio
 
 ## References
 
+- `references/case-timeline-visualization.md` — 案件时间线可视化指南（事件筛选标准、分类模型、去重逻辑、布局规范、生成流程、与证据链可视化协作）
+- `references/changelog-rules.md` — 案件变更记录规则（CHANGELOG.json 的 action 分类、触发条件、必填字段、不记录清单）
 - `references/intent-scoring.md` — 涉案人员意图评分框架（评分公式、证据分类权重、阈值区间）
 - ACFE "Fraud Case Management"
 - PMI "Project Management Body of Knowledge (PMBOK)" — 项目管理方法论借鉴
