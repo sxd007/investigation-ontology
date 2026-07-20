@@ -41,7 +41,7 @@
 
 运行与快速使用（概要）
 - 解析（示例）: `efio parse <case-dir> --type INVOICE` 或通过 `commands/parse.md` 的命令行入口。
-- 自动复核：当 `parsed_status` = `human_review_required`，解析器可启动 `scripts/review-server.py` 并打开浏览器到：
+- 自动复核：当 `parsed_status` = `human_review_required` 或 `quality_too_low`，解析器可启动 `scripts/review-server.py` 并打开浏览器到：
   `http://localhost:8899/parsed-review.html?raw=raw/ev-010.jpg&ocr=raw/ocr_output/ev-010_ocr_v1.json&parsed=raw/parsed/INVOICE-ev-010_v1.json`
 - review-server：轻量 HTTP 静态服 + POST `/save`（写回 parsed v2）+ POST `/save-ocr`（写回 ocr_output v2）+ `/shutdown`。
 
@@ -386,11 +386,15 @@ additional_fields:
 
 ### 5.3 置信度规则
 
+运行时阈值以 `skills/document-parsing/SKILL.md` 的“质量规则”为准；本节只记录当前设计口径，避免与 skill 分叉。
+
 | 置信度范围 | 语义 | 后续处理 |
 |-----------|------|---------|
-| `≥ 0.90` | 高置信度，自动通过 | 写入 parsed，标记 `auto_confirmed` |
-| `0.70 ~ 0.89` | 中等置信度，标记待复核 | 写入 parsed，标记 `flag_for_review` |
-| `< 0.70` | 低置信度 | Skill 层触发重解析或换解析策略 |
+| `>= 0.90` | 高置信度，自动通过 | 写入 parsed，标记 `parsed_status: "full"` |
+| `0.70 ~ 0.89` | 中等置信度，待复核 | 写入 parsed，标记 `parsed_status: "human_review_required"` |
+| `< 0.70` | 低置信度或质量不足 | 先重解析或换解析策略；仍不足则标记 `parsed_status: "quality_too_low"` |
+
+金额、日期、主体名称、账号、合同主体等关键字段低于 `0.80` 时，应作为高优先级人工复核项；该阈值不另立 parsed 状态。
 
 ### 5.4 人工复核记录
 
@@ -731,9 +735,10 @@ def select_ocr_backend(config):
 
 ### Step 3: 质量评估
 
-- 所有必填字段置信度 ≥ 0.90 → 自动写入，标识 auto_confirmed
-- 关键字段置信度 < 0.80 → 标记 human_review_required
-- 多个字段相互矛盾 → 标记待复核
+- 整体置信度和所有必填/关键字段均 `>= 0.90` → `parsed_status: "full"`
+- 整体置信度 `0.70 ~ 0.89`，或任一必填/关键字段低于 `0.90` 但文档仍可读 → `parsed_status: "human_review_required"`
+- 整体置信度 `< 0.70`，或文档不可读、有效文本过少、重试/换路径后仍无法稳定提取 → `parsed_status: "quality_too_low"`
+- 关键字段低于 `0.80` 或多个字段相互矛盾 → 高优先级人工复核
 
 ### Step 4: 版本管理
 
@@ -781,16 +786,17 @@ def select_ocr_backend(config):
                     下游 skill 继续处理
 ```
 
-### 10.4 Parsed 的两种状态
+### 10.4 Parsed 的状态
 
-Parsed 文件只有两种状态，没有额外分层：
+Parsed 文件使用以下状态：
 
 | `parsed_status` | 含义 | 谁生成的 |
 |-----------------|------|---------|
-| `full` | 完成了全部 schema 字段（含 sections 切分等需 AI 理解的部分） | AI（document-parsing skill） |
-| `human_review_required` | 关键字段置信度不足，等待人工复核 | OCR MCP 或 AI |
+| `full` | 高置信度完成 schema 字段提取，整体和必填/关键字段均达到运行时阈值 | document-parsing skill |
+| `human_review_required` | 中等置信度、关键字段不足、字段矛盾或需要人工确认 | OCR MCP 或 AI |
+| `quality_too_low` | 文档质量或整体置信度过低，重试/换路径后仍无法稳定提取 | OCR MCP 或 AI |
 
-两种状态的 parsed 文件写到同一目录、同一格式，下游不关心具体来源。
+不同状态的 parsed 文件写到同一目录、同一格式；下游按 `parsed_status` 判断是否应等待复核。
 
 ### 10.5 Skill 的文件结构
 
