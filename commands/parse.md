@@ -28,6 +28,14 @@ description: 文档解析入口 — 委派 document-parsing 技能将 raw 文档
 5. 仅 OCR MCP 路径写入 `raw/ocr_output/{raw_id}_ocr_v{n}.json`，并在 parsed 中记录 `source_ocr`。
 6. 根据 parsed 状态决定是否打开复核工具；优先使用 skill 定义的 `open_review` 运行时动作。
 
+### 自然语言说明（轻量契约）
+
+- 可选：调用方可在 API/CLI 中提供 `instructions`（string），用自然语言说明归档意图，例如：
+	- 中文："把它归档到案件 C12345"、"只看一下，不归档"。
+	- 英文："archive to case C12345"、"just preview, do not archive"。
+- 优先级：显式 CLI/API 参数（如 `--case-root` / `case_root` / `--no-archive` / `archive=false`）优先；否则使用 `instructions` 解析意图；再无意图时使用环境检测（检测到案件根则归档）。
+- 返回：命令应在结果中包含 `archived`（bool）、`case_root`（string|null）、`output_paths`（数组）与 `inferred_from`（"flag"|"instructions"|"env"）。
+
 ## Scope Boundary
 
 `/efio:parse` 到写入 parsed JSON 为止。它不创建、修改或注册以下对象：

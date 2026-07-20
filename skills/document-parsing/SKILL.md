@@ -191,6 +191,18 @@ parsed 顶层最小结构：
 - 关键低置信度字段或缺失警告。
 - 下一步：需要时提示使用 evidence-management 注册 EV，或由 ontology 层处理实体/关系。
 
+## 归档语义与自然语言意图
+
+- 默认行为：当解析在案件上下文运行（调用时提供或检测到 `case_root`）时，所有产物视为该案件的产物并写入 `${CASE_ROOT}/raw/ocr_output/` 与 `${CASE_ROOT}/raw/parsed/`。解析返回元数据应包含 `archived: true`、`case_root` 与写入路径列表 `output_paths`。
+- 临时/仅查看：如果调用方在 `instructions` 字段中以自然语言明确表示“仅查看”“不归档”，或显式传入 `archive=false` / `--no-archive`，解析器应不归档，产物写入临时目录或 `output_dir`，并返回 `archived: false`。
+- 自然语言解析：本 skill 支持可选的 `instructions`（自由文本）字段以便用户用一句话说明意图。解析器可用轻量关键词/正则映射三类意图：
+  - 归档到指定案件（从文本中提取 case id，如 “存到案件 C12345”）
+  - 归档到当前案件（如 “归档到本案”／“存到本案里”）
+  - 仅查看/不归档（如 “只看一下，不保存”）
+- 优先级规则：显式参数（CLI flags 或 API 字段，如 `--case-root` / `case_root` / `archive`）优先于 `instructions`；`instructions` 优先于环境检测（检测到 `raw/`、`meta.json` 等案件标记）。若既无显式参数又无法检测到案件根，解析器应提示调用方确认 `case_root` 或是否仅查看，以避免误写仓库根目录。
+
+解析器在返回结果中应始终包含 `archived`（bool）、`case_root`（string|null）、`output_paths`（array）、以及 `inferred_from`（"flag" | "instructions" | "env"）以便下游和复核工具核对。
+
 ## 相关资料
 
 - `references/ocr-mcp-integration.md`：OCR MCP 上传、调用参数和错误处理；执行 OCR 路径前必须读取。
