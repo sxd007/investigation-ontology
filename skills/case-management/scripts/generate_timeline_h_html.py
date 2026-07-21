@@ -26,6 +26,7 @@ from generate_timeline import (
     extract_money_from_text, shorten_evidence_summary,
     extract_hyp_confidence_changes,
     SECTION_ICONS, TAG_TO_SECTION, EVIDENCE_TYPE_SECTIONS, PHASE_ORDER,
+    EVENT_MARKERS, TYPE_COLORS, FILTER_ACTIONS, classify_changelog,
 )
 
 
@@ -59,6 +60,9 @@ def collect_data(registry, case_dir, changelog):
     for chg in changelog:
         action = chg.get("action", "")
         summary = chg.get("summary", "")
+        # 确定性过滤（§3.3）
+        if action in FILTER_ACTIONS:
+            continue
         if action == "evidence_registered":
             chg_date = get_date_only(chg.get("timestamp", ""))
             if any(get_date_only(e.get("moment", "")) == chg_date and
@@ -66,11 +70,14 @@ def collect_data(registry, case_dir, changelog):
                    for e in all_events):
                 continue
 
-        marker = "✅" if action == "stage_transition" else ("⚠️" if "阻塞" in summary else "")
+        # 确定性分类（§3.3）；语义 action 返回空 type，交 AI 补充
+        cls = classify_changelog(chg)
+        marker = cls["marker"]
         all_events.append({
             "moment": chg.get("timestamp", ""), "date": get_date_only(chg.get("timestamp", "")),
             "title": summary, "desc": chg.get("detail", ""),
             "tags": [], "source": "changelog", "action": action, "marker": marker,
+            "type": cls["type"],
         })
 
     all_events.sort(key=lambda x: x.get("moment", ""))
@@ -82,7 +89,7 @@ def collect_data(registry, case_dir, changelog):
 
     for evt in all_events:
         action = evt.get("action", "")
-        if action == "stage_transition":
+        if action == "phase_transition":
             phase_events[current_phase].append(evt)
             for phase in PHASE_ORDER:
                 if phase in evt.get("desc", "") and phase != current_phase:
@@ -108,15 +115,18 @@ def collect_data(registry, case_dir, changelog):
 
     # 去重
     def dedupe(evts):
+        # ⚠️ 阻塞 与 🏁 里程碑（及已标记事件）不参与去重——按 type/marker 判定，而非 title 文本
+        def _protected(e):
+            return e.get("type") in ("block", "milestone") or e.get("marker") in ("✅", "⚠️", "📄", "🔑", "📥")
         kept = []
         for evt in evts:
-            t = evt["title"]
-            if "阻塞" in t or "✅" in t:
+            if _protected(evt):
                 kept.append(evt); continue
+            t = evt["title"]
             is_dup = False
             for k in kept:
+                if _protected(k): continue
                 kt = k["title"]
-                if "阻塞" in kt or "✅" in kt: continue
                 def kw(s):
                     c = re.findall(r'[\u4e00-\u9fff]', s)
                     return set(''.join(c[i:i+2]) for i in range(len(c)-1))
@@ -246,6 +256,12 @@ h2{{font-size:15px;margin:28px 0 16px;color:var(--text-primary)}}
 }}
 .h-dot.done{{background:var(--green);box-shadow:0 0 8px var(--green)}}
 .h-dot.warn{{background:var(--amber);box-shadow:0 0 8px var(--amber)}}
+/* 五类事件圆点色（对齐 §3.1） */
+.h-dot.t-milestone{{background:var(--green);box-shadow:0 0 8px var(--green)}}
+.h-dot.t-evidence{{background:var(--amber);box-shadow:0 0 8px var(--amber)}}
+.h-dot.t-finding{{background:var(--purple);box-shadow:0 0 8px var(--purple)}}
+.h-dot.t-block{{background:var(--red);box-shadow:0 0 8px var(--red)}}
+.h-dot.t-external{{background:var(--c-external);box-shadow:0 0 8px var(--c-external)}}
 
 /* 日期标签 */
 .h-date{{
@@ -278,6 +294,11 @@ h2{{font-size:15px;margin:28px 0 16px;color:var(--text-primary)}}
 .h-card-marker{{font-size:11px;margin-right:3px}}
 .h-card-marker.done{{color:var(--green)}}
 .h-card-marker.warn{{color:var(--amber)}}
+.h-card-marker.t-milestone{{color:var(--green)}}
+.h-card-marker.t-evidence{{color:var(--amber)}}
+.h-card-marker.t-finding{{color:var(--purple)}}
+.h-card-marker.t-block{{color:var(--red)}}
+.h-card-marker.t-external{{color:var(--c-external)}}
 
 /* 上下交替 */
 .h-slot.above{{flex-direction:column-reverse}}
@@ -375,14 +396,20 @@ h2{{font-size:15px;margin:28px 0 16px;color:var(--text-primary)}}
             above = (i % 2 == 0)
             slot_cls = "above" if above else "below"
 
-            # Dot class
+            # Dot class — 按事件类型取色（五类），同日多事件取优先级最高者
+            _prio = ["block", "milestone", "finding", "evidence", "external"]
+            _types = {e.get("type", "") for e in evts if e.get("type")}
             dot_cls = ""
-            has_done = any(e.get("marker") == "✅" for e in evts)
-            has_warn = any(e.get("marker") == "⚠️" for e in evts)
-            if has_done:
-                dot_cls = "done"
-            elif has_warn:
-                dot_cls = "warn"
+            for _t in _prio:
+                if _t in _types:
+                    dot_cls = f"t-{_t}"
+                    break
+            if not dot_cls:
+                # 回退：旧 marker 兼容
+                if any(e.get("marker") == "✅" for e in evts):
+                    dot_cls = "done"
+                elif any(e.get("marker") == "⚠️" for e in evts):
+                    dot_cls = "warn"
 
             html_parts.append(f'      <div class="h-slot {slot_cls}">\n')
 
@@ -391,7 +418,8 @@ h2{{font-size:15px;margin:28px 0 16px;color:var(--text-primary)}}
                 html_parts.append(f'        <div class="h-card{" h-card-multi" if len(evts)>1 else ""}">\n')
                 for e in evts:
                     marker = e.get("marker", "")
-                    m_cls = "done" if marker == "✅" else "warn" if marker == "⚠️" else ""
+                    etype = e.get("type", "")
+                    m_cls = f"t-{etype}" if etype else ("done" if marker == "✅" else "warn" if marker == "⚠️" else "")
                     m_html = f'<span class="h-card-marker {m_cls}">{marker}</span>' if marker else ""
                     html_parts.append(f'          <div class="h-card-item"><span class="h-card-title">{m_html}{e["title"]}</span></div>\n')
                 html_parts.append(f'        </div>\n')
@@ -406,7 +434,8 @@ h2{{font-size:15px;margin:28px 0 16px;color:var(--text-primary)}}
                 html_parts.append(f'        <div class="h-card{" h-card-multi" if len(evts)>1 else ""}">\n')
                 for e in evts:
                     marker = e.get("marker", "")
-                    m_cls = "done" if marker == "✅" else "warn" if marker == "⚠️" else ""
+                    etype = e.get("type", "")
+                    m_cls = f"t-{etype}" if etype else ("done" if marker == "✅" else "warn" if marker == "⚠️" else "")
                     m_html = f'<span class="h-card-marker {m_cls}">{marker}</span>' if marker else ""
                     html_parts.append(f'          <div class="h-card-item"><span class="h-card-title">{m_html}{e["title"]}</span></div>\n')
                 html_parts.append(f'        </div>\n')

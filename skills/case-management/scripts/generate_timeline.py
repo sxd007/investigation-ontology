@@ -61,19 +61,91 @@ EVIDENCE_TYPE_SECTIONS = {
 
 PHASE_ORDER = ["INIT", "PRE_INVESTIGATION", "FIELDWORK", "REVIEWING", "CLOSED"]
 
-# CHANGELOG action → 事件标记
-CHANGELOG_ACTION_MARKERS = {
-    "stage_transition": "✅ ",
-    "gate_progress": "",  # 动态判断
-    "entity_resolved": "",
-    "entity_created": "",
-    "evidence_registered": "",
-    "evidence_verified": "",
-    "hypothesis_refactored": "",
-    "ontology_alignment": "",
-    "plan_formalized": "",
-    "investigation_action": "",
+# ═══════════════════════════════════════════════════════════════
+# 事件类型分类（对齐 references/case-timeline-visualization.md §3）
+# 词表严格对齐 schemas/changelog.schema.json + changelog-rules.md
+# ═══════════════════════════════════════════════════════════════
+
+# 五类事件 → marker 字符
+EVENT_MARKERS = {
+    "milestone": "✅",   # 🏁 里程碑
+    "evidence": "📄",    # 📄 证据获取
+    "finding": "🔑",     # 🔑 关键发现
+    "block": "⚠️",      # ⚠️ 阻塞
+    "external": "📥",    # 📥 外部输入
 }
+
+# 五类事件 → CSS 颜色（对齐 §3.1 / §5）
+TYPE_COLORS = {
+    "milestone": "#52c97a",  # 绿
+    "evidence": "#e8a020",   # 橙
+    "finding": "#9b7ae8",    # 紫
+    "block": "#e85c5c",      # 红
+    "external": "#5a8aaa",   # 蓝
+}
+
+# 确定性分类（§3.3 脚本实现）：action → 事件类型
+# 未列出的 action 交 AI 语义分类（§3.4），脚本不假设其类型
+ACTION_TYPE_MAP = {
+    "case_created": "milestone",
+    "scope_defined": "milestone",
+    "phase_transition": "milestone",
+    "gate_all_passed": "milestone",
+    "evidence_registered": "evidence",
+    "hypothesis_generated": "finding",
+    "report_drafted": "milestone",
+    "report_completed": "milestone",
+    "document_generated": "milestone",
+    "case_closed": "milestone",
+    "case_resumed": "milestone",
+    "case_suspended": "block",
+}
+
+# 确定性过滤（§3.3）：不上主时间线的 action
+FILTER_ACTIONS = {
+    "status_set",
+    "gate_item_completed",
+    "evidence_registry_initialized",
+    "hypothesis_confidence_updated",  # 由假设演进视图（Part 2）单独呈现
+}
+
+# 语义分类 action（§3.4）：action 本身不能确定类型，需 AI 读 summary/detail/related_ids
+SEMANTIC_ACTIONS = {
+    "phase_backtrack",
+    "evidence_confidence_updated",
+    "finding_confidence_updated",
+    "hypothesis_status_changed",
+    "supplement_evidence_triggered",
+    "case_abandoned",
+    "other",
+}
+
+
+def classify_changelog(chg: dict) -> dict:
+    """
+    确定性分类 CHANGELOG 条目（对齐 §3.2/§3.3）。
+
+    返回 {"filtered": bool, "type": str, "marker": str}：
+    - filtered=True：确定性过滤的 action，不上主时间线
+    - type：五类事件之一；非确定性 action（§3.4）返回 ""，由 AI 语义补充
+    - marker：type 对应的 marker 字符；type 为空时为 ""
+    """
+    action = chg.get("action", "")
+    summary = chg.get("summary", "")
+
+    if action in FILTER_ACTIONS:
+        return {"filtered": True, "type": "", "marker": ""}
+
+    # 确定性映射
+    if action in ACTION_TYPE_MAP:
+        etype = ACTION_TYPE_MAP[action]
+        return {"filtered": False, "type": etype, "marker": EVENT_MARKERS[etype]}
+
+    # 语义分类（§3.4）：脚本不假设类型，仅保留"阻塞"这一确定性可判的信号
+    if "阻塞" in summary:
+        return {"filtered": False, "type": "block", "marker": EVENT_MARKERS["block"]}
+
+    return {"filtered": False, "type": "", "marker": ""}
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -324,6 +396,10 @@ def generate_case_timeline(registry: dict, case_dir: Path, changelog: list) -> s
         chg_action = chg.get("action", "")
         chg_detail = chg.get("detail", "")
         
+        # 确定性过滤（§3.3）：纯记账/粒度过细/由假设视图覆盖的 action 不上时间线
+        if chg_action in FILTER_ACTIONS:
+            continue
+
         # 跳过已在 registry 中的证据入库事件（避免重复）
         if chg_action == "evidence_registered":
             # 检查 registry 是否已有同日同主题事件
@@ -341,15 +417,9 @@ def generate_case_timeline(registry: dict, case_dir: Path, changelog: list) -> s
             if skip:
                 continue
 
-        # 确定标记
-        marker = ""
-        if chg_action == "stage_transition":
-            marker = "✅ "
-        elif "阻塞" in chg_summary:
-            marker = "⚠️ "
-        elif chg_action == "gate_progress":
-            if "就绪" in chg_summary or "完成" in chg_summary:
-                marker = "✅ "
+        # 确定性分类（§3.3）；语义 action 返回空 type，交 AI 补充
+        cls = classify_changelog(chg)
+        marker = cls["marker"]
 
         all_events.append({
             "moment": chg.get("timestamp", ""),
@@ -360,6 +430,7 @@ def generate_case_timeline(registry: dict, case_dir: Path, changelog: list) -> s
             "source": "changelog",
             "action": chg_action,
             "marker": marker,
+            "type": cls["type"],
         })
 
     # 3. 从实体信息中提取背景事件（公司注册时间）
@@ -398,10 +469,10 @@ def generate_case_timeline(registry: dict, case_dir: Path, changelog: list) -> s
         action = evt.get("action", "")
         tags = evt.get("tags", [])
         
-        # 1. stage_transition: 更新当前阶段，归入转换前的阶段
-        if action == "stage_transition":
+        # 1. phase_transition: 更新当前阶段，归入转换前的阶段
+        if action == "phase_transition":
             detail = evt.get("description", "")
-            # stage_transition 归入转换前的阶段
+            # phase_transition 归入转换前的阶段
             phase_events[current_phase].append(evt)
             # 更新当前阶段
             for phase in PHASE_ORDER:
@@ -463,13 +534,22 @@ def generate_case_timeline(registry: dict, case_dir: Path, changelog: list) -> s
             date_groups[date].append(evt)
 
         # 去重：同日内 EVT 和 CHG 如果描述同一事件，只保留信息更丰富的
+        # ⚠️ 阻塞 与 🏁 里程碑（及已标记事件）不参与去重——按 type/marker 判定，而非 title 文本
+        def _is_protected(e):
+            return e.get("type") in ("block", "milestone") or e.get("marker") in ("✅", "✅ ", "⚠️", "⚠️ ")
+
         deduped_groups = {}
         for date, group in date_groups.items():
             kept = []
             for evt in group:
+                if _is_protected(evt):
+                    kept.append(evt)
+                    continue
                 title = evt.get("title", "")
                 is_dup = False
                 for k in kept:
+                    if _is_protected(k):
+                        continue
                     if is_duplicate_event(title, k.get("title", "")):
                         # 保留更长的标题（通常信息更丰富）
                         if len(title) > len(k.get("title", "")):
@@ -571,12 +651,12 @@ def generate_hypothesis_timeline(registry: dict, case_dir: Path, changelog: list
         for chg in changelog:
             if get_date_only(chg.get("timestamp", "")) == date:
                 action = chg.get("action", "")
-                if action == "hypothesis_refactored":
-                    section_label = "假设重构"
+                if action == "hypothesis_status_changed":
+                    section_label = "假设状态变化"
                 elif action == "evidence_registered":
                     section_label = "情报强化"
-                elif action == "gate_progress":
-                    section_label = "门禁推进"
+                elif action == "gate_all_passed":
+                    section_label = "门禁全过"
                 break
 
         lines.append(f"    section {section_label}（{date}）")

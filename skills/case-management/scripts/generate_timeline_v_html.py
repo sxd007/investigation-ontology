@@ -27,6 +27,7 @@ from generate_timeline import (
     extract_money_from_text, shorten_evidence_summary,
     extract_hyp_confidence_changes,
     SECTION_ICONS, TAG_TO_SECTION, EVIDENCE_TYPE_SECTIONS, PHASE_ORDER,
+    EVENT_MARKERS, TYPE_COLORS, FILTER_ACTIONS, classify_changelog,
 )
 
 
@@ -73,6 +74,10 @@ def collect_timeline_data(registry, case_dir, changelog):
         summary = chg.get("summary", "")
         detail = chg.get("detail", "")
 
+        # 确定性过滤（§3.3）
+        if action in FILTER_ACTIONS:
+            continue
+
         # 跳过证据入库重复
         if action == "evidence_registered":
             skip = False
@@ -88,11 +93,9 @@ def collect_timeline_data(registry, case_dir, changelog):
             if skip:
                 continue
 
-        marker = ""
-        if action == "stage_transition":
-            marker = "✅"
-        elif "阻塞" in summary:
-            marker = "⚠️"
+        # 确定性分类（§3.3）；语义 action 返回空 type，交 AI 补充
+        cls = classify_changelog(chg)
+        marker = cls["marker"]
 
         all_events.append({
             "moment": chg.get("timestamp", ""),
@@ -103,6 +106,7 @@ def collect_timeline_data(registry, case_dir, changelog):
             "source": "changelog",
             "action": action,
             "marker": marker,
+            "type": cls["type"],
         })
 
     # ── 按阶段分组 ──
@@ -117,7 +121,7 @@ def collect_timeline_data(registry, case_dir, changelog):
         source = evt.get("source", "")
         tags = evt.get("tags", "")
 
-        if action == "stage_transition":
+        if action == "phase_transition":
             phase_events[current_phase].append(evt)
             detail = evt.get("desc", "")
             for phase in PHASE_ORDER:
@@ -148,15 +152,22 @@ def collect_timeline_data(registry, case_dir, changelog):
             phase_events[current_phase].append(evt)
 
     # ── 去重 ──
+    # ⚠️ 阻塞 与 🏁 里程碑（及已标记事件）不参与去重——按 type/marker 判定，而非 title 文本
+    def _protected(e):
+        return e.get("type") in ("block", "milestone") or e.get("marker") in ("✅", "⚠️", "📄", "🔑", "📥")
+
     def dedupe(events):
         kept = []
         for evt in events:
+            if _protected(evt):
+                kept.append(evt)
+                continue
             title = evt["title"]
             is_dup = False
             for k in kept:
-                kt = k["title"]
-                if "阻塞" in title or "阻塞" in kt or "✅" in title or "✅" in kt:
+                if _protected(k):
                     continue
+                kt = k["title"]
                 def extract_kw(s):
                     chars = re.findall(r'[\u4e00-\u9fff]', s)
                     return set(''.join(chars[i:i+2]) for i in range(len(chars)-1))
@@ -254,6 +265,12 @@ body{{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font
 .tl-item::before{{content:'';position:absolute;left:-24px;top:6px;width:10px;height:10px;border-radius:50%;border:2px solid var(--border-lit);background:var(--bg-deep);z-index:1}}
 .tl-item.tl-marker-done::before{{border-color:var(--green);background:var(--green);box-shadow:0 0 6px rgba(82,201,122,.4)}}
 .tl-item.tl-marker-warn::before{{border-color:var(--amber);background:var(--amber);box-shadow:0 0 6px rgba(232,160,32,.4)}}
+/* 五类事件圆点色（对齐 §3.1） */
+.tl-item.tl-marker-milestone::before{{border-color:var(--green);background:var(--green);box-shadow:0 0 6px rgba(82,201,122,.4)}}
+.tl-item.tl-marker-evidence::before{{border-color:var(--amber);background:var(--amber);box-shadow:0 0 6px rgba(232,160,32,.4)}}
+.tl-item.tl-marker-finding::before{{border-color:var(--purple);background:var(--purple);box-shadow:0 0 6px rgba(155,122,232,.4)}}
+.tl-item.tl-marker-block::before{{border-color:var(--red);background:var(--red);box-shadow:0 0 6px rgba(232,92,92,.4)}}
+.tl-item.tl-marker-external::before{{border-color:var(--c-external);background:var(--c-external);box-shadow:0 0 6px rgba(90,138,170,.4)}}
 
 .tl-date{{flex:0 0 110px;font-family:var(--font-mono);font-size:11px;color:var(--text-id);padding-top:3px}}
 .tl-content{{flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:6px 12px;transition:all .12s;word-wrap:break-word;overflow-wrap:break-word}}
@@ -262,6 +279,11 @@ body{{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font
 .tl-content-marker{{font-size:12px;margin-right:4px}}
 .tl-content-marker.done{{color:var(--green)}}
 .tl-content-marker.warn{{color:var(--amber)}}
+.tl-content-marker.milestone{{color:var(--green)}}
+.tl-content-marker.evidence{{color:var(--amber)}}
+.tl-content-marker.finding{{color:var(--purple)}}
+.tl-content-marker.block{{color:var(--red)}}
+.tl-content-marker.external{{color:var(--c-external)}}
 
 /* ── Same-day continuation ── */
 .tl-item.tl-continuation{{margin-top:-2px}}
@@ -351,10 +373,13 @@ body{{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font
         for evt in sorted(evts, key=lambda x: x.get("moment", "")):
             date = evt["date"]
             marker = evt.get("marker", "")
+            etype = evt.get("type", "")
             is_cont = (date == prev_date)
             
             item_cls = ""
-            if marker == "✅":
+            if etype:
+                item_cls = f"tl-marker-{etype}"
+            elif marker == "✅":
                 item_cls = "tl-marker-done"
             elif marker == "⚠️":
                 item_cls = "tl-marker-warn"
@@ -363,7 +388,10 @@ body{{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font
             
             marker_cls = ""
             marker_html = ""
-            if marker == "✅":
+            if etype:
+                marker_cls = etype
+                marker_html = f'<span class="tl-content-marker {marker_cls}">{marker}</span>' if marker else ""
+            elif marker == "✅":
                 marker_cls = "done"
                 marker_html = f'<span class="tl-content-marker {marker_cls}">{marker}</span>'
             elif marker == "⚠️":
