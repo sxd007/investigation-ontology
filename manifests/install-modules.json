@@ -156,7 +156,7 @@
       ],
       "defaultInstall": false,
       "cost": "heavy",
-      "stability": "stable"
+      "stability": "alpha"
     },
     {
       "id": "evidence-management",
@@ -223,7 +223,7 @@
       ],
       "defaultInstall": false,
       "cost": "medium",
-      "stability": "stable"
+      "stability": "alpha"
     },
     {
       "id": "writing-reporting",
@@ -245,7 +245,7 @@
       ],
       "defaultInstall": true,
       "cost": "medium",
-      "stability": "stable"
+      "stability": "alpha"
     },
     {
       "id": "ontology",
