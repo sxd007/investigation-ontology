@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 /**
+ * ⚠️ 已废弃 (DEPRECATED) — 功能已合并到 scripts/scan-chain.js
+ *
+ * 当前 /evidence visualize 调用的是 scan-chain.js --html，不是本文件。
+ * 本文件仅保留向后兼容（scan-chain.py --html 仍调用本文件）。
+ * 如需修改可视化逻辑，请改 scripts/scan-chain.js。
+ *
  * evidence_chain_injector.js (v3)
  *
  * 将 evidence_registry.json + nodes/*.md|json 注入到可视化模板，

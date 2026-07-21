@@ -440,7 +440,7 @@ function loadAllNodes(caseDir) {
     const status = fm.status || defaultStatus;
 
     // Title 提取（从 injector.js 移植）
-    let title = fm.title || fm.proposition || fm.statement || fm.name || id;
+    let title = fm.title || fm.proposition || fm.statement || fm.name || fm.summary || id;
     if (!fm.title && !fm.proposition && !fm.statement && !fm.name &&
         Array.isArray(fm.alias) && fm.alias.length) {
       title = `[${fm.role || '角色'}: ${fm.alias[0]}]`;
@@ -562,6 +562,9 @@ function mergeNodes(fileNodes, registryNodes) {
   const merged = { ...registryNodes };
   for (const [id, node] of Object.entries(fileNodes)) {
     if (merged[id]) {
+      // 防御：文件节点的 title 若是 id 回退值，不覆盖注册表的已有 title
+      if (node.title === id && merged[id].title && merged[id].title !== id)
+        node.title = merged[id].title;
       merged[id] = { ...merged[id], ...node, source: merged[id].source || node.source || '' };
     } else {
       merged[id] = node;
