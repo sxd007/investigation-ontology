@@ -1,6 +1,6 @@
 ﻿---
 name: evidence-management
-description: 证据链与调查底稿管理 — 证据识别与收集、链式保管(Custody Chain)、证据可采性评估、证据链可视化(推理链图/假设验证/治理状态)、底稿编制规范、底稿复核与归档、电子证据保全
+description: 证据链管理 — 证据识别与收集、链式保管(Custody Chain)、证据可采性评估、证据链可视化(推理链图/假设验证/治理状态)、电子证据保全。兼覆底稿编制规范与复核标准。
 origin: efio
 ---
 

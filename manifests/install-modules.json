@@ -161,7 +161,7 @@
     {
       "id": "evidence-management",
       "kind": "skills",
-      "description": "证据链与底稿管理 — 证据收集、保全、链式保管、可采性评估、证据链可视化(推理链图/假设验证/治理状态)、底稿编制与复核",
+      "description": "证据链管理 — 证据识别与收集、保全、链式保管、可采性评估、证据链可视化(推理链图/假设验证/治理状态)、电子证据保全。兼覆底稿编制规范与复核标准",
       "paths": [
         "skills/evidence-management"
       ],
@@ -206,7 +206,7 @@
     {
       "id": "data-analysis",
       "kind": "skills",
-      "description": "数据分析与审计技术 — 内部审计技术、流程分析、异常检测、数据可视化(异常检测图/趋势图/统计图表)、审计轨迹分析",
+      "description": "调查数据分析与审计技术 — 当需要对交易/财务/日志数据做异常检测、趋势分析、Benford分析、关联分析、重复检测，或需要为调查假设寻找数据支持时使用",
       "paths": [
         "skills/data-analysis"
       ],
@@ -321,7 +321,7 @@
     {
       "id": "mcp-integration",
       "kind": "skills",
-      "description": "调查 MCP 工具集成层 — 技能与 MCP 服务器的连接桥梁",
+      "description": "调查 MCP 能力参考 — 当需要了解可用的 MCP 服务器类型及其能力、或需要判断某项调查任务是否可由 MCP 辅助完成时使用",
       "paths": [
         "skills/mcp-integration",
         "mcp-configs",
@@ -347,7 +347,7 @@
     {
       "id": "cold-start",
       "kind": "skills",
-      "description": "首次设置向导 — Cold-start interview 引导调查员完成团队配置、证据策略、集成检查。配置写入持久化路径，所有技能依赖此配置运行。",
+      "description": "首次设置向导 — 引导调查员完成团队配置、证据策略、集成检查。配置写入持久化路径，所有技能依赖此配置运行。",
       "paths": [
         "skills/cold-start",
         "commands/cold-start.md",
@@ -371,7 +371,7 @@
     {
       "id": "fraud-channel",
       "kind": "skills",
-      "description": "渠道舞弊调查 — ICT 特价订单渠道场景：窜货、虚报终端客户、成本造假、拼单绑单、隐瞒渠道链路、隐瞒渠道利润。含六种渠道舞弊模式的参考信号库、调查切入点和访谈问题库。",
+      "description": "渠道舞弊调查 — 渠道销售特价订单场景：窜货、虚报终端客户、成本造假、拼单绑单、隐瞒渠道链路、隐瞒渠道利润。含六种渠道舞弊模式的参考信号库、调查切入点和访谈问题库。",
       "paths": [
         "skills/fraud-channel"
       ],
@@ -555,7 +555,7 @@
     {
       "id": "order-execution-variance-analysis",
       "kind": "skills",
-      "description": "项目执行差异分析 — 多维度对比合同流、货物流、资金流的申报记录与实际执行记录，输出链路对比可视化HTML与结构化差异报告。跨场景通用工具。",
+      "description": "订单执行差异分析 — 多维度对比合同流、货物流、资金流的申报记录与实际执行记录，输出链路对比可视化HTML与结构化差异报告。跨场景通用工具。",
       "paths": [
         "skills/order-execution-variance-analysis"
       ],

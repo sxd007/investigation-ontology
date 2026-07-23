@@ -1,11 +1,6 @@
 ﻿---
 name: ontology
-description: >
-  操作 global_ontology/entities/ 或 global_ontology/relations/ 目录、创建或修改本体对象 (Person/Organization/Account/Evidence/Case)、
-  断言关系 (Relation: TRANSFERRED/HAS_ACCOUNT/WORKS_AT...)、或执行本体 Action
-  (CLOSE_CASE/RESOLVE_ENTITY/SEAL_EVIDENCE/ASSERT_RELATION 等) 时，必须使用本技能。
-  调查本体论定义"什么存在"的结构性方法论 — 覆盖 Object Types、Link Types、Action 治理规则、
-  以及认知层与本体层的 Binding Protocol。
+description: 调查本体论 — 当需要创建或修改本体对象（Person/Organization/Account/Evidence/Case）、断言实体间关系（TRANSFERRED/HAS_ACCOUNT/WORKS_AT 等）、或执行本体 Action（CLOSE_CASE/RESOLVE_ENTITY/SEAL_EVIDENCE/ASSERT_RELATION 等）时使用本技能。覆盖 Object Types、Link Types、Action 治理规则和 Binding Protocol。
 origin: efio
 paths: global_ontology/entities/*, global_ontology/relations/*
 ---

@@ -43,7 +43,7 @@ description: 技能配置管理器 — 中途切换调查团队的技能 profile
   
   【Foundation Layer】
   ✓ investigation-foundation       调查方法论与框架
-  ✓ investigation-memory           多案件记忆与关联分析
+  ✓ investigation-memory           调查过程记忆与回溯
   ✓ ontology                        本体层定义与 Binding Protocol
   
   【Process Layer】
@@ -175,7 +175,7 @@ Profile: full
 
   【Foundation Layer】
   • investigation-foundation       调查方法论与框架
-  • investigation-memory          多案件记忆与关联分析
+  • investigation-memory          调查过程记忆与回溯
   • investigation-techniques      调查方法与工具
   • ontology                      本体层定义与 Binding Protocol
 

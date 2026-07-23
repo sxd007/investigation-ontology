@@ -36,7 +36,9 @@
         "fraud-ip",
         "fraud-hr",
         "fraud-fake-chop",
-        "fraud-conflicts-of-interest"
+        "fraud-conflicts-of-interest",
+        "data-analysis",
+        "document-parsing"
       ]
     },
     "auditor": {
@@ -52,7 +54,8 @@
         "evidence-management",
         "writing-reporting",
         "mcp-integration",
-        "cold-start"
+        "cold-start",
+        "document-parsing"
       ]
     },
     "analyst": {
@@ -68,7 +71,8 @@
         "evidence-management",
         "writing-reporting",
         "mcp-integration",
-        "cold-start"
+        "cold-start",
+        "document-parsing"
       ]
     },
     "interviewer": {
@@ -115,7 +119,8 @@
         "fraud-conflicts-of-interest",
         "order-execution-variance-analysis",
         "investigation-memory",
-        "case-retrospective"
+        "case-retrospective",
+        "document-parsing"
       ]
     }
   }

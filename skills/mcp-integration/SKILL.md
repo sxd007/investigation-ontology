@@ -1,10 +1,10 @@
 ﻿---
 name: mcp-integration
-description: 调查 MCP 能力目录 — 记录本插件生态中可用的 MCP 服务器类型及能力说明。MCP 与技能之间遵循松耦合原则：技能描述分析需求，模型自行编排 MCP 调用。
+description: 调查 MCP 能力参考 — 当需要了解本插件生态中可用的 MCP 服务器类型及其能力、或需要判断某项调查任务是否可由 MCP 辅助完成时使用本技能。MCP 与技能松耦合：技能描述分析需求，模型自行编排 MCP 调用。
 origin: efio
 ---
 
-# MCP 能力目录
+# MCP 能力参考
 
 本技能是 MCP 配置的**学习型参考库**。MCP 的实际配置向导由 `/efio:cold-start` 的 Phase 2.5 提供。若需动态切换 MCP 配置，请运行 cold-start 或编辑项目 `.mcp.json`。
 
@@ -70,7 +70,7 @@ origin: efio
 
 ---
 
-## MCP 能力目录
+## MCP 能力参考
 
 以下按能力类型列出本插件生态中可能配置的 MCP 服务器。**有真实包的注明包名，暂无成熟包的标注 placeholder。**
 

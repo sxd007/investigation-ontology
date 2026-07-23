@@ -1,9 +1,6 @@
 ---
 name: document-parsing
-description: >
-  当用户提供原始文档（PDF/扫描件/图片/Word/Excel）需要提取信息或结构化处理时，必须使用本技能。
-  本技能是 OCR MCP 的上层编排者：不要直接调用 paddleOCR-mcp，应先按本技能完成类型识别、格式路由、schema 提取、质量评估、版本写入。
-  本技能只产出 raw/parsed/*.json，必要时产出 raw/ocr_output/*.json；不创建 EV 节点、本体实体或关系。
+description: 文档结构化解析 — 当用户提供原始文档（PDF/扫描件/图片/Word/Excel）需要提取信息或结构化处理时使用本技能。OCR MCP 的上层编排者，完成类型识别、格式路由、schema 提取、质量评估和版本写入。产出 raw/parsed/*.json，不创建 EV 节点或本体实体。
 origin: efio
 ---
 

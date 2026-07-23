@@ -8,20 +8,6 @@ investigation-ontology 是专为反舞弊调查人员和内部审计师设计的
 
 ## 安装
 
-### Claude Code
-
-```bash
-# 添加市场源
-claude plugin marketplace add https://github.com/sxd007/investigation-ontology
-
-# 安装（全量）
-claude plugin install investigation-ontology
-
-# 安装（按配置）
-claude plugin install investigation-ontology --profile investigator
-claude plugin install investigation-ontology --profile auditor
-```
-
 ### CodeBuddy
 
 ```bash
@@ -34,6 +20,23 @@ codebuddy plugin install investigation-ontology
 # 安装（按配置）
 codebuddy plugin install investigation-ontology --profile investigator
 ```
+
+
+> 注意： 当前优先适配`codebuddy`.
+>
+> 在`claude code` 或 `codex`中安装本插件，可能会存在一些问题，如发现问题，请直接要求claude 或 codex 读取整个项目，并按照各自的配置要求进行调整，确保 `agents`, `hooks`, `rules`, `skills` 安装到适当的位置。
+
+### Claude Code
+
+```bash
+# 添加市场源
+claude plugin marketplace add https://github.com/sxd007/investigation-ontology
+
+# 安装（全量）
+claude plugin install investigation-ontology
+```
+
+
 
 ### Codex
 
