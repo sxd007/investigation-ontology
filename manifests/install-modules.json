@@ -139,7 +139,7 @@
     {
       "id": "investigation-techniques",
       "kind": "skills",
-      "description": "调查工具与技术 — 访谈技巧、数据分析、数字取证、文档审查、外勤调查、监控技术",
+      "description": "调查技术参考 — 数字取证、OSINT公开信息检索、通讯分析、实地调查、监控技术、资产追踪等调查手段的方法论指导和选型建议",
       "paths": [
         "skills/investigation-techniques"
       ],

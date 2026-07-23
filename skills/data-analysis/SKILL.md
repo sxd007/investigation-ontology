@@ -73,7 +73,7 @@ origin: efio
 3. **可获取性**：由调查员标记（能拿到 / 能拿到但不全 / 拿不到）
 4. **替代方案**：如果拿不到，有什么替代数据，能做什么降级分析
 
-领域知识来源：`fraud-classification` 的 ACFE 信号库、各 `fraud-*` 专题 skill 的"关键信号"和"调查切入点"。
+领域知识来源：`fraud-classification`（[SKILL.md](../fraud-classification/SKILL.md)）的 ACFE 信号库、各 `fraud-*` 专题 skill（如 [fraud-channel](../fraud-channel/SKILL.md)、[fraud-procurement](../fraud-procurement/SKILL.md)）的"关键信号"和"调查切入点"。
 
 ### data_demand_map 范式
 
@@ -120,7 +120,7 @@ data_demand_map:
 
 ## 数据消费规则
 
-- 如有 `raw/parsed/*.json`（document-parsing 产物）：优先消费，继承字段级置信度和文档类型语义（`schemas/document-types/` 中各 schema 已标注调查关键字段和异常信号）
+- 如有 `raw/parsed/*.json`（[document-parsing](../document-parsing/SKILL.md) 产物）：优先消费，继承字段级置信度和文档类型语义（`schemas/document-types/` 中各 schema 已标注调查关键字段和异常信号）
 - 如是裸 CSV/Excel：按数据画像处理（记录数、时间跨度、字段完整度、可用分析键）
 - 如需从系统取数：明确需要什么表、什么字段、什么时间范围
 - 对所有上游"来者不拒"——parsed 在就消费，不在就当普通数据；planner 方案在就参考，不在就对话澄清

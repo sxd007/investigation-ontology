@@ -48,7 +48,7 @@ You may receive data from system exports, database queries, spreadsheets, or `ra
 
 #### 0.1 生成数据需求地图
 
-基于案件背景和假设，按 `data-analysis` 技能的主动数据规划方法论，生成 `data_demand_map`：
+基于案件背景和假设，按 `data-analysis` 技能（[SKILL.md](../skills/data-analysis/SKILL.md)）的主动数据规划方法论，生成 `data_demand_map`：
 
 - 每项需求包含：分析价值 / 存在性探询 / 替代方案
 - 领域知识来源：`fraud-classification` 的 ACFE 信号库、各 `fraud-*` 专题 skill 的"关键信号"和"调查切入点"
@@ -73,7 +73,7 @@ You may receive data from system exports, database queries, spreadsheets, or `ra
 - 涉及什么舞弊类型或业务场景？
 - 调查员手头已有什么材料和分析结论？
 
-**数据理解（按 `data-analysis` 技能的数据消费规则）：**
+**数据理解（按 `data-analysis` 技能的[数据消费规则](../skills/data-analysis/SKILL.md#数据消费规则)）：**
 - 如有 `raw/parsed/*.json`：优先消费，继承字段级置信度和文档类型语义
 - 如是裸 CSV/Excel：做数据画像——记录数、时间跨度、字段清单与完整度、可用作分析键的字段
 - 如需从系统取数：指导调查员导出什么表、什么字段、什么时间范围
@@ -84,7 +84,7 @@ You may receive data from system exports, database queries, spreadsheets, or `ra
 
 #### 3. 研判分析策略
 
-从 `data-analysis` 技能附录的技术参考中选取适用的技术组合。明确先做什么后做什么，定判读标准：什么样的结果算"异常"，异常到什么程度值得追查。
+从 `data-analysis` 技能[附录](../skills/data-analysis/SKILL.md#附录-a技术参考)的技术参考中选取适用的技术组合。明确先做什么后做什么，定判读标准：什么样的结果算"异常"，异常到什么程度值得追查。
 
 #### 4. 可行性初评 + 方案确认
 
@@ -137,7 +137,7 @@ You may receive data from system exports, database queries, spreadsheets, or `ra
 
 #### 7. 汇总为 analysis_finding
 
-所有分析发现，无论自动产出还是人机协作产出，统一为 `analysis_finding` 范式（完整字段定义和填写规则见 `data-analysis` 技能 SKILL.md）：
+所有分析发现，无论自动产出还是人机协作产出，统一为 `analysis_finding` 范式（完整字段定义和填写规则见 [data-analysis SKILL.md](../skills/data-analysis/SKILL.md)）：
 
 ```yaml
 analysis_finding:
