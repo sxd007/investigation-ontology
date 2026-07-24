@@ -15,7 +15,8 @@
         "key_entities_verified": { "type": "boolean", "default": false },
         "information_gaps_documented": { "type": "boolean", "default": false },
         "case_nature_assessed": { "type": "boolean", "default": false },
-        "investigation_plan_drafted": { "type": "boolean", "default": false }
+        "investigation_plan_drafted": { "type": "boolean", "default": false },
+        "whistleblower_background_check": { "type": "boolean", "default": false, "description": "条件门禁：当 trigger_type=举报 时必填。举报人背景核查已完成（内部数据库 → 企查查/天眼查 → 公司关联 → 司法风险）。非举报来源案件此项忽略。" }
       }
     },
     "pre_investigation": {

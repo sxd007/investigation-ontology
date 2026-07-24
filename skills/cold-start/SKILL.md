@@ -232,17 +232,23 @@ READY               → "配置已就绪，是否需要：
 
 在 team-profile.md 的"集成状态"节记录验证结果（含注册通道列）。表格式样见 `references/mcp-configuration.md` 第 6 节。
 
-### 4.4 项目上下文文件
+### 4.4 项目操作手册
 
-在用户的**案件工作目录**（用户运行 `/investigate new` 指向的目录）中，按平台写入对应名称的上下文文件：
+在当前工作区根目录中写入 `INVESTIGATION-HANDBOOK.md`——这是插件的操作指南原件，包含技能加载策略、案件生命周期、文件规范、质量管理等完整内容。
 
-| 平台 | 写入文件名 | 内容来源 |
-|------|-----------|---------|
-| Claude Code | `CLAUDE.md` | `project-templates/default/CLAUDE.md` |
-| CodeBuddy   | `CODEBUDDY.md` | `project-templates/default/CODEBUDDY.md` |
-| Codex       | `CODEX.md` | `project-templates/default/CODEX.md` |
+| 项目 | 说明 |
+|------|------|
+| 目标路径 | `<workspace-root>/INVESTIGATION-HANDBOOK.md` |
+| 内容来源 | `project-templates/default/INVESTIGATION-HANDBOOK.md` |
+| 写入方式 | **完整复制模板内容，不做摘要、不缩减、不改写** |
+| 覆盖策略 | 如已存在，对比内容；内容一致则跳过，不一致则覆盖并告知用户 |
 
-> **重要：** 在 CodeBuddy 平台**不要**创建 `CLAUDE.md`，应创建 `CODEBUDDY.md`；在 Codex 平台创建 `CODEX.md`。
+> **注意：** 不直接写入 `CODEBUDDY.md`/`CLAUDE.md`/`CODEX.md`——这些文件由 IDE 自动管理。
+> 插件的 SessionStart hook 会自动将 INVESTIGATION-HANDBOOK.md 中的精简规则段
+> （`<!-- efio:inject-start -->` 至 `<!-- efio:inject-end -->` 标记之间）
+> 注入到平台对应的上下文文件中。hook 具有双重自愈机制：
+> 1. INVESTIGATION-HANDBOOK.md 缺失时自动从模板复制
+> 2. 平台上下文文件中标记段缺失或过期时自动重新注入
 
 ### 4.5 输出摘要
 

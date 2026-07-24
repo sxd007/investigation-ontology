@@ -19,7 +19,7 @@
 // ============================================================================
 
 import { spawnSync } from 'node:child_process';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync, copyFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import os from 'node:os';
@@ -90,6 +90,89 @@ function sessionStart() {
     );
   } else {
     console.log('[investigation-ontology] 首次使用? 运行 /efio:cold-start 完成设置');
+  }
+
+  // ── INVESTIGATION-HANDBOOK.md 部署 + 平台上下文文件注入 ──
+  injectHandbook();
+}
+
+// ── 自愈式注入：确保工作区有手册 + IDE 上下文文件有完整操作指南 ──
+function injectHandbook() {
+  const cwd = process.cwd();
+  const handbookPath = join(cwd, 'INVESTIGATION-HANDBOOK.md');
+  const templatePath = join(pluginRoot, 'project-templates', 'default', 'INVESTIGATION-HANDBOOK.md');
+
+  // ① 手册不存在 → 从插件模板复制
+  if (!existsSync(handbookPath)) {
+    if (existsSync(templatePath)) {
+      try {
+        copyFileSync(templatePath, handbookPath);
+      } catch {
+        /* 权限或路径问题 — 静默跳过，不阻塞 session */
+        return;
+      }
+    } else {
+      return; // 模板也不存在（插件安装异常）— 静默跳过
+    }
+  }
+
+  // ② 平台检测 → 确定目标上下文文件
+  let targetFile;
+  if (process.env.CODEBUDDY_PLUGIN_ROOT) {
+    targetFile = 'CODEBUDDY.md';
+  } else if (process.env.CLAUDE_PLUGIN_ROOT) {
+    targetFile = 'CLAUDE.md';
+  } else {
+    targetFile = 'CODEX.md'; // Codex 降级
+  }
+  const targetPath = join(cwd, targetFile);
+
+  // ③ 读取手册完整内容（全量注入，不提取标记段）
+  let handbookContent;
+  try {
+    handbookContent = readFileSync(handbookPath, 'utf8');
+  } catch {
+    return;
+  }
+
+  const START = '<!-- efio:handbook-start -->';
+  const END = '<!-- efio:handbook-end -->';
+  const injectContent = `${START}\n${handbookContent}\n${END}`;
+
+  // ④ 读取目标文件当前内容
+  let targetContent = '';
+  try {
+    if (existsSync(targetPath)) {
+      targetContent = readFileSync(targetPath, 'utf8');
+    }
+  } catch {
+    /* ignore */
+  }
+
+  // ⑤ 检查标记段是否已存在且内容一致
+  const existStart = targetContent.indexOf(START);
+  const existEnd = targetContent.indexOf(END);
+
+  if (existStart !== -1 && existEnd !== -1 && existEnd > existStart) {
+    // 标记段已存在
+    const existingSection = targetContent.substring(existStart, existEnd + END.length);
+    if (existingSection === injectContent) {
+      return; // 内容一致，无需更新
+    }
+    // 内容过期 → 替换标记段（保留 IDE 生成的前后内容）
+    const before = targetContent.substring(0, existStart);
+    const after = targetContent.substring(existEnd + END.length);
+    targetContent = before + injectContent + after;
+  } else {
+    // 标记段不存在 → 追加到文件末尾
+    targetContent = targetContent.trimEnd() + '\n\n' + injectContent + '\n';
+  }
+
+  // ⑥ 写入目标文件
+  try {
+    writeFileSync(targetPath, targetContent, 'utf8');
+  } catch {
+    /* 写入失败 — 静默跳过，不阻塞 session */
   }
 }
 

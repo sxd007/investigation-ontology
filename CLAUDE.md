@@ -2,7 +2,7 @@
 
 本文件是本仓库（investigation-ontology 跨平台插件项目）的 **Claude Code 开发者指南**，指导 AI 协助开发者维护和扩展本插件在 Claude Code 平台的实现。
 
-**这不是用户指南。** 用户指南位于 `project-templates/default/CLAUDE.md`，分发到调查员的案件项目中使用。
+**这不是用户指南。** 用户指南位于 `project-templates/default/INVESTIGATION-HANDBOOK.md`，分发到调查员的案件项目中使用。
 
 ---
 
@@ -31,7 +31,7 @@ investigation-ontology 是一个跨平台插件，同时支持 Claude Code、Cod
 | `CODEX.md` | Codex 开发者 + AI | Codex 版本开发指南 |
 | `DEVELOPMENT_GUIDE.md` | 人类开发者 | 架构说明、跨平台维护指南 |
 | `README.md` | GitHub 访客 | 多平台安装说明 |
-| `project-templates/default/CLAUDE.md` | 调查员 + AI | 调查案件操作指南（分发后） |
+| `project-templates/default/INVESTIGATION-HANDBOOK.md` | 调查员 + AI | 调查案件操作指南（分发后） |
 
 ---
 
@@ -95,7 +95,7 @@ investigation-ontology 是一个跨平台插件，同时支持 Claude Code、Cod
 
 ### 3.5 修改模板
 
-`project-templates/default/CLAUDE.md` 是分发到调查项目的用户指南，其技能表、命令表需要同步更新。
+`project-templates/default/INVESTIGATION-HANDBOOK.md` 是分发到调查项目的用户指南，其技能表、命令表需要同步更新。
 
 ---
 
@@ -142,7 +142,7 @@ investigation-ontology 是一个跨平台插件，同时支持 Claude Code、Cod
 - `DEVELOPMENT_GUIDE.md` — 架构设计、插件扩展、构建发布的完整指南
 - `manifests/install-modules.json` — 模块注册表（必读）
 - `manifests/install-profiles.json` — 安装配置集
-- `project-templates/default/CLAUDE.md` — 用户指南（分发物）
+- `project-templates/default/INVESTIGATION-HANDBOOK.md` — 用户指南（分发物）
 
 ---
 

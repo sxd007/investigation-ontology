@@ -15,9 +15,9 @@ skill_navigation:
       when: "撰写完毕后创建 evidence_registry.json"
       provides: "证据注册表结构、初始证据条目登记标准"
   project_rules:
-    - "初始假设必须包含反向假设 — 见 CLAUDE.md §2.4"
-    - "举报人信息须标注 [举报人称] — 见 CLAUDE.md §4.1"
-    - "全部信息缺口须分类标注 — 见 CLAUDE.md §4.1"
+    - "初始假设必须包含反向假设 — 见 INVESTIGATION-HANDBOOK.md §1.3 假设管理"
+    - "举报人信息须标注 [举报人称] — 见 INVESTIGATION-HANDBOOK.md §5.1 写作标准"
+    - "全部信息缺口须分类标注 — 见 INVESTIGATION-HANDBOOK.md §三 INIT 任务表"
 ---
 
 # INIT 阶段情报摘要

@@ -228,6 +228,7 @@ origin: efio
 | `information_gaps_documented` | 信息缺口已标注分类（待调取/举报人无/原因未说明） |
 | `case_nature_assessed`        | 案件性质已判断（舞弊调查/业务问题/其他）     |
 | `investigation_plan_drafted`  | 初步调查计划已形成                 |
+| `whistleblower_background_check` | **条件门禁**：`trigger_type=举报` 时必填。举报人背景核查已完成 |
 
 **关键设计**：
 
@@ -236,6 +237,7 @@ origin: efio
 - 所有信息缺口必须标注分类，不得留有 `[原因未说明]`
 - `evidence_registry.json` 在 INIT 阶段创建基础结构（初始化 metadata、chain\_nodes、提取 entities、登记举报线索为首条证据、生成初始 hypotheses），但 INIT 阶段的证据置信度上限为 `suspected`
 - `nodes/` 目录与 evidence\_registry.json 同时创建。INIT 阶段至少创建 EV-001（举报线索节点）、ENT-001（举报人实体节点）、初始 HYP 节点。**关系仅声明在 nodes/ 文件的 frontmatter 中，不在 evidence\_registry.json 中维护关系副本**
+- `whistleblower_background_check` 为条件门禁：仅当 `trigger_type=举报` 时需要满足。背景核查包括内部数据库 → 企查查/天眼查 → 公司关联 → 司法风险。非举报来源案件（数据驱动/案件扩展）此项忽略，不影响门禁通过。
 
 ***
 

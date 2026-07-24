@@ -22,7 +22,17 @@ origin: efio
 详细规则参见 `config-templates/config-loader.md`。
 
 此技能读取的配置项：
-- team-profile → 调查通信纪律：通话上限、背景核查要求、call_memo 强制输出（待后续实现行为约束）
+- team-profile → 调查通信纪律：通话上限、背景核查要求、call_memo 强制输出
+
+### 通信纪律行为约束
+
+读取 team-profile.md 中的以下参数并**强制执行**：
+
+| 参数 | 约束行为 |
+|------|---------|
+| 通话前背景核查 = yes | 准备联系举报人前，**必须先确认** `checklist.yaml → init.whistleblower_background_check = true`。未完成时拒绝生成联系提纲，提示先完成背景核查 |
+| 同一事项连续通话上限 = N | 准备第 N+1 次联系时，**必须暂停并提示**"已达到连续通话上限（N次），需要调查员确认后再安排"。统计依据：`CHANGELOG.json` 中同一事项的 `call_memo` 记录数 |
+| 通话后强制 call_memo = yes | 每次通话/邮件结束后，**必须输出** `call_memo_*.md`（使用 `call_memo_template.md`）并完成沟通评估，然后才能建议下一步操作 |
 
 ## When to Activate
 

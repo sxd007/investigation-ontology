@@ -230,7 +230,7 @@ investigation-ontology 采用模块化安装体系，新增或修改技能时必
 | 5 | `agents/investigation-planner.md` | 在 Related 技能段追加引用 |
 | 6 | `agents/fraud-type-classifier.md` | 在 Cross-Reference 段和 Related 段追加引用 |
 
-此外，`project-templates/default/CLAUDE.md` 中的技能表也应同步更新。
+此外，`project-templates/default/INVESTIGATION-HANDBOOK.md` 中的技能表也应同步更新。
 
 ### 4.2 模块注册模板（install-modules.json）
 

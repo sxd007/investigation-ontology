@@ -6,8 +6,8 @@ skill_navigation:
       when: "需要确认证据注册表是否完整"
       provides: "证据充分性评估标准、confidence 定型方法"
   project_rules:
-    - "结案前 Checklist — 见 CLAUDE.md §4.2"
-    - "跨文件索引要求 — 见 CLAUDE.md §3.3"
+    - "结案前 Checklist — 见 INVESTIGATION-HANDBOOK.md §5.2 结案前 Checklist"
+    - "跨文件索引要求 — 见 INVESTIGATION-HANDBOOK.md §4.3 跨文件索引"
 ---
 
 # 案件结案报告

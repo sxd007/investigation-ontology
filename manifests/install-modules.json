@@ -351,7 +351,8 @@
       "paths": [
         "skills/cold-start",
         "commands/cold-start.md",
-        "config-templates"
+        "config-templates",
+        "project-templates/default/INVESTIGATION-HANDBOOK.md"
       ],
       "targets": [
         "claude",

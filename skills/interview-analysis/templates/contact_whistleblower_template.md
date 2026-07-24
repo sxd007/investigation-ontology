@@ -9,10 +9,10 @@ skill_navigation:
       when: "通话/邮件结束后登记获取的信息"
       provides: "证据注册表结构和标准"
   project_rules:
-    - "联系举报人前必须完成背景核查 — 见项目 CLAUDE.md §2.1"
-    - "通话后强制复盘 — 见项目 CLAUDE.md §2.2"
-    - "警示信号触发暂停评估 — 见项目 CLAUDE.md §2.3"
-    - "假设必须包含反向假设 — 见项目 CLAUDE.md §2.4"
+    - "联系举报人前必须完成背景核查 — 见 INVESTIGATION-HANDBOOK.md §三 INIT 举报来源案件提醒"
+    - "通话后强制复盘 — 见 INVESTIGATION-HANDBOOK.md §三 INIT 举报来源案件提醒"
+    - "警示信号触发暂停评估 — 本模板 §三 警示信号检查"
+    - "假设必须包含反向假设 — 见 INVESTIGATION-HANDBOOK.md §1.3 假设管理"
 ---
 
 # 举报人联系模板

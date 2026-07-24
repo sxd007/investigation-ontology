@@ -2,7 +2,7 @@
 
 本文件是本仓库（investigation-ontology CodeBuddy 版本）的**开发者指南**，指导 AI 协助开发者维护和扩展本插件。
 
-**这不是用户指南。** 用户指南位于 `project-templates/default/CODEBUDDY.md`，分发到调查员的案件项目中使用。
+**这不是用户指南。** 用户指南位于 `project-templates/default/INVESTIGATION-HANDBOOK.md`，分发到调查员的案件项目中使用。
 
 ---
 
@@ -31,7 +31,7 @@ investigation-ontology 是一个跨平台插件，支持 Claude Code、CodeBuddy
 | `CODEX.md` | Codex 开发者 + AI | Codex 版插件开发指南 |
 | `DEVELOPMENT_GUIDE.md` | 人类开发者 | 架构说明、构建方式（跨平台） |
 | `README.md` | GitHub 访客 | 项目简介、多平台安装说明 |
-| `project-templates/default/CODEBUDDY.md` | 调查员 + AI | 调查案件操作指南（分发后） |
+| `project-templates/default/INVESTIGATION-HANDBOOK.md` | 调查员 + AI | 调查案件操作指南（分发后） |
 
 ---
 
@@ -127,7 +127,7 @@ CodeBuddy 不使用额外的 MCP 配置（与 Claude Code 相同）。
 
 ### 3.5 修改模板
 
-`project-templates/default/CODEBUDDY.md` 是分发到调查项目的用户指南，其技能表、命令表需要同步更新。
+`project-templates/default/INVESTIGATION-HANDBOOK.md` 是分发到调查项目的用户指南，其技能表、命令表需要同步更新。
 
 ---
 
@@ -185,5 +185,5 @@ CodeBuddy 不使用额外的 MCP 配置（与 Claude Code 相同）。
 - `CODEX.md` — Codex 版本开发指南
 - `manifests/install-modules.json` — 模块注册表（必读）
 - `manifests/install-profiles.json` — 安装配置集
-- `project-templates/default/CODEBUDDY.md` — 用户指南（分发物）
+- `project-templates/default/INVESTIGATION-HANDBOOK.md` — 用户指南（分发物）
 
