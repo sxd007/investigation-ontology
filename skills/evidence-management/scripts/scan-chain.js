@@ -974,7 +974,7 @@ function buildChainTree(nodes, rootId, visited) {
   if (!node || visited.has(rootId)) return null;
   visited.add(rootId);
 
-  const isLeaf = ['EV', 'ENT', 'EVT'].includes(node.typePrefix);
+  const isLeaf = ['EV', 'ENT', 'EVT'].includes(node.typePrefix) && !(node.sources && node.sources.length);
   const children = [];
   if (!isLeaf && node.sources && node.sources.length) {
     for (const src of node.sources) {
