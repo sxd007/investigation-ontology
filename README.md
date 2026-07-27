@@ -53,6 +53,8 @@ codex plugin install investigation-ontology
 
 ## 安装配置
 
+`investigation-memory` 是跨阶段的低噪音过程档案能力，在所有 profile（包括 `minimal`）中默认安装；它不参与证据认定或阶段门禁。安装不等于无条件写盘，cold-start 可将写入策略设为 `silent`、`notify`（安全默认）或 `disabled`。
+
 | 配置 | 适用人群 | 包含模块 |
 |------|---------|---------|
 | `minimal` | 所有用户 | 核心命令 + 规则 + 代理 |

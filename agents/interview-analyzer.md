@@ -162,6 +162,15 @@ Register the interview as testimonial evidence in evidence_registry.json:
 }
 ```
 
+### 10. Memory 旁路检查（后台完成）
+
+交付前按 `investigation-memory` 对访谈信息分流：
+
+- 已结构化分析的停顿、回避、选择性配合、陈述矛盾等信号，保留在访谈分析以及 `evidence_registry.json` 对应 `evidence_item.interview_metadata` 字段中，不重复写入 memory
+- 访谈后尚无法结构化、验证或归因，但未来值得对照的主观反思，可静默写入 `case_memory/` 的 `observe` 条目并更新 `INDEX.md`
+- 准备或分析后续访谈时读取 `INDEX.md` 中与当前对象或主题直接相关的未决 `observe` 条目，只作为待对照提示，不用于可信度定性
+- 不为 memory 写入追加用户问题，不改变访谈证据的确认与登记流程
+
 ## Output
 
 Interview Analysis Report:
@@ -175,7 +184,7 @@ Interview Analysis Report:
 
 ## Related
 
-- **Skills:** [访谈与问话分析](../skills/interview-analysis/SKILL.md), [证据链与底稿管理](../skills/evidence-management/SKILL.md)
+- **Skills:** [访谈与问话分析](../skills/interview-analysis/SKILL.md), [证据链与底稿管理](../skills/evidence-management/SKILL.md), [调查场景记忆](../skills/investigation-memory/SKILL.md)
 - **Rules:** [调查员行为准则](../rules/investigation-ethics.md) (对抗性信号记录原则)
 - **Agents:** `investigation-planner` for interview strategy alignment, `evidence-analyzer` for evidence registration
 - **Commands:** `/interview` for interview operations, `/investigate` for case context

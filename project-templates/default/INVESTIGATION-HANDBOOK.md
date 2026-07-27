@@ -58,7 +58,7 @@ AI 在以下场景应主动加载对应技能：
 | 调查技术指引 | `investigation-techniques` | 技术 | OSINT、数字取证 |
 | 访谈管理与分析 | `interview-analysis` | 沟通 | PEACE 模型、SCAN 陈述分析、对抗行为识别 |
 | 撰写报告 | `writing-reporting` | 产出 | SCQA 结构、读者适配 |
-| 记录非正式信息 | `investigation-memory` | 归档 | 后台创建 memory 条目（不干扰案件推进） |
+| 记录非正式信息 | `investigation-memory` | 归档 | 按团队配置的 `silent` / `notify` / `disabled` 策略处理，不干扰案件推进 |
 | 案件复盘 | `case-retrospective` | 复盘 | 七维度复盘框架（显式触发） |
 | 涉及特定舞弊场景的调查机制 | `fraud-*` 场景技能 | 场景 | 渠道窜货/费用报销/采购/投标操纵/知识产权/人力资源/伪造印章/利益冲突 |
 | MCP 能力与技能配合 | `mcp-integration` | 集成 | MCP 工具发现、松耦合调用、能力目录 |
@@ -138,6 +138,8 @@ AI 在以下场景应主动加载对应技能：
 
 **适用技能：** `interview-analysis`（访谈策略）、`investigation-techniques`（调查技术）
 
+FIELDWORK 收尾时，按 `investigation-memory` 核对未决过程记忆：已转化为正式方向的标记“已纳入”，已有反证的标记“已排除”，其余保持“存档待查”。该检查不参与阶段门禁。
+
 ### REVIEWING — 收敛定性
 
 **目标：** 将全案证据收敛为事实认定。
@@ -145,6 +147,8 @@ AI 在以下场景应主动加载对应技能：
 **产出物：** `final_report.md`、`evidence_registry.json`（confidence 定型）、`nodes/`（创建 FND 节点、冻结所有节点）
 
 **适用技能：** `writing-reporting`, `case-retrospective`, `investigation-foundation`
+
+REVIEWING 仅将 `case_memory/INDEX.md` 用于检查是否遗漏调查方向，不将 memory 作为事实或证据。结案时保留已纳入条目，选择性保留存档待查条目，压缩或清除已排除和低价值条目。
 
 ---
 

@@ -36,6 +36,7 @@ All case files reside under `cases/{case_id}/`:
 | `checklist.yaml` | `schemas/checklist.schema.json` | 各阶段门禁完成状态 |
 | `evidence_registry.json` | `schemas/evidence-registry.schema.json` | 证据注册表（证据条目、实体、认定） |
 | `CHANGELOG.json` | `schemas/changelog.schema.json` | 案件变更记录（阶段转换、决策、状态变更） |
+| `case_memory/INDEX.md`（可选） | — | 非正式过程记忆索引；只作待复查提示，不参与门禁判断 |
 
 ## Process
 
@@ -62,6 +63,9 @@ All case files reside under `cases/{case_id}/`:
 
 发现的疑点:
   {evidence_registry 中所有 suspected 的 finding}
+
+相关过程记忆:
+  {case_memory/INDEX.md 中与当前阶段直接相关的“存档待查”摘要；不存在则省略}
 
 下一步建议:
   1. {基于门禁状态的具体建议}
@@ -134,6 +138,14 @@ After a transition is validated and logged:
 On rollback (REVIEWING → FIELDWORK), update `checklist.reviewing.suspected_findings_resolved` to reflect rollback intent.
 
 ### 7. Phase Navigation — 阶段导航
+
+阶段转换确认后，按 `investigation-memory` 执行以下非门禁操作：
+
+- **FIELDWORK → REVIEWING**：核对未决条目。已转化为正式调查方向的标记“已纳入”并补充关联证据/假设；已有反证或合理解释的标记“已排除”；其余保持“存档待查”。每次变更必须先写对应条目文件的“后续状态”和关联字段，再同步 `INDEX.md`，最后回读核对；不得只改索引，也不得据此阻止转段
+- **进入 REVIEWING**：将仍未解决且可能影响结论的条目作为范围完整性提示，交由调查员判断是否需要通过正式 finding 触发补充取证；memory 自身不构成回退依据
+- **REVIEWING → CLOSED**：先保存清理前的 `case_memory/INDEX.pre-archive.md` 快照，再执行结案清理。保留“已纳入”，选择性保留“存档待查”，压缩或清除“已排除”和低价值条目；所有状态/关联变更先写条目文件，再同步 `INDEX.md` 并回读核对
+
+这些维护动作不修改 `evidence_registry.json` 的事实判断，不替代任何门禁，也不额外打断用户。
 
 每次成功推进阶段后，同时输出下一阶段的导航指引：
 

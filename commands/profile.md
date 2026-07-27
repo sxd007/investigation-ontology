@@ -39,7 +39,7 @@ description: 技能配置管理器 — 中途切换调查团队的技能 profile
 一线反舞弊调查员（默认推荐）
 覆盖报案到结案全流程，重点关注 fraud-* 场景
 
-激活的技能（22 个）：
+激活的模块（数量按 `install-profiles.json` 实时计算）：
   
   【Foundation Layer】
   ✓ investigation-foundation       调查方法论与框架
@@ -91,31 +91,31 @@ description: 技能配置管理器 — 中途切换调查团队的技能 profile
 
 [1] investigator (当前使用)
     ✓ 一线反舞弊调查员（默认推荐）
-    → 22 个技能激活
+    → 模块数按 `install-profiles.json` 实时计算
 
 [2] auditor
     □ 内审/合规，侧重数据分析与流程审计
-    → 14 个技能激活（子集）
+    → 模块数按 `install-profiles.json` 实时计算（子集）
 
 [3] analyst
     □ 数据分析师，侧重数据挖掘与异常检测
-    → 16 个技能激活
+    → 模块数按 `install-profiles.json` 实时计算
 
 [4] interviewer
     □ 访谈/问话专家，侧重陈述分析与证言评估
-    → 15 个技能激活
+    → 模块数按 `install-profiles.json` 实时计算
 
 [5] full
     □ 需要全部能力（含记忆、复盘、订单差异分析）
-    → 全部 26 个技能激活
+    → 全部模块（数量实时计算）
 
 选择新的 Profile (序号)：
 > 3
 
-准备切换：investigator (22 个技能) → analyst (16 个技能)
+准备切换：investigator ({旧模块数}) → analyst ({新模块数})
 
 技能变化：
-  移除 (6 个):
+  移除 ({实时计算}):
     ✗ fraud-bid-rigging
     ✗ fraud-fake-chop
     ✗ fraud-conflicts-of-interest
@@ -123,11 +123,11 @@ description: 技能配置管理器 — 中途切换调查团队的技能 profile
     ✗ fraud-hr
     ✗ order-execution-variance-analysis
     
-  保留 (16 个):
+  保留 ({实时计算}):
     ✓ investigation-foundation, investigation-memory, ontology, ...
     ✓ evidence-management, data-analysis, writing-reporting, ...
     
-  新增 (0 个):
+  新增 ({实时计算}):
     -
 
 确认切换？ (yes/no)
@@ -147,7 +147,7 @@ description: 技能配置管理器 — 中途切换调查团队的技能 profile
   ✓ investigation-techniques
   ✓ investigation-foundation
   ✓ fraud-classification
-  ... (共 16 个)
+  ... (共 {新模块数} 个)
 
 已保存到 team-profile.md
 ```
@@ -171,7 +171,7 @@ Profile: full
   • 团队配置齐全，培训充分
   • 作为 reference，了解全部可用技能
 
-激活的技能（26 个）：
+激活的模块（数量按 `install-profiles.json` 实时计算）：
 
   【Foundation Layer】
   • investigation-foundation       调查方法论与框架

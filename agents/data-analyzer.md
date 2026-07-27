@@ -185,6 +185,15 @@ analysis_finding:
    - **数据不足需补充** → 描述需要什么数据以及如何获取
    - **待人工接手的部分** → 列明接手指引
 
+#### 9. Memory 旁路检查（后台完成）
+
+交付前按 `investigation-memory` 检查本轮分析：
+
+- 可复现的数据异常、方法、范围和结果只进入 `analysis_finding`，不重复写入 memory
+- 因数据不足而暂缓的路径、异常引发但无法验证的直觉，以及可能改变后续调查方向的非正式疑虑，可静默写入 `case_memory/` 并更新 `INDEX.md`
+- 后续数据规划时先读取 `INDEX.md`，只提取与当前分析目标相关的未决条目作为数据需求提示；memory 不作为异常成立或假设成立的依据
+- 不为 memory 写入追加用户问题，不改变原有方案确认和下游路由
+
 ## Output
 
 Data Analysis Report with:
@@ -196,6 +205,6 @@ Data Analysis Report with:
 
 ## Related
 
-- **Skills:** [数据分析与审计技术](../skills/data-analysis/SKILL.md), [调查哲学与方法论](../skills/investigation-foundation/SKILL.md), [文档结构化解析](../skills/document-parsing/SKILL.md) — parsed JSON 生产者
+- **Skills:** [数据分析与审计技术](../skills/data-analysis/SKILL.md), [调查哲学与方法论](../skills/investigation-foundation/SKILL.md), [文档结构化解析](../skills/document-parsing/SKILL.md) — parsed JSON 生产者, [调查场景记忆](../skills/investigation-memory/SKILL.md)
 - **Agents:** `investigation-planner` for hypothesis and data needs, `evidence-analyzer` for evidence registration
 - **Commands:** `/analyze` 数据分析, `/investigate` for case context

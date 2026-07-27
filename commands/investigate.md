@@ -89,7 +89,7 @@ description: 调查入口命令 — 新案立案、续案回顾、阶段导航�
 
 **流程**：
 
-1. 读取 `cases/{case_id}/meta.json`、`checklist.yaml`、`evidence_registry.json`
+1. 读取 `cases/{case_id}/meta.json`、`checklist.yaml`、`evidence_registry.json`；如存在 `case_memory/INDEX.md`，同时读取索引
 2. 输出案件状态摘要：
 
 ```
@@ -108,6 +108,10 @@ description: 调查入口命令 — 新案立案、续案回顾、阶段导航�
 
 最近动态: 6月12日 完成代理商访谈（张三）
 
+过程记忆:
+  {仅列出与当前阶段和下一步任务相关的“存档待查”摘要；没有则省略本节}
+  （仅作待复查提示，不作为案件事实）
+
 下一步建议:
   1. 建议安排终端客户 B 公司访谈 — 可用 /interview 准备提纲
   2. 访谈笔录完成后用 case-manager 更新门禁状态
@@ -115,6 +119,7 @@ description: 调查入口命令 — 新案立案、续案回顾、阶段导航�
 ```
 
 3. 如有 `suspected` 的 finding 未解决，标注提醒
+4. 填充模板中的“过程记忆”占位符时，仅展示与当前阶段和下一步任务相关的“存档待查”条目；已排除条目不展示，memory 不参与门禁判断，不在模板外重复输出
 
 ---
 

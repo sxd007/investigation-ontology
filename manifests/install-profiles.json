@@ -3,13 +3,17 @@
   "_note": "每个 profile 的 modules 列表必须是依赖完整的（包含其全部模块的传递依赖），这是安装的权威来源。当 profile 与 install-modules.json 的 defaultInstall 标志冲突时，以 profile 列表为准；defaultInstall 仅用于未指定 profile 时的默认基线。新增/修改 profile 后请运行 scripts/validate-manifests 校验依赖闭合。",
   "profiles": {
     "minimal": {
-      "description": "最小基线 — 调查准则、代理、命令、平台配置，无领域技能",
+      "description": "最小基线 — 调查准则、代理、命令、平台配置和全局调查记忆，无领域技能",
       "modules": [
         "rules-core",
         "agents-core",
         "commands-core",
         "platform-configs",
-        "cold-start"
+        "cold-start",
+        "investigation-foundation",
+        "ontology",
+        "evidence-management",
+        "investigation-memory"
       ]
     },
     "investigator": {
@@ -38,7 +42,8 @@
         "fraud-fake-chop",
         "fraud-conflicts-of-interest",
         "data-analysis",
-        "document-parsing"
+        "document-parsing",
+        "investigation-memory"
       ]
     },
     "auditor": {
@@ -55,7 +60,8 @@
         "writing-reporting",
         "mcp-integration",
         "cold-start",
-        "document-parsing"
+        "document-parsing",
+        "investigation-memory"
       ]
     },
     "analyst": {
@@ -72,7 +78,8 @@
         "writing-reporting",
         "mcp-integration",
         "cold-start",
-        "document-parsing"
+        "document-parsing",
+        "investigation-memory"
       ]
     },
     "interviewer": {
@@ -88,7 +95,8 @@
         "evidence-management",
         "writing-reporting",
         "mcp-integration",
-        "cold-start"
+        "cold-start",
+        "investigation-memory"
       ]
     },
     "full": {

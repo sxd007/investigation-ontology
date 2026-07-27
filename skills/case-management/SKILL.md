@@ -299,6 +299,7 @@ origin: efio
 - `evidence_registry.json` — 追加 testimonial / documentary / digital\_forensics 类型证据
 - `nodes/` — 大量追加 EV 节点（访谈、调证），创建 ARG 节点构建论据
 - `checklist.yaml` — 更新 fieldwork 字段
+- `case_memory/INDEX.md`（如存在）— 收尾时核对未决条目状态；不作为正式产物或门禁输入
 
 **质量门禁**（全部满足后推进至 REVIEWING）：
 
@@ -317,6 +318,7 @@ origin: efio
 - 访谈笔录应达到"独立第三人可读懂并评估证明力"的标准
 - 每识别出一个关键对抗行为，至少同步输出一条独立取证路径
 - 如确认存在 suspected 置信度的发现，在 REVIEWING 阶段触发回退
+- FIELDWORK 收尾时，已转化为正式方向的 memory 标记“已纳入”，已有反证或合理解释的标记“已排除”，其余保持“存档待查”；此操作不得阻止阶段转换
 
 ***
 
@@ -330,6 +332,7 @@ origin: efio
 
 - `evidence_registry.json`（完整，含 findings\[]、evidence\_items\[]、entities\[]）
 - 各阶段产物（INIT 摘要、PRE 简报、FIELDWORK 访谈记录等）
+- `case_memory/INDEX.md`（如存在，仅用于范围完整性检查，不作为事实或证据）
 
 **输出**：
 
@@ -353,6 +356,8 @@ origin: efio
 - 无法支撑结论的内容，不得强行写入确定事实
 - 报告应以未参与调查的第三人为读者，使其能理解"为什么这样认定"
 - 最终报告和 evidence\_registry 在 CLOSED 后冻结
+- REVIEWING 中未决 memory 只能提示可能遗漏的调查方向；如需回退，必须先转化为正式 finding 并按门禁处理
+- 结案时保留“已纳入”条目，选择性保留“存档待查”，压缩或清除“已排除”和低价值条目，并同步更新 `INDEX.md`
 
 ***
 

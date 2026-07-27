@@ -579,7 +579,7 @@
     {
       "id": "investigation-memory",
       "kind": "skills",
-      "description": "调查场景记忆系统 — 记录案件过程中的非结构化信息（讨论分支、灵感、犹豫、思考过程），形成可查询的底层档案，支撑复盘与定向检索，不干扰案件推进",
+      "description": "调查场景记忆系统 — 当案件中出现“先记下来”“暂缓、以后再看”“感觉有问题但证据还不够”等讨论分支、疑虑、直觉或非正式观察时，静默记录为可查询的过程档案；也用于回答“之前关于 X 有什么记录”。不干扰案件推进，不污染证据链",
       "paths": [
         "skills/investigation-memory"
       ],
@@ -595,7 +595,7 @@
         "investigation-foundation",
         "evidence-management"
       ],
-      "defaultInstall": false,
+      "defaultInstall": true,
       "cost": "light",
       "stability": "beta"
     },

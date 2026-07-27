@@ -94,6 +94,20 @@
 **Selected Profile:** [PLACEHOLDER: investigator/auditor/analyst/interviewer/full]
 **Active Skills:** [PLACEHOLDER]
 
+## 调查记忆策略
+
+**影响技能：** investigation-memory，以及会产生候选过程记忆的 investigation-planner、data-analyzer、interview-analyzer
+
+`investigation-memory` 在所有 profile 中安装。本节控制是否写入案件目录；无论选择何种策略，已有 memory 均可只读查询和复盘。
+
+| 策略 | 行为 |
+|------|------|
+| `silent` | 符合准入规则时后台写入，成功后不提示 |
+| `notify` | 符合准入规则时写入，并在回复末尾给出一行提示（推荐安全默认值） |
+| `disabled` | 禁止创建或修改 `case_memory/`，只允许读取已有条目 |
+
+**Memory Write Policy:** [PLACEHOLDER: silent/notify/disabled]
+
 ## 调查通信纪律
 
 **影响技能：** interview-analysis（举报人联系约束）、investigation-planner（计划中的时间框定）

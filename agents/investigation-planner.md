@@ -193,6 +193,14 @@ No-Go 条件: 线索模糊、无法验证、属业务纠纷而非舞弊
    - **如已有数据** → `evidence-analyzer` 登记并评估现有证据
    - **舞弊类型已明确** → `fraud-type-classifier` 深入匹配子类型
 
+### Memory 旁路检查（后台完成）
+
+每轮方案讨论结束、正式写入案件档案前，按 `investigation-memory` 检查本轮被暂缓的调查方向、证据不足但值得保留的疑虑，以及假设修正的关键理由：
+
+- 已正式登记为假设、证据或底稿结论的内容不重复记录
+- 合格信息静默写入 `case_memory/` 并更新 `INDEX.md`，不为此追加问题或改变方案确认流程
+- 后续调整方案时先读取 `INDEX.md`，仅将与当前阶段和任务直接相关的未决条目作为“待复查方向”，不得把 memory 当作案件事实
+
 ---
 
 ## Output Format
@@ -208,7 +216,7 @@ No-Go 条件: 线索模糊、无法验证、属业务纠纷而非舞弊
 
 ## Related
 
-- **Skills:** [调查哲学与方法论](../skills/investigation-foundation/SKILL.md), [舞弊分类与路由](../skills/fraud-classification/SKILL.md), [渠道舞弊调查](../skills/fraud-channel/SKILL.md), [费用报销舞弊调查](../skills/fraud-reimbursement/SKILL.md), [采购舞弊调查](../skills/fraud-procurement/SKILL.md), [投标操纵调查](../skills/fraud-bid-rigging/SKILL.md), [知识产权舞弊调查](../skills/fraud-ip/SKILL.md), [人力资源舞弊调查](../skills/fraud-hr/SKILL.md), [伪造印章调查](../skills/fraud-fake-chop/SKILL.md), [利益冲突舞弊调查](../skills/fraud-conflicts-of-interest/SKILL.md), [项目执行差异分析](../skills/order-execution-variance-analysis/SKILL.md), [证据链与底稿管理](../skills/evidence-management/SKILL.md), [数据分析与审计技术](../skills/data-analysis/SKILL.md)
+- **Skills:** [调查哲学与方法论](../skills/investigation-foundation/SKILL.md), [舞弊分类与路由](../skills/fraud-classification/SKILL.md), [渠道舞弊调查](../skills/fraud-channel/SKILL.md), [费用报销舞弊调查](../skills/fraud-reimbursement/SKILL.md), [采购舞弊调查](../skills/fraud-procurement/SKILL.md), [投标操纵调查](../skills/fraud-bid-rigging/SKILL.md), [知识产权舞弊调查](../skills/fraud-ip/SKILL.md), [人力资源舞弊调查](../skills/fraud-hr/SKILL.md), [伪造印章调查](../skills/fraud-fake-chop/SKILL.md), [利益冲突舞弊调查](../skills/fraud-conflicts-of-interest/SKILL.md), [项目执行差异分析](../skills/order-execution-variance-analysis/SKILL.md), [证据链与底稿管理](../skills/evidence-management/SKILL.md), [数据分析与审计技术](../skills/data-analysis/SKILL.md), [调查场景记忆](../skills/investigation-memory/SKILL.md)
 - **Rules:** [调查员行为准则](../rules/investigation-ethics.md)
 - **Agents:** `data-analyzer` for 数据分析执行, `evidence-analyzer` for 证据评估, `case-manager` for 门禁检查
 - **Commands:** `/investigate` 调查入口, `/case` 案件管理
