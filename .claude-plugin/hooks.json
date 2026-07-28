@@ -16,7 +16,7 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Write|Edit",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
@@ -48,16 +48,22 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Write|Edit",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/run-hook.mjs\" check-ref",
             "timeout": 10,
             "statusMessage": "检查 ontology_ref 引用完整性…"
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/run-hook.mjs\" validate-case-file",
+            "timeout": 15,
+            "statusMessage": "校验案件 Registry 与节点结构…"
           }
         ],
-        "description": "Check ontology_ref exists after writing ENT/EV node files (cross-platform via node)",
+        "description": "Check ontology_ref and validate evidence_registry.json / nodes frontmatter after case-file writes (cross-platform via node)",
         "id": "post:write:ontology-ref-check"
       }
     ]

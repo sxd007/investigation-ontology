@@ -14,13 +14,14 @@
 //   node run-hook.mjs mcp-ocr-guard       # PreToolUse OCR MCP 直接调用拦截提醒
 //   node run-hook.mjs validate-action     # PreToolUse 本体 Action 前置校验
 //   node run-hook.mjs check-ref           # PostToolUse ontology_ref 完整性检查
+//   node run-hook.mjs validate-case-file  # PostToolUse registry/node 结构校验
 //
 // 文档依据：https://code.claude.com/docs/en/hooks
 // ============================================================================
 
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync, writeFileSync, copyFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join, dirname, basename, isAbsolute, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import os from 'node:os';
 
@@ -224,6 +225,60 @@ function mcpOcrGuard() {
   }
 }
 
+// ── PostToolUse：校验 evidence_registry.json 与 nodes/* 结构 ──────
+function validateCaseFile() {
+  let data = {};
+  try {
+    data = JSON.parse(readStdin() || '{}');
+  } catch {
+    return;
+  }
+
+  const ti = data?.tool_input || data?.toolInput || {};
+  const filePath = ti.file_path || ti.filePath || ti.path || '';
+  if (!filePath) return;
+
+  const normalized = String(filePath).replace(/\\/g, '/');
+  const isRegistry = /(^|\/)evidence_registry\.json$/i.test(normalized);
+  const isNode = /(^|\/)nodes\/[^/]+\.(md|json)$/i.test(normalized);
+  if (!isRegistry && !isNode) return;
+
+  const cwd = data?.cwd || process.cwd();
+  const absPath = isAbsolute(filePath) ? resolve(filePath) : resolve(cwd, filePath);
+  if (!existsSync(absPath)) return;
+
+  const caseDir = isRegistry ? dirname(absPath) : dirname(dirname(absPath));
+  const scanner = join(pluginRoot, 'skills', 'evidence-management', 'scripts', 'scan-chain.js');
+  if (!existsSync(scanner)) {
+    emitPostToolContext(`⚠️ [Case Schema] 无法找到校验器: ${scanner}`);
+    return;
+  }
+
+  const result = spawnSync(process.execPath, [scanner, caseDir, '--validate'], {
+    cwd: caseDir,
+    encoding: 'utf8',
+    maxBuffer: 1024 * 1024,
+  });
+  const output = `${result.stdout || ''}${result.stderr || ''}`.trim();
+  const summary = output.match(/(\d+) ERROR,\s*(\d+) WARN/);
+  const hasIssues = result.status !== 0 || (summary && (Number(summary[1]) > 0 || Number(summary[2]) > 0));
+  if (!hasIssues) return;
+
+  const clipped = output.length > 7000 ? `${output.slice(0, 7000)}\n…输出已截断` : output;
+  emitPostToolContext(
+    `⚠️ [Case Schema] ${basename(filePath)} 写入后校验未通过。请根据以下结果立即修复；不要忽略或通过修改可视化数据绕过规范。\n${clipped}`
+  );
+}
+
+function emitPostToolContext(additionalContext) {
+  console.log(JSON.stringify({
+    hookSpecificOutput: {
+      hookEventName: 'PostToolUse',
+      additionalContext,
+    },
+  }));
+}
+
 switch (hook) {
   case 'session-start':
     sessionStart();
@@ -239,6 +294,9 @@ switch (hook) {
     break;
   case 'check-ref':
     runScript('check-ontology-ref');
+    break;
+  case 'validate-case-file':
+    validateCaseFile();
     break;
   default:
     process.exit(0);

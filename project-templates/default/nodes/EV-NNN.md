@@ -14,6 +14,13 @@ collected_at: "2026-06-14T10:00:00+08:00"
 location: "raw/EV-001.pdf"
 hash: "sha256:..."
 
+# ── ONTOLOGY BINDING ──
+ontology_ref:
+  object_id: "ev-0001"
+  object_type: Evidence
+  lifecycle_status: UNRESOLVED
+  sealed: false
+
 # ── CONFIDENCE ──
 confidence: probable             # suspected | probable | confirmed
 probative_value: medium          # low | medium | high

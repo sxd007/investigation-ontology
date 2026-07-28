@@ -36,6 +36,40 @@ const TYPE_PREFIX_MAP = {
 
 const VALID_TYPES = new Set(Object.values(NODE_TYPES));
 
+const COMMON_NODE_FIELDS = new Set([
+  'id', 'type', 'status', 'relations', 'ontology_ref', 'generated_by',
+  'reviewed_by', 'reviewed_at', 'supersedes', 'sources',
+]);
+
+const ALLOWED_NODE_FIELDS = {
+  evidence: new Set([
+    ...COMMON_NODE_FIELDS, 'title', 'evidence_type', 'subtype', 'summary',
+    'source', 'collected_by', 'collected_at', 'location', 'hash',
+    'confidence', 'probative_value', 'related_entities', 'interview_metadata',
+    'scoring_category', 'state_transition',
+  ]),
+  clue: new Set([...COMMON_NODE_FIELDS, 'title', 'intent', 'theme']),
+  argument: new Set([...COMMON_NODE_FIELDS, 'title', 'proposition', 'intent']),
+  finding: new Set([
+    ...COMMON_NODE_FIELDS, 'title', 'statement', 'confidence', 'fraud_type',
+    'main_dispute_points', 'alternative_explanations', 'defense_response_summary',
+  ]),
+  entity: new Set([
+    ...COMMON_NODE_FIELDS, 'title', 'entity_type', 'name', 'alias', 'role',
+    'attributes', 'intent_score', 'intent_level', 'score_breakdown', 'scored_at', 'scored_by',
+  ]),
+  hypothesis: new Set([
+    ...COMMON_NODE_FIELDS, 'title', 'statement', 'confidence',
+    'last_updated_at', 'last_updated_by', 'alternative_hypotheses_addressed',
+  ]),
+  event: new Set([
+    ...COMMON_NODE_FIELDS, 'title', 'moment', 'time_type', 'time_range',
+    'description', 'inferred', 'inference_basis', 'tags',
+  ]),
+};
+
+const RELATION_ITEM_FIELDS = new Set(['id', 'excerpt', 'form']);
+
 const RELATION_TYPES = new Set([
   'derived_from', 'supports', 'contradicts', 'involves',
   'corroborated_by', 'addresses', 'supported_by', 'contradicted_by',
@@ -98,8 +132,36 @@ const LABEL_MAP = {
 // §2 YAML Frontmatter 解析器（缩进感知状态机，移植自 Python）
 // ═══════════════════════════════════════════════════════════════
 
+function stripInlineComment(val) {
+  let quote = null;
+  let escaped = false;
+  for (let i = 0; i < val.length; i++) {
+    const ch = val[i];
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+    if (ch === '\\' && quote === '"') {
+      escaped = true;
+      continue;
+    }
+    if (quote) {
+      if (ch === quote) quote = null;
+      continue;
+    }
+    if (ch === '"' || ch === "'") {
+      quote = ch;
+      continue;
+    }
+    if (ch === '#' && (i === 0 || /\s/.test(val[i - 1]))) {
+      return val.slice(0, i).trimEnd();
+    }
+  }
+  return val;
+}
+
 function stripQuotes(val) {
-  val = val.trim();
+  val = stripInlineComment(val).trim();
   if (val.length >= 2 && val[0] === val[val.length - 1] && (val[0] === '"' || val[0] === "'")) {
     return val.slice(1, -1);
   }
@@ -150,7 +212,7 @@ function parseFrontmatterText(content) {
     if (!topMatch) continue;
 
     const key = topMatch[1];
-    const val = topMatch[2].trim();
+    const val = stripInlineComment(topMatch[2]).trim();
 
     // 内联数组: key: [val1, val2]
     if (val.startsWith('[') && val.endsWith(']')) {
@@ -240,7 +302,7 @@ function parseNestedDict(lines) {
         result[currentKey] = currentVal;
       }
       currentKey = sm[1];
-      const val = sm[2].trim();
+      const val = stripInlineComment(sm[2]).trim();
 
       if (val === '[]') {
         currentVal = [];
@@ -501,14 +563,24 @@ function loadRegistry(jsonPath) {
   let raw;
   try {
     raw = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
-  } catch { return {}; }
+  } catch (e) {
+    process.stderr.write(`  [ERROR] evidence_registry.json 无法解析: ${e.message}\n`);
+    return {};
+  }
 
   // 项目格式: { evidence_items: [...], findings: [...] }
-  if (raw.evidence_items && Array.isArray(raw.evidence_items)) {
+  if (Array.isArray(raw.evidence_items) || Array.isArray(raw.findings)) {
     const result = {};
-    for (const item of raw.evidence_items) {
+    for (const [index, item] of (Array.isArray(raw.evidence_items) ? raw.evidence_items : []).entries()) {
+      if (!item || typeof item !== 'object' || Array.isArray(item)) {
+        process.stderr.write(`  [ERROR] evidence_items[${index}] 应为对象，实际为 ${Array.isArray(item) ? 'array' : typeof item}\n`);
+        continue;
+      }
       const id = item.evidence_id;
-      if (!id) continue;
+      if (!id) {
+        process.stderr.write(`  [ERROR] evidence_items[${index}] 缺少 evidence_id，已跳过\n`);
+        continue;
+      }
       result[id] = {
         id,
         type: 'EV', typePrefix: 'EV',
@@ -524,10 +596,17 @@ function loadRegistry(jsonPath) {
         generated_by: '', reviewed_by: '',
       };
     }
-    if (raw.findings && Array.isArray(raw.findings)) {
-      for (const f of raw.findings) {
+    if (Array.isArray(raw.findings)) {
+      for (const [index, f] of raw.findings.entries()) {
+        if (!f || typeof f !== 'object' || Array.isArray(f)) {
+          process.stderr.write(`  [ERROR] findings[${index}] 应为对象并包含 finding_id/statement/confidence，实际为 ${Array.isArray(f) ? 'array' : typeof f}\n`);
+          continue;
+        }
         const fid = f.finding_id;
-        if (!fid) continue;
+        if (!fid) {
+          process.stderr.write(`  [ERROR] findings[${index}] 缺少 finding_id，已跳过\n`);
+          continue;
+        }
         result[fid] = {
           id: fid, type: 'FND', typePrefix: 'FND',
           status: f.confidence === 'confirmed' ? 'ready' : 'draft',
@@ -844,6 +923,17 @@ function validateNodeFile(caseDir, relPath) {
     return errors;
   }
 
+  const allowedFields = ALLOWED_NODE_FIELDS[ntype];
+  if (allowedFields) {
+    for (const key of Object.keys(meta)) {
+      if (!allowedFields.has(key)) {
+        const suggestion = nearestName(key, allowedFields);
+        errors.push({ severity: 'WARN', type: 'unknown_frontmatter_field',
+          message: `${relPath}: 未知 frontmatter 字段 '${key}'${suggestion ? `，是否应为 '${suggestion}'` : ''}` });
+      }
+    }
+  }
+
   for (const field of REQUIRED_FIELDS[ntype] || []) {
     const val = meta[field];
     if (val === undefined || val === null || val === '' || (Array.isArray(val) && val.length === 0)) {
@@ -867,6 +957,46 @@ function validateNodeFile(caseDir, relPath) {
   if (Array.isArray(meta.sources)) {
     errors.push({ severity: 'WARN', type: 'deprecated_field',
       message: `${relPath}: 'sources' 已废弃，请改用 'relations'` });
+  }
+
+
+  if (meta.relations !== undefined) {
+    if (!meta.relations || typeof meta.relations !== 'object' || Array.isArray(meta.relations)) {
+      errors.push({ severity: 'ERROR', type: 'invalid_relations',
+        message: `${relPath}: 'relations' 应为对象` });
+    } else {
+      for (const [relationType, items] of Object.entries(meta.relations)) {
+        if (!RELATION_TYPES.has(relationType)) {
+          const suggestion = nearestName(relationType, RELATION_TYPES);
+          errors.push({ severity: 'ERROR', type: 'unknown_relation_type',
+            message: `${relPath}: 未知关系 '${relationType}'${suggestion ? `，是否应为 '${suggestion}'` : ''}` });
+        }
+        if (!Array.isArray(items)) {
+          errors.push({ severity: 'ERROR', type: 'invalid_relation_items',
+            message: `${relPath}: relations.${relationType} 应为数组` });
+          continue;
+        }
+        items.forEach((item, index) => {
+          if (typeof item === 'string') return;
+          if (!item || typeof item !== 'object' || Array.isArray(item)) {
+            errors.push({ severity: 'ERROR', type: 'invalid_relation_item',
+              message: `${relPath}: relations.${relationType}[${index}] 应为 ID 字符串或对象` });
+            return;
+          }
+          if (!item.id) {
+            errors.push({ severity: 'ERROR', type: 'missing_relation_id',
+              message: `${relPath}: relations.${relationType}[${index}] 缺少 'id'` });
+          }
+          for (const key of Object.keys(item)) {
+            if (!RELATION_ITEM_FIELDS.has(key)) {
+              const suggestion = nearestName(key, RELATION_ITEM_FIELDS);
+              errors.push({ severity: 'WARN', type: 'unknown_relation_field',
+                message: `${relPath}: relations.${relationType}[${index}] 未知字段 '${key}'${suggestion ? `，是否应为 '${suggestion}'` : ''}` });
+            }
+          }
+        });
+      }
+    }
   }
 
   // ontology_ref 检查
@@ -899,11 +1029,134 @@ function validateNodeFile(caseDir, relPath) {
   return errors;
 }
 
+function editDistance(a, b) {
+  const rows = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+  for (let i = 0; i <= a.length; i++) rows[i][0] = i;
+  for (let j = 0; j <= b.length; j++) rows[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      rows[i][j] = Math.min(
+        rows[i - 1][j] + 1,
+        rows[i][j - 1] + 1,
+        rows[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1),
+      );
+    }
+  }
+  return rows[a.length][b.length];
+}
+
+function nearestName(value, candidates) {
+  let best = null;
+  let distance = Infinity;
+  for (const candidate of candidates) {
+    const current = editDistance(value, candidate);
+    if (current < distance) {
+      best = candidate;
+      distance = current;
+    }
+  }
+  return distance <= Math.max(2, Math.floor(value.length / 3)) ? best : null;
+}
+
+function valueType(value) {
+  if (Array.isArray(value)) return 'array';
+  if (value === null) return 'null';
+  if (Number.isInteger(value)) return 'integer';
+  return typeof value;
+}
+
+function validateSchemaValue(value, schema, pointer, issues) {
+  if (!schema || typeof schema !== 'object') return;
+  if (schema.type) {
+    const actual = valueType(value);
+    const valid = schema.type === 'number'
+      ? actual === 'number' || actual === 'integer'
+      : actual === schema.type;
+    if (!valid) {
+      issues.push({ severity: 'ERROR', type: 'registry_schema_type',
+        message: `evidence_registry.json${pointer}: 类型应为 ${schema.type}，实际为 ${actual}` });
+      return;
+    }
+  }
+  if (schema.enum && !schema.enum.includes(value)) {
+    issues.push({ severity: 'ERROR', type: 'registry_schema_enum',
+      message: `evidence_registry.json${pointer}: 值 '${value}' 不在允许范围 ${schema.enum.join(', ')}` });
+  }
+  if (typeof value === 'string') {
+    if (schema.pattern && !(new RegExp(schema.pattern)).test(value)) {
+      issues.push({ severity: 'ERROR', type: 'registry_schema_pattern',
+        message: `evidence_registry.json${pointer}: 值 '${value}' 不符合 ${schema.pattern}` });
+    }
+    if (schema.format === 'date-time' && Number.isNaN(Date.parse(value))) {
+      issues.push({ severity: 'ERROR', type: 'registry_schema_format',
+        message: `evidence_registry.json${pointer}: '${value}' 不是有效的 date-time` });
+    }
+  }
+  if (typeof value === 'number') {
+    if (schema.minimum !== undefined && value < schema.minimum) {
+      issues.push({ severity: 'ERROR', type: 'registry_schema_minimum',
+        message: `evidence_registry.json${pointer}: ${value} 小于最小值 ${schema.minimum}` });
+    }
+    if (schema.maximum !== undefined && value > schema.maximum) {
+      issues.push({ severity: 'ERROR', type: 'registry_schema_maximum',
+        message: `evidence_registry.json${pointer}: ${value} 大于最大值 ${schema.maximum}` });
+    }
+  }
+  if (Array.isArray(value)) {
+    if (schema.minItems !== undefined && value.length < schema.minItems) {
+      issues.push({ severity: 'ERROR', type: 'registry_schema_min_items',
+        message: `evidence_registry.json${pointer}: 数组元素数应 ≥ ${schema.minItems}` });
+    }
+    if (schema.maxItems !== undefined && value.length > schema.maxItems) {
+      issues.push({ severity: 'ERROR', type: 'registry_schema_max_items',
+        message: `evidence_registry.json${pointer}: 数组元素数应 ≤ ${schema.maxItems}` });
+    }
+    if (schema.items) value.forEach((item, index) => validateSchemaValue(item, schema.items, `${pointer}/${index}`, issues));
+  }
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    for (const required of schema.required || []) {
+      if (value[required] === undefined) {
+        issues.push({ severity: 'ERROR', type: 'registry_schema_required',
+          message: `evidence_registry.json${pointer}: 缺少必填字段 '${required}'` });
+      }
+    }
+    for (const [key, childSchema] of Object.entries(schema.properties || {})) {
+      if (value[key] !== undefined) validateSchemaValue(value[key], childSchema, `${pointer}/${key}`, issues);
+    }
+  }
+}
+
+function validateRegistry(caseDir) {
+  const registryPath = path.join(caseDir, 'evidence_registry.json');
+  if (!fs.existsSync(registryPath)) return [];
+  let registry;
+  try {
+    registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+  } catch (e) {
+    return [{ severity: 'ERROR', type: 'registry_json_syntax',
+      message: `evidence_registry.json: JSON 解析失败: ${e.message}` }];
+  }
+  let schema;
+  try {
+    const schemaPath = path.join(__dirname, '..', '..', '..', 'schemas', 'evidence-registry.schema.json');
+    schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
+  } catch (e) {
+    return [{ severity: 'ERROR', type: 'registry_schema_unavailable',
+      message: `无法加载 evidence registry Schema: ${e.message}` }];
+  }
+  const issues = [];
+  validateSchemaValue(registry, schema, '', issues);
+  return issues;
+}
+
 function validateNodes(caseDir, nodes) {
   const errors = [];
   const seen = {};
   for (const n of Object.values(nodes)) {
-    errors.push(...validateNodeFile(caseDir, n.file || ''));
+    // registry 中的 evidence_items/findings 是结构化摘要，不是节点文件。
+    // 它们由 validateRegistry() 校验；只有实际 nodes/ 文件才做 frontmatter 校验。
+    if (!n.file) continue;
+    errors.push(...validateNodeFile(caseDir, n.file));
     if (seen[n.id]) {
       errors.push({ severity: 'ERROR', type: 'duplicate_id',
         message: `ID '${n.id}' 重复: ${seen[n.id]} 和 ${n.file}` });
@@ -1380,8 +1633,8 @@ function main() {
 
   // --validate
   if (opts.validate) {
-    const issues = validateNodes(caseDir, nodes);
-    if (!issues.length) console.log('\n✅ 节点结构验证通过');
+    const issues = [...validateRegistry(caseDir), ...validateNodes(caseDir, nodes)];
+    if (!issues.length) console.log('\n✅ Registry 与节点结构验证通过');
     else reportIssues(issues);
   }
 
@@ -1401,6 +1654,8 @@ function main() {
 
   // --html
   if (opts.html) {
+    const registryIssues = validateRegistry(caseDir);
+    if (registryIssues.some(i => i.severity === 'ERROR')) reportIssues(registryIssues);
     const edges = buildEdges(nodes);
     const chains = buildAllChains(nodes);
     const hypothesisData = buildHypothesisData(nodes);
@@ -1415,6 +1670,8 @@ function main() {
 
   // --json-dump
   if (opts.jsonDump) {
+    const registryIssues = validateRegistry(caseDir);
+    if (registryIssues.some(i => i.severity === 'ERROR')) reportIssues(registryIssues);
     const edges = buildEdges(nodes);
     const chains = buildAllChains(nodes);
     const hypothesisData = buildHypothesisData(nodes);

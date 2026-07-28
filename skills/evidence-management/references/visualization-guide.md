@@ -109,8 +109,10 @@ node scan-chain.js cases/CASE-2026-001/ --trace FND-001
 | `--trace FND-001` | 追溯 FND-001 的完整证据链（DFS） |
 | `--integrity` | 完整性检查（缺失引用、孤立节点、废弃 sources 字段 + **v3: 治理 readiness — FND 链中 UNRESOLVED/DISPUTED 对象、ready 链中 draft 依赖**） |
 | `--check-chains` | 推理链逻辑检查（类型匹配、循环引用、冲突关系 + **v3: HYP coverage — active 假设无证据、confirmed 假设仍有反驳**） |
-| `--validate` | 节点文件结构验证（ID 格式、必填字段 + **v3: ontology_ref 检查 — EV/ENT 应绑定本体对象、object_type/lifecycle_status 合法性**） |
+| `--validate` | Registry Schema + 节点文件结构验证（ID、必填/未知 frontmatter 字段、关系字段 + **ontology_ref 检查**） |
 | `--sync` | 同步 chain_nodes 索引回 evidence_registry.json（以节点文件 frontmatter 的 `status` 为准；直接修改 registry 的 chain_nodes 状态会在下次 `--sync` 时被文件覆盖） |
 | `--graph` | 输出 Mermaid 图（对话内预览） |
 | `--html [file]` | 生成交互式 HTML（默认 `evidence_chain_output.html`） |
 | `--json-dump [file]` | 输出 JSON 数据（7 个数据块，供 AI fallback 注入模板使用） |
+
+`--html` 和 `--json-dump` 会在生成输出前执行 Registry Schema 门禁；存在 Schema ERROR 时停止生成，避免非法 `findings[]` 等数据被静默丢弃后形成误导性图表。

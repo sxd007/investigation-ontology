@@ -16,7 +16,7 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Write|Edit",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
@@ -37,7 +37,7 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Write|Edit",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
@@ -45,9 +45,16 @@
             "args": [],
             "timeout": 5,
             "statusMessage": "Checking ontology_ref integrity..."
+          },
+          {
+            "type": "command",
+            "command": "node \"${INVESTIGATION_ONTOLOGY_ROOT:-$(pwd)}/scripts/run-hook.mjs\" validate-case-file",
+            "args": [],
+            "timeout": 15,
+            "statusMessage": "Validating case registry and node structure..."
           }
         ],
-        "description": "Check ontology_ref exists after writing ENT/EV node files when hook runtime supports it",
+        "description": "Check ontology_ref and validate evidence_registry.json / nodes frontmatter when hook runtime supports it",
         "id": "post:write:ontology-ref-check"
       }
     ]

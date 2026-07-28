@@ -9,6 +9,12 @@ name: "[角色: 名称，如 经办人: 邓富星]"
 alias: []
 role: "[在案件中的角色]"
 
+# ── ONTOLOGY BINDING ──
+ontology_ref:
+  object_id: "P-0001"
+  object_type: Person
+  lifecycle_status: UNRESOLVED
+
 # ── ATTRIBUTES ──
 attributes:
   department: "[部门]"
@@ -20,7 +26,9 @@ attributes:
 # ── RELATIONS ──
 relations:
   involves: []                   # 关联的其他 ENT-ID
-  supersedes: ""
+
+# ── AUDIT ──
+supersedes: ""
 
 # ── NOTES ──
 # 实体节点不声明推导关系（derived_from 不适用）。

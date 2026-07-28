@@ -118,13 +118,21 @@ v3 多视图调查工具，四个互补 tab：**Reasoning**（推理链 + 边语
 | `scan-chain.js <case_dir> --trace FND-001` | 追溯 FND-001 完整证据链 |
 | `scan-chain.js <case_dir> --integrity` | 完整性检查（含 v3 治理 readiness） |
 | `scan-chain.js <case_dir> --check-chains` | 推理链逻辑检查（含 v3 HYP coverage） |
-| `scan-chain.js <case_dir> --validate` | 节点结构验证（含 v3 ontology_ref 检查） |
+| `scan-chain.js <case_dir> --validate` | Registry Schema + 节点 frontmatter/关系字段验证（含 ontology_ref 检查） |
 | `scan-chain.js <case_dir> --sync` | 同步 chain_nodes 索引回 registry |
 | `scan-chain.js <case_dir> --graph` | Mermaid 图预览 |
 | `scan-chain.js <case_dir> --html output.html` | 交互式 HTML |
 | `scan-chain.js <case_dir> --json-dump data.json` | JSON 数据输出（AI fallback 用） |
 
 > 完整选项说明见 `references/visualization-guide.md`
+
+### 写后自动校验
+
+插件的 `PostToolUse` Hook 会在 `Write|Edit|MultiEdit` 写入 `evidence_registry.json` 或 `nodes/*.md|json` 后自动运行 `scan-chain.js --validate`：
+
+- `evidence_registry.json` 按 `schemas/evidence-registry.schema.json` 校验，非法数组元素（如字符串形式的 `findings[]`）、缺失 ID、非法枚举和 ID 格式会立即报错。
+- 节点文件校验必填 frontmatter、允许字段名、关系类型，以及关系对象的 `id` / `excerpt` / `form` 字段；常见拼写错误会给出候选字段。
+- Hook 只反馈并要求修复，不自动改写案件数据。终端脚本或外部程序写入不一定触发 Hook，因此阶段门禁和正式输出前仍须显式运行 `--validate`。
 
 ## 分析辅助工具
 
