@@ -46,7 +46,8 @@
           },
           "status": {
             "type": "string",
-            "enum": ["draft", "ready", "superseded"],
+            "description": "节点工作流状态。一般节点使用 draft/ready/superseded；HYP 使用 active/rejected/confirmed。具体类型与状态的一致性由 scan-chain.js 校验。",
+            "enum": ["draft", "ready", "superseded", "active", "rejected", "confirmed"],
             "default": "draft"
           }
         },
@@ -65,7 +66,7 @@
               "description": "指向本体层 Entity 对象的引用",
               "properties": {
                 "object_id": { "type": "string", "description": "本体层实体 ID（如 P-0001）" },
-                "object_type": { "type": "string", "enum": ["Person", "Organization", "Account", "Asset", "Instrument"] },
+                "object_type": { "type": "string", "enum": ["Person", "Organization", "Account"] },
                 "lifecycle_status": { "type": "string", "enum": ["UNRESOLVED", "VERIFIED", "DISPUTED", "SEALED"] }
               },
               "required": ["object_id", "object_type"]

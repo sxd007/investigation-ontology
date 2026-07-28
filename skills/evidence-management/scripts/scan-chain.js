@@ -19,6 +19,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { findProjectRoot, loadOntology } = require('../../../scripts/ontology-validation.cjs');
 
 // ═══════════════════════════════════════════════════════════════
 // §1 常量定义
@@ -101,6 +102,13 @@ const REQUIRED_FIELDS = {
   entity:    ['id', 'type', 'entity_type', 'name'],
   hypothesis:['id', 'type', 'statement', 'status'],
   event:     ['id', 'type', 'title', 'moment', 'time_type'],
+};
+
+const REQUIRED_BODY_SECTIONS = {
+  evidence: ['关键内容摘要', '使用说明'],
+  clue: ['关键发现', '下一步'],
+  argument: ['推理过程', '剩余怀疑'],
+  finding: ['推理路径', '推理依据', '剩余怀疑'],
 };
 
 const ID_PATTERN = /^(EV|LS|ARG|FND|ENT|HYP|EVT)-\d{3,}$/;
@@ -902,11 +910,13 @@ function validateNodeFile(caseDir, relPath) {
   }
 
   let meta;
+  let body = '';
   if (fpath.endsWith('.json')) {
     meta = readJsonNode(fpath);
   } else {
     const parsed = parseFrontmatterFile(fpath);
     meta = parsed ? parsed.frontmatter : null;
+    body = parsed ? parsed.body : '';
   }
   if (!meta) {
     return [{ severity: 'ERROR', type: 'unparseable', message: `${relPath}: 无法解析` }];
@@ -1014,6 +1024,12 @@ function validateNodeFile(caseDir, relPath) {
       if (objType && !ONTOLOGY_OBJECT_TYPES.has(objType)) {
         errors.push({ severity: 'WARN', type: 'invalid_ontology_object_type',
           message: `${relPath}: ontology_ref.object_type '${objType}' 不合法` });
+      } else if (ntype === 'entity' && objType && !['Person', 'Organization', 'Account'].includes(objType)) {
+        errors.push({ severity: 'ERROR', type: 'ontology_object_type_mismatch',
+          message: `${relPath}: entity 节点不能绑定 '${objType}' 本体对象` });
+      } else if (ntype === 'evidence' && objType && objType !== 'Evidence') {
+        errors.push({ severity: 'ERROR', type: 'ontology_object_type_mismatch',
+          message: `${relPath}: evidence 节点必须绑定 Evidence 本体对象` });
       }
       const ls = ontologyRef.lifecycle_status || '';
       if (ls && !ONTOLOGY_LIFECYCLE_STATUSES.has(ls)) {
@@ -1024,6 +1040,16 @@ function validateNodeFile(caseDir, relPath) {
   } else if (ntype === 'evidence' || ntype === 'entity') {
     errors.push({ severity: 'WARN', type: 'missing_ontology_ref',
       message: `${relPath}: ${ntype} 节点应包含 ontology_ref 绑定本体对象` });
+  }
+
+  if (fpath.endsWith('.md')) {
+    const headings = new Set([...body.matchAll(/^##\s+(.+?)\s*$/gm)].map((match) => match[1].trim()));
+    for (const section of REQUIRED_BODY_SECTIONS[ntype] || []) {
+      if (!headings.has(section)) {
+        errors.push({ severity: 'WARN', type: 'missing_body_section',
+          message: `${relPath}: Markdown 正文缺少必需章节 '## ${section}'` });
+      }
+    }
   }
 
   return errors;
@@ -1146,6 +1172,157 @@ function validateRegistry(caseDir) {
   }
   const issues = [];
   validateSchemaValue(registry, schema, '', issues);
+  return issues;
+}
+
+function readRegistryObject(caseDir) {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(caseDir, 'evidence_registry.json'), 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function validateChainIndex(caseDir, fileNodes) {
+  const registry = readRegistryObject(caseDir);
+  if (!registry || !Array.isArray(registry.chain_nodes)) return [];
+  const issues = [];
+  const index = new Map();
+  for (const [position, item] of registry.chain_nodes.entries()) {
+    if (!item || typeof item !== 'object' || !item.id) continue;
+    if (index.has(item.id)) {
+      issues.push({ severity: 'ERROR', type: 'duplicate_chain_index',
+        message: `evidence_registry.json/chain_nodes/${position}: ID '${item.id}' 重复` });
+    } else {
+      index.set(item.id, item);
+    }
+  }
+  for (const node of Object.values(fileNodes)) {
+    const indexed = index.get(node.id);
+    if (!indexed) {
+      issues.push({ severity: 'ERROR', type: 'node_missing_from_chain_index',
+        message: `${node.file}: 节点 '${node.id}' 未登记到 evidence_registry.json.chain_nodes` });
+      continue;
+    }
+    if (indexed.type !== node.type) {
+      issues.push({ severity: 'ERROR', type: 'chain_index_type_mismatch',
+        message: `${node.id}: chain_nodes.type 为 '${indexed.type}'，节点文件为 '${node.type}'` });
+    }
+    if (indexed.status !== undefined && indexed.status !== node.status) {
+      issues.push({ severity: 'ERROR', type: 'chain_index_status_mismatch',
+        message: `${node.id}: chain_nodes.status 为 '${indexed.status}'，节点文件为 '${node.status}'` });
+    }
+  }
+  for (const [id] of index) {
+    if (!fileNodes[id]) {
+      issues.push({ severity: 'ERROR', type: 'chain_index_missing_node',
+        message: `evidence_registry.json.chain_nodes 中 '${id}' 没有对应的 nodes/ 文件` });
+    }
+  }
+  return issues;
+}
+
+function validateNodeReferences(fileNodes) {
+  const issues = [];
+  const expectedPrefixes = {
+    involves: new Set(['ENT']),
+    corroborated_by: new Set(['EV']),
+    addresses: new Set(['HYP']),
+  };
+  for (const node of Object.values(fileNodes)) {
+    for (const [relationType, items] of Object.entries(node.relations || {})) {
+      for (const item of items) {
+        const targetId = typeof item === 'string' ? item : item?.id;
+        if (!targetId) continue;
+        if (!fileNodes[targetId]) {
+          issues.push({ severity: ['derived_from', 'supports', 'contradicts'].includes(relationType) ? 'ERROR' : 'WARN',
+            type: 'missing_relation_target', message: `${node.file}: relations.${relationType} 引用不存在的节点 '${targetId}'` });
+          continue;
+        }
+        const expected = expectedPrefixes[relationType];
+        const actualPrefix = targetId.split('-')[0];
+        if (expected && !expected.has(actualPrefix)) {
+          issues.push({ severity: 'ERROR', type: 'relation_target_type_mismatch',
+            message: `${node.file}: relations.${relationType} 应指向 ${[...expected].join('/')}，实际为 '${targetId}'` });
+        }
+      }
+    }
+  }
+  return issues;
+}
+
+function boolValue(value) {
+  if (value === true || value === 'true') return true;
+  if (value === false || value === 'false') return false;
+  return undefined;
+}
+
+function validateOntologyBindings(caseDir, fileNodes) {
+  const registry = readRegistryObject(caseDir);
+  if (!registry) return [];
+  const entries = [];
+  for (const item of registry.entities || []) {
+    if (item?.ontology_ref) entries.push({ layer: `registry.entities[${item.entity_id || '?'}]`, cognitiveId: item.entity_id, kind: 'entity', ref: item.ontology_ref });
+  }
+  for (const item of registry.evidence_items || []) {
+    if (item?.ontology_ref) entries.push({ layer: `registry.evidence_items[${item.evidence_id || '?'}]`, cognitiveId: item.evidence_id, kind: 'evidence', ref: item.ontology_ref });
+  }
+  for (const node of Object.values(fileNodes)) {
+    if (node.ontology_ref && (node.type === 'entity' || node.type === 'evidence')) {
+      entries.push({ layer: node.file, cognitiveId: node.id, kind: node.type, ref: node.ontology_ref });
+    }
+  }
+  if (!entries.length) return [];
+
+  const projectRoot = findProjectRoot(caseDir);
+  if (!projectRoot) {
+    return [{ severity: 'ERROR', type: 'ontology_root_missing',
+      message: `${caseDir}: 存在 ontology_ref，但向上未找到 global_ontology/` }];
+  }
+  const ontology = loadOntology(projectRoot);
+  const issues = [...ontology.issues];
+  const byCognitiveId = new Map();
+  for (const entry of entries) {
+    const objectId = entry.ref.object_id;
+    const object = ontology.objects.get(objectId);
+    if (!object) {
+      issues.push({ severity: 'ERROR', type: 'ontology_ref_not_found',
+        message: `${entry.layer}: ontology_ref.object_id '${objectId}' 不存在` });
+      continue;
+    }
+    if (entry.ref.object_type && object.type !== entry.ref.object_type) {
+      issues.push({ severity: 'ERROR', type: 'ontology_ref_type_mismatch',
+        message: `${entry.layer}: object_type 为 '${entry.ref.object_type}'，本体对象为 '${object.type}'` });
+    }
+    if (entry.kind === 'entity' && entry.ref.lifecycle_status && entry.ref.lifecycle_status !== object.lifecycle_status) {
+      issues.push({ severity: 'ERROR', type: 'ontology_lifecycle_mismatch',
+        message: `${entry.layer}: lifecycle_status 为 '${entry.ref.lifecycle_status}'，本体对象为 '${object.lifecycle_status}'` });
+    }
+    const declaredSealed = boolValue(entry.ref.sealed);
+    if (entry.kind === 'evidence' && declaredSealed !== undefined && declaredSealed !== object.sealed) {
+      issues.push({ severity: 'ERROR', type: 'ontology_sealed_mismatch',
+        message: `${entry.layer}: sealed 为 '${declaredSealed}'，本体对象为 '${object.sealed}'` });
+    }
+    if (byCognitiveId.has(entry.cognitiveId)) {
+      const previous = byCognitiveId.get(entry.cognitiveId);
+      if (previous.ref.object_id !== entry.ref.object_id) {
+        issues.push({ severity: 'ERROR', type: 'ontology_binding_mismatch',
+          message: `${entry.cognitiveId}: ${previous.layer} 绑定 '${previous.ref.object_id}'，${entry.layer} 绑定 '${entry.ref.object_id}'` });
+      }
+      if (entry.kind === 'entity' && previous.ref.lifecycle_status && entry.ref.lifecycle_status &&
+          previous.ref.lifecycle_status !== entry.ref.lifecycle_status) {
+        issues.push({ severity: 'ERROR', type: 'ontology_binding_state_mismatch',
+          message: `${entry.cognitiveId}: Registry 与节点的 lifecycle_status 不一致` });
+      }
+      const previousSealed = boolValue(previous.ref.sealed);
+      if (entry.kind === 'evidence' && previousSealed !== undefined && declaredSealed !== undefined && previousSealed !== declaredSealed) {
+        issues.push({ severity: 'ERROR', type: 'ontology_binding_state_mismatch',
+          message: `${entry.cognitiveId}: Registry 与节点的 sealed 不一致` });
+      }
+    } else {
+      byCognitiveId.set(entry.cognitiveId, entry);
+    }
+  }
   return issues;
 }
 
@@ -1633,8 +1810,14 @@ function main() {
 
   // --validate
   if (opts.validate) {
-    const issues = [...validateRegistry(caseDir), ...validateNodes(caseDir, nodes)];
-    if (!issues.length) console.log('\n✅ Registry 与节点结构验证通过');
+    const issues = [
+      ...validateRegistry(caseDir),
+      ...validateNodes(caseDir, nodes),
+      ...validateChainIndex(caseDir, fileNodes),
+      ...validateNodeReferences(fileNodes),
+      ...validateOntologyBindings(caseDir, fileNodes),
+    ];
+    if (!issues.length) console.log('\n✅ Registry、节点与本体绑定验证通过');
     else reportIssues(issues);
   }
 

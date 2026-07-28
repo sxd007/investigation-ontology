@@ -12,13 +12,13 @@ const scanner = join(pluginRoot, 'skills', 'evidence-management', 'scripts', 'sc
 const hookRunner = join(pluginRoot, 'scripts', 'run-hook.mjs');
 const tempRoot = mkdtempSync(join(tmpdir(), 'case-validation-'));
 
-function registry(findings = []) {
+function registry(findings = [], chainNodes = []) {
   return {
     metadata: {
       case_id: 'CASE-TEST-001',
       generated_at: '2026-07-28T00:00:00Z',
     },
-    chain_nodes: [],
+    chain_nodes: chainNodes,
     entities: [],
     evidence_items: [],
     findings,
@@ -33,6 +33,13 @@ function makeCase(name, registryData, nodeContent = null) {
   writeFileSync(join(caseDir, 'evidence_registry.json'), JSON.stringify(registryData, null, 2));
   if (nodeContent !== null) writeFileSync(join(caseDir, 'nodes', 'FND-001.md'), nodeContent);
   return caseDir;
+}
+
+function writeOntologyFile(projectRoot, relativePath, content) {
+  const filePath = join(projectRoot, 'global_ontology', relativePath);
+  mkdirSync(dirname(filePath), { recursive: true });
+  writeFileSync(filePath, content);
+  return filePath;
 }
 
 function scan(caseDir, ...args) {
@@ -57,11 +64,11 @@ try {
     statement: '已确认测试事实',
     confidence: 'confirmed',
   };
-  const validNode = `---\nid: FND-001\ntype: finding\nstatus: ready # draft | ready | superseded\nstatement: "已确认测试事实 # 引号内不是注释"\nconfidence: confirmed\nrelations:\n  derived_from: [] # 暂无上游\n---\n\n# FND-001\n`;
-  const validCase = makeCase('valid', registry([validFinding]), validNode);
+  const validNode = `---\nid: FND-001\ntype: finding\nstatus: ready # draft | ready | superseded\nstatement: "已确认测试事实 # 引号内不是注释"\nconfidence: confirmed\nrelations:\n  derived_from: [] # 暂无上游\n---\n\n# FND-001\n\n## 推理路径\n暂无\n\n## 推理依据\n暂无\n\n## 剩余怀疑\n暂无\n`;
+  const validCase = makeCase('valid', registry([validFinding], [{ id: 'FND-001', type: 'finding', status: 'ready' }]), validNode);
   const validResult = scan(validCase);
   assert.equal(validResult.status, 0, validResult.stdout + validResult.stderr);
-  assert.match(validResult.stdout, /节点结构验证通过/);
+  assert.match(validResult.stdout, /Registry、节点与本体绑定验证通过/);
 
   const stringCase = makeCase('string-finding', registry(['【已确认】无 ID 的字符串事实']));
   const stringResult = scan(stringCase);
@@ -82,6 +89,76 @@ try {
   assert.match(typoResult.stdout, /未知关系 'derive_from'.*'derived_from'/);
   assert.match(typoResult.stdout, /缺少必填字段 'statement'/);
 
+  const missingIndexCase = makeCase('missing-index', registry([validFinding]), validNode);
+  const missingIndexResult = scan(missingIndexCase);
+  assert.equal(missingIndexResult.status, 1, missingIndexResult.stdout + missingIndexResult.stderr);
+  assert.match(missingIndexResult.stdout, /node_missing_from_chain_index/);
+
+  const hypNode = `---\nid: HYP-001\ntype: hypothesis\nstatus: active\nstatement: "测试假设"\nrelations:\n  supported_by: []\n  contradicted_by: []\n---\n\n# HYP-001\n`;
+  const hypCase = makeCase('hyp-status', registry([], [{ id: 'HYP-001', type: 'hypothesis', status: 'active' }]), null);
+  writeFileSync(join(hypCase, 'nodes', 'HYP-001.md'), hypNode);
+  const hypResult = scan(hypCase);
+  assert.equal(hypResult.status, 0, hypResult.stdout + hypResult.stderr);
+
+  const missingSectionNode = `---\nid: FND-001\ntype: finding\nstatus: ready\nstatement: "缺少章节"\nconfidence: confirmed\nrelations:\n  derived_from: []\n---\n\n# FND-001\n`;
+  const missingSectionCase = makeCase('missing-section', registry([validFinding], [{ id: 'FND-001', type: 'finding', status: 'ready' }]), missingSectionNode);
+  const missingSectionResult = scan(missingSectionCase);
+  assert.equal(missingSectionResult.status, 0, missingSectionResult.stdout + missingSectionResult.stderr);
+  assert.match(missingSectionResult.stdout, /missing_body_section/);
+
+  const projectRoot = join(tempRoot, 'ontology-project');
+  const boundCase = join(projectRoot, 'cases', 'CASE-TEST-002');
+  mkdirSync(join(boundCase, 'nodes'), { recursive: true });
+  writeOntologyFile(projectRoot, 'entities/person/P-0001.yaml', `meta:\n  id: "P-0001"\n  type: Person\n  lifecycle_status: VERIFIED\n  created_at: "2026-07-28T00:00:00Z"\n  created_by: tester\nproperties:\n  name_primary: "测试人员"\n`);
+  writeOntologyFile(projectRoot, 'entities/evidence/ev-001.yaml', `meta:\n  id: "ev-001"\n  type: Evidence\n  lifecycle_status: ACTIVE\n  created_at: "2026-07-28T00:00:00Z"\n  created_by: tester\nintegrity:\n  raw_file_path: "cases/CASE-TEST-002/raw/EV-001.txt"\n  sha256: "abc123"\n  sealed: false\nproperties:\n  evidence_type: OTHER\n`);
+  const boundRegistry = registry([], [
+    { id: 'ENT-001', type: 'entity', status: 'draft' },
+    { id: 'EV-001', type: 'evidence', status: 'ready' },
+  ]);
+  boundRegistry.entities.push({
+    entity_id: 'ENT-001', entity_type: 'subject', name: '测试人员',
+    ontology_ref: { object_id: 'P-0001', object_type: 'Person', lifecycle_status: 'VERIFIED' },
+  });
+  boundRegistry.evidence_items.push({
+    evidence_id: 'EV-001', type: 'documentary', summary: '测试证据', source: '测试',
+    collected_at: '2026-07-28T00:00:00Z',
+    ontology_ref: { object_id: 'ev-001', object_type: 'Evidence', sealed: false },
+  });
+  writeFileSync(join(boundCase, 'evidence_registry.json'), JSON.stringify(boundRegistry, null, 2));
+  const entityNode = `---\nid: ENT-001\ntype: entity\nentity_type: subject\nname: "测试人员"\nontology_ref:\n  object_id: "P-0001"\n  object_type: Person\n  lifecycle_status: VERIFIED\nrelations:\n  involves: []\n---\n\n# ENT-001\n`;
+  writeFileSync(join(boundCase, 'nodes', 'ENT-001.md'), entityNode);
+  const evidenceNode = `---\nid: EV-001\ntype: evidence\nstatus: ready\nontology_ref:\n  object_id: "ev-001"\n  object_type: Evidence\n  sealed: false\nrelations:\n  involves:\n    - ENT-001\n---\n\n# EV-001\n\n## 关键内容摘要\n测试\n\n## 使用说明\n测试\n`;
+  writeFileSync(join(boundCase, 'nodes', 'EV-001.md'), evidenceNode);
+  const boundResult = scan(boundCase);
+  assert.equal(boundResult.status, 0, boundResult.stdout + boundResult.stderr);
+
+  boundRegistry.evidence_items[0].ontology_ref.sealed = true;
+  writeFileSync(join(boundCase, 'evidence_registry.json'), JSON.stringify(boundRegistry, null, 2));
+  const sealedDriftResult = scan(boundCase);
+  assert.equal(sealedDriftResult.status, 1, sealedDriftResult.stdout + sealedDriftResult.stderr);
+  assert.match(sealedDriftResult.stdout, /ontology_sealed_mismatch/);
+  boundRegistry.evidence_items[0].ontology_ref.sealed = false;
+
+  boundRegistry.entities[0].ontology_ref.lifecycle_status = 'DISPUTED';
+  writeFileSync(join(boundCase, 'evidence_registry.json'), JSON.stringify(boundRegistry, null, 2));
+  const driftResult = scan(boundCase);
+  assert.equal(driftResult.status, 1, driftResult.stdout + driftResult.stderr);
+  assert.match(driftResult.stdout, /ontology_lifecycle_mismatch/);
+  boundRegistry.entities[0].ontology_ref.lifecycle_status = 'VERIFIED';
+
+  boundRegistry.entities[0].ontology_ref.object_id = 'P-9999';
+  writeFileSync(join(boundCase, 'evidence_registry.json'), JSON.stringify(boundRegistry, null, 2));
+  const missingObjectResult = scan(boundCase);
+  assert.equal(missingObjectResult.status, 1, missingObjectResult.stdout + missingObjectResult.stderr);
+  assert.match(missingObjectResult.stdout, /ontology_ref_not_found/);
+
+  const invalidRelation = writeOntologyFile(projectRoot, 'relations/R-001.yaml', `meta:\n  relation_id: "R-001"\n  relation_type: WORKS_AT\n  evidence_tier: HARD\n  source_evidence_refs: []\n  observed_time: "2026-07-28T00:00:00Z"\ncore:\n  from_entity: "P-0001"\n  to_entity: "O-9999"\n`);
+  const ontologyHookResult = runHook(invalidRelation, projectRoot);
+  assert.equal(ontologyHookResult.status, 0, ontologyHookResult.stdout + ontologyHookResult.stderr);
+  const ontologyHookOutput = JSON.parse(ontologyHookResult.stdout);
+  assert.match(ontologyHookOutput.hookSpecificOutput.additionalContext, /Ontology Schema/);
+  assert.match(ontologyHookOutput.hookSpecificOutput.additionalContext, /ontology_missing_relation_endpoint/);
+
   const hookResult = runHook(join(stringCase, 'evidence_registry.json'), stringCase);
   assert.equal(hookResult.status, 0, hookResult.stdout + hookResult.stderr);
   const hookOutput = JSON.parse(hookResult.stdout);
@@ -98,7 +175,7 @@ try {
   assert.equal(irrelevantResult.status, 0);
   assert.equal(irrelevantResult.stdout, '');
 
-  console.log('✓ case validation tests passed (7 scenarios)');
+  console.log('✓ case validation tests passed (15 scenarios)');
 } finally {
   rmSync(tempRoot, { recursive: true, force: true });
 }

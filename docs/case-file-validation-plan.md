@@ -57,9 +57,39 @@
 
 回归入口：`node scripts/test-case-validation.mjs`。
 
+## Phase 2：跨层与内容校验
+
+### 范围与边界
+
+1. **索引一致性（ERROR）**：`chain_nodes` 与 `nodes/` 中的实际节点必须一一对应，ID、类型一致；显式声明的状态必须一致。
+2. **本体结构（ERROR）**：校验 `global_ontology/entities/**/*.yaml` 和 `global_ontology/relations/*.yaml` 的核心必填字段、ID/类型/生命周期枚举及关系端点。
+3. **绑定一致性（ERROR）**：ENT 比较 Registry、节点和本体对象的 `object_id`、`object_type`、`lifecycle_status`；EV 比较 `object_id`、`object_type` 和 `sealed`。EV 不使用实体生命周期枚举代替冻结状态。
+4. **正文规范（WARN）**：Markdown 节点缺少模板规定的核心章节时提示修复，但不尝试判断段落语义是否真实、充分或正确。
+5. **单向关系**：只校验 `involves` 等引用的目标存在及类型正确，不要求被引用 ENT 维护反向列表。
+
+### 触发策略
+
+- 写入 Registry 或节点后，执行案件结构、索引、正文和跨层绑定校验。
+- 写入 `global_ontology/` YAML 后，执行本体结构和全局引用校验。
+- `PreToolUse validate-action` 继续负责状态转换等业务动作前置条件；PostToolUse 不替代它。
+- PostToolUse 只反馈，不自动同步或改写另一层数据，避免产生隐式副作用。
+
+### 实施顺序
+
+1. 修正 `chain_nodes.status` 对 HYP 状态的表达能力，并增加索引一致性检查。
+2. 增加零依赖本体 YAML 核心结构校验器和 PostToolUse 路由。
+3. 增加 Registry ↔ nodes ↔ global ontology 绑定一致性检查。
+4. 增加 Markdown 必需章节 lint。
+5. 扩展回归测试，覆盖缺失索引、HYP 状态、缺失本体对象、状态漂移、非法本体关系及正文缺节。
+
+### 非目标
+
+- 不把 `UNRESOLVED/VERIFIED/DISPUTED/SEALED` 加入 ENT 顶层 `status`；它们属于 `ontology_ref.lifecycle_status`。
+- 不用正则或章节存在性替代事实真实性、证据充分性等人工判断。
+- 不在写后校验中自动运行 `--sync`。
+
 ## 后续增强
 
-- 增加 registry、`chain_nodes` 与节点文件的一致性检查。
 - 将 Schema 校验覆盖扩展到 `meta.json`、`checklist.yaml` 和 `CHANGELOG.json`。
-- 在发布构建具备依赖打包能力后，评估用 Ajv 替换专用 Schema 遍历器。
-- 对 shell、外部程序和人工编辑增加 CI 或阶段门禁校验，而不是依赖 PostToolUse。
+- 在发布构建具备依赖打包能力后，评估引入完整 YAML 解析器和 Ajv，替换专用子集解析器与 Schema 遍历器。
+- 对 shell、外部程序和人工编辑增加 CI 或阶段门禁校验，而不是仅依赖 PostToolUse。

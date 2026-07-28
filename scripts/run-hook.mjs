@@ -14,7 +14,7 @@
 //   node run-hook.mjs mcp-ocr-guard       # PreToolUse OCR MCP 直接调用拦截提醒
 //   node run-hook.mjs validate-action     # PreToolUse 本体 Action 前置校验
 //   node run-hook.mjs check-ref           # PostToolUse ontology_ref 完整性检查
-//   node run-hook.mjs validate-case-file  # PostToolUse registry/node 结构校验
+//   node run-hook.mjs validate-case-file  # PostToolUse registry/node/ontology 校验
 //
 // 文档依据：https://code.claude.com/docs/en/hooks
 // ============================================================================
@@ -225,7 +225,7 @@ function mcpOcrGuard() {
   }
 }
 
-// ── PostToolUse：校验 evidence_registry.json 与 nodes/* 结构 ──────
+// ── PostToolUse：校验案件文件与 global_ontology YAML ─────────────
 function validateCaseFile() {
   let data = {};
   try {
@@ -241,11 +241,32 @@ function validateCaseFile() {
   const normalized = String(filePath).replace(/\\/g, '/');
   const isRegistry = /(^|\/)evidence_registry\.json$/i.test(normalized);
   const isNode = /(^|\/)nodes\/[^/]+\.(md|json)$/i.test(normalized);
-  if (!isRegistry && !isNode) return;
+  const isOntology = /(^|\/)global_ontology\/(entities\/[^/]+|relations)\/[^/]+\.ya?ml$/i.test(normalized);
+  if (!isRegistry && !isNode && !isOntology) return;
 
   const cwd = data?.cwd || process.cwd();
   const absPath = isAbsolute(filePath) ? resolve(filePath) : resolve(cwd, filePath);
   if (!existsSync(absPath)) return;
+
+  if (isOntology) {
+    const validator = join(pluginRoot, 'scripts', 'validate-ontology.mjs');
+    if (!existsSync(validator)) {
+      emitPostToolContext(`⚠️ [Ontology Schema] 无法找到校验器: ${validator}`);
+      return;
+    }
+    const result = spawnSync(process.execPath, [validator, absPath], {
+      cwd,
+      encoding: 'utf8',
+      maxBuffer: 1024 * 1024,
+    });
+    const output = `${result.stdout || ''}${result.stderr || ''}`.trim();
+    const summary = output.match(/本体校验:\s*(\d+) ERROR,\s*(\d+) WARN/);
+    const hasIssues = result.status !== 0 || (summary && (Number(summary[1]) > 0 || Number(summary[2]) > 0));
+    if (!hasIssues) return;
+    const clipped = output.length > 7000 ? `${output.slice(0, 7000)}\n…输出已截断` : output;
+    emitPostToolContext(`⚠️ [Ontology Schema] ${basename(filePath)} 写入后校验未通过。请修复本体结构或引用；不要绕过 Action 治理。\n${clipped}`);
+    return;
+  }
 
   const caseDir = isRegistry ? dirname(absPath) : dirname(dirname(absPath));
   const scanner = join(pluginRoot, 'skills', 'evidence-management', 'scripts', 'scan-chain.js');

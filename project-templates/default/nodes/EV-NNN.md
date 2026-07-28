@@ -18,7 +18,6 @@ hash: "sha256:..."
 ontology_ref:
   object_id: "ev-0001"
   object_type: Evidence
-  lifecycle_status: UNRESOLVED
   sealed: false
 
 # ── CONFIDENCE ──
