@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,6 +10,7 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const pluginRoot = dirname(scriptDir);
 const scanner = join(pluginRoot, 'skills', 'evidence-management', 'scripts', 'scan-chain.js');
 const hookRunner = join(pluginRoot, 'scripts', 'run-hook.mjs');
+const codeBuddyHooks = join(pluginRoot, 'hooks', 'hooks.json');
 const tempRoot = mkdtempSync(join(tmpdir(), 'case-validation-'));
 
 function registry(findings = [], chainNodes = []) {
@@ -46,9 +47,10 @@ function scan(caseDir, ...args) {
   return spawnSync(process.execPath, [scanner, caseDir, ...(args.length ? args : ['--validate'])], { encoding: 'utf8' });
 }
 
-function runHook(filePath, cwd) {
+function runHook(filePath, cwd, toolName = 'write_to_file') {
   const input = JSON.stringify({
     cwd,
+    tool_name: toolName,
     tool_input: { file_path: filePath },
   });
   return spawnSync(process.execPath, [hookRunner, 'validate-case-file'], {
@@ -59,6 +61,20 @@ function runHook(filePath, cwd) {
 }
 
 try {
+  const hookConfig = JSON.parse(readFileSync(codeBuddyHooks, 'utf8'));
+  const preWriteMatcher = hookConfig.hooks.PreToolUse.find((entry) => entry.id === 'pre:write:case-file-guard')?.matcher || '';
+  const postWriteMatcher = hookConfig.hooks.PostToolUse.find((entry) => entry.id === 'post:write:ontology-ref-check')?.matcher || '';
+  for (const toolName of ['Write', 'Edit', 'MultiEdit']) {
+    assert.match(toolName, new RegExp(preWriteMatcher), `PreToolUse matcher 缺少官方工具名: ${toolName}`);
+    assert.match(toolName, new RegExp(postWriteMatcher), `PostToolUse matcher 缺少官方工具名: ${toolName}`);
+  }
+  for (const toolName of ['write_to_file', 'replace_in_file', 'multi_replace_string_in_file']) {
+    assert.match(toolName, new RegExp(preWriteMatcher), `PreToolUse matcher 缺少兼容工具名: ${toolName}`);
+    assert.match(toolName, new RegExp(postWriteMatcher), `PostToolUse matcher 缺少兼容工具名: ${toolName}`);
+  }
+  assert.match('delete_file', new RegExp(postWriteMatcher), 'PostToolUse matcher 缺少兼容工具名: delete_file');
+  assert.doesNotMatch('NotebookEdit', new RegExp(postWriteMatcher), 'PostToolUse matcher 不应误匹配 NotebookEdit');
+
   const validFinding = {
     finding_id: 'FND-001',
     statement: '已确认测试事实',
@@ -169,13 +185,21 @@ try {
   assert.equal(validHookResult.status, 0, validHookResult.stdout + validHookResult.stderr);
   assert.equal(validHookResult.stdout, '');
 
+  const deleteCase = makeCase('delete-node', registry([validFinding], [{ id: 'FND-001', type: 'finding', status: 'ready' }]), validNode);
+  const deletedNode = join(deleteCase, 'nodes', 'FND-001.md');
+  rmSync(deletedNode);
+  const deleteHookResult = runHook(deletedNode, deleteCase, 'delete_file');
+  assert.equal(deleteHookResult.status, 0, deleteHookResult.stdout + deleteHookResult.stderr);
+  const deleteHookOutput = JSON.parse(deleteHookResult.stdout);
+  assert.match(deleteHookOutput.hookSpecificOutput.additionalContext, /chain_index_missing_node/);
+
   const irrelevant = join(stringCase, 'notes.md');
   writeFileSync(irrelevant, 'not a case schema file');
   const irrelevantResult = runHook(irrelevant, stringCase);
   assert.equal(irrelevantResult.status, 0);
   assert.equal(irrelevantResult.stdout, '');
 
-  console.log('✓ case validation tests passed (15 scenarios)');
+  console.log('✓ case validation tests passed (17 scenarios)');
 } finally {
   rmSync(tempRoot, { recursive: true, force: true });
 }

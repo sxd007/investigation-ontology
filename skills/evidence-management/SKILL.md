@@ -128,7 +128,7 @@ v3 多视图调查工具，四个互补 tab：**Reasoning**（推理链 + 边语
 
 ### 写后自动校验
 
-插件的 `PostToolUse` Hook 会在 `Write|Edit|MultiEdit` 写入 `evidence_registry.json` 或 `nodes/*.md|json` 后自动运行 `scan-chain.js --validate`：
+插件的 `PostToolUse` Hook 会在官方文件工具 `Write|Edit|MultiEdit`（并兼容部分集成的 `write_to_file|replace_in_file|multi_replace_string_in_file`）写入 `evidence_registry.json` 或 `nodes/*.md|json` 后自动运行 `scan-chain.js --validate`：
 
 - `evidence_registry.json` 按 `schemas/evidence-registry.schema.json` 校验，非法数组元素（如字符串形式的 `findings[]`）、缺失 ID、非法枚举和 ID 格式会立即报错。
 - 节点文件校验必填 frontmatter、允许字段名、关系类型，以及关系对象的 `id` / `excerpt` / `form` 字段；常见拼写错误会给出候选字段。

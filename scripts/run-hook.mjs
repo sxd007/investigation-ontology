@@ -237,6 +237,8 @@ function validateCaseFile() {
   const ti = data?.tool_input || data?.toolInput || {};
   const filePath = ti.file_path || ti.filePath || ti.path || '';
   if (!filePath) return;
+  const toolName = data?.tool_name || data?.toolName || '';
+  const isDelete = toolName === 'delete_file' || toolName === 'Delete';
 
   const normalized = String(filePath).replace(/\\/g, '/');
   const isRegistry = /(^|\/)evidence_registry\.json$/i.test(normalized);
@@ -246,7 +248,8 @@ function validateCaseFile() {
 
   const cwd = data?.cwd || process.cwd();
   const absPath = isAbsolute(filePath) ? resolve(filePath) : resolve(cwd, filePath);
-  if (!existsSync(absPath)) return;
+  // 删除 registry/节点后，目标文件已不存在，但仍需校验其所在案件以发现断链。
+  if (!existsSync(absPath) && !(isDelete && (isRegistry || isNode))) return;
 
   if (isOntology) {
     const validator = join(pluginRoot, 'scripts', 'validate-ontology.mjs');

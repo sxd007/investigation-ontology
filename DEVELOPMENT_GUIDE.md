@@ -12,6 +12,8 @@
 > | **Claude Code** | [Claude Code 文档](https://docs.anthropic.com/en/docs/claude-code) | `.claude-plugin/` 为元数据目录 |
 > | **Codex** | [Codex 文档](https://github.com/openai/codex) | `.codex-plugin/` 为元数据目录 |
 
+> **CodeBuddy matcher 兼容要求：** 官方 Hook 标识符是 `Write`、`Edit`、`MultiEdit`，必须保留。为兼容部分 IDE/代理集成暴露的下划线工具名，`PreToolUse` / `PostToolUse` 同时覆盖 `write_to_file`、`replace_in_file`、`multi_replace_string_in_file`；写后 matcher 另兼容 `delete_file`。matcher 按实际 `tool_name` 匹配。
+
 ***
 
 ## 一、项目架构三分法
