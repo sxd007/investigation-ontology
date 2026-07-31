@@ -124,7 +124,7 @@ investigation-ontology 的所有内容分为三大类。**每新增一个文件�
 
 ### 2.3 Flat Skill 约束
 
-插件通过 `plugin.json` 中的 `"skills": ["./skills/"]` 声明技能目录。Claude Code 对 `skills/*/SKILL.md` 进行**单层 glob 扫描**——只匹配深度为 1 的 SKILL.md，不支持嵌套层级。
+Claude Code 通过 `plugin.json` 中的 `"skills": ["./skills/"]` 声明技能根目录，并对 `skills/*/SKILL.md` 进行**单层 glob 扫描**——只匹配深度为 1 的 SKILL.md，不支持嵌套层级。CodeBuddy 在 `skills` 字段缺省时自动发现 `skills/<name>/SKILL.md`；声明该字段会替换默认发现，因此不得在 `.codebuddy-plugin/plugin.json` 中声明 `skills`。
 
 - ❌ `skills/fraud-classification/channel-fraud/SKILL.md` **不会被加载**
 - ✅ `skills/fraud-channel/SKILL.md` **会被加载**

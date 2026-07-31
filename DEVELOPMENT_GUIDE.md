@@ -56,7 +56,7 @@ investigation-ontology 的所有内容分为三大类。**每新增一个文件�
 
 ### 2.1 Flat Skill Scanning
 
-插件通过 `plugin.json` 中的 `"skills": ["./skills/"]` 声明技能目录。Claude Code 对 `skills/*/SKILL.md` 进行**单层 glob 扫描**——只匹配深度为 1 的 SKILL.md，不支持嵌套层级。
+Claude Code 通过 `plugin.json` 中的 `"skills": ["./skills/"]` 声明技能根目录，并对 `skills/*/SKILL.md` 进行**单层 glob 扫描**——只匹配深度为 1 的 SKILL.md，不支持嵌套层级。CodeBuddy 的语义不同：缺省 `skills` 字段时自动发现 `skills/<name>/SKILL.md`；声明该字段会替换默认发现，且每一项被视为一个技能路径。因此当前 `.codebuddy-plugin/plugin.json` 不声明 `skills`。
 
 这对项目的影响：
 
@@ -69,7 +69,7 @@ investigation-ontology 的所有内容分为三大类。**每新增一个文件�
 
 | 目录          | 发现方式                        | 声明位置                                      |
 | ----------- | --------------------------- | ----------------------------------------- |
-| `skills/`   | glob 扫描 `skills/*/SKILL.md` | `plugin.json` → `"skills": ["./skills/"]` |
+| `skills/`   | Claude：单层 glob；CodeBuddy：字段缺省时默认发现 | Claude 在 `plugin.json` 声明根目录；CodeBuddy 不声明 `skills` |
 | `agents/`   | 自动发现，无需声明                   | —                                         |
 | `commands/` | 自动发现 `commands/*.md`        | —                                         |
 | `hooks/`    | 自动发现 `hooks/hooks.json`     | —                                         |

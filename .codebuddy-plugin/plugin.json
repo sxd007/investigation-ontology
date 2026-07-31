@@ -26,8 +26,5 @@
   "agents": [
     "./agents/"
   ],
-  "skills": [
-    "./skills/"
-  ],
   "mcpServers": {}
 }

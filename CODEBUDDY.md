@@ -69,6 +69,12 @@ CodeBuddy 使用 `.codebuddy-plugin/hooks.json`（独立于 Claude Code 和 Code
 
 CodeBuddy 不使用额外的 MCP 配置（与 Claude Code 相同）。
 
+### Skills 注册
+
+当前目录采用 CodeBuddy 默认规范 `skills/<name>/SKILL.md`，因此 `.codebuddy-plugin/plugin.json` **不得声明 `skills` 字段**。字段缺省时，CodeBuddy 会自动发现全部一级技能目录。
+
+`skills` 是自定义路径字段：一旦声明，就会替换默认发现；其中每一项被视为一个技能路径，不会把 `"./skills/"` 递归展开。新增或删除符合默认布局的技能时无需修改插件清单。`node scripts/test-case-validation.mjs` 会校验清单未声明该字段，并检查默认布局完整性。
+
 ---
 
 ## 三、开发任务 SOP
@@ -172,6 +178,7 @@ CodeBuddy 不使用额外的 MCP 配置（与 Claude Code 相同）。
 - [ ] 共享文件（skills/ 等）不包含平台特定代码
 - [ ] `manifests/install-modules.json` 的 targets 包含所有三个平台的变种
 - [ ] 如果添加新命令，检查 `.codebuddy-plugin/plugin.json` 是否有对应的 `commands` 引用
+- [ ] `.codebuddy-plugin/plugin.json` 未声明 `skills` 字段，技能保持 `skills/<name>/SKILL.md` 默认布局
 - [ ] Hooks 中的环境变量已根据平台调整（本文档中已处理）
 - [ ] 如有 MCP 需求，仅在 `.codex-plugin/plugin.json` 中配置
 - [ ] `project-templates/default/` 中的用户文档已同步
