@@ -58,7 +58,7 @@ skill_navigation:
 
 | 发现 | 置信度 | 证据来源 |
 |------|--------|---------|
-| [发现] | confirmed/likely/suspected | [来源文件] |
+| [发现] | confirmed/probable/suspected | [来源文件] |
 
 ### 4.2 未解决事项
 

@@ -48,12 +48,14 @@ When registering each new evidence item, automatically associate it with active 
 1. Read existing `hypotheses[]` from `evidence_registry.json`
 2. For each active hypothesis, assess whether the new evidence supports or contradicts it
 3. Update the evidence item's `related_hypothesis_ids` accordingly
-4. Update the hypothesis node's `relations.supported_by` / `relations.contradicted_by` and re-estimate `confidence`
+4. Draft updates to the hypothesis node's `relations.supported_by` / `relations.contradicted_by` and propose any `confidence` change
 
 **Rules**:
-- This is a fully automatic step — no user intervention needed
+- Routine association and confidence changes are automatic drafts and must be surfaced in the delivery step before persistence
 - An evidence item can support and contradict different hypotheses simultaneously
-- The `last_updated_by` on the hypothesis is set to `evidence-analyzer`
+- Check source independence before treating multiple items as corroboration; same-source materials are not independent support
+- Hypothesis `confirmed` / `rejected`, a material confidence change, scope expansion, subject contact, or conversion into a formal finding requires investigator confirmation before writing
+- After confirmation, set `last_updated_by` on the hypothesis to `evidence-analyzer`
 
 ### 1b. Event Timeline Extraction
 
@@ -156,6 +158,7 @@ Identify evidence gaps:
 - Evidence that exists but is inaccessible (document as investigation-side gap)
 - Evidence the subject failed to provide (document as subject-side gap)
 - For each gap: assess impact on finding confidence, suggest alternative collection paths
+- A subject-side gap is first recorded as a cooperation risk signal; it does not automatically prove the underlying allegation or increase finding confidence
 
 ### 7. Confidence Assessment
 
@@ -197,8 +200,9 @@ When a finding's or evidence item's confidence crosses a threshold (suspected↔
    - 可采性四步判定结果
    - 各 finding 的 SPIRIT 充分性评价
    - 缺口分析及其对置信度的影响
+  - 假设关联草案、重大置信度变化以及建议确认/排除的假设
 2. **讨论** — 回答调查员的追问：某项证据的可采性是否存在争议？缺口是否有替代弥补方案？置信度是否恰当？
-3. **确认** — 调查员确认评估结论后，才更新证据注册表
+3. **确认** — 调查员确认评估结论后，才更新证据注册表；假设确认/排除、重大置信度变化、范围扩大、接触涉案方和正式 finding 收敛必须单独列为确认事项
 4. **写入** — 更新 `evidence_registry.json`：完善每项的 `admissibility`、`chain_of_custody`，更新 finding 的 `confidence` 和 `supporting_evidence_ids`
 5. **建议下一步** — 基于缺口分析推荐：
    - **有缺口需补充** → `investigation-planner` 补充证据收集方案

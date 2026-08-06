@@ -20,7 +20,7 @@ description: 用户从创建案件到结案的全流程引导地图——五个�
                                        → 输出状态摘要                     🟢 /investigate continue
 
 2. INIT 阶段                           → 初始评估 + 立案                🟢 阶段已定义
-   ├── 分析讨论举报线索                 → 假设生成（假设类型体系）        🟢 foundation 已定义
+   ├── 分析讨论举报线索                 → 假设生成（竞争假设与替代解释）  🟢 foundation 已定义
    ├── 举报人沟通与线索扩充             → 信息缺口分类记录               🟢 门禁已定义
    └── 立案决策                         → case_opened 门禁检查           🟢 case-manager 可做
                                                                        
@@ -29,7 +29,7 @@ description: 用户从创建案件到结案的全流程引导地图——五个�
    ├── 数据分析与异常检测               → 数据分析方法论                 🟢 data-analysis 技能就绪
    ├── 整理分析结果                     → evidence_registry 登记         🟢 schema 就绪，流程未串
    ├── 形成事实总结                     → intelligence_summary.md         🟢 产出已定义
-   ├── 形成假设清单                     → 假设类型体系应用               🟢 foundation 就绪
+   ├── 形成假设清单                     → 竞争假设覆盖检查               🟢 foundation 就绪
    └── 穷尽数据后进入实地调查           → 门禁检查 → FIELDWORK           🟢 case-manager 可做
                                                                        
 4. FIELDWORK 阶段                      → 接触取证                       🟢 阶段已定义
@@ -60,7 +60,7 @@ description: 用户从创建案件到结案的全流程引导地图——五个�
 | `schemas/checklist.schema.json` | 阶段门禁 schema |
 | `schemas/evidence-registry.schema.json` | 证据注册表 schema |
 | `skills/case-management/SKILL.md` | 四阶段定义 + 门禁 + 数据结构说明 |
-| `skills/investigation-foundation/SKILL.md` | 假设类型体系 + 分析工作流 + 6 条调查原则 |
+| `skills/investigation-foundation/SKILL.md` | 交互式调查推理协议 + 渐进式方法论 references |
 | `skills/data-analysis/SKILL.md` | 数据分析方法论 |
 | `skills/evidence-management/SKILL.md` | 证据全生命周期管理 |
 | `skills/fraud-channel/SKILL.md` | 渠道舞弊模式 + 信号 + 切入点 |

@@ -278,7 +278,7 @@ origin: efio
 - **备用路径（fallback）**：主路径不可用时，由调查员从系统手动提取，结果须人工核验
 - **不可获取时**：标注数据缺口（evidence_gap），评估对 finding confidence 的影响
 
-详细的通用调查原则（静默边界、缺口归因、信源前缀）参见 [`skills/investigation-foundation/SKILL.md`](../investigation-foundation/SKILL.md)。
+通用调查推理参见 [`investigation-foundation`](../investigation-foundation/SKILL.md)；静默边界以 [`case-management`](../case-management/SKILL.md) 为准，缺口归因与信源标注以 [`evidence-rules`](../../rules/evidence-rules.md) 为准。
 
 ### 数据来源分类
 

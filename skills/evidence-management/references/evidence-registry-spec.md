@@ -91,9 +91,9 @@ description: evidence_registry.json 完整字段规范 — 顶层结构、entiti
 **归因缺口的特殊处理**：当关键证据无法获取时，需在证据条目的 `source` 和 `confidence` 中反映缺口归因：
 
 - **调查方缺口**（调查员技术/权限原因无法获取）→ 降低 finding 的 confidence
-- **被调查方缺口**（被调查方无法/拒绝提供）→ 不降低 confidence，作为独立风险信号记录
+- **被调查方缺口**（被调查方无法/拒绝提供）→ 先作为独立配合风险信号记录；不自动证明相关指控或提高 confidence，是否影响 confidence 取决于提供义务、客观障碍和授权复核
 
-缺口归因的判断方法参见 [`skills/investigation-foundation/SKILL.md`](../../investigation-foundation/SKILL.md)。
+缺口归因与不利推定边界参见 [`rules/evidence-rules.md`](../../../rules/evidence-rules.md)；调查推理中的保守处理原则参见 [`evidence-reasoning.md`](../../investigation-foundation/references/evidence-reasoning.md)。
 
 有关 finding 的详细推理（inference_path、warrant、alternative_ruled_out、remaining_doubt 等），见 `nodes/FND-NNN.md` 模板中的对应章节。
 
@@ -115,14 +115,14 @@ description: evidence_registry.json 完整字段规范 — 顶层结构、entiti
 
 | 触发点 | 执行者 | 动作 | 人工介入 |
 |--------|--------|------|---------|
-| INIT 立案 | investigation-planner | 从线索提炼 2-3 个竞争假设，写入 hypotheses | AI 生成后可手动修改 |
-| 新证据登记 | evidence-analyzer | 更新 HYP-NNN.json 的 relations（supported_by/contradicted_by） | ◉ 自动，无需介入 |
-| 假设置信度重估 | investigation-planner | 基于证据变化重新计算 confidence | △ 仅当跨越阈值(>0.8/<0.2)时确认 |
+| INIT 立案 | investigation-planner | 形成最小充分的竞争假设集（通常 3-5 个，含合理替代解释），写入 hypotheses | AI 草拟、调查员确认后写入 |
+| 新证据登记 | evidence-analyzer | 草拟 HYP-NNN.json 的 relations（supported_by/contradicted_by）更新 | 交付时展示，调查员确认后写入 |
+| 假设置信度重估 | investigation-planner / evidence-analyzer | 基于证据变化提出 confidence 更新及依据 | 重大变化必须单独确认；不得仅靠固定阈值替代专业判断 |
 | 假设状态变更 | investigation-planner | active → rejected / confirmed | ✦ 必须手动确认 |
 
 **关键规则**：
-- 至少包含 1 个反向假设（如"举报不真实"）
-- 所有假设在 INIT 阶段**同等优先级**验证，不得偏袒任一方向
+- 至少包含 1 个真正挑战核心命题的合理替代假设，不得仅以举报人动机替代内容核实
+- 指控性假设与合理替代假设在 INIT 阶段**同等优先级**验证，不得偏袒任一方向
 - `status` 变更为 `confirmed` 或 `rejected` 仅限 REVIEWING 阶段，需调查员手动确认
 
 ## event_timeline — 事件时间线

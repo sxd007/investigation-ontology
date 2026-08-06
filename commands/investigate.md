@@ -34,7 +34,7 @@ description: 调查入口命令 — 新案立案、续案回顾、阶段导航�
       4. 确保 templates/ 和 cases/ 目录存在
 ```
 
-> INVESTIGATION-HANDBOOK.md 是 AI 在办案时的操作手册（生命周期、举报规则、文件规范、质量标准）。插件提供通用能力，INVESTIGATION-HANDBOOK.md 告诉 AI 在这个项目里怎么用这些能力。IDE 上下文文件（CODEBUDDY.md/CLAUDE.md/CODEX.md）由 SessionStart hook 自动注入精简规则，无需手动管理。
+> INVESTIGATION-HANDBOOK.md 是 AI 在办案时的操作手册（生命周期、举报规则、文件规范、质量标准）。插件提供通用能力，INVESTIGATION-HANDBOOK.md 告诉 AI 在这个项目里怎么用这些能力。SessionStart hook 会将工作区中的完整手册全文注入 IDE 上下文文件（CODEBUDDY.md/CLAUDE.md/CODEX.md），无需手动管理。
 
 **流程**：
 
@@ -73,7 +73,7 @@ description: 调查入口命令 — 新案立案、续案回顾、阶段导航�
      - 提取关键实体（人员、公司、项目）
      - 匹配可能的舞弊类型（参见 fraud-classification 技能）
      - 识别信息缺口并追问用户
-     - 初步生成 2-3 个竞争假设
+    - 形成最小充分的竞争假设集（通常 3-5 个），至少包含一个真正挑战核心命题的合理替代解释
    - 完成后更新 `checklist.yaml` 对应门禁
 
 5. **立案决策**

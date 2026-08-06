@@ -12,7 +12,7 @@ skill_navigation:
     - "联系举报人前必须完成背景核查 — 见 INVESTIGATION-HANDBOOK.md §三 INIT 举报来源案件提醒"
     - "通话后强制复盘 — 见 INVESTIGATION-HANDBOOK.md §三 INIT 举报来源案件提醒"
     - "警示信号触发暂停评估 — 本模板 §三 警示信号检查"
-    - "假设必须包含反向假设 — 见 INVESTIGATION-HANDBOOK.md §1.3 假设管理"
+   - "假设必须包含真正挑战核心命题的合理替代解释 — 见 INVESTIGATION-HANDBOOK.md §1.3 假设管理"
 ---
 
 # 举报人联系模板
