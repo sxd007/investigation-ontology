@@ -21,8 +21,8 @@
     "skills"
   ],
   "skills": "./skills/",
-  "hooks": "./hooks.json",
-  "mcpServers": "./mcp.json",
+  "hooks": "./.codex-plugin/hooks.json",
+  "mcpServers": "./.codex-plugin/mcp.json",
   "interface": {
     "displayName": "Investigation Ontology",
     "shortDescription": "Anti-fraud investigation workflows for Codex.",

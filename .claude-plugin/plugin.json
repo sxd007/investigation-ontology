@@ -10,7 +10,7 @@
   "repository": "https://github.com/sxd007/investigation-ontology",
   "license": "Apache-2.0",
   "disclaimer": "see DISCLAIMER.md",
-  "hooks": "./hooks.json",
+  "hooks": "./.claude-plugin/hooks.json",
   "keywords": [
     "investigation",
     "fraud-examination",
