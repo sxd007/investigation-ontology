@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://efio.example/schemas/policy-digest-0.2.0.schema.json",
+  "title": "PolicyDigest 0.2.0",
+  "description": "分层流程解构单一真相源：L1-L5 流程树、Artifact、流程内边及分层挂接。",
+  "type": "object",
+  "required": [
+    "digest_schema_version", "digest_id", "case_id", "status", "generated_at", "source_index_ref",
+    "document_identity", "scope", "rules", "process_elements", "process_objectives", "artifacts", "flow_edges",
+    "role_assignments", "risks", "controls", "issues", "graph", "pending_confirmations", "ontology_projection"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "digest_schema_version": {"const": "0.2.0"},
+    "digest_id": {"type": "string", "minLength": 1},
+    "case_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["draft", "review_required", "ready_for_ingestion", "superseded"]},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "supersedes": {"type": ["string", "null"]},
+    "superseded_by": {"type": ["string", "null"]},
+    "source_index_ref": {"type": "string", "minLength": 1},
+    "document_identity": {"$ref": "#/$defs/documentIdentity"},
+    "scope": {"$ref": "#/$defs/scope"},
+    "rules": {"type": "array", "items": {"$ref": "#/$defs/rule"}},
+    "process_elements": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/processElement"}},
+    "process_objectives": {"type": "array", "items": {"$ref": "#/$defs/processObjective"}},
+    "artifacts": {"type": "array", "items": {"$ref": "#/$defs/artifact"}},
+    "flow_edges": {"type": "array", "items": {"$ref": "#/$defs/flowEdge"}},
+    "role_assignments": {"type": "array", "items": {"$ref": "#/$defs/roleAssignment"}},
+    "risks": {"type": "array", "items": {"$ref": "#/$defs/risk"}},
+    "controls": {"type": "array", "items": {"$ref": "#/$defs/control"}},
+    "issues": {"type": "array", "items": {"$ref": "#/$defs/issue"}},
+    "graph": {"$ref": "#/$defs/graph"},
+    "pending_confirmations": {"type": "array", "items": {"$ref": "#/$defs/pendingConfirmation"}},
+    "ontology_projection": {
+      "type": "object",
+      "required": ["candidates_schema_version", "candidates_ref", "parsed_schema_version", "parsed_ref", "tenant", "core_versions", "hierarchy_mapping"],
+      "additionalProperties": false,
+      "properties": {
+        "candidates_schema_version": {"const": "0.3.0"},
+        "candidates_ref": {"type": "string"},
+        "parsed_schema_version": {"const": "0.1.0"},
+        "parsed_ref": {"type": "string"},
+        "tenant": {"type": ["string", "null"]},
+        "core_versions": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}},
+        "hierarchy_mapping": {
+          "type": "object",
+          "required": ["mode", "extension_prefix", "serialization_policy"],
+          "additionalProperties": false,
+          "properties": {
+            "mode": {"const": "candidates_extension"},
+            "extension_prefix": {"const": "efio"},
+            "serialization_policy": {"const": "PENDING_CORE_ALIGNMENT"}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["doc_id", "block_id", "block_path", "excerpt"],
+      "additionalProperties": false,
+      "properties": {
+        "doc_id": {"type": "string", "minLength": 1},
+        "block_id": {"type": "string", "minLength": 1},
+        "block_path": {"type": "string", "minLength": 1},
+        "clause_ref": {"type": ["string", "null"]},
+        "page_hint": {"type": ["integer", "null"], "minimum": 1},
+        "excerpt": {"type": "string", "minLength": 1, "maxLength": 200}
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": ["status", "pool"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {"enum": ["proposed", "confirmed", "modified", "rejected", "serialized"]},
+        "pool": {"enum": ["full", "sampled"]},
+        "reviewer": {"type": ["string", "null"]},
+        "timestamp": {"type": ["string", "null"]},
+        "patches": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "documentIdentity": {
+      "type": "object",
+      "required": ["doc_id", "title", "validity", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "doc_id": {"type": "string"}, "title": {"type": ["string", "null"]}, "doc_number": {"type": ["string", "null"]},
+        "version": {"type": ["string", "null"]}, "policy_level": {"type": ["string", "null"]},
+        "drafting_department": {"type": ["string", "null"]}, "owning_department": {"type": ["string", "null"]},
+        "approving_authority": {"type": ["string", "null"]}, "publication_date": {"type": ["string", "null"]},
+        "effective_date": {"type": ["string", "null"]}, "applicability_summary": {"type": ["string", "null"]},
+        "higher_authorities": {"type": "array", "items": {"type": "string"}},
+        "related_documents": {"type": "array", "items": {"type": "string"}},
+        "superseded_documents": {"type": "array", "items": {"type": "string"}},
+        "attachments": {"type": "array", "items": {"type": "string"}},
+        "interpretation_authority": {"type": ["string", "null"]},
+        "validity": {"enum": ["effective", "pending_confirmation", "invalid"]},
+        "source": {"$ref": "#/$defs/source"}
+      }
+    },
+    "scope": {
+      "type": "object", "required": ["subjects", "scenarios", "matters", "triggers", "exclusions"], "additionalProperties": false,
+      "properties": {
+        "subjects": {"type": "array", "items": {"type": "string"}}, "scenarios": {"type": "array", "items": {"type": "string"}},
+        "matters": {"type": "array", "items": {"type": "string"}}, "triggers": {"type": "array", "items": {"type": "string"}},
+        "exclusions": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "rule": {
+      "type": "object",
+      "required": ["rule_id", "source", "original_text", "disposition", "clause_types", "requirement", "parameters", "evidence_requirements", "operationalized_by", "semantic_confidence", "review", "candidate_refs"],
+      "additionalProperties": false,
+      "properties": {
+        "rule_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "original_text": {"type": "string"},
+        "disposition": {"type": "string"}, "clause_types": {"type": "array", "items": {"type": "string"}},
+        "applicable_subjects": {"type": "array", "items": {"type": "string"}}, "trigger": {"type": ["string", "null"]},
+        "requirement": {"type": ["string", "null"]}, "responsible_roles": {"type": "array", "items": {"type": "string"}},
+        "parameters": {"type": "array", "items": {"type": "object"}}, "evidence_requirements": {"type": "array", "items": {"type": "string"}},
+        "exception_note": {"type": ["string", "null"]}, "operationalized_by": {"type": "array", "items": {"type": "string"}},
+        "semantic_confidence": {"type": "number", "minimum": 0, "maximum": 1}, "uncertainty_reason": {"type": ["string", "null"]},
+        "review": {"$ref": "#/$defs/review"}, "candidate_refs": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "hierarchyConfidence": {
+      "type": "object",
+      "required": ["evidence", "boundary", "parent", "granularity", "overall"],
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {"type": "number", "minimum": 0, "maximum": 1}, "boundary": {"type": "number", "minimum": 0, "maximum": 1},
+        "parent": {"type": "number", "minimum": 0, "maximum": 1}, "granularity": {"type": "number", "minimum": 0, "maximum": 1},
+        "overall": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "processElement": {
+      "type": "object",
+      "required": ["element_id", "level", "rdf_type", "name", "parent_ref", "owning_process_ref", "objective_refs", "owner_role_refs", "input_artifact_refs", "output_artifact_refs", "entry_conditions", "exit_conditions", "decomposition_basis", "hierarchy_status", "hierarchy_confidence", "alternative_levels", "source", "review", "candidate_refs"],
+      "additionalProperties": false,
+      "properties": {
+        "element_id": {"type": "string", "minLength": 1}, "level": {"enum": ["L1", "L2", "L3", "L4", "L5"]},
+        "rdf_type": {"enum": ["proc:ProcessCategory", "proc:ProcessGroup", "proc:Process", "proc:ProcessActivity", "proc:Task"]},
+        "name": {"type": "string", "minLength": 1}, "parent_ref": {"type": ["string", "null"]},
+        "owning_process_ref": {"type": ["string", "null"]}, "objective_refs": {"type": "array", "items": {"type": "string"}},
+        "owner_role_refs": {"type": "array", "items": {"type": "string"}}, "input_artifact_refs": {"type": "array", "items": {"type": "string"}},
+        "output_artifact_refs": {"type": "array", "items": {"type": "string"}}, "entry_conditions": {"type": "array", "items": {"type": "string"}},
+        "exit_conditions": {"type": "array", "items": {"type": "string"}},
+        "decomposition_basis": {"enum": ["explicit_text", "inferred_structure", "confirmed_by_owner"]},
+        "hierarchy_status": {"enum": ["resolved", "unresolved"]}, "hierarchy_confidence": {"$ref": "#/$defs/hierarchyConfidence"},
+        "alternative_levels": {"type": "array", "items": {"enum": ["L1", "L2", "L3", "L4", "L5"]}, "uniqueItems": true},
+        "source": {"$ref": "#/$defs/source"}, "review": {"$ref": "#/$defs/review"},
+        "candidate_refs": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "processObjective": {
+      "type": "object",
+      "required": ["objective_id", "statement", "parent_objective_ref", "element_refs", "assertion_basis", "source", "review", "candidate_refs"],
+      "additionalProperties": false,
+      "properties": {
+        "objective_id": {"type": "string"}, "statement": {"type": "string"}, "parent_objective_ref": {"type": ["string", "null"]},
+        "element_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "assertion_basis": {"enum": ["explicit_text", "analysis"]}, "source": {"$ref": "#/$defs/source"},
+        "review": {"$ref": "#/$defs/review"}, "candidate_refs": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "required": ["artifact_id", "name", "artifact_type", "produced_by", "consumed_by", "required_fields", "retention_requirement", "source", "review", "candidate_refs"],
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {"type": "string"}, "name": {"type": "string"},
+        "artifact_type": {"enum": ["document", "data", "system_record", "physical_object", "decision"]},
+        "produced_by": {"type": "array", "items": {"type": "string"}}, "consumed_by": {"type": "array", "items": {"type": "string"}},
+        "required_fields": {"type": "array", "items": {"type": "string"}}, "retention_requirement": {"type": ["string", "null"]},
+        "source": {"$ref": "#/$defs/source"}, "review": {"$ref": "#/$defs/review"},
+        "candidate_refs": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "flowEdge": {
+      "type": "object",
+      "required": ["edge_id", "process_ref", "from_ref", "to_ref", "edge_kind", "condition", "condition_parameters", "source", "review", "candidate_refs"],
+      "additionalProperties": false,
+      "properties": {
+        "edge_id": {"type": "string"}, "process_ref": {"type": "string"}, "from_ref": {"type": "string"}, "to_ref": {"type": "string"},
+        "edge_kind": {"enum": ["main", "conditional", "escalation", "reject", "return", "termination", "emergency"]},
+        "condition": {"type": ["string", "null"]}, "condition_parameters": {"type": "array", "items": {"type": "object"}},
+        "source": {"$ref": "#/$defs/source"}, "review": {"$ref": "#/$defs/review"},
+        "candidate_refs": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "roleAssignment": {
+      "type": "object", "required": ["assignment_id", "element_ref", "role", "raci", "source", "review"], "additionalProperties": false,
+      "properties": {
+        "assignment_id": {"type": "string"}, "element_ref": {"type": "string"}, "role": {"type": "string"},
+        "raci": {"enum": ["R", "A", "C", "I", "S"]}, "authorization_basis": {"type": ["string", "null"]},
+        "source": {"$ref": "#/$defs/source"}, "review": {"$ref": "#/$defs/review"}
+      }
+    },
+    "risk": {
+      "type": "object", "required": ["risk_id", "description", "assertion_basis", "rule_refs", "element_refs", "source", "review"], "additionalProperties": false,
+      "properties": {
+        "risk_id": {"type": "string"}, "description": {"type": "string"}, "category": {"type": ["string", "null"]},
+        "assertion_basis": {"enum": ["explicit_text", "analysis"]}, "rule_refs": {"type": "array", "items": {"type": "string"}},
+        "element_refs": {"type": "array", "items": {"type": "string"}}, "source": {"$ref": "#/$defs/source"}, "review": {"$ref": "#/$defs/review"}
+      }
+    },
+    "control": {
+      "type": "object", "required": ["control_id", "measure", "element_ref", "assertion_basis", "risk_refs", "source", "review"], "additionalProperties": false,
+      "properties": {
+        "control_id": {"type": "string"}, "measure": {"type": "string"}, "responsible_roles": {"type": "array", "items": {"type": "string"}},
+        "element_ref": {"type": ["string", "null"]}, "decision_criteria": {"type": ["string", "null"]}, "frequency": {"type": ["string", "null"]},
+        "evidence": {"type": "array", "items": {"type": "string"}}, "remediation": {"type": ["string", "null"]},
+        "timing_type": {"type": ["string", "null"]}, "execution_mode": {"type": ["string", "null"]}, "importance": {"type": ["string", "null"]},
+        "assertion_basis": {"enum": ["explicit_text", "analysis"]}, "risk_refs": {"type": "array", "items": {"type": "string"}},
+        "source": {"$ref": "#/$defs/source"}, "review": {"$ref": "#/$defs/review"}
+      }
+    },
+    "issue": {
+      "type": "object", "required": ["issue_id", "type", "description", "impact", "risk_level", "recommendation", "blocking", "source"], "additionalProperties": false,
+      "properties": {
+        "issue_id": {"type": "string"}, "type": {"type": "string"}, "related_refs": {"type": "array", "items": {"type": "string"}},
+        "description": {"type": "string"}, "impact": {"type": "string"}, "risk_level": {"enum": ["high", "medium", "low", "unassessed"]},
+        "recommendation": {"type": "string"}, "confirmation_owner": {"type": ["string", "null"]}, "blocking": {"type": "boolean"},
+        "source": {"$ref": "#/$defs/source"}
+      }
+    },
+    "graph": {
+      "type": "object", "required": ["lanes", "nodes", "edges"], "additionalProperties": false,
+      "properties": {
+        "lanes": {"type": "array", "items": {"type": "object"}}, "nodes": {"type": "array", "items": {"type": "object"}},
+        "edges": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "pendingConfirmation": {
+      "type": "object", "required": ["confirmation_id", "question", "impact", "source", "suggested_owner", "blocking"], "additionalProperties": false,
+      "properties": {
+        "confirmation_id": {"type": "string"}, "question": {"type": "string"}, "impact": {"type": "string"},
+        "source": {"$ref": "#/$defs/source"}, "suggested_owner": {"type": ["string", "null"]}, "blocking": {"type": "boolean"}
+      }
+    }
+  }
+}

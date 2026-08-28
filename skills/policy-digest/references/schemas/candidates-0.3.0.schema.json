@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/ontology/schemas/candidates.schema.json",
+  "title": "Candidates",
+  "description": "Vendored candidates schema 0.3.0 from ontology_framework (2026-08-25).",
+  "type": "object",
+  "required": ["candidatesSchemaVersion", "document", "coreVersions", "candidates"],
+  "additionalProperties": false,
+  "properties": {
+    "candidatesSchemaVersion": {"type": "string", "const": "0.3.0"},
+    "document": {
+      "type": "object",
+      "required": ["docId", "parsedRef"],
+      "additionalProperties": false,
+      "properties": {
+        "docId": {"type": "string", "minLength": 1},
+        "parsedRef": {
+          "type": "object",
+          "required": ["path", "parsedSchemaVersion"],
+          "additionalProperties": false,
+          "properties": {
+            "path": {"type": "string"},
+            "parsedSchemaVersion": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}
+          }
+        },
+        "tenant": {"type": "string"}
+      }
+    },
+    "coreVersions": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}},
+    "candidates": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/candidate"}}
+  },
+  "$defs": {
+    "targetRef": {
+      "type": "object",
+      "required": ["docId", "blockPath", "excerpt"],
+      "additionalProperties": false,
+      "properties": {
+        "docId": {"type": "string"},
+        "blockPath": {"type": "string"},
+        "excerpt": {"type": "string", "minLength": 1, "maxLength": 200},
+        "iri": {"type": "string"}
+      }
+    },
+    "instanceProposal": {
+      "type": "object",
+      "required": ["localId", "rdfType"],
+      "additionalProperties": false,
+      "properties": {
+        "localId": {"type": "string"},
+        "rdfType": {"type": "string"},
+        "label": {"type": "string"},
+        "clauseNumber": {"type": "string"},
+        "clauseText": {"type": "string"},
+        "statement": {"type": "string"},
+        "obligationStatus": {"enum": ["EFFECTIVE", "DRAFT", "ABOLISHED"]},
+        "applicability": {"enum": ["APPLICABLE", "NOT_APPLICABLE", "UNASSESSED"]},
+        "properties": {"type": "object"}
+      }
+    },
+    "alignment": {
+      "type": "object",
+      "required": ["kind", "targetRef"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {"enum": ["internalizes", "operationalizedBy", "referencesPCF", "realizedAtPoint", "assignedToPosition", "derivedFrom", "exemptsFrom"]},
+        "targetRef": {"$ref": "#/$defs/targetRef"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "note": {"type": "string"}
+      }
+    },
+    "reviewPatch": {
+      "type": "object",
+      "required": ["field", "before", "after"],
+      "additionalProperties": false,
+      "properties": {"field": {"type": "string"}, "before": {}, "after": {}}
+    },
+    "parameterSpec": {
+      "type": "object",
+      "required": ["parameterType", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "target": {"type": "string"},
+        "parameterType": {"type": "string"},
+        "value": {"type": "string"},
+        "valueNumber": {"type": "number"},
+        "comparator": {"enum": ["GT", "GE", "LT", "LE", "EQ"]},
+        "unit": {"type": "string"},
+        "note": {"type": "string"}
+      }
+    },
+    "transition": {
+      "type": "object",
+      "required": ["localId", "fromActivity", "toActivity", "transitionKind"],
+      "additionalProperties": false,
+      "properties": {
+        "localId": {"type": "string"},
+        "fromActivity": {"type": "string"},
+        "toActivity": {"type": "string"},
+        "transitionKind": {"type": "string"},
+        "condition": {"type": "string"},
+        "conditionParams": {"type": "array", "items": {"$ref": "#/$defs/parameterSpec"}}
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "required": ["candidateId", "sourceBlock", "disposition", "confidence", "coreVersion", "produces", "reviewPool", "review"],
+      "additionalProperties": false,
+      "properties": {
+        "candidateId": {"type": "string", "minLength": 1},
+        "sourceBlock": {
+          "type": "object",
+          "required": ["docId", "blockId", "blockPath", "excerpt"],
+          "additionalProperties": false,
+          "properties": {
+            "docId": {"type": "string"},
+            "blockId": {"type": "string"},
+            "blockPath": {"type": "string"},
+            "excerpt": {"type": "string", "minLength": 1, "maxLength": 200}
+          }
+        },
+        "disposition": {"enum": ["purpose-preamble", "definition", "prohibition", "mandatory", "procedural", "duty-position", "penalty", "citation", "process-step", "risk-requirement", "exemption", "non-normative"]},
+        "clauseType": {
+          "type": "array",
+          "items": {"enum": ["prohibition", "mandatory", "procedural", "duty-position", "penalty", "citation", "definition", "purpose-preamble", "exemption", "process-step"]},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "coreVersion": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+        "produces": {"type": "array", "items": {"$ref": "#/$defs/instanceProposal"}},
+        "alignments": {"type": "array", "items": {"$ref": "#/$defs/alignment"}},
+        "parameters": {"type": "array", "items": {"$ref": "#/$defs/parameterSpec"}},
+        "transitions": {"type": "array", "items": {"$ref": "#/$defs/transition"}},
+        "obligationDraft": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {"statement": {"type": "string"}, "proceduralDetailTo": {"type": "string"}}
+        },
+        "reviewPool": {"enum": ["full", "sampled"]},
+        "review": {
+          "type": "object",
+          "required": ["status"],
+          "additionalProperties": false,
+          "properties": {
+            "status": {"enum": ["proposed", "confirmed", "modified", "rejected", "serialized"]},
+            "reviewer": {"type": ["string", "null"]},
+            "timestamp": {"type": ["string", "null"]},
+            "rejectReason": {"type": ["string", "null"]},
+            "reviewPatch": {"type": "array", "items": {"$ref": "#/$defs/reviewPatch"}}
+          }
+        }
+      },
+      "allOf": [
+        {"if": {"properties": {"disposition": {"const": "procedural"}}}, "then": {"required": ["obligationDraft"]}},
+        {"if": {"properties": {"review": {"properties": {"status": {"const": "modified"}}}}}, "then": {"properties": {"review": {"required": ["reviewPatch", "reviewer", "timestamp"]}}}},
+        {"if": {"properties": {"clauseType": {"minItems": 2}}, "required": ["clauseType"]}, "then": {"properties": {"reviewPool": {"const": "full"}}}}
+      ]
+    }
+  }
+}

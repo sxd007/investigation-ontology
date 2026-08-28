@@ -56,6 +56,7 @@ AI 在以下场景应主动加载对应技能：
 | 创建/修改本体对象 | `ontology` | 本体 | Object/Link/Action 模型、Binding Protocol |
 | 提供分析数据指引 | `data-analysis` | 分析 | COSO 框架、Benford 定律、异常检测、可视化 |
 | 项目链路对比分析 | `order-execution-variance-analysis` | 分析 | 合同流/货物流/资金流多维对比 |
+| 解构制度、办法、流程或授权文件 | `policy-digest` | 分析 | 提取可追溯规则、L1–L5 流程、RACI、Artifact 与风险控制；生成本体 candidates 和原文对照导览 |
 | 调查技术指引 | `investigation-techniques` | 技术 | OSINT、数字取证 |
 | 访谈管理与分析 | `interview-analysis` | 沟通 | PEACE 模型、SCAN 陈述分析、对抗行为识别 |
 | 撰写报告 | `writing-reporting` | 产出 | SCQA 结构、读者适配 |
@@ -131,7 +132,7 @@ AI 在以下场景应主动加载对应技能：
 
 **产出物：** `pre_investigation_brief.md`、`intelligence_summary.md`、`evidence_registry.json`（追加）、`nodes/`（追加 EV、创建 LS）、`meta.json`（补充 SLA、调查目标）
 
-**适用技能：** `investigation-foundation`, `data-analysis` , `evidence-management`, `document-parsing`,以及按场景领域对应的`fraud-*` 技能
+**适用技能：** `investigation-foundation`、`data-analysis`、`evidence-management`、`document-parsing`，涉及内部制度、流程或授权基线时加载 `policy-digest`，并按场景加载对应的 `fraud-*` 技能。
 
 ### FIELDWORK — 接触取证
 
@@ -174,6 +175,7 @@ REVIEWING 仅将 `case_memory/INDEX.md` 用于检查是否遗漏调查方向，�
     ├── CHANGELOG.json                  ← 变更记录
     ├── nodes/                          ← 分析推理层（EV/ENT/LS/ARG/FND/HYP 节点）
     ├── raw/                            ← 原始证据文件
+    ├── policy-digests/                 ← 制度流程解构包（按 doc_id 分目录，按需创建）
     ├── 01_INIT/ ~ 04_REVIEWING/        ← 阶段目录
     └── case_memory/                    ← 非正式观察记录
 ```

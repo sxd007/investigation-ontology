@@ -43,6 +43,7 @@
         "fraud-conflicts-of-interest",
         "data-analysis",
         "document-parsing",
+        "policy-digest",
         "investigation-memory"
       ]
     },
@@ -58,9 +59,11 @@
         "data-analysis",
         "evidence-management",
         "writing-reporting",
+        "case-management",
         "mcp-integration",
         "cold-start",
         "document-parsing",
+        "policy-digest",
         "investigation-memory"
       ]
     },
@@ -128,7 +131,8 @@
         "order-execution-variance-analysis",
         "investigation-memory",
         "case-retrospective",
-        "document-parsing"
+        "document-parsing",
+        "policy-digest"
       ]
     }
   }

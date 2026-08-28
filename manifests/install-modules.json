@@ -622,6 +622,29 @@
       "defaultInstall": false,
       "cost": "light",
       "stability": "beta"
+    },
+    {
+      "id": "policy-digest",
+      "kind": "skills",
+      "description": "企业制度流程解构 — 将制度、办法、流程、授权文件及附件转化为带原文锚点的规则、流程、RACI、风险控制、问题清单与本体 candidates 入库包",
+      "paths": [
+        "skills/policy-digest"
+      ],
+      "targets": [
+        "claude",
+        "codebuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "codex-project"
+      ],
+      "dependencies": [
+        "case-management",
+        "document-parsing"
+      ],
+      "defaultInstall": false,
+      "cost": "heavy",
+      "stability": "alpha"
     }
   ]
 }

@@ -10,6 +10,7 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const pluginRoot = dirname(scriptDir);
 const scanner = join(pluginRoot, 'skills', 'evidence-management', 'scripts', 'scan-chain.js');
 const hookRunner = join(pluginRoot, 'scripts', 'run-hook.mjs');
+const policyDigestValidatorTests = join(pluginRoot, 'skills', 'policy-digest', 'scripts', 'test-policy-digest-validation.mjs');
 const codeBuddyHooks = join(pluginRoot, 'hooks', 'hooks.json');
 const codeBuddyPlugin = join(pluginRoot, '.codebuddy-plugin', 'plugin.json');
 const skillsRoot = join(pluginRoot, 'skills');
@@ -73,6 +74,9 @@ try {
   assert.equal(Object.hasOwn(pluginConfig, 'skills'), false, '默认 skills/<name>/SKILL.md 布局不得声明 CodeBuddy skills 字段，否则会关闭默认发现');
   assert.ok(discoveredSkills.length > 0, 'CodeBuddy 默认发现至少应包含一个技能');
   assert.deepEqual(discoveredSkills, skillDirectories, 'skills 下每个一级目录都必须包含 SKILL.md，确保 CodeBuddy 默认发现无遗漏');
+
+  const policyDigestTestResult = spawnSync(process.execPath, [policyDigestValidatorTests], { encoding: 'utf8' });
+  assert.equal(policyDigestTestResult.status, 0, policyDigestTestResult.stdout + policyDigestTestResult.stderr);
 
   const hookConfig = JSON.parse(readFileSync(codeBuddyHooks, 'utf8'));
   const preWriteMatcher = hookConfig.hooks.PreToolUse.find((entry) => entry.id === 'pre:write:case-file-guard')?.matcher || '';

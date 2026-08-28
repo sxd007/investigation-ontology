@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://efio.example/schemas/policy-digest-0.1.0.schema.json",
+  "title": "PolicyDigest",
+  "description": "policy-digest 完整分析层单一真相源 schema 0.1.0。",
+  "type": "object",
+  "required": [
+    "digest_schema_version",
+    "digest_id",
+    "case_id",
+    "status",
+    "generated_at",
+    "source_index_ref",
+    "document_identity",
+    "scope",
+    "rules",
+    "activities",
+    "role_assignments",
+    "risks",
+    "controls",
+    "issues",
+    "graph",
+    "pending_confirmations",
+    "ontology_projection"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "digest_schema_version": {"const": "0.1.0"},
+    "digest_id": {"type": "string", "minLength": 1},
+    "case_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["draft", "review_required", "ready_for_ingestion", "superseded"]},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "supersedes": {"type": ["string", "null"]},
+    "superseded_by": {"type": ["string", "null"]},
+    "source_index_ref": {"type": "string", "minLength": 1},
+    "document_identity": {"$ref": "#/$defs/documentIdentity"},
+    "scope": {"$ref": "#/$defs/scope"},
+    "rules": {"type": "array", "items": {"$ref": "#/$defs/rule"}},
+    "activities": {"type": "array", "items": {"$ref": "#/$defs/activity"}},
+    "role_assignments": {"type": "array", "items": {"$ref": "#/$defs/roleAssignment"}},
+    "risks": {"type": "array", "items": {"$ref": "#/$defs/risk"}},
+    "controls": {"type": "array", "items": {"$ref": "#/$defs/control"}},
+    "issues": {"type": "array", "items": {"$ref": "#/$defs/issue"}},
+    "graph": {"$ref": "#/$defs/graph"},
+    "pending_confirmations": {"type": "array", "items": {"$ref": "#/$defs/pendingConfirmation"}},
+    "ontology_projection": {
+      "type": "object",
+      "required": ["candidates_schema_version", "candidates_ref", "parsed_schema_version", "parsed_ref", "tenant", "core_versions"],
+      "additionalProperties": false,
+      "properties": {
+        "candidates_schema_version": {"const": "0.3.0"},
+        "candidates_ref": {"type": "string"},
+        "parsed_schema_version": {"const": "0.1.0"},
+        "parsed_ref": {"type": "string"},
+        "tenant": {"type": ["string", "null"]},
+        "core_versions": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}}
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["doc_id", "block_id", "block_path", "excerpt"],
+      "additionalProperties": false,
+      "properties": {
+        "doc_id": {"type": "string", "minLength": 1},
+        "block_id": {"type": "string", "minLength": 1},
+        "block_path": {"type": "string", "minLength": 1},
+        "clause_ref": {"type": ["string", "null"]},
+        "page_hint": {"type": ["integer", "null"], "minimum": 1},
+        "excerpt": {"type": "string", "minLength": 1, "maxLength": 200}
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": ["status", "pool"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {"enum": ["proposed", "confirmed", "modified", "rejected", "serialized"]},
+        "pool": {"enum": ["full", "sampled"]},
+        "reviewer": {"type": ["string", "null"]},
+        "timestamp": {"type": ["string", "null"]},
+        "patches": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "documentIdentity": {
+      "type": "object",
+      "required": ["doc_id", "title", "validity", "source"],
+      "properties": {
+        "doc_id": {"type": "string"},
+        "title": {"type": ["string", "null"]},
+        "doc_number": {"type": ["string", "null"]},
+        "version": {"type": ["string", "null"]},
+        "policy_level": {"type": ["string", "null"]},
+        "drafting_department": {"type": ["string", "null"]},
+        "owning_department": {"type": ["string", "null"]},
+        "approving_authority": {"type": ["string", "null"]},
+        "publication_date": {"type": ["string", "null"]},
+        "effective_date": {"type": ["string", "null"]},
+        "applicability_summary": {"type": ["string", "null"]},
+        "higher_authorities": {"type": "array", "items": {"type": "string"}},
+        "related_documents": {"type": "array", "items": {"type": "string"}},
+        "superseded_documents": {"type": "array", "items": {"type": "string"}},
+        "attachments": {"type": "array", "items": {"type": "string"}},
+        "interpretation_authority": {"type": ["string", "null"]},
+        "validity": {"enum": ["effective", "pending_confirmation", "invalid"]},
+        "source": {"$ref": "#/$defs/source"}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "required": ["subjects", "scenarios", "matters", "triggers", "exclusions"],
+      "additionalProperties": false,
+      "properties": {
+        "subjects": {"type": "array", "items": {"type": "string"}},
+        "scenarios": {"type": "array", "items": {"type": "string"}},
+        "matters": {"type": "array", "items": {"type": "string"}},
+        "triggers": {"type": "array", "items": {"type": "string"}},
+        "exclusions": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "rule": {
+      "type": "object",
+      "required": ["rule_id", "source", "original_text", "disposition", "clause_types", "requirement", "parameters", "evidence_requirements", "semantic_confidence", "review", "candidate_refs"],
+      "properties": {
+        "rule_id": {"type": "string"},
+        "source": {"$ref": "#/$defs/source"},
+        "original_text": {"type": "string"},
+        "disposition": {"type": "string"},
+        "clause_types": {"type": "array", "items": {"type": "string"}},
+        "applicable_subjects": {"type": "array", "items": {"type": "string"}},
+        "trigger": {"type": ["string", "null"]},
+        "requirement": {"type": ["string", "null"]},
+        "responsible_roles": {"type": "array", "items": {"type": "string"}},
+        "parameters": {"type": "array", "items": {"type": "object"}},
+        "evidence_requirements": {"type": "array", "items": {"type": "string"}},
+        "exception_note": {"type": ["string", "null"]},
+        "semantic_confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "uncertainty_reason": {"type": ["string", "null"]},
+        "review": {"$ref": "#/$defs/review"},
+        "candidate_refs": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "activity": {
+      "type": "object",
+      "required": ["activity_id", "name", "responsible_roles", "inputs", "action", "outputs", "main_next", "transitions", "control_refs", "source", "review"],
+      "properties": {
+        "activity_id": {"type": "string"},
+        "name": {"type": "string"},
+        "responsible_roles": {"type": "array", "items": {"type": "string"}},
+        "inputs": {"type": "array", "items": {"type": "string"}},
+        "action": {"type": "string"},
+        "decision_criteria": {"type": ["string", "null"]},
+        "outputs": {"type": "array", "items": {"type": "string"}},
+        "time_limit": {"type": ["string", "null"]},
+        "main_next": {"type": ["string", "null"]},
+        "transitions": {"type": "array", "items": {"type": "object"}},
+        "control_refs": {"type": "array", "items": {"type": "string"}},
+        "source": {"$ref": "#/$defs/source"},
+        "review": {"$ref": "#/$defs/review"}
+      }
+    },
+    "roleAssignment": {
+      "type": "object",
+      "required": ["assignment_id", "activity_ref", "role", "raci", "source", "review"],
+      "properties": {
+        "assignment_id": {"type": "string"},
+        "activity_ref": {"type": "string"},
+        "role": {"type": "string"},
+        "raci": {"enum": ["R", "A", "C", "I", "S"]},
+        "authorization_basis": {"type": ["string", "null"]},
+        "source": {"$ref": "#/$defs/source"},
+        "review": {"$ref": "#/$defs/review"}
+      }
+    },
+    "risk": {
+      "type": "object",
+      "required": ["risk_id", "description", "assertion_basis", "rule_refs", "activity_refs", "source", "review"],
+      "properties": {
+        "risk_id": {"type": "string"},
+        "description": {"type": "string"},
+        "category": {"type": ["string", "null"]},
+        "assertion_basis": {"enum": ["explicit_text", "analysis"]},
+        "rule_refs": {"type": "array", "items": {"type": "string"}},
+        "activity_refs": {"type": "array", "items": {"type": "string"}},
+        "source": {"$ref": "#/$defs/source"},
+        "review": {"$ref": "#/$defs/review"}
+      }
+    },
+    "control": {
+      "type": "object",
+      "required": ["control_id", "measure", "assertion_basis", "risk_refs", "source", "review"],
+      "properties": {
+        "control_id": {"type": "string"},
+        "measure": {"type": "string"},
+        "responsible_roles": {"type": "array", "items": {"type": "string"}},
+        "activity_ref": {"type": ["string", "null"]},
+        "decision_criteria": {"type": ["string", "null"]},
+        "frequency": {"type": ["string", "null"]},
+        "evidence": {"type": "array", "items": {"type": "string"}},
+        "remediation": {"type": ["string", "null"]},
+        "timing_type": {"type": ["string", "null"]},
+        "execution_mode": {"type": ["string", "null"]},
+        "importance": {"type": ["string", "null"]},
+        "assertion_basis": {"enum": ["explicit_text", "analysis"]},
+        "risk_refs": {"type": "array", "items": {"type": "string"}},
+        "source": {"$ref": "#/$defs/source"},
+        "review": {"$ref": "#/$defs/review"}
+      }
+    },
+    "issue": {
+      "type": "object",
+      "required": ["issue_id", "type", "description", "impact", "risk_level", "recommendation", "blocking", "source"],
+      "properties": {
+        "issue_id": {"type": "string"},
+        "type": {"type": "string"},
+        "related_refs": {"type": "array", "items": {"type": "string"}},
+        "description": {"type": "string"},
+        "impact": {"type": "string"},
+        "risk_level": {"enum": ["high", "medium", "low", "unassessed"]},
+        "recommendation": {"type": "string"},
+        "confirmation_owner": {"type": ["string", "null"]},
+        "blocking": {"type": "boolean"},
+        "source": {"$ref": "#/$defs/source"}
+      }
+    },
+    "graph": {
+      "type": "object",
+      "required": ["lanes", "nodes", "edges"],
+      "additionalProperties": false,
+      "properties": {
+        "lanes": {"type": "array", "items": {"type": "object"}},
+        "nodes": {"type": "array", "items": {"type": "object"}},
+        "edges": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "pendingConfirmation": {
+      "type": "object",
+      "required": ["confirmation_id", "question", "impact", "source", "suggested_owner", "blocking"],
+      "properties": {
+        "confirmation_id": {"type": "string"},
+        "question": {"type": "string"},
+        "impact": {"type": "string"},
+        "source": {"$ref": "#/$defs/source"},
+        "suggested_owner": {"type": ["string", "null"]},
+        "blocking": {"type": "boolean"}
+      }
+    }
+  }
+}

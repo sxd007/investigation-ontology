@@ -27,7 +27,7 @@ user-invocable: true
 
 ## 状态检测（入口）
 
-每次运行时，先解析 `{PLUGIN_CONFIG_DIR}`（见 `../../config-templates/config-loader.md § 平台路径`），再检查四种状态：
+每次运行时，先解析 `{PLUGIN_CONFIG_DIR}`（见 `config-templates/config-loader.md § 平台路径`），再检查四种状态：
 
 | 平台 | {PLUGIN_CONFIG_DIR} |
 |------|---------------------|
@@ -73,7 +73,7 @@ READY               → "配置已就绪，是否需要：
 
 ### 1.0 快速预设选择（Quick Preset）
 
-**在逐字段采集之前**，读取 `../../config-templates/team-profile.md § 快速预设` 中的预设清单，向用户展示：
+**在逐字段采集之前**，读取 `config-templates/team-profile.md § 快速预设` 中的预设清单，向用户展示：
 
 ```
 ┌─ 请选择最接近你们团队的预设配置 ─────────────────────┐
@@ -133,7 +133,7 @@ READY               → "配置已就绪，是否需要：
 
 **影响技能：** 全部（决定办案时默认聚焦/优先提示的技能集）
 
-读取 `../../manifests/install-profiles.json`，向用户展示可选角色画像及其技能集，引导选择其一。画像是 install-profiles.json 在运行期的消费方——决定本团队默认聚焦哪些技能。
+读取 `manifests/install-profiles.json`，向用户展示可选角色画像及其技能集，引导选择其一。画像是 install-profiles.json 在运行期的消费方——决定本团队默认聚焦哪些技能。
 
 | 画像 | 适用 | 技能集（摘要） |
 |------|------|--------------|
@@ -164,7 +164,7 @@ READY               → "配置已就绪，是否需要：
 用户选定角色画像后，检查已有 MCP 配置，引导用户按需补充。
 
 1. **检查已有配置** — 读取用户级 (`~/.codebuddy/mcp.json`) 和项目级 (`.mcp.json`) 配置，展示当前状态
-2. **能力补充建议** — 对比 `../../mcp-configs/mcp-servers.json`，展示尚未配置的可选 MCP
+2. **能力补充建议** — 对比 `mcp-configs/mcp-servers.json`，展示尚未配置的可选 MCP
 3. **选择注册通道** — 引导用户按决策树选择用户级或项目级（通用能力→用户级，案件专用→项目级）
 4. **写入配置** — 按选择的通道写入对应配置文件
 5. **验证与记录** — 验证可用性，记录到 team-profile.md 集成状态表
@@ -189,7 +189,7 @@ READY               → "配置已就绪，是否需要：
 └──────────────────────────────────────────────────────┘
 ```
 
-根据用户选择，从 `../../config-templates/ocr-backend.md` 模板生成配置文件并填入对应值：
+根据用户选择，从 `config-templates/ocr-backend.md` 模板生成配置文件并填入对应值：
 
 - 选 1（auto）→ `Upload Method: auto`，其余字段填默认值
 - 选 2（http）→ 追问上传地址和认证信息，填入 `Upload Endpoint` 和 `Auth Headers`
@@ -223,10 +223,10 @@ READY               → "配置已就绪，是否需要：
 
 ### 4.2 模板合并（升级场景）
 
-插件升级后，`../../config-templates/team-profile.md` 和 `../../config-templates/ocr-backend.md` 可能新增了配置项。检测流程：
+插件升级后，`config-templates/team-profile.md` 和 `config-templates/ocr-backend.md` 可能新增了配置项。检测流程：
 
 ```
-1. READ 新模板 (../../config-templates/team-profile.md, ../../config-templates/ocr-backend.md)
+1. READ 新模板 (config-templates/team-profile.md, config-templates/ocr-backend.md)
 2. READ 现有用户配置 ({PLUGIN_CONFIG_DIR}/team-profile.md, {PLUGIN_CONFIG_DIR}/ocr-backend.md)
 3. 按 H2 节逐节对比:
    - 模板中存在但配置中不存在的节 → 标记为"新配置项"
@@ -251,7 +251,7 @@ READY               → "配置已就绪，是否需要：
 | 项目 | 说明 |
 |------|------|
 | 目标路径 | `<workspace-root>/INVESTIGATION-HANDBOOK.md` |
-| 内容来源 | `../../project-templates/default/INVESTIGATION-HANDBOOK.md` |
+| 内容来源 | `project-templates/default/INVESTIGATION-HANDBOOK.md` |
 | 写入方式 | **完整复制模板内容，不做摘要、不缩减、不改写** |
 | 覆盖策略 | 如已存在，对比内容；内容一致则跳过，不一致则覆盖并告知用户 |
 
@@ -288,7 +288,7 @@ READY               → "配置已就绪，是否需要：
 
 ## 升级说明（发版注意）
 
-每次发版更新 `../../config-templates/team-profile.md` 或 `../../config-templates/ocr-backend.md` 时：
+每次发版更新 `config-templates/team-profile.md` 或 `config-templates/ocr-backend.md` 时：
 
 1. **保留模板结构**：所有字段保持 `[PLACEHOLDER]` 标记
 2. **新增字段必须标注"影响技能"**：确保 cold-start 能识别并归入正确的合并流程

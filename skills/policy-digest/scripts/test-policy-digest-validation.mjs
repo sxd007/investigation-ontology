@@ -1,0 +1,305 @@
+#!/usr/bin/env node
+import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { migrateDigest } from './migrate-policy-digest-0.1-to-0.2.mjs';
+import { generateExplanation, renderExplanationHtml } from './generate-policy-digest-explanation.mjs';
+import { renderPolicyDigestMarkdown } from './generate-policy-digest-md.mjs';
+import { canonicalJson, createCandidateSeed, projectDeterministicCandidates } from './project-policy-digest-candidates.mjs';
+import { generateScaffold } from './scaffold-policy-digest.mjs';
+import { collectDiagnosticHints, summarizeIssues, validatePackage } from './validate-policy-digest.mjs';
+
+const root = mkdtempSync(join(tmpdir(), 'policy-digest-validation-'));
+const projectorScript = join(dirname(fileURLToPath(import.meta.url)), 'project-policy-digest-candidates.mjs');
+const markdownScript = join(dirname(fileURLToPath(import.meta.url)), 'generate-policy-digest-md.mjs');
+const source = { doc_id: 'ACME-SUPPLIER-001', block_id: 'b-001', block_path: 'ch1/art1', clause_ref: '第一条', page_hint: 1, excerpt: '供应商管理包括筛选、认证和定期评估' };
+const review = () => ({ status: 'proposed', pool: 'full', reviewer: null, timestamp: null });
+const confidence = () => ({ evidence: 0.95, boundary: 0.95, parent: 0.95, granularity: 0.95, overall: 0.95 });
+const candidateId = 'ACME-SUPPLIER-001-C001';
+const hierarchy = [
+  ['CAT-PROCUREMENT', 'L1', 'proc:ProcessCategory', '采购管理', null, null],
+  ['PG-SUPPLIER', 'L2', 'proc:ProcessGroup', '供应商管理', 'CAT-PROCUREMENT', null],
+  ['PROC-SCREENING', 'L3', 'proc:Process', '供应商筛选', 'PG-SUPPLIER', 'PROC-SCREENING'],
+  ['ACT-COLLECT', 'L4', 'proc:ProcessActivity', '收集候选供应商', 'PROC-SCREENING', 'PROC-SCREENING'],
+  ['ACT-PRESCREEN', 'L4', 'proc:ProcessActivity', '初步资格筛查', 'PROC-SCREENING', 'PROC-SCREENING'],
+  ['PROC-CERTIFICATION', 'L3', 'proc:Process', '供应商认证', 'PG-SUPPLIER', 'PROC-CERTIFICATION'],
+  ['ACT-DUE-DILIGENCE', 'L4', 'proc:ProcessActivity', '供应商尽调', 'PROC-CERTIFICATION', 'PROC-CERTIFICATION'],
+  ['ACT-CERT-APPROVAL', 'L4', 'proc:ProcessActivity', '认证审批', 'PROC-CERTIFICATION', 'PROC-CERTIFICATION'],
+];
+
+function parsed() {
+  return {
+    parsedSchemaVersion: '0.1.0',
+    document: { docId: source.doc_id, rawRef: { path: 'raw/policy.pdf', sha256: 'a'.repeat(64) }, identity: { docNumber: source.doc_id, title: '供应商管理制度' } },
+    blocks: [{ blockId: source.block_id, blockType: 'clause', text: `第一条 ${source.excerpt}。`, anchor: { blockPath: source.block_path, charStart: 0, charEnd: 25, pageHint: 1, excerpt: source.excerpt }, clauseRef: { number: '第一条', index: 1 }, parseConfidence: 0.99, needsVerification: false }],
+    coverage: { clauseSequence: { declared: [1], detected: [1], gaps: [], status: 'OK' }, blockCount: { estimated: 1, parsed: 1 }, tocCrosscheck: { hasToc: false, matched: null, orphanSections: [] }, unrecognizedRegions: [], parser: { engine: 'test', model: null, timestamp: '2026-08-26T00:00:00Z' } },
+  };
+}
+
+function hierarchyProperties(level, parent, owner, predecessor = null) {
+  return { 'efio:hierarchyLevel': level, ...(parent ? { 'efio:parentElement': parent } : {}), ...(owner ? { 'efio:owningProcess': owner } : {}), 'efio:mappingStatus': 'PENDING_CORE_ALIGNMENT', ...(predecessor ? { precededByActivity: predecessor } : {}) };
+}
+
+function candidates() {
+  const proposals = hierarchy.map(([localId, level, rdfType, label, parent, owner]) => ({
+    localId, rdfType, label,
+    properties: hierarchyProperties(level, parent, owner, localId === 'ACT-PRESCREEN' ? 'ACT-COLLECT' : localId === 'ACT-CERT-APPROVAL' ? 'ACT-DUE-DILIGENCE' : null),
+  }));
+  Object.assign(proposals.find((item) => item.localId === 'PROC-SCREENING').properties, { hasObjective: 'OBJ-SCREENING', hasOutput: 'ART-CANDIDATE-LIST' });
+  Object.assign(proposals.find((item) => item.localId === 'PROC-CERTIFICATION').properties, { hasObjective: 'OBJ-CERTIFICATION', hasInput: 'ART-CANDIDATE-LIST', hasOutput: 'ART-CERT-DECISION' });
+  proposals.push(
+    { localId: 'R-001-OBLIGATION', rdfType: 'policy:Obligation', statement: '执行筛选和认证', obligationStatus: 'DRAFT', applicability: 'UNASSESSED' },
+    { localId: 'OBJ-SCREENING', rdfType: 'proc:ProcessObjective', label: '形成候选供应商清单' },
+    { localId: 'OBJ-CERTIFICATION', rdfType: 'proc:ProcessObjective', label: '确认供应商资格' },
+    { localId: 'ART-CANDIDATE-LIST', rdfType: 'proc:Artifact', label: '候选供应商清单' },
+    { localId: 'ART-CERT-DECISION', rdfType: 'proc:Artifact', label: '供应商认证决定' },
+  );
+  return {
+    candidatesSchemaVersion: '0.3.0',
+    document: { docId: source.doc_id, parsedRef: { path: 'normalized.parsed.json', parsedSchemaVersion: '0.1.0' }, tenant: 'acme' },
+    coreVersions: { process: '0.4.0' },
+    candidates: [{ candidateId, sourceBlock: { docId: source.doc_id, blockId: source.block_id, blockPath: source.block_path, excerpt: source.excerpt }, disposition: 'process-step', clauseType: ['process-step'], confidence: 0.95, coreVersion: '0.4.0', produces: proposals, reviewPool: 'full', review: { status: 'proposed', reviewer: null, timestamp: null } }],
+  };
+}
+
+function element(tuple) {
+  const [element_id, level, rdf_type, name, parent_ref, owning_process_ref] = tuple;
+  return {
+    element_id, level, rdf_type, name, parent_ref, owning_process_ref,
+    objective_refs: element_id === 'PROC-SCREENING' ? ['OBJ-SCREENING'] : element_id === 'PROC-CERTIFICATION' ? ['OBJ-CERTIFICATION'] : [],
+    owner_role_refs: [], input_artifact_refs: element_id === 'PROC-CERTIFICATION' ? ['ART-CANDIDATE-LIST'] : [],
+    output_artifact_refs: element_id === 'PROC-SCREENING' ? ['ART-CANDIDATE-LIST'] : element_id === 'PROC-CERTIFICATION' ? ['ART-CERT-DECISION'] : [],
+    entry_conditions: level === 'L3' ? ['满足启动条件'] : [], exit_conditions: level === 'L3' ? ['形成流程结果'] : [],
+    decomposition_basis: 'explicit_text', hierarchy_status: 'resolved', hierarchy_confidence: confidence(), alternative_levels: [], source, review: review(), candidate_refs: [candidateId],
+  };
+}
+
+function digest() {
+  const processElements = hierarchy.map(element);
+  const roleAssignments = [];
+  for (const item of processElements.filter((value) => ['L3', 'L4'].includes(value.level))) {
+    roleAssignments.push({ assignment_id: `RA-${item.element_id}-R`, element_ref: item.element_id, role: `${item.name}执行人`, raci: 'R', authorization_basis: null, source, review: review() });
+    if (item.level === 'L3') roleAssignments.push({ assignment_id: `RA-${item.element_id}-A`, element_ref: item.element_id, role: `${item.name}负责人`, raci: 'A', authorization_basis: null, source, review: review() });
+  }
+  return {
+    digest_schema_version: '0.2.0', digest_id: 'PD-ACME-SUPPLIER-001-v1', case_id: 'CASE-2026-001', status: 'review_required', generated_at: '2026-08-26T00:00:00Z', source_index_ref: 'source-index.json',
+    document_identity: { doc_id: source.doc_id, title: '供应商管理制度', doc_number: source.doc_id, version: null, policy_level: null, drafting_department: null, owning_department: '采购部', approving_authority: null, publication_date: null, effective_date: null, applicability_summary: null, higher_authorities: [], related_documents: [], superseded_documents: [], attachments: [], interpretation_authority: null, validity: 'pending_confirmation', source },
+    scope: { subjects: ['采购部'], scenarios: ['供应商管理'], matters: ['筛选', '认证'], triggers: ['供应商准入需求'], exclusions: [] },
+    rules: [{ rule_id: 'R-001', source, original_text: source.excerpt, disposition: 'process-step', clause_types: ['process-step'], applicable_subjects: ['采购部'], trigger: '供应商准入需求', requirement: '执行筛选和认证', responsible_roles: ['采购部'], parameters: [], evidence_requirements: [], exception_note: null, operationalized_by: ['PROC-SCREENING', 'PROC-CERTIFICATION'], semantic_confidence: 0.95, uncertainty_reason: null, review: review(), candidate_refs: [candidateId] }],
+    process_elements: processElements,
+    process_objectives: [
+      { objective_id: 'OBJ-SCREENING', statement: '形成候选供应商清单', parent_objective_ref: null, element_refs: ['PROC-SCREENING'], assertion_basis: 'explicit_text', source, review: review(), candidate_refs: [candidateId] },
+      { objective_id: 'OBJ-CERTIFICATION', statement: '确认供应商资格', parent_objective_ref: null, element_refs: ['PROC-CERTIFICATION'], assertion_basis: 'explicit_text', source, review: review(), candidate_refs: [candidateId] },
+    ],
+    artifacts: [
+      { artifact_id: 'ART-CANDIDATE-LIST', name: '候选供应商清单', artifact_type: 'document', produced_by: ['PROC-SCREENING'], consumed_by: ['PROC-CERTIFICATION'], required_fields: [], retention_requirement: null, source, review: review(), candidate_refs: [candidateId] },
+      { artifact_id: 'ART-CERT-DECISION', name: '供应商认证决定', artifact_type: 'decision', produced_by: ['PROC-CERTIFICATION'], consumed_by: [], required_fields: [], retention_requirement: null, source, review: review(), candidate_refs: [candidateId] },
+    ],
+    flow_edges: [
+      { edge_id: 'EDGE-SCREENING-001', process_ref: 'PROC-SCREENING', from_ref: 'ACT-COLLECT', to_ref: 'ACT-PRESCREEN', edge_kind: 'main', condition: null, condition_parameters: [], source, review: review(), candidate_refs: [candidateId] },
+      { edge_id: 'EDGE-CERT-001', process_ref: 'PROC-CERTIFICATION', from_ref: 'ACT-DUE-DILIGENCE', to_ref: 'ACT-CERT-APPROVAL', edge_kind: 'main', condition: null, condition_parameters: [], source, review: review(), candidate_refs: [candidateId] },
+    ],
+    role_assignments: roleAssignments, risks: [], controls: [], issues: [], graph: { lanes: [], nodes: [], edges: [] }, pending_confirmations: [],
+    ontology_projection: { candidates_schema_version: '0.3.0', candidates_ref: 'candidates.json', parsed_schema_version: '0.1.0', parsed_ref: 'normalized.parsed.json', tenant: 'acme', core_versions: { process: '0.4.0' }, hierarchy_mapping: { mode: 'candidates_extension', extension_prefix: 'efio', serialization_policy: 'PENDING_CORE_ALIGNMENT' } },
+  };
+}
+
+function markdown(data) {
+  const ids = [...data.rules.map((x) => x.rule_id), ...data.process_elements.map((x) => x.element_id), ...data.process_objectives.map((x) => x.objective_id), ...data.artifacts.map((x) => x.artifact_id), ...data.flow_edges.map((x) => x.edge_id), ...data.role_assignments.map((x) => x.assignment_id)].join(' ');
+  return `# 供应商管理制度解构\n\n## 文件身份表\n${source.doc_id}\n\n## 核心规则表\nR-001\n\n## 流程节点表\n${ids}\n\n## RACI 责任矩阵\n${ids}\n\n## 风险控制矩阵\n\n## 制度问题及优化建议清单\n\n## 端到端泳道流程图\n`;
+}
+
+function writePackage(name, digestData, candidateData = candidates()) {
+  const directory = join(root, name); mkdirSync(directory, { recursive: true });
+  writeFileSync(join(directory, 'normalized.parsed.json'), JSON.stringify(parsed(), null, 2));
+  writeFileSync(join(directory, 'digest.json'), JSON.stringify(digestData, null, 2));
+  writeFileSync(join(directory, 'candidates.json'), JSON.stringify(candidateData, null, 2));
+  writeFileSync(join(directory, 'source-index.json'), '{}'); writeFileSync(join(directory, 'digest.md'), markdown(digestData));
+  return directory;
+}
+
+function runProjector(args) {
+  return spawnSync(process.execPath, [projectorScript, ...args], { encoding: 'utf8' });
+}
+
+function runMarkdownGenerator(args) {
+  return spawnSync(process.execPath, [markdownScript, ...args], { encoding: 'utf8' });
+}
+
+try {
+  const scaffoldDirectory = join(root, 'scaffold');
+  generateScaffold(scaffoldDirectory, { caseId: 'CASE-STARTER', docId: 'DOC-STARTER', tenant: 'acme' });
+  const scaffoldValidation = validatePackage(scaffoldDirectory);
+  assert.deepEqual(scaffoldValidation.issues.filter((item) => item.severity === 'ERROR'), [], JSON.stringify(scaffoldValidation.issues, null, 2));
+  assert.equal(scaffoldValidation.summary.errors, 0);
+  assert.ok(readFileSync(join(scaffoldDirectory, 'digest.json'), 'utf8').includes('ISSUE-SCAFFOLD-001'));
+  assert.ok(readFileSync(join(scaffoldDirectory, 'normalized.parsed.json'), 'utf8').includes('"parsedSchemaVersion": "0.1.0"'));
+  const legacyParsed = { schema_version: '0.1.0', document: { doc_id: 'DOC-OLD', raw_ref: {} }, blocks: [{ block_id: 'B-1', block_type: 'clause', anchor: { block_path: 'ch1', char_start: 0, char_end: 1 } }] };
+  const namingHints = collectDiagnosticHints(legacyParsed);
+  assert.equal(namingHints[0].code, 'parsed_field_naming_mismatch');
+  assert.ok(namingHints[0].message.includes('schema_version → parsedSchemaVersion'));
+  assert.ok(namingHints[0].message.includes('block_id → blockId'));
+
+  const validDigest = digest();
+  const validDirectory = writePackage('valid', validDigest);
+  const valid = validatePackage(validDirectory);
+  assert.deepEqual(valid.issues.filter((item) => item.severity === 'ERROR'), [], JSON.stringify(valid.issues, null, 2));
+  const initialized = projectDeterministicCandidates(validDigest, createCandidateSeed(validDigest));
+  assert.equal(initialized.candidates.length, 1);
+  assert.ok(initialized.candidates[0].produces.some((item) => item.localId === 'R-001-OBLIGATION'));
+  const initializedDirectory = writePackage('initialized', validDigest, initialized);
+  assert.deepEqual(validatePackage(initializedDirectory).issues.filter((item) => item.severity === 'ERROR'), []);
+
+  const generatedMarkdown = renderPolicyDigestMarkdown(validDigest);
+  for (const id of ['R-001', 'PROC-SCREENING', 'OBJ-SCREENING', 'ART-CANDIDATE-LIST', 'EDGE-SCREENING-001', 'RA-PROC-SCREENING-R']) assert.ok(generatedMarkdown.includes(id));
+  const markdownDirectory = writePackage('markdown-cli', validDigest, initialized);
+  const markdownDefault = runMarkdownGenerator([markdownDirectory]);
+  assert.equal(markdownDefault.status, 0, markdownDefault.stderr);
+  assert.equal(readFileSync(join(markdownDirectory, 'digest.generated.md'), 'utf8'), generatedMarkdown);
+  assert.notEqual(runMarkdownGenerator([markdownDirectory, '--check']).status, 0);
+  const markdownInPlace = runMarkdownGenerator([markdownDirectory, '--in-place']);
+  assert.equal(markdownInPlace.status, 0, markdownInPlace.stderr);
+  assert.ok(readFileSync(join(markdownDirectory, 'digest.before-generation.md'), 'utf8').includes('# 供应商管理制度解构'));
+  assert.equal(runMarkdownGenerator([markdownDirectory, '--check']).status, 0);
+  assert.notEqual(runMarkdownGenerator([markdownDirectory, '--output', join(markdownDirectory, 'digest.md')]).status, 0);
+  writeFileSync(join(markdownDirectory, 'digest.md'), `${generatedMarkdown}\n人工漂移\n`);
+  assert.notEqual(runMarkdownGenerator([markdownDirectory, '--check']).status, 0);
+  assert.equal(runMarkdownGenerator([markdownDirectory, '--in-place']).status, 0);
+  assert.equal(runMarkdownGenerator([markdownDirectory, '--check']).status, 0);
+
+  const cliInitDirectory = writePackage('cli-init', validDigest);
+  rmSync(join(cliInitDirectory, 'candidates.json'));
+  const cliInit = runProjector([cliInitDirectory, '--init', '--in-place']);
+  assert.equal(cliInit.status, 0, cliInit.stderr);
+  assert.ok(readFileSync(join(cliInitDirectory, 'candidates.json'), 'utf8').includes('R-001-OBLIGATION'));
+  assert.equal(runProjector([cliInitDirectory, '--check']).status, 0);
+  const driftedCandidates = JSON.parse(readFileSync(join(cliInitDirectory, 'candidates.json'), 'utf8'));
+  driftedCandidates.candidates[0].confidence = 0.01;
+  writeFileSync(join(cliInitDirectory, 'candidates.json'), canonicalJson(driftedCandidates));
+  const driftCheck = runProjector([cliInitDirectory, '--check']);
+  assert.equal(driftCheck.status, 1);
+  assert.ok(driftCheck.stderr.includes('不一致'));
+  const inPlace = runProjector([cliInitDirectory, '--in-place']);
+  assert.equal(inPlace.status, 0, inPlace.stderr);
+  assert.ok(readFileSync(join(cliInitDirectory, 'candidates.before-projection.json'), 'utf8').includes('0.01'));
+  assert.equal(runProjector([cliInitDirectory, '--check']).status, 0);
+
+  const cliOutputDirectory = writePackage('cli-output', validDigest);
+  const explicitOutput = join(cliOutputDirectory, 'review', 'projected.json');
+  mkdirSync(dirname(explicitOutput), { recursive: true });
+  const cliOutput = runProjector([cliOutputDirectory, '--output', explicitOutput]);
+  assert.equal(cliOutput.status, 0, cliOutput.stderr);
+  assert.ok(readFileSync(explicitOutput, 'utf8').includes('R-001-OBLIGATION'));
+  const existingCandidatesBeforePreview = readFileSync(join(cliOutputDirectory, 'candidates.json'), 'utf8');
+  const initPreviewPath = join(cliOutputDirectory, 'review', 'initialized.json');
+  const initPreview = runProjector([cliOutputDirectory, '--init', '--output', initPreviewPath]);
+  assert.equal(initPreview.status, 0, initPreview.stderr);
+  assert.ok(readFileSync(initPreviewPath, 'utf8').includes('R-001-OBLIGATION'));
+  assert.equal(readFileSync(join(cliOutputDirectory, 'candidates.json'), 'utf8'), existingCandidatesBeforePreview);
+  assert.notEqual(runProjector([cliOutputDirectory, '--in-place', '--output', explicitOutput]).status, 0);
+  assert.notEqual(runProjector([cliOutputDirectory, '--init']).status, 0);
+  assert.notEqual(runProjector([cliOutputDirectory, '--init', '--output', join(cliOutputDirectory, 'candidates.json')]).status, 0);
+  assert.notEqual(runProjector([cliOutputDirectory, '--output', join(cliOutputDirectory, 'candidates.json')]).status, 0);
+  assert.notEqual(runProjector([cliOutputDirectory, '--core-version', '0.4.0']).status, 0);
+  const seedWithRuleProposal = candidates();
+  seedWithRuleProposal.candidates[0].produces.push({ localId: 'RULE-KEEP', rdfType: 'policy:Obligation', statement: '必须保留的规则投影' });
+  seedWithRuleProposal.candidates[0].produces.find((item) => item.localId === 'PROC-SCREENING').properties['efio:hierarchyLevel'] = 'L5';
+  seedWithRuleProposal.candidates[0].disposition = 'mandatory';
+  seedWithRuleProposal.candidates[0].confidence = 0.1;
+  seedWithRuleProposal.document.docId = 'STALE-DOC';
+  seedWithRuleProposal.coreVersions = { process: '9.9.9' };
+  const digestWithParameter = structuredClone(validDigest);
+  digestWithParameter.rules[0].parameters = [{ parameter_type: 'duration', value: '5个工作日', value_number: 5, comparator: 'le', unit: '工作日' }];
+  const projected = projectDeterministicCandidates(digestWithParameter, seedWithRuleProposal);
+  const projectedCandidate = projected.candidates[0];
+  assert.equal(projected.candidates[0].produces.find((item) => item.localId === 'PROC-SCREENING').properties['efio:hierarchyLevel'], 'L3');
+  assert.ok(projectedCandidate.produces.some((item) => item.localId === 'RULE-KEEP'));
+  assert.deepEqual(projectedCandidate.produces.find((item) => item.localId === 'R-001-OBLIGATION'), {
+    localId: 'R-001-OBLIGATION', rdfType: 'policy:Obligation', statement: '执行筛选和认证', obligationStatus: 'DRAFT', applicability: 'UNASSESSED',
+  });
+  assert.deepEqual(projectedCandidate.parameters, [{ target: 'R-001-OBLIGATION', parameterType: 'duration', value: '5个工作日', valueNumber: 5, comparator: 'LE', unit: '工作日' }]);
+  assert.equal(projectedCandidate.disposition, 'process-step');
+  assert.equal(projectedCandidate.confidence, 0.95);
+  assert.equal(projected.document.docId, source.doc_id);
+  assert.deepEqual(projected.coreVersions, { process: '0.4.0' });
+  assert.equal(canonicalJson(projectDeterministicCandidates(digestWithParameter, projected)), canonicalJson(projected));
+  const malformedRuleParameter = structuredClone(validDigest);
+  malformedRuleParameter.rules[0].parameters = [{ value: '5个工作日' }];
+  assert.throws(() => projectDeterministicCandidates(malformedRuleParameter, candidates()), /rule R-001\.parameters\[0\].*parameterType/);
+  const malformedEdgeParameter = structuredClone(validDigest);
+  malformedEdgeParameter.flow_edges[0].edge_kind = 'conditional';
+  malformedEdgeParameter.flow_edges[0].condition_parameters = [{ parameterType: 'threshold', value: 5 }];
+  assert.throws(() => projectDeterministicCandidates(malformedEdgeParameter, candidates()), /flow edge EDGE-SCREENING-001\.condition_parameters\[0\].*value\(string\)/);
+  const malformedParameterDirectory = writePackage('malformed-parameter', malformedRuleParameter);
+  assert.ok(validatePackage(malformedParameterDirectory).issues.some((item) => item.code === 'parameter_shape_invalid' && item.location === 'digest/rules/0/parameters/0'));
+  const mismatchedSourceDigest = structuredClone(validDigest);
+  mismatchedSourceDigest.process_elements[0].source.doc_id = 'STALE-DOC';
+  const sourceMismatchDirectory = writePackage('source-mismatch', mismatchedSourceDigest);
+  assert.ok(validatePackage(sourceMismatchDirectory).issues.some((item) => item.code === 'source_doc_id_mismatch' && item.location === '$/process_elements/0/source/doc_id'));
+  const multiCoreDigest = structuredClone(validDigest);
+  multiCoreDigest.ontology_projection.core_versions = { policy: '0.1.0', process: '0.4.0' };
+  assert.throws(() => createCandidateSeed(multiCoreDigest), /policy=0\.1\.0.*process=0\.4\.0/);
+  assert.throws(() => createCandidateSeed(multiCoreDigest, '9.9.9'), /不在.*可选值/);
+  writeFileSync(join(validDirectory, 'candidates.json'), canonicalJson(projected));
+  assert.deepEqual(validatePackage(validDirectory).issues.filter((item) => item.severity === 'ERROR'), []);
+  const explanation = generateExplanation(validDirectory);
+  const explanationHtml = readFileSync(explanation.outputPath, 'utf8');
+  assert.ok(explanationHtml.includes('制度解构导览'));
+  assert.ok(explanationHtml.includes('原文对照'));
+  assert.ok(explanationHtml.includes('流程分层'));
+  assert.ok(explanationHtml.includes('本体投影'));
+  const browserScript = explanationHtml.match(/<script>\s*([\s\S]*?)<\/script>\s*<\/body>/)?.[1];
+  assert.ok(browserScript, '应包含内嵌交互脚本');
+  assert.doesNotThrow(() => new Function(browserScript), '内嵌交互脚本应可解析');
+  assert.equal(explanation.model.counts.processes, 2);
+  assert.equal(explanation.model.counts.candidates, 1);
+  assert.ok(explanation.model.records.some((item) => item.kind === 'candidate' && item.id === candidateId));
+  assert.ok(explanation.model.records.find((item) => item.id === candidateId).proposals.some((item) => item.local_id === 'PROC-SCREENING'));
+  assert.ok(explanation.model.records.some((item) => item.id === 'RA-PROC-SCREENING-R'));
+  assert.ok(explanation.model.source_blocks.some((item) => item.block_id === 'b-001'));
+  assert.ok(!renderExplanationHtml({ ...explanation.model, meta: { ...explanation.model.meta, title: '</script><script>alert(1)</script>' } }).includes('</script><script>alert(1)</script>'));
+
+  const invalidDigest = structuredClone(validDigest);
+  invalidDigest.process_elements.find((x) => x.element_id === 'ACT-CERT-APPROVAL').owning_process_ref = 'PROC-SCREENING';
+  invalidDigest.process_elements.find((x) => x.element_id === 'PROC-CERTIFICATION').hierarchy_confidence.overall = 0.99;
+  invalidDigest.flow_edges.push({ ...invalidDigest.flow_edges[0], edge_id: 'EDGE-BAD-CROSS', process_ref: 'PROC-SCREENING', from_ref: 'ACT-COLLECT', to_ref: 'ACT-CERT-APPROVAL' });
+  const invalidCodes = new Set(validatePackage(writePackage('invalid', invalidDigest)).issues.map((item) => item.code));
+  assert.ok(invalidCodes.has('owning_process_invalid'));
+  assert.ok(invalidCodes.has('hierarchy_confidence_not_conservative'));
+  assert.ok(invalidCodes.has('flow_edge_cross_process'));
+  const missingObligationCandidates = candidates();
+  missingObligationCandidates.candidates[0].produces = missingObligationCandidates.candidates[0].produces.filter((item) => item.localId !== 'R-001-OBLIGATION');
+  const missingObligationCodes = new Set(validatePackage(writePackage('missing-obligation', validDigest, missingObligationCandidates)).issues.map((item) => item.code));
+  assert.ok(missingObligationCodes.has('candidate_rule_obligation_missing'));
+  const missingCandidateRefDigest = structuredClone(validDigest);
+  missingCandidateRefDigest.rules[0].candidate_refs = [];
+  assert.ok(validatePackage(writePackage('missing-candidate-ref', missingCandidateRefDigest)).issues.some((item) => item.code === 'candidate_ref_cardinality'));
+  const multipleCandidateRefsDigest = structuredClone(validDigest);
+  multipleCandidateRefsDigest.flow_edges[0].candidate_refs = [candidateId, candidateId];
+  assert.ok(validatePackage(writePackage('multiple-candidate-refs', multipleCandidateRefsDigest)).issues.some((item) => item.code === 'candidate_ref_cardinality'));
+  const ambiguousRules = structuredClone(validDigest);
+  ambiguousRules.rules.push({ ...structuredClone(ambiguousRules.rules[0]), rule_id: 'R-002', source: { ...source, block_id: 'b-002' } });
+  assert.throws(() => projectDeterministicCandidates(ambiguousRules, candidates()), /多个 source block/);
+  const grouped = summarizeIssues([
+    { severity: 'ERROR', code: 'anchor_excerpt_mismatch' },
+    { severity: 'ERROR', code: 'anchor_excerpt_mismatch' },
+    { severity: 'WARN', code: 'raci_responsible_missing' },
+  ]);
+  assert.equal(grouped.errors, 2);
+  assert.equal(grouped.warnings, 1);
+  assert.equal(grouped.by_code[0].code, 'anchor_excerpt_mismatch');
+  assert.equal(grouped.by_code[0].total, 2);
+
+  const old = structuredClone(validDigest);
+  old.digest_schema_version = '0.1.0'; old.activities = [{ activity_id: 'ACT-OLD', name: '旧活动', responsible_roles: [], inputs: [], action: '执行', outputs: [], main_next: null, transitions: [], control_refs: [], source, review: review() }];
+  old.role_assignments = []; old.risks = []; old.controls = []; old.issues = []; old.pending_confirmations = [];
+  delete old.process_elements; delete old.process_objectives; delete old.artifacts; delete old.flow_edges; delete old.ontology_projection.hierarchy_mapping;
+  const migrated = migrateDigest(old, candidates()).digest;
+  assert.equal(migrated.digest_schema_version, '0.2.0'); assert.equal(migrated.process_elements[0].hierarchy_status, 'unresolved');
+  assert.ok(migrated.issues.some((item) => item.blocking));
+
+  console.log('✓ policy-digest 0.2 tests passed (scaffold + projector CLI + Markdown CLI + diagnostics + hierarchy + artifacts + edges + migration + explanation)');
+} finally { rmSync(root, { recursive: true, force: true }); }
