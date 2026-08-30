@@ -282,6 +282,7 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs cases/{
 - [Candidates 确定性规则/流程投影器](./scripts/project-policy-digest-candidates.mjs)
 - [六表一图 Markdown 生成器](./scripts/generate-policy-digest-md.mjs)
 - [校验器回归测试](./scripts/test-policy-digest-validation.mjs)
+- [十规则脱敏 fixture 回归测试](./scripts/test-ten-rule-policy-fixture.mjs)
 - [0.1 → 0.2 迁移器](./scripts/migrate-policy-digest-0.1-to-0.2.mjs)
 - [制度解构导览生成器](./scripts/generate-policy-digest-explanation.mjs)
 - [制度解构导览规范](references/explanation-view.md)

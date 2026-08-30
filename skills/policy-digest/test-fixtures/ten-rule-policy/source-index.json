@@ -1,0 +1,33 @@
+{
+  "doc_id": "FIXTURE-POLICY-001",
+  "case_id": "CASE-FIXTURE-001",
+  "generated_at": "2026-08-28T00:00:00+08:00",
+  "note": "脱敏回归 fixture：全部内容为合成占位文本，不含任何原始制度原文。",
+  "inputs": [
+    {
+      "role": "main",
+      "relative_path": "raw/fixture-source.pdf",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "file_type": "pdf",
+      "page_count": 10,
+      "acquired_at": "2026-08-28T00:00:00+08:00",
+      "parse_path": "synthetic",
+      "parse_note": "脱敏回归 fixture，无原始文件"
+    }
+  ],
+  "missing_inputs": [],
+  "versions": [
+    {
+      "version": "v1",
+      "doc_number": "FIXTURE-DOC-2025-001",
+      "publication_date": "2025-01-01",
+      "note": "合成版本信息"
+    }
+  ],
+  "anchor_coverage": {
+    "parsed_ref": "normalized.parsed.json",
+    "block_count": 49,
+    "clause_sequence_status": "OK",
+    "unrecognized_regions": 1
+  }
+}

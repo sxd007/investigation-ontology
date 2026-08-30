@@ -1,0 +1,4687 @@
+{
+  "digest_schema_version": "0.2.0",
+  "digest_id": "DIGEST-FIXTURE-POLICY-001-v1",
+  "case_id": "CASE-FIXTURE-001",
+  "status": "draft",
+  "generated_at": "2026-08-26T09:40:00+08:00",
+  "supersedes": null,
+  "superseded_by": null,
+  "source_index_ref": "source-index.json",
+  "document_identity": {
+    "doc_id": "FIXTURE-POLICY-001",
+    "title": "脱敏占位文本-0001",
+    "doc_number": "脱敏占位文本-0071",
+    "version": "v1",
+    "policy_level": "脱敏占位文本-0072",
+    "drafting_department": "脱敏占位文本-0073",
+    "owning_department": "脱敏占位文本-0073",
+    "approving_authority": "脱敏占位文本-0074",
+    "publication_date": "2025-01-01",
+    "effective_date": "2025-01-01",
+    "applicability_summary": "脱敏占位文本-0075",
+    "higher_authorities": [],
+    "related_documents": [
+      "脱敏占位文本-0076"
+    ],
+    "superseded_documents": [],
+    "attachments": [
+      "脱敏占位文本-0077",
+      "脱敏占位文本-0078"
+    ],
+    "interpretation_authority": "脱敏占位文本-0073",
+    "validity": "effective",
+    "source": {
+      "doc_id": "FIXTURE-POLICY-001",
+      "block_id": "b-000",
+      "block_path": "preamble",
+      "clause_ref": null,
+      "page_hint": 1,
+      "excerpt": "脱敏占位文本-0003"
+    }
+  },
+  "scope": {
+    "subjects": [
+      "脱敏占位文本-0079",
+      "脱敏占位文本-0080",
+      "脱敏占位文本-0081",
+      "脱敏占位文本-0082",
+      "脱敏占位文本-0083",
+      "脱敏占位文本-0084",
+      "脱敏占位文本-0085",
+      "脱敏占位文本-0086",
+      "脱敏占位文本-0087"
+    ],
+    "scenarios": [
+      "脱敏占位文本-0088",
+      "脱敏占位文本-0089",
+      "脱敏占位文本-0090",
+      "脱敏占位文本-0091",
+      "脱敏占位文本-0092",
+      "脱敏占位文本-0093",
+      "脱敏占位文本-0094"
+    ],
+    "matters": [
+      "脱敏占位文本-0095",
+      "脱敏占位文本-0096",
+      "脱敏占位文本-0097",
+      "脱敏占位文本-0098",
+      "脱敏占位文本-0099",
+      "脱敏占位文本-0100",
+      "脱敏占位文本-0101",
+      "脱敏占位文本-0102"
+    ],
+    "triggers": [
+      "脱敏占位文本-0103",
+      "脱敏占位文本-0104",
+      "脱敏占位文本-0105",
+      "脱敏占位文本-0106",
+      "脱敏占位文本-0107",
+      "脱敏占位文本-0108"
+    ],
+    "exclusions": [
+      "脱敏占位文本-0109",
+      "脱敏占位文本-0110"
+    ]
+  },
+  "rules": [
+    {
+      "rule_id": "R-01",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-002",
+        "block_path": "ch1/s1",
+        "clause_ref": null,
+        "page_hint": 2,
+        "excerpt": "脱敏占位文本-0005"
+      },
+      "original_text": "脱敏占位文本-0111",
+      "disposition": "definition",
+      "clause_types": [
+        "definition"
+      ],
+      "applicable_subjects": [
+        "脱敏占位文本-0112"
+      ],
+      "trigger": null,
+      "requirement": "脱敏占位文本-0113",
+      "responsible_roles": [
+        "脱敏占位文本-0112"
+      ],
+      "parameters": [],
+      "evidence_requirements": [
+        "脱敏占位文本-0114"
+      ],
+      "exception_note": null,
+      "operationalized_by": [
+        "PE-L3-01",
+        "PE-L3-02"
+      ],
+      "semantic_confidence": 0.9,
+      "uncertainty_reason": null,
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-R-01"
+      ]
+    },
+    {
+      "rule_id": "R-02",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-009",
+        "block_path": "ch2/s1",
+        "clause_ref": null,
+        "page_hint": 2,
+        "excerpt": "脱敏占位文本-0012"
+      },
+      "original_text": "脱敏占位文本-0115",
+      "disposition": "mandatory",
+      "clause_types": [
+        "mandatory"
+      ],
+      "applicable_subjects": [
+        "脱敏占位文本-0112",
+        "脱敏占位文本-0082"
+      ],
+      "trigger": "脱敏占位文本-0116",
+      "requirement": "脱敏占位文本-0117",
+      "responsible_roles": [
+        "脱敏占位文本-0082"
+      ],
+      "parameters": [
+        {
+          "name": "脱敏占位文本-0118",
+          "value": "脱敏占位文本-0119",
+          "unit": "脱敏占位文本-0120",
+          "parameterType": "quota"
+        }
+      ],
+      "evidence_requirements": [
+        "脱敏占位文本-0121"
+      ],
+      "exception_note": "脱敏占位文本-0122",
+      "operationalized_by": [
+        "PE-L3-01",
+        "PE-L3-02"
+      ],
+      "semantic_confidence": 0.7,
+      "uncertainty_reason": "脱敏占位文本-0123",
+      "review": {
+        "status": "proposed",
+        "pool": "full"
+      },
+      "candidate_refs": [
+        "CAND-R-02"
+      ]
+    },
+    {
+      "rule_id": "R-03",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-010",
+        "block_path": "ch2/s2",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0013"
+      },
+      "original_text": "脱敏占位文本-0124",
+      "disposition": "mandatory",
+      "clause_types": [
+        "mandatory"
+      ],
+      "applicable_subjects": [
+        "脱敏占位文本-0112"
+      ],
+      "trigger": "脱敏占位文本-0116",
+      "requirement": "脱敏占位文本-0125",
+      "responsible_roles": [
+        "脱敏占位文本-0112"
+      ],
+      "parameters": [
+        {
+          "name": "脱敏占位文本-0096",
+          "value": "脱敏占位文本-0126",
+          "unit": "脱敏占位文本-0127",
+          "parameterType": "duration"
+        }
+      ],
+      "evidence_requirements": [
+        "脱敏占位文本-0128"
+      ],
+      "exception_note": "脱敏占位文本-0129",
+      "operationalized_by": [
+        "PE-L3-01",
+        "PE-L3-02"
+      ],
+      "semantic_confidence": 0.7,
+      "uncertainty_reason": "脱敏占位文本-0130",
+      "review": {
+        "status": "proposed",
+        "pool": "full"
+      },
+      "candidate_refs": [
+        "CAND-R-03"
+      ]
+    },
+    {
+      "rule_id": "R-04",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-012",
+        "block_path": "ch3/s1",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0015"
+      },
+      "original_text": "脱敏占位文本-0131",
+      "disposition": "procedural",
+      "clause_types": [
+        "procedural"
+      ],
+      "applicable_subjects": [
+        "脱敏占位文本-0112"
+      ],
+      "trigger": "脱敏占位文本-0132",
+      "requirement": "脱敏占位文本-0133",
+      "responsible_roles": [
+        "脱敏占位文本-0112"
+      ],
+      "parameters": [],
+      "evidence_requirements": [
+        "脱敏占位文本-0134",
+        "脱敏占位文本-0135"
+      ],
+      "exception_note": null,
+      "operationalized_by": [
+        "PE-L4-01"
+      ],
+      "semantic_confidence": 0.9,
+      "uncertainty_reason": null,
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-R-04"
+      ]
+    },
+    {
+      "rule_id": "R-05",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "original_text": "脱敏占位文本-0136",
+      "disposition": "procedural",
+      "clause_types": [
+        "procedural"
+      ],
+      "applicable_subjects": [
+        "脱敏占位文本-0112",
+        "脱敏占位文本-0080",
+        "脱敏占位文本-0081",
+        "脱敏占位文本-0082",
+        "脱敏占位文本-0083",
+        "脱敏占位文本-0084"
+      ],
+      "trigger": "脱敏占位文本-0137",
+      "requirement": "脱敏占位文本-0138",
+      "responsible_roles": [
+        "脱敏占位文本-0080",
+        "脱敏占位文本-0081",
+        "脱敏占位文本-0082",
+        "脱敏占位文本-0083",
+        "脱敏占位文本-0084"
+      ],
+      "parameters": [],
+      "evidence_requirements": [
+        "脱敏占位文本-0139"
+      ],
+      "exception_note": "脱敏占位文本-0140",
+      "operationalized_by": [
+        "PE-L4-02",
+        "PE-L4-03",
+        "PE-L4-04",
+        "PE-L4-05"
+      ],
+      "semantic_confidence": 0.85,
+      "uncertainty_reason": null,
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-R-05"
+      ]
+    },
+    {
+      "rule_id": "R-06",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-020",
+        "block_path": "ch3/s1/note3",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0023"
+      },
+      "original_text": "脱敏占位文本-0141",
+      "disposition": "mandatory",
+      "clause_types": [
+        "mandatory"
+      ],
+      "applicable_subjects": [
+        "脱敏占位文本-0142",
+        "脱敏占位文本-0143",
+        "脱敏占位文本-0144"
+      ],
+      "trigger": "脱敏占位文本-0145",
+      "requirement": "脱敏占位文本-0146",
+      "responsible_roles": [
+        "脱敏占位文本-0142",
+        "脱敏占位文本-0143",
+        "脱敏占位文本-0144"
+      ],
+      "parameters": [
+        {
+          "name": "脱敏占位文本-0147",
+          "value": "脱敏占位文本-0148",
+          "unit": "脱敏占位文本-0149",
+          "comparator": "LT",
+          "parameterType": "amount_threshold",
+          "valueNumber": 5000000
+        },
+        {
+          "name": "脱敏占位文本-0150",
+          "value": "脱敏占位文本-0151",
+          "unit": "脱敏占位文本-0149",
+          "comparator": "GE",
+          "parameterType": "amount_threshold",
+          "valueNumber": 10000000
+        }
+      ],
+      "evidence_requirements": [
+        "脱敏占位文本-0152"
+      ],
+      "exception_note": "脱敏占位文本-0153",
+      "operationalized_by": [
+        "PE-L4-05"
+      ],
+      "semantic_confidence": 0.8,
+      "uncertainty_reason": "脱敏占位文本-0154",
+      "review": {
+        "status": "proposed",
+        "pool": "full"
+      },
+      "candidate_refs": [
+        "CAND-R-06"
+      ]
+    },
+    {
+      "rule_id": "R-07",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-028",
+        "block_path": "ch4/s1",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0031"
+      },
+      "original_text": "脱敏占位文本-0155",
+      "disposition": "mandatory",
+      "clause_types": [
+        "mandatory"
+      ],
+      "applicable_subjects": [
+        "脱敏占位文本-0112"
+      ],
+      "trigger": "脱敏占位文本-0156",
+      "requirement": "脱敏占位文本-0157",
+      "responsible_roles": [
+        "脱敏占位文本-0112"
+      ],
+      "parameters": [],
+      "evidence_requirements": [
+        "脱敏占位文本-0098"
+      ],
+      "exception_note": "脱敏占位文本-0158",
+      "operationalized_by": [
+        "PE-L5-02"
+      ],
+      "semantic_confidence": 0.9,
+      "uncertainty_reason": null,
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-R-07"
+      ]
+    },
+    {
+      "rule_id": "R-08",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-022",
+        "block_path": "ch3/s2/principle",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0025"
+      },
+      "original_text": "脱敏占位文本-0159",
+      "disposition": "mandatory",
+      "clause_types": [
+        "mandatory"
+      ],
+      "applicable_subjects": [
+        "脱敏占位文本-0112"
+      ],
+      "trigger": "脱敏占位文本-0160",
+      "requirement": "脱敏占位文本-0161",
+      "responsible_roles": [
+        "脱敏占位文本-0112"
+      ],
+      "parameters": [],
+      "evidence_requirements": [
+        "脱敏占位文本-0162"
+      ],
+      "exception_note": null,
+      "operationalized_by": [
+        "PE-L3-04",
+        "PE-L3-05",
+        "PE-L3-06"
+      ],
+      "semantic_confidence": 0.9,
+      "uncertainty_reason": null,
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-R-08"
+      ]
+    },
+    {
+      "rule_id": "R-09",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-042",
+        "block_path": "ch7/s1",
+        "clause_ref": null,
+        "page_hint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      },
+      "original_text": "脱敏占位文本-0163",
+      "disposition": "definition",
+      "clause_types": [
+        "definition"
+      ],
+      "applicable_subjects": [
+        "脱敏占位文本-0085",
+        "脱敏占位文本-0164",
+        "脱敏占位文本-0165"
+      ],
+      "trigger": "脱敏占位文本-0166",
+      "requirement": "脱敏占位文本-0167",
+      "responsible_roles": [
+        "脱敏占位文本-0085"
+      ],
+      "parameters": [
+        {
+          "name": "脱敏占位文本-0101",
+          "value": "脱敏占位文本-0168",
+          "unit": "脱敏占位文本-0149",
+          "parameterType": "cost_formula"
+        }
+      ],
+      "evidence_requirements": [
+        "脱敏占位文本-0169"
+      ],
+      "exception_note": null,
+      "operationalized_by": [
+        "PE-L4-15",
+        "PE-L4-16",
+        "PE-L4-17"
+      ],
+      "semantic_confidence": 0.85,
+      "uncertainty_reason": null,
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-R-09"
+      ]
+    },
+    {
+      "rule_id": "R-10",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-047",
+        "block_path": "ch8/s2",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0050"
+      },
+      "original_text": "脱敏占位文本-0170",
+      "disposition": "penalty",
+      "clause_types": [
+        "penalty"
+      ],
+      "applicable_subjects": [
+        "脱敏占位文本-0112",
+        "脱敏占位文本-0082"
+      ],
+      "trigger": "脱敏占位文本-0108",
+      "requirement": "脱敏占位文本-0171",
+      "responsible_roles": [
+        "脱敏占位文本-0085"
+      ],
+      "parameters": [
+        {
+          "name": "脱敏占位文本-0172",
+          "value": "脱敏占位文本-0173",
+          "unit": "脱敏占位文本-0174",
+          "parameterType": "violation_level"
+        }
+      ],
+      "evidence_requirements": [
+        "脱敏占位文本-0175"
+      ],
+      "exception_note": null,
+      "operationalized_by": [
+        "PE-L4-18",
+        "PE-L4-19"
+      ],
+      "semantic_confidence": 0.85,
+      "uncertainty_reason": null,
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-R-10"
+      ]
+    }
+  ],
+  "process_elements": [
+    {
+      "element_id": "PE-L1-01",
+      "level": "L1",
+      "rdf_type": "proc:ProcessCategory",
+      "name": "脱敏占位文本-0176",
+      "parent_ref": null,
+      "owning_process_ref": null,
+      "objective_refs": [
+        "OBJ-01",
+        "OBJ-02",
+        "OBJ-03"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0073"
+      ],
+      "input_artifact_refs": [],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0177"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0178"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.9,
+        "boundary": 0.85,
+        "parent": 0.9,
+        "granularity": 0.8,
+        "overall": 0.8
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-000",
+        "block_path": "preamble",
+        "clause_ref": null,
+        "page_hint": 1,
+        "excerpt": "脱敏占位文本-0003"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L1-01"
+      ]
+    },
+    {
+      "element_id": "PE-L2-01",
+      "level": "L2",
+      "rdf_type": "proc:ProcessGroup",
+      "name": "脱敏占位文本-0179",
+      "parent_ref": "PE-L1-01",
+      "owning_process_ref": null,
+      "objective_refs": [
+        "OBJ-04"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [
+        "ART-01",
+        "ART-02"
+      ],
+      "output_artifact_refs": [
+        "ART-03"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0180"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0181"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.85,
+        "boundary": 0.8,
+        "parent": 0.85,
+        "granularity": 0.8,
+        "overall": 0.8
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-012",
+        "block_path": "ch3/s1",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0015"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L2-01"
+      ]
+    },
+    {
+      "element_id": "PE-L2-02",
+      "level": "L2",
+      "rdf_type": "proc:ProcessGroup",
+      "name": "脱敏占位文本-0182",
+      "parent_ref": "PE-L1-01",
+      "owning_process_ref": null,
+      "objective_refs": [
+        "OBJ-05"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-04",
+        "ART-05",
+        "ART-07"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0183"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0184"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.85,
+        "boundary": 0.8,
+        "parent": 0.85,
+        "granularity": 0.8,
+        "overall": 0.8
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-021",
+        "block_path": "ch3/s2",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0024"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L2-02"
+      ]
+    },
+    {
+      "element_id": "PE-L2-03",
+      "level": "L2",
+      "rdf_type": "proc:ProcessGroup",
+      "name": "脱敏占位文本-0093",
+      "parent_ref": "PE-L1-01",
+      "owning_process_ref": null,
+      "objective_refs": [
+        "OBJ-06"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-08"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0166"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0185"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-042",
+        "block_path": "ch7/s1",
+        "clause_ref": null,
+        "page_hint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L2-03"
+      ]
+    },
+    {
+      "element_id": "PE-L2-04",
+      "level": "L2",
+      "rdf_type": "proc:ProcessGroup",
+      "name": "脱敏占位文本-0186",
+      "parent_ref": "PE-L1-01",
+      "owning_process_ref": null,
+      "objective_refs": [
+        "OBJ-07"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-09"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0187"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0188"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-046",
+        "block_path": "ch8/s1",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0049"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L2-04"
+      ]
+    },
+    {
+      "element_id": "PE-L3-01",
+      "level": "L3",
+      "rdf_type": "proc:Process",
+      "name": "脱敏占位文本-0189",
+      "parent_ref": "PE-L2-01",
+      "owning_process_ref": "PE-L2-01",
+      "objective_refs": [
+        "OBJ-04"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [
+        "ART-01",
+        "ART-02"
+      ],
+      "output_artifact_refs": [
+        "ART-03"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0103"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0190"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.85,
+        "boundary": 0.8,
+        "parent": 0.85,
+        "granularity": 0.8,
+        "overall": 0.8
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L3-01"
+      ]
+    },
+    {
+      "element_id": "PE-L3-02",
+      "level": "L3",
+      "rdf_type": "proc:Process",
+      "name": "脱敏占位文本-0191",
+      "parent_ref": "PE-L2-01",
+      "owning_process_ref": "PE-L2-01",
+      "objective_refs": [
+        "OBJ-04"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [
+        "ART-01"
+      ],
+      "output_artifact_refs": [
+        "ART-03"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0104"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0190"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.85,
+        "boundary": 0.8,
+        "parent": 0.85,
+        "granularity": 0.8,
+        "overall": 0.8
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-014",
+        "block_path": "ch3/s1/ct/nrd",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0017"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L3-02"
+      ]
+    },
+    {
+      "element_id": "PE-L3-03",
+      "level": "L3",
+      "rdf_type": "proc:Process",
+      "name": "脱敏占位文本-0192",
+      "parent_ref": "PE-L2-01",
+      "owning_process_ref": "PE-L2-01",
+      "objective_refs": [
+        "OBJ-04"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-06"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0105"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0193"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-016",
+        "block_path": "ch3/s1/ct/renew",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0019"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L3-03"
+      ]
+    },
+    {
+      "element_id": "PE-L3-04",
+      "level": "L3",
+      "rdf_type": "proc:Process",
+      "name": "脱敏占位文本-0194",
+      "parent_ref": "PE-L2-02",
+      "owning_process_ref": "PE-L2-02",
+      "objective_refs": [
+        "OBJ-05"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-04"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0195"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0196"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.85,
+        "boundary": 0.8,
+        "parent": 0.85,
+        "granularity": 0.8,
+        "overall": 0.8
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-023",
+        "block_path": "ch3/s2/tosales",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0026"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L3-04"
+      ]
+    },
+    {
+      "element_id": "PE-L3-05",
+      "level": "L3",
+      "rdf_type": "proc:Process",
+      "name": "脱敏占位文本-0197",
+      "parent_ref": "PE-L2-02",
+      "owning_process_ref": "PE-L2-02",
+      "objective_refs": [
+        "OBJ-05"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-05"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0198"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0199"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.85,
+        "boundary": 0.8,
+        "parent": 0.85,
+        "granularity": 0.8,
+        "overall": 0.8
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-024",
+        "block_path": "ch3/s2/toreturn",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0027"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L3-05"
+      ]
+    },
+    {
+      "element_id": "PE-L3-06",
+      "level": "L3",
+      "rdf_type": "proc:Process",
+      "name": "脱敏占位文本-0092",
+      "parent_ref": "PE-L2-02",
+      "owning_process_ref": "PE-L2-02",
+      "objective_refs": [
+        "OBJ-05"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-07"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0200"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0201"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-025",
+        "block_path": "ch3/s2/cleanup",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0028"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L3-06"
+      ]
+    },
+    {
+      "element_id": "PE-L3-07",
+      "level": "L3",
+      "rdf_type": "proc:Process",
+      "name": "脱敏占位文本-0093",
+      "parent_ref": "PE-L2-03",
+      "owning_process_ref": "PE-L2-03",
+      "objective_refs": [
+        "OBJ-06"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-08"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0166"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0202"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-042",
+        "block_path": "ch7/s1",
+        "clause_ref": null,
+        "page_hint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L3-07"
+      ]
+    },
+    {
+      "element_id": "PE-L3-08",
+      "level": "L3",
+      "rdf_type": "proc:Process",
+      "name": "脱敏占位文本-0102",
+      "parent_ref": "PE-L2-04",
+      "owning_process_ref": "PE-L2-04",
+      "objective_refs": [
+        "OBJ-07"
+      ],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-09"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0203"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0204"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-047",
+        "block_path": "ch8/s2",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0050"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L3-08"
+      ]
+    },
+    {
+      "element_id": "PE-L4-01",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0205",
+      "parent_ref": "PE-L3-01",
+      "owning_process_ref": "PE-L3-01",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [
+        "ART-01",
+        "ART-02"
+      ],
+      "output_artifact_refs": [
+        "ART-01"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0180"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0206"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-012",
+        "block_path": "ch3/s1",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0015"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-01"
+      ]
+    },
+    {
+      "element_id": "PE-L4-02",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0207",
+      "parent_ref": "PE-L3-01",
+      "owning_process_ref": "PE-L3-01",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0080"
+      ],
+      "input_artifact_refs": [
+        "ART-01",
+        "ART-02"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0208"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0209"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-02"
+      ]
+    },
+    {
+      "element_id": "PE-L4-03",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0210",
+      "parent_ref": "PE-L3-01",
+      "owning_process_ref": "PE-L3-01",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0081"
+      ],
+      "input_artifact_refs": [
+        "ART-01"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0209"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0211"
+      ],
+      "decomposition_basis": "inferred_structure",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.7,
+        "boundary": 0.7,
+        "parent": 0.8,
+        "granularity": 0.7,
+        "overall": 0.7
+      },
+      "alternative_levels": [
+        "L5"
+      ],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "full"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-03"
+      ]
+    },
+    {
+      "element_id": "PE-L4-04",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0212",
+      "parent_ref": "PE-L3-01",
+      "owning_process_ref": "PE-L3-01",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0082"
+      ],
+      "input_artifact_refs": [
+        "ART-01"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0211"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0213"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-032",
+        "block_path": "ch5/s1",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0035"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-04"
+      ]
+    },
+    {
+      "element_id": "PE-L4-05",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0214",
+      "parent_ref": "PE-L3-01",
+      "owning_process_ref": "PE-L3-01",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0083",
+        "脱敏占位文本-0084",
+        "脱敏占位文本-0142",
+        "脱敏占位文本-0143",
+        "脱敏占位文本-0144"
+      ],
+      "input_artifact_refs": [
+        "ART-01"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0213"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0215"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-020",
+        "block_path": "ch3/s1/note3",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0023"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-05"
+      ]
+    },
+    {
+      "element_id": "PE-L4-06",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0216",
+      "parent_ref": "PE-L3-01",
+      "owning_process_ref": "PE-L3-01",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0087"
+      ],
+      "input_artifact_refs": [
+        "ART-01"
+      ],
+      "output_artifact_refs": [
+        "ART-03"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0217"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0218"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-06"
+      ]
+    },
+    {
+      "element_id": "PE-L4-07",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0219",
+      "parent_ref": "PE-L3-04",
+      "owning_process_ref": "PE-L3-04",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-04"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0220"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0221"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-023",
+        "block_path": "ch3/s2/tosales",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0026"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-07"
+      ]
+    },
+    {
+      "element_id": "PE-L4-08",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0222",
+      "parent_ref": "PE-L3-04",
+      "owning_process_ref": "PE-L3-04",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0086"
+      ],
+      "input_artifact_refs": [
+        "ART-04"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0223"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0224"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-023",
+        "block_path": "ch3/s2/tosales",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0026"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-08"
+      ]
+    },
+    {
+      "element_id": "PE-L4-09",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0225",
+      "parent_ref": "PE-L3-04",
+      "owning_process_ref": "PE-L3-04",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-04"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0224"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0226"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-023",
+        "block_path": "ch3/s2/tosales",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0026"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-09"
+      ]
+    },
+    {
+      "element_id": "PE-L4-10",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0227",
+      "parent_ref": "PE-L3-05",
+      "owning_process_ref": "PE-L3-05",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0087"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0228"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0229"
+      ],
+      "decomposition_basis": "inferred_structure",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.7,
+        "boundary": 0.7,
+        "parent": 0.8,
+        "granularity": 0.7,
+        "overall": 0.7
+      },
+      "alternative_levels": [
+        "L5"
+      ],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-024",
+        "block_path": "ch3/s2/toreturn",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0027"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "full"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-10"
+      ]
+    },
+    {
+      "element_id": "PE-L4-11",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0230",
+      "parent_ref": "PE-L3-05",
+      "owning_process_ref": "PE-L3-05",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-05"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0229"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0221"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-024",
+        "block_path": "ch3/s2/toreturn",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0027"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-11"
+      ]
+    },
+    {
+      "element_id": "PE-L4-12",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0231",
+      "parent_ref": "PE-L3-05",
+      "owning_process_ref": "PE-L3-05",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-05"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0232"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0226"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-024",
+        "block_path": "ch3/s2/toreturn",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0027"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-12"
+      ]
+    },
+    {
+      "element_id": "PE-L4-13",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0233",
+      "parent_ref": "PE-L3-06",
+      "owning_process_ref": "PE-L3-06",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0234"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0235"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-046",
+        "block_path": "ch8/s1",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0049"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-13"
+      ]
+    },
+    {
+      "element_id": "PE-L4-14",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0236",
+      "parent_ref": "PE-L3-06",
+      "owning_process_ref": "PE-L3-06",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-07"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0237"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0238"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-025",
+        "block_path": "ch3/s2/cleanup",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0028"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-14"
+      ]
+    },
+    {
+      "element_id": "PE-L4-15",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0239",
+      "parent_ref": "PE-L3-07",
+      "owning_process_ref": "PE-L3-07",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0240"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0241"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-042",
+        "block_path": "ch7/s1",
+        "clause_ref": null,
+        "page_hint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-15"
+      ]
+    },
+    {
+      "element_id": "PE-L4-16",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0242",
+      "parent_ref": "PE-L3-07",
+      "owning_process_ref": "PE-L3-07",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0240"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0243"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-042",
+        "block_path": "ch7/s1",
+        "clause_ref": null,
+        "page_hint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-16"
+      ]
+    },
+    {
+      "element_id": "PE-L4-17",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0244",
+      "parent_ref": "PE-L3-07",
+      "owning_process_ref": "PE-L3-07",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [],
+      "output_artifact_refs": [
+        "ART-08"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0245"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0246"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-044",
+        "block_path": "ch7/s3",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0047"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-17"
+      ]
+    },
+    {
+      "element_id": "PE-L4-18",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0247",
+      "parent_ref": "PE-L3-08",
+      "owning_process_ref": "PE-L3-08",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0187"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0248"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-046",
+        "block_path": "ch8/s1",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0049"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-18"
+      ]
+    },
+    {
+      "element_id": "PE-L4-19",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0249",
+      "parent_ref": "PE-L3-08",
+      "owning_process_ref": "PE-L3-08",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0085"
+      ],
+      "input_artifact_refs": [],
+      "output_artifact_refs": [
+        "ART-09"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0250"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0251"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-048",
+        "block_path": "ch8/s2/level_table",
+        "clause_ref": null,
+        "page_hint": 9,
+        "excerpt": "脱敏占位文本-0051"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-19"
+      ]
+    },
+    {
+      "element_id": "PE-L4-20",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0252",
+      "parent_ref": "PE-L3-02",
+      "owning_process_ref": "PE-L3-02",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [
+        "ART-01"
+      ],
+      "output_artifact_refs": [
+        "ART-01"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0104"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0253"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-014",
+        "block_path": "ch3/s1/ct/nrd",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0017"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-20"
+      ]
+    },
+    {
+      "element_id": "PE-L4-21",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0254",
+      "parent_ref": "PE-L3-02",
+      "owning_process_ref": "PE-L3-02",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0080",
+        "脱敏占位文本-0086"
+      ],
+      "input_artifact_refs": [
+        "ART-01"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0255"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0256"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-014",
+        "block_path": "ch3/s1/ct/nrd",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0017"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-21"
+      ]
+    },
+    {
+      "element_id": "PE-L4-22",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0257",
+      "parent_ref": "PE-L3-02",
+      "owning_process_ref": "PE-L3-02",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0087"
+      ],
+      "input_artifact_refs": [
+        "ART-01"
+      ],
+      "output_artifact_refs": [
+        "ART-03"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0258"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0218"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-014",
+        "block_path": "ch3/s1/ct/nrd",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0017"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-22"
+      ]
+    },
+    {
+      "element_id": "PE-L4-23",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0259",
+      "parent_ref": "PE-L3-03",
+      "owning_process_ref": "PE-L3-03",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [
+        "ART-03"
+      ],
+      "output_artifact_refs": [
+        "ART-06"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0105"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0260"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-030",
+        "block_path": "ch4/s3",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0033"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-23"
+      ]
+    },
+    {
+      "element_id": "PE-L4-24",
+      "level": "L4",
+      "rdf_type": "proc:ProcessActivity",
+      "name": "脱敏占位文本-0261",
+      "parent_ref": "PE-L3-03",
+      "owning_process_ref": "PE-L3-03",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0082"
+      ],
+      "input_artifact_refs": [
+        "ART-06"
+      ],
+      "output_artifact_refs": [],
+      "entry_conditions": [
+        "脱敏占位文本-0262"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0263"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.8,
+        "boundary": 0.75,
+        "parent": 0.85,
+        "granularity": 0.75,
+        "overall": 0.75
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-016",
+        "block_path": "ch3/s1/ct/renew",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0019"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L4-24"
+      ]
+    },
+    {
+      "element_id": "PE-L5-01",
+      "level": "L5",
+      "rdf_type": "proc:Task",
+      "name": "脱敏占位文本-0264",
+      "parent_ref": "PE-L4-01",
+      "owning_process_ref": "PE-L3-01",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [],
+      "output_artifact_refs": [
+        "ART-01"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0180"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0265"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.85,
+        "boundary": 0.8,
+        "parent": 0.85,
+        "granularity": 0.8,
+        "overall": 0.8
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-012",
+        "block_path": "ch3/s1",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0015"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L5-01"
+      ]
+    },
+    {
+      "element_id": "PE-L5-02",
+      "level": "L5",
+      "rdf_type": "proc:Task",
+      "name": "脱敏占位文本-0266",
+      "parent_ref": "PE-L4-01",
+      "owning_process_ref": "PE-L3-01",
+      "objective_refs": [],
+      "owner_role_refs": [
+        "脱敏占位文本-0112"
+      ],
+      "input_artifact_refs": [],
+      "output_artifact_refs": [
+        "ART-02"
+      ],
+      "entry_conditions": [
+        "脱敏占位文本-0267"
+      ],
+      "exit_conditions": [
+        "脱敏占位文本-0268"
+      ],
+      "decomposition_basis": "explicit_text",
+      "hierarchy_status": "resolved",
+      "hierarchy_confidence": {
+        "evidence": 0.85,
+        "boundary": 0.8,
+        "parent": 0.85,
+        "granularity": 0.8,
+        "overall": 0.8
+      },
+      "alternative_levels": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-028",
+        "block_path": "ch4/s1",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0031"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-PE-L5-02"
+      ]
+    }
+  ],
+  "process_objectives": [
+    {
+      "objective_id": "OBJ-01",
+      "statement": "脱敏占位文本-0269",
+      "parent_objective_ref": null,
+      "element_refs": [
+        "PE-L1-01"
+      ],
+      "assertion_basis": "explicit_text",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-000",
+        "block_path": "preamble",
+        "clause_ref": null,
+        "page_hint": 1,
+        "excerpt": "脱敏占位文本-0003"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-OBJ-01"
+      ]
+    },
+    {
+      "objective_id": "OBJ-02",
+      "statement": "脱敏占位文本-0270",
+      "parent_objective_ref": null,
+      "element_refs": [
+        "PE-L1-01"
+      ],
+      "assertion_basis": "explicit_text",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-000",
+        "block_path": "preamble",
+        "clause_ref": null,
+        "page_hint": 1,
+        "excerpt": "脱敏占位文本-0003"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-OBJ-02"
+      ]
+    },
+    {
+      "objective_id": "OBJ-03",
+      "statement": "脱敏占位文本-0271",
+      "parent_objective_ref": null,
+      "element_refs": [
+        "PE-L1-01"
+      ],
+      "assertion_basis": "explicit_text",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-000",
+        "block_path": "preamble",
+        "clause_ref": null,
+        "page_hint": 1,
+        "excerpt": "脱敏占位文本-0003"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-OBJ-03"
+      ]
+    },
+    {
+      "objective_id": "OBJ-04",
+      "statement": "脱敏占位文本-0272",
+      "parent_objective_ref": "OBJ-01",
+      "element_refs": [
+        "PE-L2-01"
+      ],
+      "assertion_basis": "analysis",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-009",
+        "block_path": "ch2/s1",
+        "clause_ref": null,
+        "page_hint": 2,
+        "excerpt": "脱敏占位文本-0012"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-OBJ-04"
+      ]
+    },
+    {
+      "objective_id": "OBJ-05",
+      "statement": "脱敏占位文本-0273",
+      "parent_objective_ref": "OBJ-01",
+      "element_refs": [
+        "PE-L2-02"
+      ],
+      "assertion_basis": "analysis",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-021",
+        "block_path": "ch3/s2",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0024"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-OBJ-05"
+      ]
+    },
+    {
+      "objective_id": "OBJ-06",
+      "statement": "脱敏占位文本-0274",
+      "parent_objective_ref": "OBJ-03",
+      "element_refs": [
+        "PE-L2-03"
+      ],
+      "assertion_basis": "analysis",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-042",
+        "block_path": "ch7/s1",
+        "clause_ref": null,
+        "page_hint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-OBJ-06"
+      ]
+    },
+    {
+      "objective_id": "OBJ-07",
+      "statement": "脱敏占位文本-0275",
+      "parent_objective_ref": "OBJ-01",
+      "element_refs": [
+        "PE-L2-04"
+      ],
+      "assertion_basis": "analysis",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-046",
+        "block_path": "ch8/s1",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0049"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-OBJ-07"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "ART-01",
+      "name": "脱敏占位文本-0134",
+      "artifact_type": "document",
+      "produced_by": [
+        "PE-L5-01"
+      ],
+      "consumed_by": [
+        "PE-L4-02",
+        "PE-L4-03",
+        "PE-L4-04",
+        "PE-L4-05",
+        "PE-L4-20",
+        "PE-L4-21"
+      ],
+      "required_fields": [
+        "脱敏占位文本-0276",
+        "脱敏占位文本-0277",
+        "脱敏占位文本-0278",
+        "脱敏占位文本-0279"
+      ],
+      "retention_requirement": "脱敏占位文本-0280",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-012",
+        "block_path": "ch3/s1",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0015"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-ART-01"
+      ]
+    },
+    {
+      "artifact_id": "ART-02",
+      "name": "脱敏占位文本-0098",
+      "artifact_type": "document",
+      "produced_by": [
+        "PE-L5-02"
+      ],
+      "consumed_by": [
+        "PE-L4-02"
+      ],
+      "required_fields": [
+        "脱敏占位文本-0277",
+        "脱敏占位文本-0278",
+        "脱敏占位文本-0279"
+      ],
+      "retention_requirement": "脱敏占位文本-0280",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-028",
+        "block_path": "ch4/s1",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0031"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-ART-02"
+      ]
+    },
+    {
+      "artifact_id": "ART-03",
+      "name": "脱敏占位文本-0281",
+      "artifact_type": "system_record",
+      "produced_by": [
+        "PE-L4-06",
+        "PE-L4-22"
+      ],
+      "consumed_by": [
+        "PE-L4-07",
+        "PE-L4-10",
+        "PE-L4-13",
+        "PE-L4-15",
+        "PE-L4-18",
+        "PE-L4-23"
+      ],
+      "required_fields": [
+        "脱敏占位文本-0282",
+        "脱敏占位文本-0283",
+        "脱敏占位文本-0284",
+        "脱敏占位文本-0279"
+      ],
+      "retention_requirement": "脱敏占位文本-0285",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-ART-03"
+      ]
+    },
+    {
+      "artifact_id": "ART-04",
+      "name": "脱敏占位文本-0286",
+      "artifact_type": "document",
+      "produced_by": [
+        "PE-L4-07"
+      ],
+      "consumed_by": [
+        "PE-L4-08",
+        "PE-L4-09"
+      ],
+      "required_fields": [
+        "脱敏占位文本-0282",
+        "脱敏占位文本-0287",
+        "脱敏占位文本-0288"
+      ],
+      "retention_requirement": "脱敏占位文本-0289",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-023",
+        "block_path": "ch3/s2/tosales",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0026"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-ART-04"
+      ]
+    },
+    {
+      "artifact_id": "ART-05",
+      "name": "脱敏占位文本-0290",
+      "artifact_type": "document",
+      "produced_by": [
+        "PE-L4-11"
+      ],
+      "consumed_by": [
+        "PE-L4-12"
+      ],
+      "required_fields": [
+        "脱敏占位文本-0282",
+        "脱敏占位文本-0291",
+        "脱敏占位文本-0292"
+      ],
+      "retention_requirement": "脱敏占位文本-0289",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-024",
+        "block_path": "ch3/s2/toreturn",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0027"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-ART-05"
+      ]
+    },
+    {
+      "artifact_id": "ART-06",
+      "name": "脱敏占位文本-0293",
+      "artifact_type": "document",
+      "produced_by": [
+        "PE-L4-23"
+      ],
+      "consumed_by": [
+        "PE-L4-24"
+      ],
+      "required_fields": [
+        "脱敏占位文本-0294",
+        "脱敏占位文本-0295",
+        "脱敏占位文本-0278"
+      ],
+      "retention_requirement": "脱敏占位文本-0280",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-030",
+        "block_path": "ch4/s3",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0033"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-ART-06"
+      ]
+    },
+    {
+      "artifact_id": "ART-07",
+      "name": "脱敏占位文本-0296",
+      "artifact_type": "document",
+      "produced_by": [
+        "PE-L4-14"
+      ],
+      "consumed_by": [],
+      "required_fields": [
+        "脱敏占位文本-0282",
+        "脱敏占位文本-0297",
+        "脱敏占位文本-0298"
+      ],
+      "retention_requirement": "脱敏占位文本-0299",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-026",
+        "block_path": "ch3/s2/scrap",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0029"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-ART-07"
+      ]
+    },
+    {
+      "artifact_id": "ART-08",
+      "name": "脱敏占位文本-0300",
+      "artifact_type": "data",
+      "produced_by": [
+        "PE-L4-17"
+      ],
+      "consumed_by": [],
+      "required_fields": [
+        "脱敏占位文本-0282",
+        "脱敏占位文本-0301",
+        "脱敏占位文本-0302",
+        "脱敏占位文本-0303"
+      ],
+      "retention_requirement": "脱敏占位文本-0304",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-042",
+        "block_path": "ch7/s1",
+        "clause_ref": null,
+        "page_hint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-ART-08"
+      ]
+    },
+    {
+      "artifact_id": "ART-09",
+      "name": "脱敏占位文本-0305",
+      "artifact_type": "system_record",
+      "produced_by": [
+        "PE-L4-19"
+      ],
+      "consumed_by": [],
+      "required_fields": [
+        "脱敏占位文本-0306",
+        "脱敏占位文本-0172",
+        "脱敏占位文本-0054"
+      ],
+      "retention_requirement": "脱敏占位文本-0285",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-047",
+        "block_path": "ch8/s2",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0050"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      },
+      "candidate_refs": [
+        "CAND-ART-09"
+      ]
+    }
+  ],
+  "flow_edges": [
+    {
+      "edge_id": "FE-01",
+      "candidate_refs": [
+        "CAND-PE-L4-02"
+      ],
+      "process_ref": "PE-L3-01",
+      "from_ref": "PE-L4-01",
+      "to_ref": "PE-L4-02",
+      "edge_kind": "main",
+      "condition": null,
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-02",
+      "candidate_refs": [
+        "CAND-PE-L4-03"
+      ],
+      "process_ref": "PE-L3-01",
+      "from_ref": "PE-L4-02",
+      "to_ref": "PE-L4-03",
+      "edge_kind": "main",
+      "condition": null,
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-03",
+      "candidate_refs": [
+        "CAND-PE-L4-04"
+      ],
+      "process_ref": "PE-L3-01",
+      "from_ref": "PE-L4-03",
+      "to_ref": "PE-L4-04",
+      "edge_kind": "main",
+      "condition": null,
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-04",
+      "candidate_refs": [
+        "CAND-PE-L4-05"
+      ],
+      "process_ref": "PE-L3-01",
+      "from_ref": "PE-L4-04",
+      "to_ref": "PE-L4-05",
+      "edge_kind": "main",
+      "condition": null,
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-05",
+      "candidate_refs": [
+        "CAND-PE-L4-06"
+      ],
+      "process_ref": "PE-L3-01",
+      "from_ref": "PE-L4-05",
+      "to_ref": "PE-L4-06",
+      "edge_kind": "main",
+      "condition": "脱敏占位文本-0217",
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-06",
+      "candidate_refs": [
+        "CAND-PE-L4-05"
+      ],
+      "process_ref": "PE-L3-01",
+      "from_ref": "PE-L4-05",
+      "to_ref": "PE-L4-04",
+      "edge_kind": "reject",
+      "condition": "脱敏占位文本-0307",
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-07",
+      "candidate_refs": [
+        "CAND-PE-L4-21"
+      ],
+      "process_ref": "PE-L3-02",
+      "from_ref": "PE-L4-20",
+      "to_ref": "PE-L4-21",
+      "edge_kind": "main",
+      "condition": null,
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-014",
+        "block_path": "ch3/s1/ct/nrd",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0017"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-08",
+      "candidate_refs": [
+        "CAND-PE-L4-22"
+      ],
+      "process_ref": "PE-L3-02",
+      "from_ref": "PE-L4-21",
+      "to_ref": "PE-L4-22",
+      "edge_kind": "main",
+      "condition": "脱敏占位文本-0258",
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-014",
+        "block_path": "ch3/s1/ct/nrd",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0017"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-09",
+      "candidate_refs": [
+        "CAND-PE-L4-24"
+      ],
+      "process_ref": "PE-L3-03",
+      "from_ref": "PE-L4-23",
+      "to_ref": "PE-L4-24",
+      "edge_kind": "main",
+      "condition": null,
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-016",
+        "block_path": "ch3/s1/ct/renew",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0019"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-10",
+      "candidate_refs": [
+        "CAND-PE-L4-08"
+      ],
+      "process_ref": "PE-L3-04",
+      "from_ref": "PE-L4-07",
+      "to_ref": "PE-L4-08",
+      "edge_kind": "main",
+      "condition": null,
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-023",
+        "block_path": "ch3/s2/tosales",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0026"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-11",
+      "candidate_refs": [
+        "CAND-PE-L4-09"
+      ],
+      "process_ref": "PE-L3-04",
+      "from_ref": "PE-L4-08",
+      "to_ref": "PE-L4-09",
+      "edge_kind": "main",
+      "condition": "脱敏占位文本-0224",
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-023",
+        "block_path": "ch3/s2/tosales",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0026"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-12",
+      "candidate_refs": [
+        "CAND-PE-L4-11"
+      ],
+      "process_ref": "PE-L3-05",
+      "from_ref": "PE-L4-10",
+      "to_ref": "PE-L4-11",
+      "edge_kind": "main",
+      "condition": "脱敏占位文本-0229",
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-024",
+        "block_path": "ch3/s2/toreturn",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0027"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-13",
+      "candidate_refs": [
+        "CAND-PE-L4-12"
+      ],
+      "process_ref": "PE-L3-05",
+      "from_ref": "PE-L4-11",
+      "to_ref": "PE-L4-12",
+      "edge_kind": "main",
+      "condition": "脱敏占位文本-0232",
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-024",
+        "block_path": "ch3/s2/toreturn",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0027"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-14",
+      "candidate_refs": [
+        "CAND-PE-L4-14"
+      ],
+      "process_ref": "PE-L3-06",
+      "from_ref": "PE-L4-13",
+      "to_ref": "PE-L4-14",
+      "edge_kind": "main",
+      "condition": "脱敏占位文本-0308",
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-025",
+        "block_path": "ch3/s2/cleanup",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0028"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-15",
+      "candidate_refs": [
+        "CAND-PE-L4-16"
+      ],
+      "process_ref": "PE-L3-07",
+      "from_ref": "PE-L4-15",
+      "to_ref": "PE-L4-16",
+      "edge_kind": "main",
+      "condition": null,
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-042",
+        "block_path": "ch7/s1",
+        "clause_ref": null,
+        "page_hint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-16",
+      "candidate_refs": [
+        "CAND-PE-L4-17"
+      ],
+      "process_ref": "PE-L3-07",
+      "from_ref": "PE-L4-16",
+      "to_ref": "PE-L4-17",
+      "edge_kind": "main",
+      "condition": null,
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-044",
+        "block_path": "ch7/s3",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0047"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "edge_id": "FE-17",
+      "candidate_refs": [
+        "CAND-PE-L4-19"
+      ],
+      "process_ref": "PE-L3-08",
+      "from_ref": "PE-L4-18",
+      "to_ref": "PE-L4-19",
+      "edge_kind": "main",
+      "condition": "脱敏占位文本-0250",
+      "condition_parameters": [],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-047",
+        "block_path": "ch8/s2",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0050"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    }
+  ],
+  "role_assignments": [
+    {
+      "assignment_id": "RA-01",
+      "element_ref": "PE-L3-01",
+      "role": "脱敏占位文本-0112",
+      "raci": "A",
+      "authorization_basis": "脱敏占位文本-0309",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-012",
+        "block_path": "ch3/s1",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0015"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-02",
+      "element_ref": "PE-L3-02",
+      "role": "脱敏占位文本-0112",
+      "raci": "A",
+      "authorization_basis": "脱敏占位文本-0310",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-014",
+        "block_path": "ch3/s1/ct/nrd",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0017"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-03",
+      "element_ref": "PE-L3-03",
+      "role": "脱敏占位文本-0112",
+      "raci": "A",
+      "authorization_basis": "脱敏占位文本-0311",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-016",
+        "block_path": "ch3/s1/ct/renew",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0019"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-04",
+      "element_ref": "PE-L3-04",
+      "role": "脱敏占位文本-0112",
+      "raci": "A",
+      "authorization_basis": "脱敏占位文本-0312",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-022",
+        "block_path": "ch3/s2/principle",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0025"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-05",
+      "element_ref": "PE-L3-05",
+      "role": "脱敏占位文本-0112",
+      "raci": "A",
+      "authorization_basis": "脱敏占位文本-0313",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-022",
+        "block_path": "ch3/s2/principle",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0025"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-06",
+      "element_ref": "PE-L3-06",
+      "role": "脱敏占位文本-0085",
+      "raci": "A",
+      "authorization_basis": "脱敏占位文本-0314",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-025",
+        "block_path": "ch3/s2/cleanup",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0028"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-07",
+      "element_ref": "PE-L3-07",
+      "role": "脱敏占位文本-0085",
+      "raci": "A",
+      "authorization_basis": "脱敏占位文本-0315",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-042",
+        "block_path": "ch7/s1",
+        "clause_ref": null,
+        "page_hint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-08",
+      "element_ref": "PE-L3-08",
+      "role": "脱敏占位文本-0085",
+      "raci": "A",
+      "authorization_basis": "脱敏占位文本-0316",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-046",
+        "block_path": "ch8/s1",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0049"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-09",
+      "element_ref": "PE-L4-01",
+      "role": "脱敏占位文本-0112",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0317",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-012",
+        "block_path": "ch3/s1",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0015"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-10",
+      "element_ref": "PE-L4-02",
+      "role": "脱敏占位文本-0080",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0318",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-11",
+      "element_ref": "PE-L4-03",
+      "role": "脱敏占位文本-0081",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0318",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-12",
+      "element_ref": "PE-L4-04",
+      "role": "脱敏占位文本-0082",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0319",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-032",
+        "block_path": "ch5/s1",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0035"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-13",
+      "element_ref": "PE-L4-05",
+      "role": "脱敏占位文本-0083",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0320",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-020",
+        "block_path": "ch3/s1/note3",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0023"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-14",
+      "element_ref": "PE-L4-06",
+      "role": "脱敏占位文本-0087",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0321",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-15",
+      "element_ref": "PE-L4-07",
+      "role": "脱敏占位文本-0112",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0322",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-023",
+        "block_path": "ch3/s2/tosales",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0026"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-16",
+      "element_ref": "PE-L4-08",
+      "role": "脱敏占位文本-0086",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0323",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-023",
+        "block_path": "ch3/s2/tosales",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0026"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-17",
+      "element_ref": "PE-L4-09",
+      "role": "脱敏占位文本-0085",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0324",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-023",
+        "block_path": "ch3/s2/tosales",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0026"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-18",
+      "element_ref": "PE-L4-10",
+      "role": "脱敏占位文本-0087",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0325",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-024",
+        "block_path": "ch3/s2/toreturn",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0027"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-19",
+      "element_ref": "PE-L4-11",
+      "role": "脱敏占位文本-0112",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0326",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-024",
+        "block_path": "ch3/s2/toreturn",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0027"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-20",
+      "element_ref": "PE-L4-12",
+      "role": "脱敏占位文本-0085",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0327",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-024",
+        "block_path": "ch3/s2/toreturn",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0027"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-21",
+      "element_ref": "PE-L4-13",
+      "role": "脱敏占位文本-0085",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0328",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-046",
+        "block_path": "ch8/s1",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0049"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-22",
+      "element_ref": "PE-L4-14",
+      "role": "脱敏占位文本-0085",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0329",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-025",
+        "block_path": "ch3/s2/cleanup",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0028"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-23",
+      "element_ref": "PE-L4-15",
+      "role": "脱敏占位文本-0085",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0330",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-042",
+        "block_path": "ch7/s1",
+        "clause_ref": null,
+        "page_hint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-24",
+      "element_ref": "PE-L4-16",
+      "role": "脱敏占位文本-0085",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0330",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-042",
+        "block_path": "ch7/s1",
+        "clause_ref": null,
+        "page_hint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-25",
+      "element_ref": "PE-L4-17",
+      "role": "脱敏占位文本-0085",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0331",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-044",
+        "block_path": "ch7/s3",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0047"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-26",
+      "element_ref": "PE-L4-18",
+      "role": "脱敏占位文本-0085",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0328",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-046",
+        "block_path": "ch8/s1",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0049"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-27",
+      "element_ref": "PE-L4-19",
+      "role": "脱敏占位文本-0085",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0332",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-048",
+        "block_path": "ch8/s2/level_table",
+        "clause_ref": null,
+        "page_hint": 9,
+        "excerpt": "脱敏占位文本-0051"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-28",
+      "element_ref": "PE-L4-20",
+      "role": "脱敏占位文本-0112",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0333",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-014",
+        "block_path": "ch3/s1/ct/nrd",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0017"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-29",
+      "element_ref": "PE-L4-21",
+      "role": "脱敏占位文本-0080",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0334",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-014",
+        "block_path": "ch3/s1/ct/nrd",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0017"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-30",
+      "element_ref": "PE-L4-22",
+      "role": "脱敏占位文本-0087",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0335",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-014",
+        "block_path": "ch3/s1/ct/nrd",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0017"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-31",
+      "element_ref": "PE-L4-23",
+      "role": "脱敏占位文本-0112",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0336",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-030",
+        "block_path": "ch4/s3",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0033"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-32",
+      "element_ref": "PE-L4-24",
+      "role": "脱敏占位文本-0082",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0337",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-016",
+        "block_path": "ch3/s1/ct/renew",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0019"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-33",
+      "element_ref": "PE-L5-01",
+      "role": "脱敏占位文本-0112",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0338",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-012",
+        "block_path": "ch3/s1",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0015"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "assignment_id": "RA-34",
+      "element_ref": "PE-L5-02",
+      "role": "脱敏占位文本-0112",
+      "raci": "R",
+      "authorization_basis": "脱敏占位文本-0339",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-028",
+        "block_path": "ch4/s1",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0031"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    }
+  ],
+  "risks": [
+    {
+      "risk_id": "RISK-01",
+      "description": "脱敏占位文本-0340",
+      "category": "脱敏占位文本-0341",
+      "assertion_basis": "analysis",
+      "rule_refs": [
+        "R-03",
+        "R-08"
+      ],
+      "element_refs": [
+        "PE-L3-06"
+      ],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-025",
+        "block_path": "ch3/s2/cleanup",
+        "clause_ref": null,
+        "page_hint": 5,
+        "excerpt": "脱敏占位文本-0028"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "risk_id": "RISK-02",
+      "description": "脱敏占位文本-0342",
+      "category": "脱敏占位文本-0343",
+      "assertion_basis": "analysis",
+      "rule_refs": [
+        "R-02",
+        "R-03"
+      ],
+      "element_refs": [
+        "PE-L3-01",
+        "PE-L3-02"
+      ],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-009",
+        "block_path": "ch2/s1",
+        "clause_ref": null,
+        "page_hint": 2,
+        "excerpt": "脱敏占位文本-0012"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "risk_id": "RISK-03",
+      "description": "脱敏占位文本-0344",
+      "category": "脱敏占位文本-0345",
+      "assertion_basis": "analysis",
+      "rule_refs": [
+        "R-09"
+      ],
+      "element_refs": [
+        "PE-L3-07"
+      ],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-042",
+        "block_path": "ch7/s1",
+        "clause_ref": null,
+        "page_hint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "risk_id": "RISK-04",
+      "description": "脱敏占位文本-0346",
+      "category": "脱敏占位文本-0347",
+      "assertion_basis": "analysis",
+      "rule_refs": [
+        "R-08",
+        "R-10"
+      ],
+      "element_refs": [
+        "PE-L3-08"
+      ],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-033",
+        "block_path": "ch5/s2",
+        "clause_ref": null,
+        "page_hint": 6,
+        "excerpt": "脱敏占位文本-0036"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "risk_id": "RISK-05",
+      "description": "脱敏占位文本-0348",
+      "category": "脱敏占位文本-0349",
+      "assertion_basis": "analysis",
+      "rule_refs": [
+        "R-06"
+      ],
+      "element_refs": [
+        "PE-L4-05"
+      ],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-020",
+        "block_path": "ch3/s1/note3",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0023"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    }
+  ],
+  "controls": [
+    {
+      "control_id": "CTRL-01",
+      "measure": "脱敏占位文本-0350",
+      "responsible_roles": [
+        "脱敏占位文本-0080",
+        "脱敏占位文本-0081",
+        "脱敏占位文本-0082"
+      ],
+      "element_ref": "PE-L3-01",
+      "decision_criteria": "脱敏占位文本-0351",
+      "frequency": "脱敏占位文本-0352",
+      "evidence": [
+        "脱敏占位文本-0139"
+      ],
+      "remediation": "脱敏占位文本-0353",
+      "timing_type": "脱敏占位文本-0354",
+      "execution_mode": "脱敏占位文本-0355",
+      "importance": "脱敏占位文本-0356",
+      "assertion_basis": "explicit_text",
+      "risk_refs": [
+        "RISK-02"
+      ],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-013",
+        "block_path": "ch3/s1/ct/sales",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "control_id": "CTRL-02",
+      "measure": "脱敏占位文本-0357",
+      "responsible_roles": [
+        "脱敏占位文本-0142",
+        "脱敏占位文本-0143",
+        "脱敏占位文本-0144"
+      ],
+      "element_ref": "PE-L4-05",
+      "decision_criteria": "脱敏占位文本-0358",
+      "frequency": "脱敏占位文本-0359",
+      "evidence": [
+        "脱敏占位文本-0152"
+      ],
+      "remediation": null,
+      "timing_type": "脱敏占位文本-0354",
+      "execution_mode": "脱敏占位文本-0355",
+      "importance": "脱敏占位文本-0356",
+      "assertion_basis": "explicit_text",
+      "risk_refs": [
+        "RISK-05"
+      ],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-020",
+        "block_path": "ch3/s1/note3",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0023"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "control_id": "CTRL-03",
+      "measure": "脱敏占位文本-0360",
+      "responsible_roles": [
+        "脱敏占位文本-0085"
+      ],
+      "element_ref": "PE-L3-06",
+      "decision_criteria": "脱敏占位文本-0361",
+      "frequency": "脱敏占位文本-0362",
+      "evidence": [
+        "脱敏占位文本-0363",
+        "脱敏占位文本-0364"
+      ],
+      "remediation": "脱敏占位文本-0365",
+      "timing_type": "脱敏占位文本-0366",
+      "execution_mode": "脱敏占位文本-0355",
+      "importance": "脱敏占位文本-0356",
+      "assertion_basis": "explicit_text",
+      "risk_refs": [
+        "RISK-01"
+      ],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-046",
+        "block_path": "ch8/s1",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0049"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "control_id": "CTRL-04",
+      "measure": "脱敏占位文本-0367",
+      "responsible_roles": [
+        "脱敏占位文本-0085"
+      ],
+      "element_ref": "PE-L3-07",
+      "decision_criteria": "脱敏占位文本-0368",
+      "frequency": "脱敏占位文本-0369",
+      "evidence": [
+        "脱敏占位文本-0169"
+      ],
+      "remediation": null,
+      "timing_type": "脱敏占位文本-0370",
+      "execution_mode": "脱敏占位文本-0371",
+      "importance": "脱敏占位文本-0372",
+      "assertion_basis": "explicit_text",
+      "risk_refs": [
+        "RISK-03"
+      ],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-044",
+        "block_path": "ch7/s3",
+        "clause_ref": null,
+        "page_hint": 8,
+        "excerpt": "脱敏占位文本-0047"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    },
+    {
+      "control_id": "CTRL-05",
+      "measure": "脱敏占位文本-0373",
+      "responsible_roles": [
+        "脱敏占位文本-0085"
+      ],
+      "element_ref": "PE-L3-08",
+      "decision_criteria": "脱敏占位文本-0172",
+      "frequency": "脱敏占位文本-0374",
+      "evidence": [
+        "脱敏占位文本-0175"
+      ],
+      "remediation": "脱敏占位文本-0375",
+      "timing_type": "脱敏占位文本-0370",
+      "execution_mode": "脱敏占位文本-0355",
+      "importance": "脱敏占位文本-0356",
+      "assertion_basis": "explicit_text",
+      "risk_refs": [
+        "RISK-04"
+      ],
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-048",
+        "block_path": "ch8/s2/level_table",
+        "clause_ref": null,
+        "page_hint": 9,
+        "excerpt": "脱敏占位文本-0051"
+      },
+      "review": {
+        "status": "proposed",
+        "pool": "sampled"
+      }
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "ISSUE-01",
+      "type": "脱敏占位文本-0376",
+      "related_refs": [
+        "R-02"
+      ],
+      "description": "脱敏占位文本-0377",
+      "impact": "脱敏占位文本-0378",
+      "risk_level": "medium",
+      "recommendation": "脱敏占位文本-0379",
+      "confirmation_owner": "脱敏占位文本-0073",
+      "blocking": false,
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-009",
+        "block_path": "ch2/s1",
+        "clause_ref": null,
+        "page_hint": 2,
+        "excerpt": "脱敏占位文本-0012"
+      }
+    },
+    {
+      "issue_id": "ISSUE-02",
+      "type": "脱敏占位文本-0376",
+      "related_refs": [
+        "R-03"
+      ],
+      "description": "脱敏占位文本-0380",
+      "impact": "脱敏占位文本-0381",
+      "risk_level": "medium",
+      "recommendation": "脱敏占位文本-0382",
+      "confirmation_owner": "脱敏占位文本-0073",
+      "blocking": false,
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-010",
+        "block_path": "ch2/s2",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0013"
+      }
+    },
+    {
+      "issue_id": "ISSUE-03",
+      "type": "脱敏占位文本-0383",
+      "related_refs": [
+        "R-06"
+      ],
+      "description": "脱敏占位文本-0384",
+      "impact": "脱敏占位文本-0385",
+      "risk_level": "high",
+      "recommendation": "脱敏占位文本-0386",
+      "confirmation_owner": "脱敏占位文本-0073",
+      "blocking": false,
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-020",
+        "block_path": "ch3/s1/note3",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0023"
+      }
+    },
+    {
+      "issue_id": "ISSUE-04",
+      "type": "脱敏占位文本-0387",
+      "related_refs": [
+        "R-09"
+      ],
+      "description": "脱敏占位文本-0070",
+      "impact": "脱敏占位文本-0388",
+      "risk_level": "medium",
+      "recommendation": "脱敏占位文本-0389",
+      "confirmation_owner": "脱敏占位文本-0073",
+      "blocking": false,
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-039",
+        "block_path": "ch6/s2",
+        "clause_ref": null,
+        "page_hint": 6,
+        "excerpt": "脱敏占位文本-0042"
+      }
+    }
+  ],
+  "graph": {
+    "lanes": [
+      {
+        "lane_id": "LANE-01",
+        "name": "脱敏占位文本-0112"
+      },
+      {
+        "lane_id": "LANE-02",
+        "name": "脱敏占位文本-0398"
+      },
+      {
+        "lane_id": "LANE-03",
+        "name": "脱敏占位文本-0085"
+      },
+      {
+        "lane_id": "LANE-04",
+        "name": "脱敏占位文本-0087"
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "PE-L4-01",
+        "label": "脱敏占位文本-0205",
+        "lane": "LANE-01",
+        "element_ref": "PE-L4-01"
+      },
+      {
+        "node_id": "PE-L4-02",
+        "label": "脱敏占位文本-0207",
+        "lane": "LANE-02",
+        "element_ref": "PE-L4-02"
+      },
+      {
+        "node_id": "PE-L4-03",
+        "label": "脱敏占位文本-0210",
+        "lane": "LANE-02",
+        "element_ref": "PE-L4-03"
+      },
+      {
+        "node_id": "PE-L4-04",
+        "label": "脱敏占位文本-0212",
+        "lane": "LANE-02",
+        "element_ref": "PE-L4-04"
+      },
+      {
+        "node_id": "PE-L4-05",
+        "label": "脱敏占位文本-0214",
+        "lane": "LANE-02",
+        "element_ref": "PE-L4-05"
+      },
+      {
+        "node_id": "PE-L4-06",
+        "label": "脱敏占位文本-0216",
+        "lane": "LANE-04",
+        "element_ref": "PE-L4-06"
+      },
+      {
+        "node_id": "PE-L4-20",
+        "label": "脱敏占位文本-0252",
+        "lane": "LANE-01",
+        "element_ref": "PE-L4-20"
+      },
+      {
+        "node_id": "PE-L4-21",
+        "label": "脱敏占位文本-0254",
+        "lane": "LANE-02",
+        "element_ref": "PE-L4-21"
+      },
+      {
+        "node_id": "PE-L4-22",
+        "label": "脱敏占位文本-0257",
+        "lane": "LANE-04",
+        "element_ref": "PE-L4-22"
+      },
+      {
+        "node_id": "PE-L4-23",
+        "label": "脱敏占位文本-0259",
+        "lane": "LANE-01",
+        "element_ref": "PE-L4-23"
+      },
+      {
+        "node_id": "PE-L4-24",
+        "label": "脱敏占位文本-0261",
+        "lane": "LANE-02",
+        "element_ref": "PE-L4-24"
+      },
+      {
+        "node_id": "PE-L4-07",
+        "label": "脱敏占位文本-0219",
+        "lane": "LANE-01",
+        "element_ref": "PE-L4-07"
+      },
+      {
+        "node_id": "PE-L4-08",
+        "label": "脱敏占位文本-0222",
+        "lane": "LANE-02",
+        "element_ref": "PE-L4-08"
+      },
+      {
+        "node_id": "PE-L4-09",
+        "label": "脱敏占位文本-0225",
+        "lane": "LANE-03",
+        "element_ref": "PE-L4-09"
+      },
+      {
+        "node_id": "PE-L4-13",
+        "label": "脱敏占位文本-0233",
+        "lane": "LANE-03",
+        "element_ref": "PE-L4-13"
+      },
+      {
+        "node_id": "PE-L4-14",
+        "label": "脱敏占位文本-0399",
+        "lane": "LANE-03",
+        "element_ref": "PE-L4-14"
+      },
+      {
+        "node_id": "PE-L4-18",
+        "label": "脱敏占位文本-0247",
+        "lane": "LANE-03",
+        "element_ref": "PE-L4-18"
+      },
+      {
+        "node_id": "PE-L4-19",
+        "label": "脱敏占位文本-0249",
+        "lane": "LANE-03",
+        "element_ref": "PE-L4-19"
+      }
+    ],
+    "edges": [
+      {
+        "edge_id": "FE-01",
+        "from": "PE-L4-01",
+        "to": "PE-L4-02",
+        "kind": "main"
+      },
+      {
+        "edge_id": "FE-02",
+        "from": "PE-L4-02",
+        "to": "PE-L4-03",
+        "kind": "main"
+      },
+      {
+        "edge_id": "FE-03",
+        "from": "PE-L4-03",
+        "to": "PE-L4-04",
+        "kind": "main"
+      },
+      {
+        "edge_id": "FE-04",
+        "from": "PE-L4-04",
+        "to": "PE-L4-05",
+        "kind": "main"
+      },
+      {
+        "edge_id": "FE-05",
+        "from": "PE-L4-05",
+        "to": "PE-L4-06",
+        "kind": "main"
+      },
+      {
+        "edge_id": "FE-06",
+        "from": "PE-L4-05",
+        "to": "PE-L4-04",
+        "kind": "reject"
+      },
+      {
+        "edge_id": "FE-07",
+        "from": "PE-L4-20",
+        "to": "PE-L4-21",
+        "kind": "main"
+      },
+      {
+        "edge_id": "FE-08",
+        "from": "PE-L4-21",
+        "to": "PE-L4-22",
+        "kind": "main"
+      },
+      {
+        "edge_id": "FE-09",
+        "from": "PE-L4-23",
+        "to": "PE-L4-24",
+        "kind": "main"
+      },
+      {
+        "edge_id": "FE-10",
+        "from": "PE-L4-07",
+        "to": "PE-L4-08",
+        "kind": "main"
+      },
+      {
+        "edge_id": "FE-11",
+        "from": "PE-L4-08",
+        "to": "PE-L4-09",
+        "kind": "main"
+      },
+      {
+        "edge_id": "FE-12",
+        "from": "PE-L4-13",
+        "to": "PE-L4-14",
+        "kind": "main"
+      },
+      {
+        "edge_id": "FE-17",
+        "from": "PE-L4-18",
+        "to": "PE-L4-19",
+        "kind": "main"
+      }
+    ]
+  },
+  "pending_confirmations": [
+    {
+      "confirmation_id": "PC-01",
+      "question": "脱敏占位文本-0390",
+      "impact": "脱敏占位文本-0391",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-009",
+        "block_path": "ch2/s1",
+        "clause_ref": null,
+        "page_hint": 2,
+        "excerpt": "脱敏占位文本-0012"
+      },
+      "suggested_owner": "脱敏占位文本-0073",
+      "blocking": false
+    },
+    {
+      "confirmation_id": "PC-02",
+      "question": "脱敏占位文本-0392",
+      "impact": "脱敏占位文本-0393",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-010",
+        "block_path": "ch2/s2",
+        "clause_ref": null,
+        "page_hint": 3,
+        "excerpt": "脱敏占位文本-0013"
+      },
+      "suggested_owner": "脱敏占位文本-0073",
+      "blocking": false
+    },
+    {
+      "confirmation_id": "PC-03",
+      "question": "脱敏占位文本-0394",
+      "impact": "脱敏占位文本-0395",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-020",
+        "block_path": "ch3/s1/note3",
+        "clause_ref": null,
+        "page_hint": 4,
+        "excerpt": "脱敏占位文本-0023"
+      },
+      "suggested_owner": "脱敏占位文本-0073",
+      "blocking": false
+    },
+    {
+      "confirmation_id": "PC-04",
+      "question": "脱敏占位文本-0396",
+      "impact": "脱敏占位文本-0397",
+      "source": {
+        "doc_id": "FIXTURE-POLICY-001",
+        "block_id": "b-039",
+        "block_path": "ch6/s2",
+        "clause_ref": null,
+        "page_hint": 6,
+        "excerpt": "脱敏占位文本-0042"
+      },
+      "suggested_owner": "脱敏占位文本-0073",
+      "blocking": false
+    }
+  ],
+  "ontology_projection": {
+    "candidates_schema_version": "0.3.0",
+    "candidates_ref": "candidates.json",
+    "parsed_schema_version": "0.1.0",
+    "parsed_ref": "normalized.parsed.json",
+    "tenant": "FIXTURE",
+    "core_versions": {
+      "proc": "0.1.0",
+      "fnd": "2.0.0"
+    },
+    "hierarchy_mapping": {
+      "mode": "candidates_extension",
+      "extension_prefix": "efio",
+      "serialization_policy": "PENDING_CORE_ALIGNMENT"
+    }
+  }
+}

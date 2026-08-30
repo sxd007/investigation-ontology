@@ -94,7 +94,7 @@ codex plugin install investigation-ontology
 | 8 | `interview-analysis` | 工具 · 访谈分析 | ✅ | 访谈策划、SCAN 陈述分析、行为分析、笔录评估 | 3 templates |
 | 9 | `data-analysis` | 工具 · 数据分析 | 🚧 | 异常检测、趋势分析、审计轨迹、数据可视化 | — |
 | 10 | `order-execution-variance-analysis` | 工具 · 数据分析 | 🧪 | 合同流/货物流/资金流多维度对比，输出差异报告 | 2 templates |
-| 11 | `policy-digest` | 工具 · 制度流程分析 | 🚧 | 制度原文解构为规则、L1–L5 流程、RACI、风险控制和本体 candidates，附原文对照导览 | 6 refs + 4 schemas + 7 scripts |
+| 11 | `policy-digest` | 工具 · 制度流程分析 | 🚧 | 制度原文解构为规则、L1–L5 流程、RACI、风险控制和本体 candidates，附原文对照导览 | 6 refs + 4 schemas + 8 scripts |
 | 12 | `investigation-techniques` | 工具 · 调查技术 | 🚧 | 访谈技巧、数字取证、文档审查、外勤调查、监控技术 | — |
 | 13 | `investigation-memory` | 工具 · 记忆系统 | 🧪 | 非结构化信息记录、支撑复盘与定向检索 | — |
 | 14 | `writing-reporting` | 工具 · 写作报告 | 🚧 | 底稿撰写、备忘录、调查报告、可视化呈现 | 1 template |

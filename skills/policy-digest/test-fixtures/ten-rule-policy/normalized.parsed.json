@@ -1,0 +1,679 @@
+{
+  "parsedSchemaVersion": "0.1.0",
+  "document": {
+    "docId": "FIXTURE-POLICY-001",
+    "rawRef": {
+      "path": "raw/fixture-source.pdf",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "identity": {
+      "docNumber": "FIXTURE-DOC-2025-001",
+      "title": "脱敏占位文本-0001",
+      "issuingAuthority": "脱敏占位文本-0002",
+      "effectiveDate": "2025-01-01"
+    }
+  },
+  "blocks": [
+    {
+      "blockId": "b-000",
+      "blockType": "paragraph",
+      "text": "脱敏占位文本-0003",
+      "anchor": {
+        "blockPath": "preamble",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 1,
+        "excerpt": "脱敏占位文本-0003"
+      }
+    },
+    {
+      "blockId": "b-001",
+      "blockType": "heading",
+      "headingLevel": 1,
+      "text": "脱敏占位文本-0004",
+      "anchor": {
+        "blockPath": "ch1",
+        "charStart": 0,
+        "charEnd": 10,
+        "pageHint": 2,
+        "excerpt": "脱敏占位文本-0004"
+      }
+    },
+    {
+      "blockId": "b-002",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0005",
+      "anchor": {
+        "blockPath": "ch1/s1",
+        "charStart": 0,
+        "charEnd": 50,
+        "pageHint": 2,
+        "excerpt": "脱敏占位文本-0005"
+      }
+    },
+    {
+      "blockId": "b-003",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0006",
+      "anchor": {
+        "blockPath": "ch1/s1/xm",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 2,
+        "excerpt": "脱敏占位文本-0006"
+      }
+    },
+    {
+      "blockId": "b-004",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0007",
+      "anchor": {
+        "blockPath": "ch1/s1/zt",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 2,
+        "excerpt": "脱敏占位文本-0007"
+      }
+    },
+    {
+      "blockId": "b-005",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0008",
+      "anchor": {
+        "blockPath": "ch1/s2",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 2,
+        "excerpt": "脱敏占位文本-0008"
+      }
+    },
+    {
+      "blockId": "b-006",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0009",
+      "anchor": {
+        "blockPath": "ch1/s2/yt",
+        "charStart": 0,
+        "charEnd": 30,
+        "pageHint": 2,
+        "excerpt": "脱敏占位文本-0009"
+      }
+    },
+    {
+      "blockId": "b-007",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0010",
+      "anchor": {
+        "blockPath": "ch1/s2/jc",
+        "charStart": 0,
+        "charEnd": 30,
+        "pageHint": 2,
+        "excerpt": "脱敏占位文本-0010"
+      }
+    },
+    {
+      "blockId": "b-008",
+      "blockType": "heading",
+      "headingLevel": 1,
+      "text": "脱敏占位文本-0011",
+      "anchor": {
+        "blockPath": "ch2",
+        "charStart": 0,
+        "charEnd": 10,
+        "pageHint": 2,
+        "excerpt": "脱敏占位文本-0011"
+      }
+    },
+    {
+      "blockId": "b-009",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0012",
+      "anchor": {
+        "blockPath": "ch2/s1",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 2,
+        "excerpt": "脱敏占位文本-0012"
+      }
+    },
+    {
+      "blockId": "b-010",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0013",
+      "anchor": {
+        "blockPath": "ch2/s2",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 3,
+        "excerpt": "脱敏占位文本-0013"
+      }
+    },
+    {
+      "blockId": "b-011",
+      "blockType": "heading",
+      "headingLevel": 1,
+      "text": "脱敏占位文本-0014",
+      "anchor": {
+        "blockPath": "ch3",
+        "charStart": 0,
+        "charEnd": 14,
+        "pageHint": 3,
+        "excerpt": "脱敏占位文本-0014"
+      }
+    },
+    {
+      "blockId": "b-012",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0015",
+      "anchor": {
+        "blockPath": "ch3/s1",
+        "charStart": 0,
+        "charEnd": 50,
+        "pageHint": 3,
+        "excerpt": "脱敏占位文本-0015"
+      }
+    },
+    {
+      "blockId": "b-013",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0016",
+      "anchor": {
+        "blockPath": "ch3/s1/ct/sales",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 3,
+        "excerpt": "脱敏占位文本-0016"
+      }
+    },
+    {
+      "blockId": "b-014",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0017",
+      "anchor": {
+        "blockPath": "ch3/s1/ct/nrd",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 3,
+        "excerpt": "脱敏占位文本-0017"
+      }
+    },
+    {
+      "blockId": "b-015",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0018",
+      "anchor": {
+        "blockPath": "ch3/s1/ct/rd",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 4,
+        "excerpt": "脱敏占位文本-0018"
+      }
+    },
+    {
+      "blockId": "b-016",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0019",
+      "anchor": {
+        "blockPath": "ch3/s1/ct/renew",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 4,
+        "excerpt": "脱敏占位文本-0019"
+      }
+    },
+    {
+      "blockId": "b-017",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0020",
+      "anchor": {
+        "blockPath": "ch3/s1/it",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 4,
+        "excerpt": "脱敏占位文本-0020"
+      }
+    },
+    {
+      "blockId": "b-018",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0021",
+      "anchor": {
+        "blockPath": "ch3/s1/note1",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 4,
+        "excerpt": "脱敏占位文本-0021"
+      }
+    },
+    {
+      "blockId": "b-019",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0022",
+      "anchor": {
+        "blockPath": "ch3/s1/note2",
+        "charStart": 0,
+        "charEnd": 30,
+        "pageHint": 4,
+        "excerpt": "脱敏占位文本-0022"
+      }
+    },
+    {
+      "blockId": "b-020",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0023",
+      "anchor": {
+        "blockPath": "ch3/s1/note3",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 4,
+        "excerpt": "脱敏占位文本-0023"
+      }
+    },
+    {
+      "blockId": "b-021",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0024",
+      "anchor": {
+        "blockPath": "ch3/s2",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 4,
+        "excerpt": "脱敏占位文本-0024"
+      }
+    },
+    {
+      "blockId": "b-022",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0025",
+      "anchor": {
+        "blockPath": "ch3/s2/principle",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 4,
+        "excerpt": "脱敏占位文本-0025"
+      }
+    },
+    {
+      "blockId": "b-023",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0026",
+      "anchor": {
+        "blockPath": "ch3/s2/tosales",
+        "charStart": 0,
+        "charEnd": 50,
+        "pageHint": 5,
+        "excerpt": "脱敏占位文本-0026"
+      }
+    },
+    {
+      "blockId": "b-024",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0027",
+      "anchor": {
+        "blockPath": "ch3/s2/toreturn",
+        "charStart": 0,
+        "charEnd": 50,
+        "pageHint": 5,
+        "excerpt": "脱敏占位文本-0027"
+      }
+    },
+    {
+      "blockId": "b-025",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0028",
+      "anchor": {
+        "blockPath": "ch3/s2/cleanup",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 5,
+        "excerpt": "脱敏占位文本-0028"
+      }
+    },
+    {
+      "blockId": "b-026",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0029",
+      "anchor": {
+        "blockPath": "ch3/s2/scrap",
+        "charStart": 0,
+        "charEnd": 50,
+        "pageHint": 5,
+        "excerpt": "脱敏占位文本-0029"
+      }
+    },
+    {
+      "blockId": "b-027",
+      "blockType": "heading",
+      "headingLevel": 1,
+      "text": "脱敏占位文本-0030",
+      "anchor": {
+        "blockPath": "ch4",
+        "charStart": 0,
+        "charEnd": 10,
+        "pageHint": 5,
+        "excerpt": "脱敏占位文本-0030"
+      }
+    },
+    {
+      "blockId": "b-028",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0031",
+      "anchor": {
+        "blockPath": "ch4/s1",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 5,
+        "excerpt": "脱敏占位文本-0031"
+      }
+    },
+    {
+      "blockId": "b-029",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0032",
+      "anchor": {
+        "blockPath": "ch4/s2",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 5,
+        "excerpt": "脱敏占位文本-0032"
+      }
+    },
+    {
+      "blockId": "b-030",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0033",
+      "anchor": {
+        "blockPath": "ch4/s3",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 5,
+        "excerpt": "脱敏占位文本-0033"
+      }
+    },
+    {
+      "blockId": "b-031",
+      "blockType": "heading",
+      "headingLevel": 1,
+      "text": "脱敏占位文本-0034",
+      "anchor": {
+        "blockPath": "ch5",
+        "charStart": 0,
+        "charEnd": 12,
+        "pageHint": 5,
+        "excerpt": "脱敏占位文本-0034"
+      }
+    },
+    {
+      "blockId": "b-032",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0035",
+      "anchor": {
+        "blockPath": "ch5/s1",
+        "charStart": 0,
+        "charEnd": 50,
+        "pageHint": 5,
+        "excerpt": "脱敏占位文本-0035"
+      }
+    },
+    {
+      "blockId": "b-033",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0036",
+      "anchor": {
+        "blockPath": "ch5/s2",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 6,
+        "excerpt": "脱敏占位文本-0036"
+      }
+    },
+    {
+      "blockId": "b-034",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0037",
+      "anchor": {
+        "blockPath": "ch5/s3",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 6,
+        "excerpt": "脱敏占位文本-0037"
+      }
+    },
+    {
+      "blockId": "b-035",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0038",
+      "anchor": {
+        "blockPath": "ch5/s4",
+        "charStart": 0,
+        "charEnd": 50,
+        "pageHint": 6,
+        "excerpt": "脱敏占位文本-0038"
+      }
+    },
+    {
+      "blockId": "b-036",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0039",
+      "anchor": {
+        "blockPath": "ch5/s5",
+        "charStart": 0,
+        "charEnd": 50,
+        "pageHint": 6,
+        "excerpt": "脱敏占位文本-0039"
+      }
+    },
+    {
+      "blockId": "b-037",
+      "blockType": "heading",
+      "headingLevel": 1,
+      "text": "脱敏占位文本-0040",
+      "anchor": {
+        "blockPath": "ch6",
+        "charStart": 0,
+        "charEnd": 10,
+        "pageHint": 6,
+        "excerpt": "脱敏占位文本-0040"
+      }
+    },
+    {
+      "blockId": "b-038",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0041",
+      "anchor": {
+        "blockPath": "ch6/s1",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 6,
+        "excerpt": "脱敏占位文本-0041"
+      }
+    },
+    {
+      "blockId": "b-039",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0042",
+      "anchor": {
+        "blockPath": "ch6/s2",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 6,
+        "excerpt": "脱敏占位文本-0042"
+      }
+    },
+    {
+      "blockId": "b-040",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0043",
+      "anchor": {
+        "blockPath": "ch6/s3",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 6,
+        "excerpt": "脱敏占位文本-0043"
+      }
+    },
+    {
+      "blockId": "b-041",
+      "blockType": "heading",
+      "headingLevel": 1,
+      "text": "脱敏占位文本-0044",
+      "anchor": {
+        "blockPath": "ch7",
+        "charStart": 0,
+        "charEnd": 10,
+        "pageHint": 7,
+        "excerpt": "脱敏占位文本-0044"
+      }
+    },
+    {
+      "blockId": "b-042",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0045",
+      "anchor": {
+        "blockPath": "ch7/s1",
+        "charStart": 0,
+        "charEnd": 60,
+        "pageHint": 7,
+        "excerpt": "脱敏占位文本-0045"
+      }
+    },
+    {
+      "blockId": "b-043",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0046",
+      "anchor": {
+        "blockPath": "ch7/s2",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 8,
+        "excerpt": "脱敏占位文本-0046"
+      }
+    },
+    {
+      "blockId": "b-044",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0047",
+      "anchor": {
+        "blockPath": "ch7/s3",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 8,
+        "excerpt": "脱敏占位文本-0047"
+      }
+    },
+    {
+      "blockId": "b-045",
+      "blockType": "heading",
+      "headingLevel": 1,
+      "text": "脱敏占位文本-0048",
+      "anchor": {
+        "blockPath": "ch8",
+        "charStart": 0,
+        "charEnd": 10,
+        "pageHint": 8,
+        "excerpt": "脱敏占位文本-0048"
+      }
+    },
+    {
+      "blockId": "b-046",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0049",
+      "anchor": {
+        "blockPath": "ch8/s1",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 8,
+        "excerpt": "脱敏占位文本-0049"
+      }
+    },
+    {
+      "blockId": "b-047",
+      "blockType": "clause",
+      "text": "脱敏占位文本-0050",
+      "anchor": {
+        "blockPath": "ch8/s2",
+        "charStart": 0,
+        "charEnd": 40,
+        "pageHint": 8,
+        "excerpt": "脱敏占位文本-0050"
+      }
+    },
+    {
+      "blockId": "b-048",
+      "blockType": "table",
+      "text": "脱敏占位文本-0051",
+      "anchor": {
+        "blockPath": "ch8/s2/level_table",
+        "charStart": 0,
+        "charEnd": 50,
+        "pageHint": 9,
+        "excerpt": "脱敏占位文本-0051"
+      },
+      "table": {
+        "grid": [
+          [
+            "脱敏占位文本-0052",
+            "脱敏占位文本-0053",
+            "脱敏占位文本-0054"
+          ],
+          [
+            "脱敏占位文本-0055",
+            "脱敏占位文本-0056",
+            "脱敏占位文本-0057"
+          ],
+          [
+            "脱敏占位文本-0058",
+            "脱敏占位文本-0059",
+            "脱敏占位文本-0060"
+          ],
+          [
+            "脱敏占位文本-0061",
+            "脱敏占位文本-0062",
+            "脱敏占位文本-0063"
+          ],
+          [
+            "脱敏占位文本-0064",
+            "脱敏占位文本-0065",
+            "脱敏占位文本-0066"
+          ],
+          [
+            "脱敏占位文本-0067",
+            "脱敏占位文本-0068",
+            "脱敏占位文本-0069"
+          ]
+        ],
+        "headerRows": 1
+      }
+    }
+  ],
+  "coverage": {
+    "clauseSequence": {
+      "detected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "gaps": [],
+      "status": "OK"
+    },
+    "blockCount": {
+      "parsed": 49
+    },
+    "unrecognizedRegions": [
+      {
+        "kind": "other",
+        "blockPath": "ch6/s2/attachment",
+        "reason": "脱敏占位文本-0070"
+      }
+    ],
+    "parser": {
+      "engine": "pypdf + ai_direct",
+      "timestamp": "2026-08-26T09:20:00+08:00"
+    }
+  }
+}
