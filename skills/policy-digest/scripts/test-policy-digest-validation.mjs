@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { migrateDigest } from './migrate-policy-digest-0.1-to-0.2.mjs';
 import { generateExplanation, renderExplanationHtml } from './generate-policy-digest-explanation.mjs';
 import { renderPolicyDigestMarkdown } from './generate-policy-digest-md.mjs';
-import { canonicalJson, createCandidateSeed, projectDeterministicCandidates } from './project-policy-digest-candidates.mjs';
+import { canonicalJson, createCandidateSeed, projectDeterministicCandidates, syncMissingCandidateSeeds } from './project-policy-digest-candidates.mjs';
 import { generateScaffold } from './scaffold-policy-digest.mjs';
 import { collectDiagnosticHints, summarizeIssues, validatePackage } from './validate-policy-digest.mjs';
 
@@ -213,6 +213,47 @@ try {
   assert.notEqual(runProjector([cliOutputDirectory, '--init', '--output', join(cliOutputDirectory, 'candidates.json')]).status, 0);
   assert.notEqual(runProjector([cliOutputDirectory, '--output', join(cliOutputDirectory, 'candidates.json')]).status, 0);
   assert.notEqual(runProjector([cliOutputDirectory, '--core-version', '0.4.0']).status, 0);
+  const incrementalDigest = structuredClone(validDigest);
+  incrementalDigest.ontology_projection.core_versions = { policy: '0.1.0', process: '0.4.0' };
+  incrementalDigest.rules.push({
+    ...structuredClone(incrementalDigest.rules[0]),
+    rule_id: 'R-002',
+    original_text: '供应商认证决定应形成记录',
+    requirement: '供应商认证决定应形成记录',
+    candidate_refs: ['ACME-SUPPLIER-001-C002'],
+  });
+  const incrementalSeed = projectDeterministicCandidates(validDigest, candidates());
+  incrementalSeed.candidates[0].produces.push({ localId: 'R-001-CLAUSE', rdfType: 'policy:Clause', clauseNumber: '第一条', clauseText: source.excerpt });
+  incrementalSeed.candidates[0].alignments = [{ kind: 'derivedFrom', targetRef: { docId: source.doc_id, blockPath: source.block_path, excerpt: source.excerpt } }];
+  const incrementalDirectory = writePackage('incremental-candidate-sync', incrementalDigest, incrementalSeed);
+  const incrementalPreviewPath = join(incrementalDirectory, 'review', 'projected.json');
+  mkdirSync(dirname(incrementalPreviewPath), { recursive: true });
+  assert.notEqual(runProjector([incrementalDirectory]).status, 0);
+  const incrementalPreview = runProjector([incrementalDirectory, '--sync-missing-candidates', '--output', incrementalPreviewPath]);
+  assert.equal(incrementalPreview.status, 0, incrementalPreview.stderr);
+  const incrementalProjected = JSON.parse(readFileSync(incrementalPreviewPath, 'utf8'));
+  const addedCandidate = incrementalProjected.candidates.find((item) => item.candidateId === 'ACME-SUPPLIER-001-C002');
+  assert.equal(addedCandidate.coreVersion, '0.1.0');
+  assert.ok(addedCandidate.produces.some((item) => item.localId === 'R-002-CLAUSE' && item.rdfType === 'policy:Clause'));
+  assert.ok(addedCandidate.produces.some((item) => item.localId === 'R-002-OBLIGATION' && item.obligationStatus === 'DRAFT'));
+  const preservedCandidate = incrementalProjected.candidates.find((item) => item.candidateId === candidateId);
+  assert.deepEqual(preservedCandidate.alignments, incrementalSeed.candidates[0].alignments);
+  assert.ok(preservedCandidate.produces.some((item) => item.localId === 'R-001-CLAUSE'));
+  assert.equal(canonicalJson(syncMissingCandidateSeeds(incrementalDigest, incrementalProjected)), canonicalJson(incrementalProjected));
+  const incrementalInPlace = runProjector([incrementalDirectory, '--sync-missing-candidates', '--in-place']);
+  assert.equal(incrementalInPlace.status, 0, incrementalInPlace.stderr);
+  assert.ok(!readFileSync(join(incrementalDirectory, 'candidates.before-projection.json'), 'utf8').includes('ACME-SUPPLIER-001-C002'));
+  assert.equal(runProjector([incrementalDirectory, '--check']).status, 0);
+  assert.deepEqual(validatePackage(incrementalDirectory).issues.filter((item) => item.severity === 'ERROR'), []);
+  const processOnlyDigest = structuredClone(validDigest);
+  processOnlyDigest.process_elements[0].candidate_refs = ['PROCESS-ONLY-CANDIDATE'];
+  assert.throws(() => syncMissingCandidateSeeds(processOnlyDigest, candidates()), /process-only 或共享 Clause/);
+  const sharedCandidateDigest = structuredClone(incrementalDigest);
+  sharedCandidateDigest.rules.push({ ...structuredClone(sharedCandidateDigest.rules[1]), rule_id: 'R-003' });
+  assert.throws(() => syncMissingCandidateSeeds(sharedCandidateDigest, incrementalSeed), /恰好关联一条 rule/);
+  const clauseCollisionSeed = structuredClone(incrementalSeed);
+  clauseCollisionSeed.candidates[0].produces.push({ localId: 'R-002-CLAUSE', rdfType: 'policy:Clause' });
+  assert.throws(() => syncMissingCandidateSeeds(incrementalDigest, clauseCollisionSeed), /localId R-002-CLAUSE 已存在/);
   const seedWithRuleProposal = candidates();
   seedWithRuleProposal.candidates[0].produces.push({ localId: 'RULE-KEEP', rdfType: 'policy:Obligation', statement: '必须保留的规则投影' });
   seedWithRuleProposal.candidates[0].produces.find((item) => item.localId === 'PROC-SCREENING').properties['efio:hierarchyLevel'] = 'L5';
@@ -252,6 +293,30 @@ try {
   multiCoreDigest.ontology_projection.core_versions = { policy: '0.1.0', process: '0.4.0' };
   assert.throws(() => createCandidateSeed(multiCoreDigest), /policy=0\.1\.0.*process=0\.4\.0/);
   assert.throws(() => createCandidateSeed(multiCoreDigest, '9.9.9'), /不在.*可选值/);
+  const comparatorConflictDigest = structuredClone(validDigest);
+  comparatorConflictDigest.rules[0].original_text = '超过 6 小时应升级审批';
+  comparatorConflictDigest.rules[0].requirement = '超过 6 小时应升级审批';
+  comparatorConflictDigest.rules[0].parameters = [{ parameterType: 'duration_threshold', value: '6', valueNumber: 6, comparator: 'GE', unit: '小时' }];
+  const comparatorConflictCandidates = projectDeterministicCandidates(comparatorConflictDigest, candidates());
+  const comparatorConflictDirectory = writePackage('comparator-conflict', comparatorConflictDigest, comparatorConflictCandidates);
+  assert.ok(validatePackage(comparatorConflictDirectory).issues.some((item) => item.code === 'rule_comparator_conflict' && item.location.endsWith('/comparator')));
+  const requirementConflictDigest = structuredClone(validDigest);
+  requirementConflictDigest.rules[0].original_text = '700 元以上应升级审批';
+  requirementConflictDigest.rules[0].requirement = '超过 700 元应升级审批';
+  const requirementConflictCandidates = projectDeterministicCandidates(requirementConflictDigest, candidates());
+  const requirementConflictDirectory = writePackage('requirement-comparator-conflict', requirementConflictDigest, requirementConflictCandidates);
+  assert.ok(validatePackage(requirementConflictDirectory).issues.some((item) => item.code === 'rule_comparator_conflict' && item.location.endsWith('/requirement')));
+  const consistentComparatorDigest = structuredClone(validDigest);
+  consistentComparatorDigest.rules[0].original_text = '0–700 元（含 700 元）无需审批，700 元以上需要审批，比例不得超过 20%';
+  consistentComparatorDigest.rules[0].requirement = '0–700 元（含）无需审批，700 元以上需要审批，比例不超过 20%';
+  consistentComparatorDigest.rules[0].parameters = [
+    { parameterType: 'amount_threshold', value: '700', valueNumber: 700, comparator: 'LE', unit: '元' },
+    { parameterType: 'amount_threshold', value: '700', valueNumber: 700, comparator: 'GE', unit: '元' },
+    { parameterType: 'ratio_limit', value: '20%', valueNumber: 0.2, comparator: 'LE', unit: '比例' },
+  ];
+  const consistentComparatorCandidates = projectDeterministicCandidates(consistentComparatorDigest, candidates());
+  const consistentComparatorDirectory = writePackage('consistent-comparators', consistentComparatorDigest, consistentComparatorCandidates);
+  assert.ok(!validatePackage(consistentComparatorDirectory).issues.some((item) => item.code === 'rule_comparator_conflict'));
   writeFileSync(join(validDirectory, 'candidates.json'), canonicalJson(projectDeterministicCandidates(validDigest, projected)));
   assert.deepEqual(validatePackage(validDirectory).issues.filter((item) => item.severity === 'ERROR'), []);
   const explanation = generateExplanation(validDirectory);

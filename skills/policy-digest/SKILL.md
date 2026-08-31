@@ -120,8 +120,10 @@ Schema 只验证单文件形状；跨 parsed/digest/candidates/Markdown 的引�
 - 强制、禁止、授权、程序、职责、处罚、引用、豁免等条款逐条分诊；混合条款保留多值类型并强制全审。
 - 程序条款同时保留 Clause、义务转写和流程活动，禁止只画流程不建义务候选。
 - 义务转写保留制度语义，不扩大约束范围；参数只是 statement 的结构化投影，不能替代原文转写。
-- 同一规则只有一个来源锚点；中国/国际、不同主体或不同币种的要求来自不同原文块时，应拆成独立规则，不得把其他来源的阈值塞入当前规则参数。
+- 义务转写不得摘要掉适用主体、场景、对象、目的、排除项、申报/报备、频率、时限、阈值、审批层级、证据或例外。复合条款先列出原子事实清单，再逐项核对 `requirement + parameters + evidence_requirements + exception_note` 是否覆盖；不能无损表达时继续拆规则并进入 full review。
+- 同一规则只有一个来源锚点；中国/国际、不同国家、主体、币种、阈值、统计周期或规范动作应按原子义务拆分。即使多个表格行或国家要求被解析在同一原文块，也不得汇总成“遵守附录要求”式规则；无法建立行级块时允许共享 block 锚点，但每条规则的 excerpt 必须直接覆盖对应行的核心规范句。
 - “以上/以下/不低于/不超过/超过/低于”按原文字面分别投影为 `GE/LE/GE/LE/GT/LT`。相邻档位按字面发生重叠或空档时保留原比较符并建立问题，禁止静默改写比较符来替制度消歧。
+- `original_text`、`requirement` 和 parameter comparator 必须逐值一致；在规范化文字中不得把“以上”润色成“超过”，或把“超过”投影为 `GE`。含多个独立阈值、地域或规范动作的规则默认进入 full review。
 - 主流程按业务时间顺序重建，不受章节顺序限制；章节父子关系不得直接冒充流程父子关系。
 - 每个已解析 L3 至少具备目标、入口条件、一个 L4 和输出 Artifact；不足时保持 unresolved 并建立 blocking 人审项。
 - `parent_ref` 只连接相邻层级；L3 的 `owning_process_ref` 指向自身，L4/L5 指向所属 L3；禁止父子环。
@@ -141,6 +143,7 @@ Schema 只验证单文件形状；跨 parsed/digest/candidates/Markdown 的引�
 - RACI、风险和控制可绑定任一流程层级；每个 L3/L4 至少一个 R，L3 原则上只有一个 A。缺失或多 A 进入问题清单，不由 AI 补角色。
 - 检查申请、审批、执行、验收、付款、监督和归档的职责分离。
 - 每项关键控制回答：风险 → 控制责任人 → 执行节点 → 判断标准 → 证据 → 监督 → 整改。
+- 控制的 `assertion_basis: explicit_text` 只覆盖原文明示内容。原文未规定整改、退回、终止、补缴、调整或处置方式时，`remediation` 必须为 `null`；建议写入问题记录，或改标 `analysis` 并进入 full review，禁止用常识补齐后仍标记为明文。
 - 风险要求同时产生控制点和控制程序，并用 `realizedAtPoint` 对齐；只建一侧视为不完整。
 - 证据类型、保存期限、频率和阈值在原文明确时投影为 parameters；模糊词不伪造数值。
 
@@ -181,9 +184,11 @@ node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{ca
 
 已有 `candidates.json` 时，先省略 `--in-place` 生成并列的 `candidates.projected.json` 复核；使用 `--check` 可在不写文件的情况下检测规则/流程投影漂移。常规模式从 seed candidates 保留候选 ID、共享 Clause、Core 选择、alignment 和审核数据。
 
+已有包在 `digest.json` 新增规则并使用新 `candidate_ref` 时，常规投影会因 seed 尚无该 candidate 而阻断。此时先运行 `--sync-missing-candidates` 生成并列预览；该模式只为“恰好关联一条 rule”的缺失 candidate 创建独立 Clause 壳，再执行常规确定性投影，不改已有 candidate 的 Clause、alignment、Core 选择或审核数据。复核后才可用 `--sync-missing-candidates --in-place` 写入。process-only candidate、多 rule 共享 Clause、Clause ID 冲突或 Core 版本无法明确时继续阻断，必须人工建 seed；不得复制旧 candidate、旧 alignment 或审核状态来消除错误。
+
 最终交付前必须运行 projector `--check`，再运行 package validator；任一命令非零即不可交付。不得因为 validator 的其他检查通过而忽略 projector 漂移。
 
-没有 `candidates.json` 时，仅当 digest 已显式声明 candidate_refs、每个 candidate 至少关联一条同来源同 disposition 的 rule、且目标 Core 版本唯一时，才可使用 `--init` 创建壳；多版本时必须同时给出 `--core-version`。不得以 `--init` 覆盖已有 candidates，也不得为 process-only 分组猜 disposition。
+没有 `candidates.json` 时，仅当 digest 已显式声明 candidate_refs、每个 candidate 至少关联一条同来源同 disposition 的 rule、且目标 Core 版本唯一时，才可使用 `--init` 创建壳；多版本时必须同时给出 `--core-version`。不得以 `--init` 覆盖已有 candidates，也不得为 process-only 分组猜 disposition。`--init` 是首次建包，`--sync-missing-candidates` 是已有包新增独立规则，两者不得混用。
 
 每条可投影记录必须恰好一个 candidate_ref；candidate 拆分遵循投影契约 §4.1。Rule 和 flow edge 参数必须包含 `parameterType` 与字符串 `value`；当前由 package validator 以 `parameter_shape_invalid` 门禁，不能因单文件 Schema 仍接受开放 object 而省略。所有 digest source 和 candidate sourceBlock 的文档 ID 必须与 parsed 主文档一致。
 
@@ -203,6 +208,7 @@ node skills/policy-digest/scripts/validate-policy-digest.mjs cases/{case_id}/pol
 - digest/candidates 到 normalized parsed 的锚点可定位性；
 - ID 唯一性及 parameter、transition、alignment、流程目标、Artifact、RACI、candidate 引用完整性；
 - `candidates.json` 与 digest 正向投影结果完整一致，包括 proposal、parameter、transition、排序和确定性状态；
+- 原文、规范化 requirement 与结构化 parameter 的显式数值比较符没有 `GE/GT/LE/LT` 冲突；
 - 相邻父层、无环、L3 归属、层级置信度保守性和推断层级全审；
 - L3 完整性、Artifact 双向引用、同一 L3 流转边及其 candidates 投影；
 - 无条件主干边与条件/异常 transition 的单源纪律；

@@ -204,6 +204,68 @@ function normalizedText(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
+const COMPARATOR_WORDS = new Map([
+  ['以上', 'GE'], ['不低于', 'GE'], ['不少于', 'GE'], ['至少', 'GE'],
+  ['超过', 'GT'], ['大于', 'GT'],
+  ['以下', 'LE'], ['不超过', 'LE'], ['不能超过', 'LE'], ['不得超过', 'LE'], ['不高于', 'LE'], ['至多', 'LE'],
+  ['低于', 'LT'], ['小于', 'LT'],
+]);
+
+function normalizeClaimUnit(value) {
+  return String(value || '').replace('人民币', '元').replace('％', '%');
+}
+
+function comparatorClaims(text) {
+  const claims = new Map();
+  const add = (number, unit, comparator) => {
+    const key = `${Number(number)}:${normalizeClaimUnit(unit)}`;
+    if (!claims.has(key)) claims.set(key, new Set());
+    claims.get(key).add(comparator);
+  };
+  const units = '(?:人民币|美元|元|小时|工作日|日|天|%|％)?';
+  const negatedPrefix = new RegExp(`(不低于|不少于|不超过|不能超过|不得超过|不高于)\\s*(\\d+(?:\\.\\d+)?)\\s*(${units})`, 'g');
+  const prefix = new RegExp(`(?<!不)(?<!不能)(?<!不得)(至少|超过|大于|至多|低于|小于)\\s*(\\d+(?:\\.\\d+)?)\\s*(${units})`, 'g');
+  const postfix = new RegExp(`(\\d+(?:\\.\\d+)?)\\s*(${units})\\s*(以上|以下)`, 'g');
+  const inclusiveRange = new RegExp(`(\\d+(?:\\.\\d+)?)\\s*(${units})\\s*[-–—~～至]\\s*(\\d+(?:\\.\\d+)?)\\s*(${units})(?=[^；。]{0,20}含)`, 'g');
+  for (const match of normalizedText(text).matchAll(negatedPrefix)) add(match[2], match[3], COMPARATOR_WORDS.get(match[1]));
+  for (const match of normalizedText(text).matchAll(prefix)) add(match[2], match[3], COMPARATOR_WORDS.get(match[1]));
+  for (const match of normalizedText(text).matchAll(postfix)) add(match[1], match[2], COMPARATOR_WORDS.get(match[3]));
+  for (const match of normalizedText(text).matchAll(inclusiveRange)) {
+    add(match[1], match[2] || match[4], 'GE');
+    add(match[3], match[4] || match[2], 'LE');
+  }
+  return claims;
+}
+
+function parameterClaimKey(parameter) {
+  const match = String(parameter.value || '').match(/-?\d+(?:\.\d+)?/);
+  if (!match) return null;
+  const unit = String(parameter.value || '').includes('%') || String(parameter.value || '').includes('％') ? '%' : parameter.unit || '';
+  return `${Number(match[0])}:${normalizeClaimUnit(unit)}`;
+}
+
+function validateRuleComparatorSemantics(digest, issues) {
+  for (const [ruleIndex, rule] of (digest.rules || []).entries()) {
+    const sourceClaims = comparatorClaims(rule.original_text);
+    const requirementClaims = comparatorClaims(rule.requirement);
+    for (const [key, comparators] of requirementClaims) {
+      const expected = sourceClaims.get(key);
+      if (expected && [...comparators].some((comparator) => !expected.has(comparator))) {
+        addIssue(issues, 'ERROR', 'rule_comparator_conflict', `规则 ${rule.rule_id} 的 requirement 改变了原文字面比较符：${key} 原文=${[...expected].join('/')}，转写=${[...comparators].join('/')}`, `digest/rules/${ruleIndex}/requirement`);
+      }
+    }
+    for (const [parameterIndex, parameter] of (rule.parameters || []).entries()) {
+      if (!parameter.comparator) continue;
+      const key = parameterClaimKey(parameter);
+      const expected = key ? sourceClaims.get(key) : null;
+      const actual = String(parameter.comparator).toUpperCase();
+      if (expected && !expected.has(actual)) {
+        addIssue(issues, 'ERROR', 'rule_comparator_conflict', `规则 ${rule.rule_id} 的 parameter comparator 与原文字面不一致：${key} 原文=${[...expected].join('/')}，参数=${actual}`, `digest/rules/${ruleIndex}/parameters/${parameterIndex}/comparator`);
+      }
+    }
+  }
+}
+
 function validateProjectableParameter(parameter, pointer, issues) {
   if (!parameter || typeof parameter !== 'object' || Array.isArray(parameter)) {
     addIssue(issues, 'ERROR', 'parameter_shape_invalid', '参数必须是 object', pointer);
@@ -233,6 +295,7 @@ function validateProjectableParameters(digest, issues) {
       validateProjectableParameter(parameter, `digest/flow_edges/${edgeIndex}/condition_parameters/${parameterIndex}`, issues);
     }
   }
+  validateRuleComparatorSemantics(digest, issues);
 }
 
 function validateAnchors(digest, candidates, parsed, issues) {

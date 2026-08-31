@@ -82,7 +82,8 @@ node skills/policy-digest/scripts/project-policy-digest-candidates.mjs <package-
 
 - `--check`：不写文件；检查现有 candidates 的生成区域是否与 digest 一致；
 - `--init`：按 digest 中已填写的 `candidate_refs[]` 从零创建 candidate 壳并投影；已有 candidates 时只能配合指向其他文件的 `--output` 安全预览；
-- `--core-version <version>`：仅在 `--init` 且 `core_versions` 有多个不同版本时，显式指定 candidate 的目标 Core；
+- `--sync-missing-candidates`：已有 candidates 增加独立规则时，为 seed 中缺失且恰好关联一条 rule 的 candidate 创建独立 Clause 壳，再执行完整投影；默认仅写并列预览；
+- `--core-version <version>`：在 `--init` 或 `--sync-missing-candidates` 无法从显式域版本确定 Core 时指定目标版本；
 - `--output <path>`：指定并列输出；
 - `--in-place`：备份为 `candidates.before-projection.json` 后覆盖；
 - 默认不覆盖，避免破坏已审核候选。
@@ -91,10 +92,13 @@ node skills/policy-digest/scripts/project-policy-digest-candidates.mjs <package-
 
 `--init` 不负责发明候选边界。它只收集 digest 已显式引用的 candidate ID；每个 candidate 必须至少关联一条 rule，且同组 rules 必须共享 source block 和 disposition。process-only 分组或多 Core 版本歧义会立即失败，要求提供 seed candidates 或显式版本。
 
+`--sync-missing-candidates` 也不做语义归并。它只接受 digest 已通过新 `candidate_ref` 声明的“一条 rule → 一个缺失 candidate”边界，并机械生成 `${rule_id}-CLAUSE`，Clause 文本取 `original_text`，编号与标签取 `source.clause_ref`。已有 candidate 的 Clause、alignment、Core 选择和审核数据按普通 seed 规则保留，确定性生成区仍由 digest 重建；缺失 candidate 若没有 rule、关联多条 rules、Clause localId 冲突或 Core 版本无法从显式 `policy` 版本/唯一版本确定，则阻断并要求人工建 seed。同步写入后仍必须单独运行普通 `--check` 和 package validator。
+
 ### 4.1 candidate_refs 基数与拆分准则
 
 - 每条 rule、process element、objective、Artifact 和 flow edge 必须恰好填写一个 candidate_ref；零个或多个均无法确定性投影。
 - 安全默认是“一条 rule 一个 candidate”，但这不是本体上的永久一一关系。同一 source block 的多条 rule 只有在 disposition 一致、且确实应共享 candidate 时才可显式合并。
+- 同一表格块中的不同国家、主体、币种、阈值、统计周期或规范动作仍应先拆成原子 rules；共享 block 不等于共享 candidate 或共享 Clause。
 - process/objective/Artifact/edge 若与某条 rule 共享来源块，优先显式归入该 rule candidate。
 - 跨来源块记录不得由投影器按“名称相近”或“语义就近”自动归并；分析者必须依据业务关系显式选择 candidate_ref，无法确认时建立待确认项。
 - 没有关联 rule 的纯 process candidate 无法由 `--init` 推导 sourceBlock 和 disposition，必须提供 seed `candidates.json`。

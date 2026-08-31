@@ -119,6 +119,21 @@ function addByCandidate(target, candidateId, value, label) {
   target.get(candidateId).push(value);
 }
 
+function resolveCandidateCoreVersion(digest, requestedCoreVersion, context) {
+  const coreVersions = digest.ontology_projection?.core_versions || {};
+  const uniqueCoreVersions = [...new Set(Object.values(coreVersions))];
+  if (requestedCoreVersion) {
+    if (!uniqueCoreVersions.includes(requestedCoreVersion)) {
+      throw new Error(`--core-version ${requestedCoreVersion} 不在 ontology_projection.core_versions 的可选值中：${uniqueCoreVersions.join('，') || '<empty>'}`);
+    }
+    return requestedCoreVersion;
+  }
+  if (context === 'rule' && coreVersions.policy) return coreVersions.policy;
+  if (uniqueCoreVersions.length === 1) return uniqueCoreVersions[0];
+  const choices = Object.entries(coreVersions).map(([name, version]) => `${name}=${version}`).join('，') || '<empty>';
+  throw new Error(`ontology_projection.core_versions 含多个不同版本（${choices}）；${context} candidate 必须用 --core-version 明确选择，不能猜测`);
+}
+
 export function createCandidateSeed(digest, requestedCoreVersion = null) {
   if (digest.digest_schema_version !== '0.2.0') throw new Error(`仅支持 Policy Digest 0.2.0，实际为 ${digest.digest_schema_version}`);
   const coreVersions = Object.values(digest.ontology_projection?.core_versions || {});
@@ -168,6 +183,69 @@ export function createCandidateSeed(digest, requestedCoreVersion = null) {
     coreVersions: structuredClone(digest.ontology_projection.core_versions),
     candidates,
   };
+}
+
+export function syncMissingCandidateSeeds(digest, seedCandidates, requestedCoreVersion = null) {
+  if (digest.digest_schema_version !== '0.2.0') throw new Error(`仅支持 Policy Digest 0.2.0，实际为 ${digest.digest_schema_version}`);
+  if (seedCandidates.candidatesSchemaVersion !== '0.3.0') throw new Error(`仅支持 Candidates 0.3.0，实际为 ${seedCandidates.candidatesSchemaVersion}`);
+
+  const synced = structuredClone(seedCandidates);
+  const existingCandidateIds = new Set();
+  const localIds = new Set();
+  for (const candidate of synced.candidates || []) {
+    if (existingCandidateIds.has(candidate.candidateId)) throw new Error(`seed candidates 含重复 candidateId：${candidate.candidateId}`);
+    existingCandidateIds.add(candidate.candidateId);
+    for (const proposal of candidate.produces || []) {
+      if (localIds.has(proposal.localId)) throw new Error(`seed candidates 含重复 proposal localId：${proposal.localId}`);
+      localIds.add(proposal.localId);
+    }
+  }
+
+  const referencedCandidateIds = new Set();
+  for (const collection of ['rules', 'process_elements', 'process_objectives', 'artifacts', 'flow_edges']) {
+    for (const record of digest[collection] || []) {
+      const id = record.rule_id || record.element_id || record.objective_id || record.artifact_id || record.edge_id;
+      referencedCandidateIds.add(oneCandidateRef(record, id, collection));
+    }
+  }
+  const missingCandidateIds = stableSort([...referencedCandidateIds].filter((id) => !existingCandidateIds.has(id)), (id) => id);
+  if (!missingCandidateIds.length) return synced;
+
+  const rulesByCandidate = new Map(missingCandidateIds.map((id) => [id, []]));
+  for (const rule of digest.rules || []) {
+    const candidateId = oneCandidateRef(rule, rule.rule_id, 'rule');
+    if (rulesByCandidate.has(candidateId)) rulesByCandidate.get(candidateId).push(rule);
+  }
+  const coreVersion = resolveCandidateCoreVersion(digest, requestedCoreVersion, 'rule');
+  for (const candidateId of missingCandidateIds) {
+    const rules = rulesByCandidate.get(candidateId) || [];
+    if (rules.length !== 1) {
+      throw new Error(`缺失 candidate ${candidateId} 必须恰好关联一条 rule 才能安全生成独立 Clause 壳，实际为 ${rules.length}；process-only 或共享 Clause 分组请人工补 seed`);
+    }
+    const rule = rules[0];
+    const clauseId = `${rule.rule_id}-CLAUSE`;
+    if (localIds.has(clauseId)) throw new Error(`无法为 ${candidateId} 生成 Clause 壳：localId ${clauseId} 已存在`);
+    localIds.add(clauseId);
+    synced.candidates ||= [];
+    synced.candidates.push({
+      candidateId,
+      sourceBlock: sourceBlock(rule.source),
+      disposition: rule.disposition,
+      confidence: rule.semantic_confidence,
+      coreVersion,
+      produces: [{
+        localId: clauseId,
+        rdfType: 'policy:Clause',
+        label: rule.source.clause_ref || rule.rule_id,
+        clauseNumber: rule.source.clause_ref || rule.rule_id,
+        clauseText: rule.original_text,
+      }],
+      reviewPool: rule.review?.pool || 'full',
+      review: { status: 'proposed', reviewer: null, timestamp: null },
+    });
+  }
+  synced.candidates = stableSort(synced.candidates || [], (candidate) => candidate.candidateId);
+  return synced;
 }
 
 export function projectDeterministicCandidates(digest, seedCandidates) {
@@ -274,13 +352,17 @@ export function canonicalJson(value) {
 function runCli() {
   const args = process.argv.slice(2);
   const input = args.find((arg) => !arg.startsWith('--'));
-  if (!input) throw new Error('用法: node project-policy-digest-candidates.mjs <package-directory> [--check|--init] [--core-version <version>] [--in-place|--output <path>]');
+  if (!input) throw new Error('用法: node project-policy-digest-candidates.mjs <package-directory> [--check|--init|--sync-missing-candidates] [--core-version <version>] [--in-place|--output <path>]');
   const directory = resolve(input);
   const digestPath = join(directory, 'digest.json');
   const candidatesPath = join(directory, 'candidates.json');
   if (!existsSync(digestPath)) throw new Error(`缺少 ${digestPath}`);
   const digest = readJson(digestPath);
   const initialize = args.includes('--init');
+  const syncMissing = args.includes('--sync-missing-candidates');
+  const check = args.includes('--check');
+  if (initialize && syncMissing) throw new Error('--init 与 --sync-missing-candidates 不能同时使用');
+  if (check && syncMissing) throw new Error('--check 与 --sync-missing-candidates 不能同时使用；先同步预览或写入，再单独检查');
   const outputIndex = args.indexOf('--output');
   const requestedOutput = outputIndex >= 0 ? args[outputIndex + 1] : null;
   if (outputIndex >= 0 && !requestedOutput) throw new Error('--output 后必须提供路径');
@@ -296,13 +378,14 @@ function runCli() {
   const requestedCoreVersion = coreVersionIndex >= 0 ? args[coreVersionIndex + 1] : null;
   if (coreVersionIndex >= 0 && !requestedCoreVersion) throw new Error('--core-version 后必须提供版本');
   if (requestedCoreVersion && !/^\d+\.\d+\.\d+$/.test(requestedCoreVersion)) throw new Error('--core-version 必须是 X.Y.Z 格式');
-  if (requestedCoreVersion && !initialize) throw new Error('--core-version 仅与 --init 一起使用');
-  const current = initialize ? createCandidateSeed(digest, requestedCoreVersion) : readJson(candidatesPath);
+  if (requestedCoreVersion && !initialize && !syncMissing) throw new Error('--core-version 仅与 --init 或 --sync-missing-candidates 一起使用');
+  const original = initialize ? createCandidateSeed(digest, requestedCoreVersion) : readJson(candidatesPath);
+  const current = syncMissing ? syncMissingCandidateSeeds(digest, original, requestedCoreVersion) : original;
   const projected = projectDeterministicCandidates(digest, current);
-  const currentText = canonicalJson(current);
+  const currentText = canonicalJson(original);
   const projectedText = canonicalJson(projected);
   const changed = currentText !== projectedText;
-  if (args.includes('--check')) {
+  if (check) {
     if (initialize) throw new Error('--check 需要已有 candidates.json，不能与 --init 同时使用');
     if (changed) {
       console.error('🔴 candidates.json 的确定性规则/流程投影与 digest.json 不一致');
@@ -314,6 +397,7 @@ function runCli() {
   const outputPath = inPlace ? candidatesPath : resolvedOutput || join(directory, 'candidates.projected.json');
   writeFileSync(outputPath, projectedText, 'utf8');
   console.log(`${changed ? '✓ 已生成' : '✓ 无内容漂移，已写出'}确定性规则/流程投影：${outputPath}`);
+  if (syncMissing) console.log(`ℹ 已安全补齐 ${projected.candidates.length - original.candidates.length} 个缺失 candidate 与独立 Clause 壳；共享 Clause 和 process-only 分组仍需人工建 seed。`);
   console.log('ℹ 已保留 Clause、alignments、Core 选择和人工审核元数据；本脚本不推断这些语义。');
 }
 

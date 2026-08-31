@@ -42,7 +42,7 @@
 
 投影器要求上述每条记录恰好一个 candidate_ref。数组中的 ID 必须指向 `candidates.json` 中真实存在的 `candidateId`。流程元素、目标和 Artifact 还必须存在对应的 `produces[].localId` proposal；每条非空 `rule.requirement` 必须在其引用的 candidate 中存在 `{rule_id}-OBLIGATION`。具体拆分规则见正向投影契约 §4.1。
 
-常见错误：`schema_required`、`candidate_ref_cardinality`、`candidate_ref_missing`、`candidate_rule_obligation_missing`、`candidate_rule_statement_mismatch`、`digest_element_candidate_missing`、`candidate_objective_missing`、`candidate_artifact_missing`、`candidate_projection_drift`。
+常见错误：`schema_required`、`candidate_ref_cardinality`、`candidate_ref_missing`、`candidate_rule_obligation_missing`、`candidate_rule_statement_mismatch`、`digest_element_candidate_missing`、`candidate_objective_missing`、`candidate_artifact_missing`、`candidate_projection_drift`、`rule_comparator_conflict`。
 
 ## 3. 层级与置信度
 
@@ -74,6 +74,8 @@ $$
 这些 `efio:*` 键是临时交换映射，不是 Process Core 0.4.0 正式属性。
 
 Package validator 会调用同一正向投影逻辑，对完整 candidates 结果做字节级确定性比较。proposal 状态、属性单双值、parameter/transition 顺序或 transition ID 等任一确定性字段被手工改动，都会报告 `candidate_projection_drift`。先运行 projector `--check`，确认差异后再用 `--in-place` 重建。
+
+Validator 还会对原文、规范化 requirement 和 parameter 中可无歧义定位的显式数值比较符做一致性检查。例如“700 元以上”必须保持 `GE`，“超过 700 元”必须保持 `GT`；自然语言转写或参数改变边界语义时报 `rule_comparator_conflict`。复杂表格的完整条件覆盖仍需按原子事实清单人工复核，不能仅依赖该词法门禁。
 
 ## 5. Artifact 双向一致
 

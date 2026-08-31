@@ -211,6 +211,8 @@ flowchart LR
 
 当前 0.2.0 投影器会从 digest 覆盖生成 candidate 来源/分类、Rule Obligation、parameter target、流程层级、目标、Artifact 和流程边，同时从已有 candidates 保留候选 ID、共享 Clause、alignment、Core 选择和审核数据。具体生成区域与保留区域见 [Digest → Candidates 正向投影契约](references/candidates-projection-contract.md)。
 
+增量修改已有包时，如果新增 rule 使用新的 `candidate_ref`，先用 `--sync-missing-candidates` 补齐可无歧义生成的独立 candidate/Clause 壳，再执行普通投影检查；不要等常规投影报“未知 candidateId”后手工复制旧 candidate。
+
 ## 7. 标准成果包
 
 ```text
@@ -273,6 +275,14 @@ node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{ca
 ```
 
 输出路径不得是包内 `candidates.json`，也不能与 `--in-place` 同时使用。candidate_refs 的基数、拆分准则及 procedural 单 requirement 限制见 [Digest → Candidates 正向投影契约](references/candidates-projection-contract.md#41-candidate_refs-基数与拆分准则)。
+
+已有包新增独立规则时，先安全同步缺失 seed：
+
+```text
+node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{case_id}/policy-digests/{doc_id} --sync-missing-candidates
+```
+
+默认只生成 `candidates.projected.json` 供复核；确认新增 candidate 的 `coreVersion`、Clause 原文和 review 元数据后，改用 `--sync-missing-candidates --in-place`。该模式只处理恰好关联一条 rule 的缺失 candidate；process-only candidate、多 rule 共享 Clause 和 ID 冲突仍需人工建立 seed。写入后必须另行运行普通 `--check`。
 
 ```text
 node skills/policy-digest/scripts/validate-policy-digest.mjs cases/{case_id}/policy-digests/{doc_id}
