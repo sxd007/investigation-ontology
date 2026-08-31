@@ -2,6 +2,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { basename, dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { canonicalJson, projectDeterministicCandidates } from './project-policy-digest-candidates.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const schemaDir = join(scriptDir, '..', 'references', 'schemas');
@@ -468,7 +469,7 @@ function validateDigestReferences(digest, candidateInfo, issues) {
   for (const element of digest.process_elements || []) {
     if (!['L3', 'L4', 'L5'].includes(element.level)) continue;
     const raci = assignmentsByElement.get(element.element_id) || [];
-    if (['L4', 'L5'].includes(element.level) && !raci.includes('R')) addIssue(issues, 'WARN', 'raci_responsible_missing', `元素 ${element.element_id} 没有 R`, 'digest/role_assignments');
+    if (['L3', 'L4'].includes(element.level) && !raci.includes('R')) addIssue(issues, 'WARN', 'raci_responsible_missing', `元素 ${element.element_id} 没有 R`, 'digest/role_assignments');
     if (element.level === 'L3' && raci.filter((item) => item === 'A').length !== 1) addIssue(issues, 'WARN', 'raci_accountable_count', `L3 ${element.element_id} 的 A 数量不是 1`, 'digest/role_assignments');
   }
   for (const [index, risk] of (digest.risks || []).entries()) for (const ref of risk.element_refs || []) if (!elementIds.has(ref)) addIssue(issues, 'ERROR', 'risk_element_missing', `风险 element_ref 不存在：${ref}`, `digest/risks/${index}`);
@@ -511,6 +512,17 @@ function validateMarkdown(markdownPath, digest, issues) {
   for (const id of ids) if (!markdown.includes(id)) addIssue(issues, 'ERROR', 'markdown_record_missing', `digest.md 未呈现记录 ${id}`, markdownPath);
 }
 
+function validateCandidateProjection(digest, candidates, issues) {
+  try {
+    const projected = projectDeterministicCandidates(digest, candidates);
+    if (canonicalJson(projected) !== canonicalJson(candidates)) {
+      addIssue(issues, 'ERROR', 'candidate_projection_drift', 'candidates.json 与 digest.json 的完整确定性投影不一致；运行 projector --check 定位，并用 --in-place 安全重建', 'candidates');
+    }
+  } catch (error) {
+    addIssue(issues, 'ERROR', 'candidate_projection_invalid', `无法完成确定性投影校验：${error.message}`, 'candidates');
+  }
+}
+
 export function validatePackage(inputPath) {
   const packageDir = resolve(existsSync(inputPath) && !basename(inputPath).toLowerCase().endsWith('.json') ? inputPath : dirname(inputPath));
   const issues = [];
@@ -539,6 +551,7 @@ export function validatePackage(inputPath) {
     validateAnchors(digest, candidates, parsed, issues);
     const candidateInfo = validateCandidateReferences(candidates, parsed, issues);
     validateDigestReferences(digest, candidateInfo, issues);
+    if (!issues.some((item) => item.severity === 'ERROR')) validateCandidateProjection(digest, candidates, issues);
     validateMarkdown(paths.markdown, digest, issues);
     const parsedRef = candidates.document?.parsedRef?.path;
     if (parsedRef && basename(parsedRef) !== basename(paths.parsed)) addIssue(issues, 'ERROR', 'parsed_ref_path', `parsedRef 应指向 ${basename(paths.parsed)}`, 'candidates/document/parsedRef/path');

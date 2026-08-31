@@ -106,7 +106,7 @@ Schema 只验证单文件形状；跨 parsed/digest/candidates/Markdown 的引�
 
 - 提取名称、编号、版本、层级、制定/归口/审批主体、发布/生效日期、适用范围、依据、关联/替代文件、附件、解释权和有效性判断。
 - 用“对象 + 场景 + 事项 + 触发条件 + 排除事项”表达适用边界。
-- “有效/失效”必须有发布、生效、废止或替代依据；否则标记 `待确认`。
+- “有效/失效”必须有发布、生效、废止或替代依据；只看到历史修订但无法排除后续废止/替代时，`validity` 必须为 `pending_confirmation`，不得一边建立有效性待确认项一边写 `effective`。
 
 ### 阶段四：规则与分层流程解构（Pass A–G）
 
@@ -120,12 +120,15 @@ Schema 只验证单文件形状；跨 parsed/digest/candidates/Markdown 的引�
 - 强制、禁止、授权、程序、职责、处罚、引用、豁免等条款逐条分诊；混合条款保留多值类型并强制全审。
 - 程序条款同时保留 Clause、义务转写和流程活动，禁止只画流程不建义务候选。
 - 义务转写保留制度语义，不扩大约束范围；参数只是 statement 的结构化投影，不能替代原文转写。
+- 同一规则只有一个来源锚点；中国/国际、不同主体或不同币种的要求来自不同原文块时，应拆成独立规则，不得把其他来源的阈值塞入当前规则参数。
+- “以上/以下/不低于/不超过/超过/低于”按原文字面分别投影为 `GE/LE/GE/LE/GT/LT`。相邻档位按字面发生重叠或空档时保留原比较符并建立问题，禁止静默改写比较符来替制度消歧。
 - 主流程按业务时间顺序重建，不受章节顺序限制；章节父子关系不得直接冒充流程父子关系。
 - 每个已解析 L3 至少具备目标、入口条件、一个 L4 和输出 Artifact；不足时保持 unresolved 并建立 blocking 人审项。
 - `parent_ref` 只连接相邻层级；L3 的 `owning_process_ref` 指向自身，L4/L5 指向所属 L3；禁止父子环。
 - `hierarchy_confidence.overall` 必须严格等于 evidence、boundary、parent、granularity 中的最低值。推断层级统一进入 full review。
 - `flow_edges[]` 仅连接同一 L3 内元素。跨 L3 协作以 Artifact 的 `produced_by`/`consumed_by` 表达，不用伪造跨流程顺序边。
 - 无条件主干边投影为活动 `precededByActivity`；有条件、升级、驳回、退回、终止、紧急通道投影为 `transitions[]`，同一边禁止双写。
+- 原文只规定“须审批”时，不得自行补写“不通过则退回/终止/上交”等流向；确需表达分析性推断时必须标明依据、进入 full review，且不得与问题清单中的“处置路径缺失”判断矛盾。
 - “原则上 X”仍建立有效义务；未明示例外记制度缺陷。明确豁免使用 `exemption + exemptsFrom`，不当作普通异常流。
 
 ### 阶段五：权责与风险控制
@@ -164,7 +167,7 @@ Schema 只验证单文件形状；跨 parsed/digest/candidates/Markdown 的引�
 2. `candidates.json` 严格遵循 candidates schema 0.3.0：不添加分析问题、评分或展示字段。
 3. 每一表行、候选、RACI 指派、风险控制和流程边都必须带原文锚点；无锚点记录不得进入交付包。
 4. 引用完整：parameter target 指向本文件 Obligation；transition 两端指向本文件活动；alignment 目标含 excerpt。
-5. 未确认记录保持 `review.status: proposed`；AI 不写 confirmed、modified、rejected 或 serialized。
+5. 未确认记录保持 `review.status: proposed`；AI 不写 confirmed、modified、rejected 或 serialized，也不得把确定性 Obligation 从 `DRAFT/UNASSESSED` 改成 `EFFECTIVE/APPLICABLE`。
 6. 低解析置信、低语义置信、混合条款、未识别区域、跨文档冲突和关键字段缺失全部进入全审池。
 7. Core 版本、tenant 或必要 parsedRef 缺失时，将成果标为“分析草稿/不可入库”，不得用占位版本通过校验。
 8. candidates 必须为每个流程元素、目标和 Artifact 建立 proposal；流程元素使用临时 `efio:*` 层级属性，目标/输入/输出继续使用 Process Core 原生关系。
@@ -177,6 +180,8 @@ node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{ca
 ```
 
 已有 `candidates.json` 时，先省略 `--in-place` 生成并列的 `candidates.projected.json` 复核；使用 `--check` 可在不写文件的情况下检测规则/流程投影漂移。常规模式从 seed candidates 保留候选 ID、共享 Clause、Core 选择、alignment 和审核数据。
+
+最终交付前必须运行 projector `--check`，再运行 package validator；任一命令非零即不可交付。不得因为 validator 的其他检查通过而忽略 projector 漂移。
 
 没有 `candidates.json` 时，仅当 digest 已显式声明 candidate_refs、每个 candidate 至少关联一条同来源同 disposition 的 rule、且目标 Core 版本唯一时，才可使用 `--init` 创建壳；多版本时必须同时给出 `--core-version`。不得以 `--init` 覆盖已有 candidates，也不得为 process-only 分组猜 disposition。
 
@@ -197,6 +202,7 @@ node skills/policy-digest/scripts/validate-policy-digest.mjs cases/{case_id}/pol
 - 三层 JSON 的版本化 Schema；
 - digest/candidates 到 normalized parsed 的锚点可定位性；
 - ID 唯一性及 parameter、transition、alignment、流程目标、Artifact、RACI、candidate 引用完整性；
+- `candidates.json` 与 digest 正向投影结果完整一致，包括 proposal、parameter、transition、排序和确定性状态；
 - 相邻父层、无环、L3 归属、层级置信度保守性和推断层级全审；
 - L3 完整性、Artifact 双向引用、同一 L3 流转边及其 candidates 投影；
 - 无条件主干边与条件/异常 transition 的单源纪律；

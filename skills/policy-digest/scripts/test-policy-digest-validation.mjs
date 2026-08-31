@@ -144,7 +144,7 @@ try {
   assert.ok(namingHints[0].message.includes('block_id → blockId'));
 
   const validDigest = digest();
-  const validDirectory = writePackage('valid', validDigest);
+  const validDirectory = writePackage('valid', validDigest, projectDeterministicCandidates(validDigest, candidates()));
   const valid = validatePackage(validDirectory);
   assert.deepEqual(valid.issues.filter((item) => item.severity === 'ERROR'), [], JSON.stringify(valid.issues, null, 2));
   const initialized = projectDeterministicCandidates(validDigest, createCandidateSeed(validDigest));
@@ -152,6 +152,15 @@ try {
   assert.ok(initialized.candidates[0].produces.some((item) => item.localId === 'R-001-OBLIGATION'));
   const initializedDirectory = writePackage('initialized', validDigest, initialized);
   assert.deepEqual(validatePackage(initializedDirectory).issues.filter((item) => item.severity === 'ERROR'), []);
+  const driftedValidationCandidates = structuredClone(initialized);
+  driftedValidationCandidates.candidates[0].produces.find((item) => item.localId === 'R-001-OBLIGATION').obligationStatus = 'EFFECTIVE';
+  const driftedValidationDirectory = writePackage('projection-drift', validDigest, driftedValidationCandidates);
+  assert.ok(validatePackage(driftedValidationDirectory).issues.some((item) => item.code === 'candidate_projection_drift'));
+  const missingL3ResponsibleDigest = structuredClone(validDigest);
+  missingL3ResponsibleDigest.role_assignments = missingL3ResponsibleDigest.role_assignments.filter((item) => !(item.element_ref === 'PROC-SCREENING' && item.raci === 'R'));
+  const missingL3ResponsibleCandidates = projectDeterministicCandidates(missingL3ResponsibleDigest, initialized);
+  const missingL3ResponsibleDirectory = writePackage('missing-l3-responsible', missingL3ResponsibleDigest, missingL3ResponsibleCandidates);
+  assert.ok(validatePackage(missingL3ResponsibleDirectory).issues.some((item) => item.code === 'raci_responsible_missing'));
 
   const generatedMarkdown = renderPolicyDigestMarkdown(validDigest);
   for (const id of ['R-001', 'PROC-SCREENING', 'OBJ-SCREENING', 'ART-CANDIDATE-LIST', 'EDGE-SCREENING-001', 'RA-PROC-SCREENING-R']) assert.ok(generatedMarkdown.includes(id));
@@ -243,7 +252,7 @@ try {
   multiCoreDigest.ontology_projection.core_versions = { policy: '0.1.0', process: '0.4.0' };
   assert.throws(() => createCandidateSeed(multiCoreDigest), /policy=0\.1\.0.*process=0\.4\.0/);
   assert.throws(() => createCandidateSeed(multiCoreDigest, '9.9.9'), /不在.*可选值/);
-  writeFileSync(join(validDirectory, 'candidates.json'), canonicalJson(projected));
+  writeFileSync(join(validDirectory, 'candidates.json'), canonicalJson(projectDeterministicCandidates(validDigest, projected)));
   assert.deepEqual(validatePackage(validDirectory).issues.filter((item) => item.severity === 'ERROR'), []);
   const explanation = generateExplanation(validDirectory);
   const explanationHtml = readFileSync(explanation.outputPath, 'utf8');
