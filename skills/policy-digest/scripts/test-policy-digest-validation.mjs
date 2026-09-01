@@ -335,6 +335,11 @@ try {
   assert.ok(explanation.model.records.some((item) => item.id === 'RA-PROC-SCREENING-R'));
   assert.ok(explanation.model.source_blocks.some((item) => item.block_id === 'b-001'));
   assert.ok(!renderExplanationHtml({ ...explanation.model, meta: { ...explanation.model.meta, title: '</script><script>alert(1)</script>' } }).includes('</script><script>alert(1)</script>'));
+  assert.ok(!explanationHtml.includes('__POLICY_DATA__'), '模板数据占位符应被替换');
+  assert.ok(!explanationHtml.includes('__TITLE__'), '模板标题占位符应被替换');
+  assert.ok(explanationHtml.includes('id="roles-matrix"') || explanationHtml.includes("id='roles-matrix'") || explanationHtml.includes('roles-matrix'), '应包含 RACI 矩阵容器');
+  assert.ok(explanationHtml.includes('trace-matrix'), '应包含规则风控矩阵容器');
+  assert.ok(explanationHtml.includes('全部展开') && explanationHtml.includes('全部折叠'), '应包含折叠控制');
 
   const invalidDigest = structuredClone(validDigest);
   invalidDigest.process_elements.find((x) => x.element_id === 'ACT-CERT-APPROVAL').owning_process_ref = 'PROC-SCREENING';

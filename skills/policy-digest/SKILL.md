@@ -232,15 +232,15 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs cases/{
 也可用 `--output <path>` 指定输出。生成的 `explanation.html` 是无外部依赖的单文件，可直接发送给制度归口部门并在浏览器离线打开。它必须提供：
 
 - “怎么读”页：用非本体术语解释从原文到结构化记录的六步方法和数量概览；
-- “流程分层”页：展开 L1–L5 树，显示明文/推断依据、层级状态和置信度；
-- “流程提炼”页：按 L3 展示目标、流程内边和 Artifact 输入输出交接；
-- “角色职责”页：按流程元素展示 RACI，每项均可单独回到来源；
-- “规则与风控”页：展示规则、目标、风险、控制、问题及其流程落点；
+- “流程分层”页：展开 L1–L5 树，显示明文/推断依据、层级状态和置信度；节点可折叠/展开，并提供一键全部展开/全部折叠；
+- “流程提炼”页：按 L3 展示目标、流程内边和 Artifact 输入输出交接；L3 区块可折叠，L4/L5 按父子关系缩进，记录类型标签按类型着色；
+- “角色职责”页：以“流程元素 × 角色”RACI 矩阵展示，行按层级树序缩进、可折叠，单元格标记与记录索引均可单独回到来源；
+- “规则与风控”页：以“流程元素 × 目标/规则/风险/控制”树形矩阵展示，记录按实际挂载层级进入单元格（不上卷、不继承），默认折叠到 L3，控制标注关联风险并可高亮配对行；问题清单在矩阵下方独立区块；
 - “本体投影”页：展示 candidate、proposal、Core 版本、review pool、parameter、transition、alignment 和临时 `efio:*` 映射；
-- “原文对照”栏：点击任一结构化记录，定位 `block_id + block_path + clause_ref + page_hint`，显示完整 parsed 原文块及该类型的判断说明；
+- “原文对照”栏：始终按文档顺序呈现全部 parsed 原文块；点击任一结构化记录，定位 `block_id + block_path + clause_ref + page_hint` 并高亮目标块，上下文保持可见可滑动，块下显示该类型的判断说明；
 - 全文搜索、窄屏布局和打印样式，且不依赖联网资源。
 
-导览只消费已存在的数据，不是新的真相源。无法定位原文的记录应先由校验器阻断，而不是在页面中补造说明。详细视图规则见 [制度解构导览规范](references/explanation-view.md)。
+导览由 `scripts/explanation-template.html` 模板加数据占位符注入生成；Agent 不得手写或改写 HTML，只消费已存在的数据，不是新的真相源。无法定位原文的记录应先由校验器阻断，而不是在页面中补造说明。详细视图规则见 [制度解构导览规范](references/explanation-view.md)。
 
 ## 置信度与人审规则
 
@@ -297,6 +297,7 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs cases/{
 - [十规则脱敏 fixture 回归测试](./scripts/test-ten-rule-policy-fixture.mjs)
 - [0.1 → 0.2 迁移器](./scripts/migrate-policy-digest-0.1-to-0.2.mjs)
 - [制度解构导览生成器](./scripts/generate-policy-digest-explanation.mjs)
+- [制度解构导览视图模板](./scripts/explanation-template.html)
 - [制度解构导览规范](references/explanation-view.md)
 - [分层流程解构实施方案](./references/hierarchical-process-decomposition-plan.md)
 - [校验契约速查](./references/validation-cheat-sheet.md)

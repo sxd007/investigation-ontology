@@ -43,23 +43,47 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <packag
 - 来源锚点及 parsed 原文块；
 - 如有，备选层级和人工审核状态。
 
+交互要求：
+
+- 每个有子级的节点提供折叠/展开开关，折叠时隐藏其全部后代子树；
+- 工具栏提供「全部展开 / 全部折叠」；
+- 折叠状态仅保存在页面内存，不回写输入 JSON。
+
 界面不得把文档目录渲染成流程父子树，除非 digest 已将其确认为流程层级。
 
 ### 3.3 流程提炼
 
 以每个 L3 为审阅单元，展示目标、入口/出口、L4/L5、流程内边和 Artifact。跨 L3 只展示 `produced_by`/`consumed_by` 交接，不绘制虚构的跨流程先后关系。
 
+交互要求：
+
+- 每个 L3 区块可整体折叠/展开；
+- L4/L5 必须按父子关系缩进展示，不得平铺；
+- 记录类型标签（流程、规则、目标、Artifact、流转、角色、风险、控制、问题、候选）按类型着色，颜色同时配合文字，不作唯一状态提示。
+
 ### 3.4 角色职责
 
-按 `element_ref` 展示 RACI。每一项 assignment 都是可点击记录，不能只给整张矩阵一个来源。界面解释 R/A/C/I/S 的含义，但不得替制度补全缺失角色。
+以「流程元素 × 角色」RACI 矩阵展示：
+
+- 行为按 `parent_ref` 树序展开的流程元素（层级缩进、可折叠）；
+- 列为全部去重角色；单元格为该元素 × 该角色的 R/A/C/I/S 标记，允许同格多个；
+- 末列为该行的 assignment 记录索引；
+- 默认「仅显示有指派的行」（自身或子树有指派即保留），可切换显示全部；
+- 点击单元格标记或记录索引回到该 assignment 的来源锚点；每一项 assignment 都是可点击记录，不能只给整张矩阵一个来源。
+
+界面解释 R/A/C/I/S 的含义，但不得替制度补全缺失角色。
 
 ### 3.5 规则与风控
 
-分别展示规则、流程目标、风险、控制和问题：
+以「流程元素 × 目标/规则/风险/控制」树形矩阵展示：
 
-- 规则显示其 `operationalized_by` 落点；
-- 风险与控制显示 `assertion_basis`；
-- 问题显示 blocking 和风险等级；
+- 行结构同 RACI 矩阵（树序、缩进、可折叠，默认折叠到 L3）；L4/L5 行显示祖先面包屑；
+- 记录按实际挂载层级进入单元格：目标/规则/风险按 `element_refs`（规则为 `operationalized_by`），控制按 `element_ref`；不上卷、不继承、不合并；
+- 控制标记标注其 `risk_refs` 关联（如 `↔RISK-02`）；点击控制或风险时，高亮其配对记录所在的全部落点行；
+- 默认「仅显示有记录的行」，可切换显示全部；
+- 空单元格显示为空，暴露“有流程无控制”等缺口，但不生成新的问题记录；
+- 问题与待确认在矩阵下方独立区块展示 blocking 和风险等级，不进入矩阵列；
+- 规则、目标、风险、控制的全量分组列表折叠在「全部记录明细」中，不丢信息；
 - 分析判断不得使用与制度明文相同的视觉标签。
 
 ### 3.6 本体投影
@@ -75,13 +99,13 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <packag
 
 ## 4. 原文对照
 
-点击任一结构化记录后，右侧至少显示：
+右侧面板**始终按文档顺序渲染全部原文块**，不得只显示局部片段。点击任一结构化记录后：
 
-- `clause_ref`、`block_path`、`block_id` 和 `page_hint`；
-- parsed 中对应 block 的完整文本，而不仅是 digest 的短 excerpt；
-- `parseConfidence` 和 `needsVerification`；
-- 记录类型、ID 和通用映射说明；
-- 对流程元素，显示分层依据和置信度分解。
+- 自动滚动定位到对应原文块并高亮；
+- 上下文块保持可见，允许用户继续滑动查看前后文；
+- 在高亮块下方展示结构化说明：记录类型、ID、通用映射说明；对流程元素另显示分层依据和置信度分解；
+- 每个原文块显示 `clause_ref`、`block_path`、`block_id`、`page_hint`、parsed 完整文本（不仅是 digest 短 excerpt）、`parseConfidence` 和 `needsVerification`；
+- 提供「清除定位」复位高亮；搜索时弱化非匹配块而非删除全文。
 
 定位优先顺序为精确来源键 `doc_id + block_id + block_path`，回退可使用同一 `block_id`。不得用名称相似度自动替换来源。
 
@@ -96,6 +120,7 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <packag
 ## 6. 安全与隐私
 
 - HTML、CSS、JavaScript 和数据全部内嵌，不请求外部资源。
+- 视图模板与数据分离：`scripts/explanation-template.html` 是唯一模板（含 CSS、视图骨架和交互脚本），生成器只做 `__TITLE__` 与 `__POLICY_DATA__` 占位符注入；Agent 不得手写或改写 HTML。
 - JSON 注入脚本上下文前转义 `<`、`>` 和 `&`；动态文本使用文本转义。
 - 导览包含制度原文，沿用原成果包访问权限；不得默认发布到公共 URL。
 - 页面不包含遥测、Cookie、远程字体或第三方图表库。
@@ -104,8 +129,10 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <packag
 
 1. 文件可在断网浏览器中独立打开。
 2. 六个视图均可使用：怎么读、流程分层、流程提炼、角色职责、规则与风控、本体投影。
-3. 每类结构化记录可回到 parsed 原文块。
-4. L3 数量、流程树、Artifact 和 RACI 与 digest 一致，candidate/proposal 数量与 candidates 一致。
-5. 推断、未解析和 blocking 状态不被弱化或隐藏。
-6. 输入中的 HTML/脚本片段不能突破嵌入数据边界。
-7. 生成过程不改变 digest、parsed 或 candidates。
+3. 每类结构化记录可回到 parsed 原文块；右侧面板呈现全部原文块，点击记录后定位高亮且保留上下文。
+4. 流程分层与流程提炼支持折叠/展开及一键全部展开/折叠；L4/L5 缩进展示父子关系。
+5. 角色职责为 RACI 矩阵，规则与风控为流程×四维树形矩阵；矩阵记录与 digest 一致，控制与风险的配对高亮可用。
+6. L3 数量、流程树、Artifact 和 RACI 与 digest 一致，candidate/proposal 数量与 candidates 一致。
+7. 推断、未解析和 blocking 状态不被弱化或隐藏。
+8. 输入中的 HTML/脚本片段不能突破嵌入数据边界；产物不含未替换的 `__TITLE__` / `__POLICY_DATA__` 占位符。
+9. 生成过程不改变 digest、parsed 或 candidates。
