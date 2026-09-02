@@ -30,7 +30,27 @@
 
 常见错误：`source_doc_id_mismatch`、`anchor_block_missing`、`anchor_path_mismatch`、`anchor_excerpt_mismatch`。
 
-## 2. candidate_refs
+## 2. 原文块反向覆盖
+
+校验器对每个 parsed block 计算处置状态，防止"原文存在但整支未被消化"的静默遗漏：
+
+| 状态 | 判定 | 结果 |
+|---|---|---|
+| 已引用 | 被 digest 任一记录 `source.block_id` 或 candidate `sourceBlock.blockId` 引用 | 通过 |
+| 标题豁免 | `blockType: heading` | 通过（机械豁免，不强制引用章节标题） |
+| 显式跳过 | 在 `source-index.json` 的 `skipped_blocks` 中声明 `{block_id, reason}` | 通过（理由必填，供人审核对） |
+| 无处置 | 以上都不是 | WARN；`digest.status: ready_for_ingestion` 时升级为 ERROR |
+
+配套纪律：
+
+- `skipped_blocks` 的 `block_id` 必须存在且 `reason` 非空，否则报 `skipped_block_unknown` / `skipped_block_reason_missing`。
+- 已声明 skipped 的块若又被引用，报 `skipped_block_referenced`（WARN），提示清理失效声明。
+- 覆盖检查只回答"该引的引了没有"；"引得对不对"（语义准确性）永远需要人审，`explanation.html` 的原文对照栏是复核入口。
+- 不要为提高覆盖而拆碎引用凑数；合并消化多个块时，让记录的 excerpt 覆盖核心规范句即可，其余块用 skipped 声明去向。
+
+常见错误：`source_block_unaccounted`、`skipped_block_unknown`、`skipped_block_reason_missing`、`skipped_block_referenced`。
+
+## 3. candidate_refs
 
 以下 digest 记录必须填写 `candidate_refs` 字段，且在进入 package validation 前明确为恰好一个 candidate ID：
 
@@ -44,7 +64,7 @@
 
 常见错误：`schema_required`、`candidate_ref_cardinality`、`candidate_ref_missing`、`candidate_rule_obligation_missing`、`candidate_rule_statement_mismatch`、`digest_element_candidate_missing`、`candidate_objective_missing`、`candidate_artifact_missing`、`candidate_projection_drift`、`rule_comparator_conflict`。
 
-## 3. 层级与置信度
+## 4. 层级与置信度
 
 - `L1→L2→L3→L4→L5` 的父子只能相邻；L1 的 `parent_ref` 必须为 null。
 - L3 的 `owning_process_ref` 指向自己；L4/L5 指向最近的 L3 祖先；L1/L2 为 null。
@@ -59,7 +79,7 @@ $$
 
 常见错误：`hierarchy_non_adjacent_parent`、`owning_process_invalid`、`hierarchy_confidence_not_conservative`、`inferred_hierarchy_not_full_review`、`process_*_missing`。
 
-## 4. candidates 层级投影
+## 5. candidates 层级投影
 
 每个流程 proposal 必须与 digest 同 ID、同 rdfType，并在 `properties` 中包含：
 
@@ -77,7 +97,7 @@ Package validator 会调用同一正向投影逻辑，对完整 candidates 结�
 
 Validator 还会对原文、规范化 requirement 和 parameter 中可无歧义定位的显式数值比较符做一致性检查。例如“700 元以上”必须保持 `GE`，“超过 700 元”必须保持 `GT`；自然语言转写或参数改变边界语义时报 `rule_comparator_conflict`。复杂表格的完整条件覆盖仍需按原子事实清单人工复核，不能仅依赖该词法门禁。
 
-## 5. Artifact 双向一致
+## 6. Artifact 双向一致
 
 - `artifact.produced_by` 中的元素必须在自己的 `output_artifact_refs` 回指该 Artifact。
 - `artifact.consumed_by` 中的元素必须在自己的 `input_artifact_refs` 回指该 Artifact。
@@ -85,7 +105,7 @@ Validator 还会对原文、规范化 requirement 和 parameter 中可无歧义�
 
 常见错误：`artifact_output_not_reciprocal`、`artifact_input_not_reciprocal`、`candidate_*_projection_missing`。
 
-## 6. flow_edges 与 transition
+## 7. flow_edges 与 transition
 
 允许的 `edge_kind`：
 
@@ -117,7 +137,7 @@ transition 的固定字段为：
 
 常见错误：`flow_edge_cross_process`、`candidate_transition_projection_missing`、`candidate_transition_kind_mismatch`、`transition_main_edge_duplicate`。
 
-## 7. parameter.target
+## 8. parameter.target
 
 投影前，digest 的 rule `parameters[]` 和 flow edge `condition_parameters[]` 每项必须至少包含：
 
@@ -139,7 +159,7 @@ Candidates 0.3.0 的单文件 Schema 没有把 `target` 标成必填，但 Polic
 
 常见错误：`parameter_shape_invalid`、`parameter_target_missing`。
 
-## 8. ready_for_ingestion
+## 9. ready_for_ingestion
 
 当 `digest.status` 为 `ready_for_ingestion` 时：
 
@@ -149,13 +169,13 @@ Candidates 0.3.0 的单文件 Schema 没有把 `target` 标成必填，但 Polic
 
 结构校验通过不等于可以入库；人工审核状态必须真实。
 
-## 9. digest.md
+## 10. digest.md
 
 必须包含文件身份、核心规则、流程节点、RACI、风险控制、问题建议和流程图章节，并呈现所有规则、流程元素、目标、Artifact、边、RACI、风险、控制和问题 ID。
 
 不要手写维护。使用 `generate-policy-digest-md.mjs` 从最终 digest 生成；默认写出并列的 `digest.generated.md`，复核后用 `--in-place` 覆盖并自动备份，CI 可用 `--check` 检测漂移。
 
-## 10. 大量错误的处理顺序
+## 11. 大量错误的处理顺序
 
 先处理错误摘要中数量最多的 code，再重新运行校验：
 

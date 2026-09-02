@@ -112,12 +112,12 @@ function markdown(data) {
   return `# 供应商管理制度解构\n\n## 文件身份表\n${source.doc_id}\n\n## 核心规则表\nR-001\n\n## 流程节点表\n${ids}\n\n## RACI 责任矩阵\n${ids}\n\n## 风险控制矩阵\n\n## 制度问题及优化建议清单\n\n## 端到端泳道流程图\n`;
 }
 
-function writePackage(name, digestData, candidateData = candidates()) {
+function writePackage(name, digestData, candidateData = candidates(), parsedData = parsed(), sourceIndexData = {}) {
   const directory = join(root, name); mkdirSync(directory, { recursive: true });
-  writeFileSync(join(directory, 'normalized.parsed.json'), JSON.stringify(parsed(), null, 2));
+  writeFileSync(join(directory, 'normalized.parsed.json'), JSON.stringify(parsedData, null, 2));
   writeFileSync(join(directory, 'digest.json'), JSON.stringify(digestData, null, 2));
   writeFileSync(join(directory, 'candidates.json'), JSON.stringify(candidateData, null, 2));
-  writeFileSync(join(directory, 'source-index.json'), '{}'); writeFileSync(join(directory, 'digest.md'), markdown(digestData));
+  writeFileSync(join(directory, 'source-index.json'), JSON.stringify(sourceIndexData, null, 2)); writeFileSync(join(directory, 'digest.md'), markdown(digestData));
   return directory;
 }
 
@@ -161,6 +161,31 @@ try {
   const missingL3ResponsibleCandidates = projectDeterministicCandidates(missingL3ResponsibleDigest, initialized);
   const missingL3ResponsibleDirectory = writePackage('missing-l3-responsible', missingL3ResponsibleDigest, missingL3ResponsibleCandidates);
   assert.ok(validatePackage(missingL3ResponsibleDirectory).issues.some((item) => item.code === 'raci_responsible_missing'));
+
+  const coverageParsed = parsed();
+  coverageParsed.blocks.push(
+    { blockId: 'b-900', blockType: 'clause', text: '第九十条 本制度由采购部负责解释。', anchor: { blockPath: 'ch9/art90', charStart: 100, charEnd: 118, pageHint: 3, excerpt: '本制度由采购部负责解释' }, clauseRef: { number: '第九十条', index: 90 }, parseConfidence: 0.99, needsVerification: false },
+    { blockId: 'b-h1', blockType: 'heading', text: '第一章 总则', anchor: { blockPath: 'ch1', charStart: 0, charEnd: 5, pageHint: 1, excerpt: '第一章 总则' }, headingLevel: 1, parseConfidence: 0.99, needsVerification: false },
+  );
+  coverageParsed.coverage.blockCount = { estimated: 3, parsed: 3 };
+  const unaccountedDirectory = writePackage('coverage-unaccounted', validDigest, initialized, coverageParsed);
+  const unaccountedIssues = validatePackage(unaccountedDirectory).issues.filter((item) => item.code === 'source_block_unaccounted');
+  assert.equal(unaccountedIssues.length, 1);
+  assert.equal(unaccountedIssues[0].severity, 'WARN');
+  assert.ok(unaccountedIssues[0].message.includes('b-900') && unaccountedIssues[0].message.includes('负责解释'));
+  const readyDigest = structuredClone(validDigest);
+  readyDigest.status = 'ready_for_ingestion';
+  const readyDirectory = writePackage('coverage-ready', readyDigest, initialized, coverageParsed);
+  const readyUnaccounted = validatePackage(readyDirectory).issues.filter((item) => item.code === 'source_block_unaccounted');
+  assert.equal(readyUnaccounted.length, 1);
+  assert.equal(readyUnaccounted[0].severity, 'ERROR');
+  const skippedDirectory = writePackage('coverage-skipped', validDigest, initialized, coverageParsed, { skipped_blocks: [{ block_id: 'b-900', reason: '解释权归属条款，不产生流程规则' }] });
+  assert.ok(!validatePackage(skippedDirectory).issues.some((item) => item.code === 'source_block_unaccounted'));
+  const badSkippedDirectory = writePackage('coverage-bad-skipped', validDigest, initialized, coverageParsed, { skipped_blocks: [{ block_id: 'b-999', reason: '' }, { block_id: source.block_id, reason: '误声明已引用块' }] });
+  const badSkippedCodes = validatePackage(badSkippedDirectory).issues;
+  assert.ok(badSkippedCodes.some((item) => item.code === 'skipped_block_unknown'));
+  assert.ok(badSkippedCodes.some((item) => item.code === 'skipped_block_reason_missing'));
+  assert.ok(badSkippedCodes.some((item) => item.code === 'skipped_block_referenced' && item.severity === 'WARN'));
 
   const generatedMarkdown = renderPolicyDigestMarkdown(validDigest);
   for (const id of ['R-001', 'PROC-SCREENING', 'OBJ-SCREENING', 'ART-CANDIDATE-LIST', 'EDGE-SCREENING-001', 'RA-PROC-SCREENING-R']) assert.ok(generatedMarkdown.includes(id));
@@ -340,6 +365,17 @@ try {
   assert.ok(explanationHtml.includes('id="roles-matrix"') || explanationHtml.includes("id='roles-matrix'") || explanationHtml.includes('roles-matrix'), '应包含 RACI 矩阵容器');
   assert.ok(explanationHtml.includes('trace-matrix'), '应包含规则风控矩阵容器');
   assert.ok(explanationHtml.includes('全部展开') && explanationHtml.includes('全部折叠'), '应包含折叠控制');
+  const coverageSkippedDirectory = writePackage('coverage-skipped-explanation', validDigest, initialized, coverageParsed, { skipped_blocks: [{ block_id: 'b-900', reason: '解释权归属条款，不产生流程规则' }] });
+  const coverageExplanation = generateExplanation(coverageSkippedDirectory);
+  const coverageByBlockId = new Map(coverageExplanation.model.source_blocks.map((item) => [item.block_id, item]));
+  assert.equal(coverageByBlockId.get('b-001').coverage, 'referenced');
+  assert.equal(coverageByBlockId.get('b-900').coverage, 'skipped');
+  assert.equal(coverageByBlockId.get('b-h1').coverage, 'exempt');
+  const coverageExplanationHtml = readFileSync(coverageExplanation.outputPath, 'utf8');
+  assert.ok(coverageExplanationHtml.includes('已声明跳过'));
+  const unaccountedExplanation = generateExplanation(unaccountedDirectory);
+  assert.equal(unaccountedExplanation.model.source_blocks.find((item) => item.block_id === 'b-900').coverage, 'unaccounted');
+  assert.ok(readFileSync(unaccountedExplanation.outputPath, 'utf8').includes('未被消化'));
 
   const invalidDigest = structuredClone(validDigest);
   invalidDigest.process_elements.find((x) => x.element_id === 'ACT-CERT-APPROVAL').owning_process_ref = 'PROC-SCREENING';

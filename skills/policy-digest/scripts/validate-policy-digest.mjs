@@ -204,6 +204,8 @@ function normalizedText(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
+const COVERAGE_EXEMPT_BLOCK_TYPES = new Set(['heading']);
+
 const COMPARATOR_WORDS = new Map([
   ['以上', 'GE'], ['不低于', 'GE'], ['不少于', 'GE'], ['至少', 'GE'],
   ['超过', 'GT'], ['大于', 'GT'],
@@ -320,6 +322,38 @@ function validateAnchors(digest, candidates, parsed, issues) {
   };
   for (const item of collectSources(digest)) check(item.source, item.pointer);
   (candidates.candidates || []).forEach((candidate, index) => check(candidate.sourceBlock, `candidates/${index}/sourceBlock`));
+}
+
+function validateSourceCoverage(parsed, digest, candidates, sourceIndex, issues) {
+  const referenced = new Set();
+  for (const item of collectSources(digest)) {
+    const blockId = item.source.block_id ?? item.source.blockId;
+    if (blockId) referenced.add(blockId);
+  }
+  for (const candidate of candidates.candidates || []) {
+    const blockId = candidate.sourceBlock?.blockId ?? candidate.sourceBlock?.block_id;
+    if (blockId) referenced.add(blockId);
+  }
+  const blocks = new Map((parsed.blocks || []).map((block) => [block.blockId, block]));
+  const skipped = new Map();
+  for (const [index, entry] of (sourceIndex?.skipped_blocks || []).entries()) {
+    const pointer = `source-index/skipped_blocks/${index}`;
+    const blockId = entry?.block_id;
+    if (!blockId || !blocks.has(blockId)) addIssue(issues, 'ERROR', 'skipped_block_unknown', `skipped_blocks 引用不存在的 block：${blockId || '<empty>'}`, pointer);
+    if (typeof entry?.reason !== 'string' || !entry.reason.trim()) addIssue(issues, 'ERROR', 'skipped_block_reason_missing', 'skipped_blocks 每项必须给出非空 reason', pointer);
+    if (blockId) skipped.set(blockId, entry?.reason || '');
+  }
+  const ready = digest.status === 'ready_for_ingestion';
+  for (const block of parsed.blocks || []) {
+    if (referenced.has(block.blockId)) {
+      if (skipped.has(block.blockId)) addIssue(issues, 'WARN', 'skipped_block_referenced', `block ${block.blockId} 已被 digest/candidate 引用，却仍声明 skipped；请清理失效声明`, 'source-index/skipped_blocks');
+      continue;
+    }
+    if (skipped.has(block.blockId)) continue;
+    if (COVERAGE_EXEMPT_BLOCK_TYPES.has(block.blockType)) continue;
+    const snippet = normalizedText(block.text).slice(0, 40);
+    addIssue(issues, ready ? 'ERROR' : 'WARN', 'source_block_unaccounted', `原文块未被任何 digest/candidate 记录引用，也未在 source-index 声明跳过：${block.blockId}（${block.anchor?.blockPath || '?'}）${snippet ? `「${snippet}」` : ''}`, `parsed/blocks/${block.blockId}`);
+  }
 }
 
 function validateUniqueIds(records, field, pointer, issues) {
@@ -599,7 +633,7 @@ export function validatePackage(inputPath) {
   const digest = loadJson(paths.digest, issues, 'digest');
   const parsed = loadJson(paths.parsed, issues, 'parsed');
   const candidates = loadJson(paths.candidates, issues, 'candidates');
-  loadJson(paths.sourceIndex, issues, 'source_index');
+  const sourceIndex = loadJson(paths.sourceIndex, issues, 'source_index');
   const hints = parsed ? collectDiagnosticHints(parsed) : [];
 
   if (digest) {
@@ -612,6 +646,7 @@ export function validatePackage(inputPath) {
   if (candidates) validateBySchema(candidates, loadSchema('candidates-0.3.0.schema.json'), loadSchema('candidates-0.3.0.schema.json'), 'candidates', issues);
   if (digest && parsed && candidates) {
     validateAnchors(digest, candidates, parsed, issues);
+    validateSourceCoverage(parsed, digest, candidates, sourceIndex, issues);
     const candidateInfo = validateCandidateReferences(candidates, parsed, issues);
     validateDigestReferences(digest, candidateInfo, issues);
     if (!issues.some((item) => item.severity === 'ERROR')) validateCandidateProjection(digest, candidates, issues);

@@ -29,5 +29,23 @@
     "block_count": 49,
     "clause_sequence_status": "OK",
     "unrecognized_regions": 1
-  }
+  },
+  "skipped_blocks": [
+    { "block_id": "b-003", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-004", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-005", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-006", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-007", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-015", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-017", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-018", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-019", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-029", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-034", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-035", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-036", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-038", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-040", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" },
+    { "block_id": "b-043", "reason": "脱敏占位块，不承担制度规则，合成 fixture 未纳入解构" }
+  ]
 }

@@ -140,6 +140,7 @@ export function buildScaffold({ caseId, docId, tenant = null, title = '待解构
     schema_version: 'starter-0.1.0', doc_id: docId,
     warning: '脚手架占位来源，必须替换为真实文件路径、哈希、解析版本和覆盖信息。',
     sources: [{ path: 'raw/REPLACE-WITH-SOURCE', sha256: '0'.repeat(64), role: 'main', acquired_at: generatedAt }],
+    skipped_blocks: [],
   };
   return { parsed, digest, candidates, sourceIndex, markdown: renderPolicyDigestMarkdown(digest) };
 }

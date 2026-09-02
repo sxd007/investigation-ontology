@@ -206,6 +206,7 @@ node skills/policy-digest/scripts/validate-policy-digest.mjs cases/{case_id}/pol
 
 - 三层 JSON 的版本化 Schema；
 - digest/candidates 到 normalized parsed 的锚点可定位性；
+- 原文块反向覆盖：parsed 的每个非标题块必须被 digest/candidate 引用，或在 `source-index.json` 的 `skipped_blocks` 中显式声明跳过及理由；无处置块报 WARN，`ready_for_ingestion` 时升级为 ERROR；
 - ID 唯一性及 parameter、transition、alignment、流程目标、Artifact、RACI、candidate 引用完整性；
 - `candidates.json` 与 digest 正向投影结果完整一致，包括 proposal、parameter、transition、排序和确定性状态；
 - 原文、规范化 requirement 与结构化 parameter 的显式数值比较符没有 `GE/GT/LE/LT` 冲突；

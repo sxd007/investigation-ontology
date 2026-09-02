@@ -208,13 +208,14 @@ transition 固定使用 `localId`、`fromActivity`、`toActivity`、`transitionK
 运行 `../scripts/validate-policy-digest.mjs <package-directory>`。校验至少覆盖：
 
 1. 三层 JSON Schema、ID 唯一性和锚点可定位性；
-2. 相邻父层、层级无环、L3 归属、置信度保守性、推断层级全审；
-3. 已解析 L3 的活动、目标、入口和输出完整性；
-4. 目标与 Artifact proposal、原生关系投影及 Artifact 双向引用；
-5. 同一 L3 内流转、main/transition 单源纪律及 candidates 投影；
-6. RACI、风险、控制、规则和 candidate 引用完整性；
-7. `ready_for_ingestion` 不含 blocking、unresolved 或 proposed；
-8. `digest.md` 包含六表一图章节并呈现全部结构化记录 ID。
-9. 导览生成器可从已校验包生成单文件 HTML，所有可审阅记录保留来源键。
+2. 原文块反向覆盖：每个非标题 parsed 块已被引用或在 `skipped_blocks` 显式声明跳过（`ready_for_ingestion` 时无处置块阻止交付）；
+3. 相邻父层、层级无环、L3 归属、置信度保守性、推断层级全审；
+4. 已解析 L3 的活动、目标、入口和输出完整性；
+5. 目标与 Artifact proposal、原生关系投影及 Artifact 双向引用；
+6. 同一 L3 内流转、main/transition 单源纪律及 candidates 投影；
+7. RACI、风险、控制、规则和 candidate 引用完整性；
+8. `ready_for_ingestion` 不含 blocking、unresolved 或 proposed；
+9. `digest.md` 包含六表一图章节并呈现全部结构化记录 ID。
+10. 导览生成器可从已校验包生成单文件 HTML，所有可审阅记录保留来源键。
 
 ERROR 阻止交付；WARN 必须在人审说明中处置。

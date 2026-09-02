@@ -33,7 +33,7 @@ function digestSource(source = {}) {
   };
 }
 
-export function buildExplanationModel(digest, parsed, candidates = null) {
+export function buildExplanationModel(digest, parsed, candidates = null, sourceIndex = null) {
   if (digest.digest_schema_version !== '0.2.0') throw new Error(`仅支持 Policy Digest 0.2.0，实际为 ${digest.digest_schema_version}`);
   const elements = digest.process_elements || [];
   const byElement = new Map(elements.map((item) => [item.element_id, item]));
@@ -41,6 +41,7 @@ export function buildExplanationModel(digest, parsed, candidates = null) {
   for (const item of elements) if (item.parent_ref && children.has(item.parent_ref)) children.get(item.parent_ref).push(item.element_id);
   const sourceBlocks = (parsed.blocks || []).map((block) => ({
     block_id: block.blockId,
+    block_type: block.blockType || '',
     block_path: block.anchor?.blockPath || '',
     clause_ref: block.clauseRef?.number || '',
     page_hint: block.anchor?.pageHint ?? null,
@@ -87,6 +88,15 @@ export function buildExplanationModel(digest, parsed, candidates = null) {
   });
   records.push(...candidateRecords);
 
+  const referencedBlockIds = new Set(records.map((item) => item.source?.block_id).filter(Boolean));
+  const skippedBlocks = new Map((sourceIndex?.skipped_blocks || []).map((entry) => [entry?.block_id, entry?.reason || '']).filter(([id]) => id));
+  for (const block of sourceBlocks) {
+    if (referencedBlockIds.has(block.block_id)) block.coverage = 'referenced';
+    else if (skippedBlocks.has(block.block_id)) { block.coverage = 'skipped'; block.skipped_reason = skippedBlocks.get(block.block_id); }
+    else if (block.block_type === 'heading') block.coverage = 'exempt';
+    else block.coverage = 'unaccounted';
+  }
+
   return {
     meta: { digest_id: digest.digest_id, status: digest.status, generated_at: digest.generated_at, title: digest.document_identity?.title || parsed.document?.identity?.title || digest.digest_id, doc_id: digest.document_identity?.doc_id || parsed.document?.docId, schema_version: digest.digest_schema_version },
     identity: digest.document_identity,
@@ -122,9 +132,10 @@ export function generateExplanation(packageDirectory, outputPath = null) {
   const digestPath = join(directory, 'digest.json');
   const parsedPath = join(directory, 'normalized.parsed.json');
   const candidatesPath = join(directory, 'candidates.json');
+  const sourceIndexPath = join(directory, 'source-index.json');
   if (!existsSync(digestPath)) throw new Error(`缺少 ${digestPath}`);
   if (!existsSync(parsedPath)) throw new Error(`缺少 ${parsedPath}`);
-  const model = buildExplanationModel(readJson(digestPath), readJson(parsedPath), existsSync(candidatesPath) ? readJson(candidatesPath) : null);
+  const model = buildExplanationModel(readJson(digestPath), readJson(parsedPath), existsSync(candidatesPath) ? readJson(candidatesPath) : null, existsSync(sourceIndexPath) ? readJson(sourceIndexPath) : null);
   const target = resolve(outputPath || join(directory, 'explanation.html'));
   writeFileSync(target, renderExplanationHtml(model), 'utf8');
   return { outputPath: target, model };

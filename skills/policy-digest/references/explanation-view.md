@@ -105,6 +105,7 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <packag
 - 上下文块保持可见，允许用户继续滑动查看前后文；
 - 在高亮块下方展示结构化说明：记录类型、ID、通用映射说明；对流程元素另显示分层依据和置信度分解；
 - 每个原文块显示 `clause_ref`、`block_path`、`block_id`、`page_hint`、parsed 完整文本（不仅是 digest 短 excerpt）、`parseConfidence` 和 `needsVerification`；
+- 每个原文块按覆盖状态标记：未被任何记录引用且未声明跳过的非标题块显示「未被消化」角标，已在 `skipped_blocks` 声明的块显示「已声明跳过」角标及理由；角标只提示覆盖状态，不做语义正确性判断；
 - 提供「清除定位」复位高亮；搜索时弱化非匹配块而非删除全文。
 
 定位优先顺序为精确来源键 `doc_id + block_id + block_path`，回退可使用同一 `block_id`。不得用名称相似度自动替换来源。
