@@ -1,0 +1,71 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/scripts/run-hook.mjs\" session-start",
+            "timeout": 5
+          }
+        ],
+        "description": "Check config status, count active cases, give actionable prompt (cross-platform via node)",
+        "id": "session:start:status"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "^(Write|Edit|MultiEdit|write_to_file|replace_in_file|multi_replace_string_in_file)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/scripts/run-hook.mjs\" pre-write-naming",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/scripts/run-hook.mjs\" validate-action",
+            "timeout": 15,
+            "statusMessage": "校验本体 Action 前置条件…"
+          }
+        ],
+        "description": "Remind naming conventions + enforce ontology Action preconditions (cross-platform via node; scripts early-exit on non global_ontology/entities/ global_ontology/relations/ paths)",
+        "id": "pre:write:case-file-guard"
+      },
+      {
+        "matcher": "mcp_call_tool",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/scripts/run-hook.mjs\" mcp-ocr-guard",
+            "timeout": 5
+          }
+        ],
+        "description": "OCR MCP guard: detects direct paddleOCR-mcp calls and reminds to use document-parsing skill.",
+        "id": "pre:mcp:ocr-skill-guard"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "^(Write|Edit|MultiEdit|write_to_file|replace_in_file|multi_replace_string_in_file|delete_file)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/scripts/run-hook.mjs\" check-ref",
+            "timeout": 10,
+            "statusMessage": "检查 ontology_ref 引用完整性…"
+          },
+          {
+            "type": "command",
+            "command": "node \"${CODEBUDDY_PLUGIN_ROOT}/scripts/run-hook.mjs\" validate-case-file",
+            "timeout": 15,
+            "statusMessage": "校验案件 Registry 与节点结构…"
+          }
+        ],
+        "description": "Check ontology_ref and validate evidence_registry.json / nodes frontmatter after case-file writes (cross-platform via node)",
+        "id": "post:write:ontology-ref-check"
+      }
+    ]
+  }
+}

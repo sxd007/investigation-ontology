@@ -73,7 +73,8 @@
       "kind": "platform",
       "description": "平台基线配置 — MCP 配置、包管理器设置、兼容层",
       "paths": [
-        "mcp-configs"
+        "mcp-configs",
+        ".workbuddy-plugin"
       ],
       "targets": [
         "claude",

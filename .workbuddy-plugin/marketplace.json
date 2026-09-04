@@ -1,0 +1,35 @@
+{
+  "name": "investigation-ontology",
+  "owner": {
+    "name": "Alpha Shen",
+    "url": "https://github.com/sxd007"
+  },
+  "description": "反舞弊调查全流程插件市场 — 调查方法论、舞弊分类、证据链管理、访谈分析、写作报告、审计技术",
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "investigation-ontology",
+      "source": "./",
+      "description": "反舞弊调查全流程技能包 — 调查哲学方法论、舞弊类型与调查方案、证据链与底稿管理、访谈笔录分析、写作技巧、审计技术、流程分析、结果可视化",
+      "version": "1.0.0",
+      "author": {
+        "name": "Alpha Shen",
+        "url": "https://github.com/sxd007"
+      },
+      "homepage": "https://github.com/sxd007/investigation-ontology",
+      "repository": "https://github.com/sxd007/investigation-ontology",
+      "license": "Apache-2.0",
+      "keywords": [
+        "investigation",
+        "fraud",
+        "forensic",
+        "audit",
+        "evidence",
+        "interview",
+        "writing"
+      ],
+      "category": "workflow",
+      "strict": false
+    }
+  ]
+}
