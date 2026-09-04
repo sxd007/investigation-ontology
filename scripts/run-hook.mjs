@@ -26,9 +26,11 @@ import { fileURLToPath } from 'node:url';
 import os from 'node:os';
 
 const hook = process.argv[2];
-// 优先用平台注入的环境变量；都没有时从脚本自身位置推导（scripts/ 的上级即插件根目录）
+// 优先用平台注入的环境变量（引擎对 .codebuddy-plugin/.workbuddy-plugin/.claude-plugin
+// 统一注入 CODEBUDDY_PLUGIN_ROOT/CLAUDE_PLUGIN_ROOT；WORKBUDDY_PLUGIN_ROOT 为防御性预留）；
+// 都没有时从脚本自身位置推导（scripts/ 的上级即插件根目录）
 const __scriptDir = dirname(fileURLToPath(import.meta.url));
-const pluginRoot = process.env.CODEBUDDY_PLUGIN_ROOT || process.env.CLAUDE_PLUGIN_ROOT || join(__scriptDir, '..');
+const pluginRoot = process.env.WORKBUDDY_PLUGIN_ROOT || process.env.CODEBUDDY_PLUGIN_ROOT || process.env.CLAUDE_PLUGIN_ROOT || join(__scriptDir, '..');
 const isWin = process.platform === 'win32';
 
 function readStdin() {
@@ -119,7 +121,7 @@ function injectHandbook() {
 
   // ② 平台检测 → 确定目标上下文文件
   let targetFile;
-  if (process.env.CODEBUDDY_PLUGIN_ROOT) {
+  if (process.env.CODEBUDDY_PLUGIN_ROOT || process.env.WORKBUDDY_APP_NAME) { // WorkBuddy 经 WORKBUDDY_APP_NAME 识别，注入 CODEBUDDY.md
     targetFile = 'CODEBUDDY.md';
   } else if (process.env.CLAUDE_PLUGIN_ROOT) {
     targetFile = 'CLAUDE.md';
