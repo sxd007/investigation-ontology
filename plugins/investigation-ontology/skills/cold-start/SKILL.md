@@ -35,10 +35,12 @@ user-invocable: true
   # investigation-ontology workspace marker
   created_at: <当前时间 ISO 8601>
   created_by: cold-start
-  handbook_version: <读取插件 VERSION 文件内容>
+  handbook_version: <读取手册模板头部的 handbook-version 戳>
   ```
 
-- 若已存在 → 读取 `handbook_version` 与插件 VERSION 对比，落后则**提示**用户手册可刷新（不自动覆盖工作区定制）
+  模板路径：`${插件根}/project-templates/default/INVESTIGATION-HANDBOOK.md` 头部 `<!-- handbook-version: X.Y.Z -->`。手册版本独立于插件 VERSION（插件升级不等于手册变更）；模板无戳则跳过比对。
+
+- 若已存在 → 读取标记 `handbook_version` 与模板头部戳对比，落后则**提示**用户手册可刷新（不自动覆盖工作区定制）
 - SessionStart hook 只在存在此标记的工作区注入手册与提示，其余工作区完全静默
 
 ---

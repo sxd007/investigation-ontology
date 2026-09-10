@@ -1,3 +1,4 @@
+<!-- handbook-version: 1.0.0 -->
 # investigation-ontology 操作指南
 
 > 本文件指导 AI 在办理反舞弊调查案件时的操作方式——什么原则必须遵守、什么场景该调度什么能力。由插件分发到工作区根目录，SessionStart hook 自动全量注入 IDE 上下文文件。
