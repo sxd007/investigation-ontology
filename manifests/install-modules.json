@@ -6,7 +6,7 @@
       "kind": "rules",
       "description": "调查准则与规范 — 证据规则、保密协议、职业道德、工作底稿标准",
       "paths": [
-        "rules"
+        "plugins/investigation-ontology/rules"
       ],
       "targets": [
         "claude",
@@ -30,8 +30,8 @@
       "kind": "agents",
       "description": "核心子代理定义 — 调查规划师、证据分析师、访谈专家、报告撰写师",
       "paths": [
-        "agents",
-        "AGENTS.md"
+        "plugins/investigation-ontology/agents",
+        "plugins/investigation-ontology/AGENTS.md"
       ],
       "targets": [
         "claude",
@@ -55,7 +55,7 @@
       "kind": "commands",
       "description": "核心调查斜杠命令 — /investigate, /interview, /evidence, /report 等",
       "paths": [
-        "commands"
+        "plugins/investigation-ontology/commands"
       ],
       "targets": [
         "claude",
@@ -79,8 +79,13 @@
       "kind": "platform",
       "description": "平台基线配置 — MCP 配置、包管理器设置、兼容层",
       "paths": [
-        "mcp-configs",
-        ".workbuddy-plugin"
+        "plugins/investigation-ontology/mcp-configs",
+        ".workbuddy-plugin",
+        ".claude-plugin",
+        "plugins/investigation-ontology/.workbuddy-plugin",
+        "plugins/investigation-ontology/.codebuddy-plugin",
+        "plugins/investigation-ontology/.claude-plugin",
+        "plugins/investigation-ontology/.codex-plugin"
       ],
       "targets": [
         "claude",
@@ -104,7 +109,7 @@
       "kind": "skills",
       "description": "调查哲学与方法论 — 调查思维框架、假设检验、推理方法、认知偏差防控",
       "paths": [
-        "skills/investigation-foundation"
+        "plugins/investigation-ontology/skills/investigation-foundation"
       ],
       "targets": [
         "claude",
@@ -130,7 +135,7 @@
       "kind": "skills",
       "description": "舞弊分类与路由 — 基于 ACFE 分类框架匹配线索信号、路由到对应 fraud-<domain> 场景技能",
       "paths": [
-        "skills/fraud-classification"
+        "plugins/investigation-ontology/skills/fraud-classification"
       ],
       "targets": [
         "claude",
@@ -154,7 +159,7 @@
       "kind": "skills",
       "description": "调查技术参考 — 数字取证、OSINT公开信息检索、通讯分析、实地调查、监控技术、资产追踪等调查手段的方法论指导和选型建议",
       "paths": [
-        "skills/investigation-techniques"
+        "plugins/investigation-ontology/skills/investigation-techniques"
       ],
       "targets": [
         "claude",
@@ -178,7 +183,7 @@
       "kind": "skills",
       "description": "证据链管理 — 证据识别与收集、保全、链式保管、可采性评估、证据链可视化(推理链图/假设验证/治理状态)、电子证据保全。兼覆底稿编制规范与复核标准",
       "paths": [
-        "skills/evidence-management"
+        "plugins/investigation-ontology/skills/evidence-management"
       ],
       "targets": [
         "claude",
@@ -203,7 +208,7 @@
       "kind": "skills",
       "description": "访谈与问话分析 — 访谈策划、陈述分析（SCAN）、行为分析、笔录评估、证言可信度评估",
       "paths": [
-        "skills/interview-analysis"
+        "plugins/investigation-ontology/skills/interview-analysis"
       ],
       "targets": [
         "claude",
@@ -227,7 +232,7 @@
       "kind": "skills",
       "description": "调查数据分析与审计技术 — 当需要对交易/财务/日志数据做异常检测、趋势分析、Benford分析、关联分析、重复检测，或需要为调查假设寻找数据支持时使用",
       "paths": [
-        "skills/data-analysis"
+        "plugins/investigation-ontology/skills/data-analysis"
       ],
       "targets": [
         "claude",
@@ -251,7 +256,7 @@
       "kind": "skills",
       "description": "写作与报告技巧 — 调查底稿撰写、备忘录写作、调查报告写作、报告可视化呈现(报告图表/信息图/截屏编排)、故事化叙述",
       "paths": [
-        "skills/writing-reporting"
+        "plugins/investigation-ontology/skills/writing-reporting"
       ],
       "targets": [
         "claude",
@@ -275,7 +280,7 @@
       "kind": "skills",
       "description": "调查本体论 — Object/Link/Action 模型定义、Binding Protocol、建模最佳实践与 Action 治理规则",
       "paths": [
-        "skills/ontology"
+        "plugins/investigation-ontology/skills/ontology"
       ],
       "targets": [
         "claude",
@@ -299,9 +304,9 @@
       "kind": "skills",
       "description": "文档结构化解析 — 将原始文档（扫描件/PDF/图片）转化为结构化 parsed JSON，支持 OCR MCP 集成、格式感知路由、版本管理。输出供 evidence-management 和 ontology 消费。",
       "paths": [
-        "skills/document-parsing",
-        "schemas/document-types",
-        "docs/document-parsing-design.md"
+        "plugins/investigation-ontology/skills/document-parsing",
+        "plugins/investigation-ontology/schemas/document-types",
+        "plugins/investigation-ontology/docs/document-parsing-design.md"
       ],
       "targets": [
         "claude",
@@ -326,7 +331,7 @@
       "kind": "skills",
       "description": "调查流程与案件管理 — 案件生命周期管理、质量管控、团队协作、时间线管理、风险管理",
       "paths": [
-        "skills/case-management"
+        "plugins/investigation-ontology/skills/case-management"
       ],
       "targets": [
         "claude",
@@ -352,10 +357,10 @@
       "kind": "skills",
       "description": "调查 MCP 能力参考 — 当需要了解可用的 MCP 服务器类型及其能力、或需要判断某项调查任务是否可由 MCP 辅助完成时使用",
       "paths": [
-        "skills/mcp-integration",
-        "mcp-configs",
-        "project-templates/default/.mcp.json",
-        "docs/capability-surface-selection.md"
+        "plugins/investigation-ontology/skills/mcp-integration",
+        "plugins/investigation-ontology/mcp-configs",
+        "plugins/investigation-ontology/project-templates/default/.mcp.json",
+        "plugins/investigation-ontology/docs/capability-surface-selection.md"
       ],
       "targets": [
         "claude",
@@ -380,10 +385,10 @@
       "kind": "skills",
       "description": "首次设置向导 — 引导调查员完成团队配置、证据策略、集成检查。配置写入持久化路径，所有技能依赖此配置运行。",
       "paths": [
-        "skills/cold-start",
-        "commands/cold-start.md",
-        "config-templates",
-        "project-templates/default/INVESTIGATION-HANDBOOK.md"
+        "plugins/investigation-ontology/skills/cold-start",
+        "plugins/investigation-ontology/commands/cold-start.md",
+        "plugins/investigation-ontology/config-templates",
+        "plugins/investigation-ontology/project-templates/default/INVESTIGATION-HANDBOOK.md"
       ],
       "targets": [
         "claude",
@@ -407,7 +412,7 @@
       "kind": "skills",
       "description": "渠道舞弊调查 — 渠道销售特价订单场景：窜货、虚报终端客户、成本造假、拼单绑单、隐瞒渠道链路、隐瞒渠道利润。含六种渠道舞弊模式的参考信号库、调查切入点和访谈问题库。",
       "paths": [
-        "skills/fraud-channel"
+        "plugins/investigation-ontology/skills/fraud-channel"
       ],
       "targets": [
         "claude",
@@ -432,7 +437,7 @@
       "kind": "skills",
       "description": "费用报销舞弊调查 — 员工利用职务便利虚构、篡改、重复申报或不当归类的报销行为。覆盖信号识别、证据路径、数据分析方法和调查方案设计。",
       "paths": [
-        "skills/fraud-reimbursement"
+        "plugins/investigation-ontology/skills/fraud-reimbursement"
       ],
       "targets": [
         "claude",
@@ -457,7 +462,7 @@
       "kind": "skills",
       "description": "采购舞弊调查 — 采购全生命周期（需求→寻源→定标→签约→收货→付款）中的舞弊行为。覆盖围标串标、化整为零、参数定制、虚假供应商、虚假收货、截标等模式的信号识别与调查方法。",
       "paths": [
-        "skills/fraud-procurement"
+        "plugins/investigation-ontology/skills/fraud-procurement"
       ],
       "targets": [
         "claude",
@@ -482,7 +487,7 @@
       "kind": "skills",
       "description": "投标操纵（围标/串标）调查 — 投标方之间或与招标方合谋破坏竞争机制的各类行为。覆盖压标、陪标、轮标、市场划分、转包回补、信息泄露等模式的信号识别与调查方法。",
       "paths": [
-        "skills/fraud-bid-rigging"
+        "plugins/investigation-ontology/skills/fraud-bid-rigging"
       ],
       "targets": [
         "claude",
@@ -507,7 +512,7 @@
       "kind": "skills",
       "description": "知识产权舞弊调查 — 涵盖商业秘密窃取、竞业违规、专利侵权的调查方法。覆盖数据外泄检测、离职前行为链分析、竞业违约取证、专利侵权识别的信号识别与调查方案设计。",
       "paths": [
-        "skills/fraud-ip"
+        "plugins/investigation-ontology/skills/fraud-ip"
       ],
       "targets": [
         "claude",
@@ -532,7 +537,7 @@
       "kind": "skills",
       "description": "人力资源舞弊调查 — 覆盖虚假员工（Ghost Employee）、薪资操纵（Payroll Fraud）、佣金舞弊、招聘舞弊、履历造假、考勤舞弊、福利滥用等场景的信号识别与调查方法。",
       "paths": [
-        "skills/fraud-hr"
+        "plugins/investigation-ontology/skills/fraud-hr"
       ],
       "targets": [
         "claude",
@@ -557,7 +562,7 @@
       "kind": "skills",
       "description": "伪造印章调查 — 私刻、变造、盗用、冒用公司公章或授权章的调查方法。覆盖印章真伪识别、印文比对方法、使用痕迹追溯、伪造目的判断。",
       "paths": [
-        "skills/fraud-fake-chop"
+        "plugins/investigation-ontology/skills/fraud-fake-chop"
       ],
       "targets": [
         "claude",
@@ -582,7 +587,7 @@
       "kind": "skills",
       "description": "利益冲突舞弊调查 — 员工在商业决策中存在未披露的个人利益，损害公司利益的各类场景。覆盖采购冲突、销售冲突、裙带关系、双重角色、回扣关联的信号识别与调查方法。",
       "paths": [
-        "skills/fraud-conflicts-of-interest"
+        "plugins/investigation-ontology/skills/fraud-conflicts-of-interest"
       ],
       "targets": [
         "claude",
@@ -607,7 +612,7 @@
       "kind": "skills",
       "description": "订单执行差异分析 — 多维度对比合同流、货物流、资金流的申报记录与实际执行记录，输出链路对比可视化HTML与结构化差异报告。跨场景通用工具。",
       "paths": [
-        "skills/order-execution-variance-analysis"
+        "plugins/investigation-ontology/skills/order-execution-variance-analysis"
       ],
       "targets": [
         "claude",
@@ -632,7 +637,7 @@
       "kind": "skills",
       "description": "调查场景记忆系统 — 当案件中出现“先记下来”“暂缓、以后再看”“感觉有问题但证据还不够”等讨论分支、疑虑、直觉或非正式观察时，静默记录为可查询的过程档案；也用于回答“之前关于 X 有什么记录”。不干扰案件推进，不污染证据链",
       "paths": [
-        "skills/investigation-memory"
+        "plugins/investigation-ontology/skills/investigation-memory"
       ],
       "targets": [
         "claude",
@@ -657,7 +662,7 @@
       "kind": "skills",
       "description": "案件回顾与复盘技术 — 完结案件的多维度复盘框架，聚焦调查员能力、经验、逻辑与方法。由用户显式触发，独立于案件调查流程，目标为提升调查员觉知",
       "paths": [
-        "skills/case-retrospective"
+        "plugins/investigation-ontology/skills/case-retrospective"
       ],
       "targets": [
         "claude",
@@ -683,7 +688,7 @@
       "kind": "skills",
       "description": "企业制度流程解构 — 将制度、办法、流程、授权文件及附件转化为带原文锚点的规则、流程、RACI、风险控制、问题清单与本体 candidates 入库包",
       "paths": [
-        "skills/policy-digest"
+        "plugins/investigation-ontology/skills/policy-digest"
       ],
       "targets": [
         "claude",
