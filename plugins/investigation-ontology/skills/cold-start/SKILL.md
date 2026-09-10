@@ -25,6 +25,24 @@ user-invocable: true
 
 ---
 
+## Phase 0：标记工作区（每次运行首先执行）
+
+在状态检测之前，先确保当前工作区已标记为调查工作区：
+
+- 若 `.efio-workspace` 不存在 → **立即创建**（意图声明即生效，向导中断也保留标记）：
+
+  ```
+  # investigation-ontology workspace marker
+  created_at: <当前时间 ISO 8601>
+  created_by: cold-start
+  handbook_version: <读取插件 VERSION 文件内容>
+  ```
+
+- 若已存在 → 读取 `handbook_version` 与插件 VERSION 对比，落后则**提示**用户手册可刷新（不自动覆盖工作区定制）
+- SessionStart hook 只在存在此标记的工作区注入手册与提示，其余工作区完全静默
+
+---
+
 ## 状态检测（入口）
 
 每次运行时，先解析 `{PLUGIN_CONFIG_DIR}`（见 `config-templates/config-loader.md § 平台路径`），再检查四种状态：

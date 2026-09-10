@@ -60,6 +60,24 @@ function runScript(base) {
 
 // ── SessionStart：检查配置状态、统计活跃案件、给出可执行提示 ──────
 function sessionStart() {
+  // ── 工作区隔离（opt-in）──
+  // 仅调查工作区生效：根目录需存在 .efio-workspace 标记（由 cold-start Phase 0
+  // 或 /investigate INIT 创建）。无标记空间完全静默 — 不打印提示、不部署手册、
+  // 不注入 IDE 上下文文件，避免插件干扰非调查场景（面试、国际业务等工作区）。
+  if (!existsSync(join(process.cwd(), '.efio-workspace'))) {
+    // 遗留调查空间迁移引导：有案件结构（cases/<案>/meta.json）但无标记 → 一行提示，不注入
+    try {
+      const casesDir = join(process.cwd(), 'cases');
+      if (existsSync(casesDir)) {
+        const legacy = readdirSync(casesDir, { withFileTypes: true })
+          .some((d) => d.isDirectory() && existsSync(join(casesDir, d.name, 'meta.json')));
+        if (legacy) {
+          console.log('[investigation-ontology] 检测到案件目录但无 .efio-workspace 标记 — 运行 /efio:cold-start 激活调查工具箱（历史调查空间迁移）');
+        }
+      }
+    } catch { /* ignore */ }
+    return;
+  }
   // CodeBuddy: ~/.codebuddy/plugins/config/efio/team-profile.md
   // Claude Code: ~/.claude/plugins/config/cc-investigation/team-profile.md
   const cfgCodeBuddy = join(os.homedir(), '.codebuddy', 'plugins', 'config', 'efio', 'team-profile.md');

@@ -43,6 +43,7 @@ description: 调查入口命令 — 新案立案、续案回顾、阶段导航�
    - 如信息不足，主动追问，不自行猜测
 
 2. **创建案件档案**
+   - 若工作区根无 `.efio-workspace` 标记 → 先创建（内容含 `created_at` / `created_by: investigate` / `handbook_version`，读取插件 VERSION），并告知用户"本工作区已标记为调查工作区"
    - 创建 `cases/{case_id}/` 目录
    - 创建 `cases/{case_id}/nodes/` 目录（分析推理层）
    - 创建 `cases/{case_id}/raw/` 目录（原始证据文件存放）
