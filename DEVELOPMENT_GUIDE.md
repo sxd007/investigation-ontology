@@ -2,13 +2,14 @@
 
 本文档是 `cc-investigation-ontology` 插件的**唯一开发方法论权威来源**。所有开发规范、架构原则、编写标准、操作流程均在此定义。
 
-**跨平台说明：** 本指南适用于所有三个平台（Claude Code、CodeBuddy、Codex）。各平台的特定配置差异（hooks 位置、环境变量、入口文件等）见对应的平台文件：`CLAUDE.md` / `CODEBUDDY.md` / `CODEX.md`。跨平台架构细节见 [`docs/ARCHITECTURE_NOTES.md`](docs/ARCHITECTURE_NOTES.md)。
+**跨平台说明：** 本指南适用于所有四个平台（Claude Code、CodeBuddy、Codex、WorkBuddy）。各平台的特定配置差异（hooks 位置、环境变量、入口文件等）见对应的平台文件：`CLAUDE.md` / `CODEBUDDY.md` / `CODEX.md`（工作区级，由 hook 注入，不在仓库内）。跨平台架构细节见 [`docs/ARCHITECTURE_NOTES.md`](docs/ARCHITECTURE_NOTES.md)。
 
 > **⚠️ 开发前必读：** 修改平台配置（hooks、plugin.json、MCP）前，**务必查阅对应平台的官方文档**，不要凭推测修改。各平台规范有差异，错误配置会导致 hooks 静默失效。
 >
 > | 平台 | 官方文档 | 关键参考 |
 > |------|---------|---------|
 > | **CodeBuddy** | [插件开发指南](https://www.codebuddy.cn/docs/zh/cli/plugins) · [插件参考文档](https://www.codebuddy.cn/docs/cli/plugins-reference) · [Hook 参考指南](https://www.codebuddy.cn/docs/zh/cli/hooks) · [工具参考](https://www.codebuddy.cn/docs/cli/tools-reference) | hooks 必须在 `hooks/hooks.json`（插件根目录）；只有 `plugin.json` 在 `.codebuddy-plugin/` 内；matcher 用规范工具名 `Write\|Edit\|MultiEdit`；Windows 强制 Git Bash 执行 |
+> | **WorkBuddy** | 同 CodeBuddy 文档（`workbuddy.cn` 与 `codebuddy.cn` 同源） | 与 CodeBuddy 同一引擎：三候选清单目录通吃、hook 执行时引擎统一注入 `${CODEBUDDY_PLUGIN_ROOT}`、原生读取 `CODEBUDDY.md`、用户数据目录 `~/.h3caiwork/`；GUI 插件技能仅 AI 可见（用户侧靠 `/efio:*` 命令） |
 > | **Claude Code** | [Claude Code 文档](https://docs.anthropic.com/en/docs/claude-code) | `.claude-plugin/` 为元数据目录 |
 > | **Codex** | [Codex 文档](https://github.com/openai/codex) | `.codex-plugin/` 为元数据目录 |
 
@@ -132,57 +133,42 @@ skills/evidence-management/SKILL.md
 
 ## 三、目录结构
 
+市场/套件两层对称制：仓库根只保留市场级清单与仓库级资产，全部套件内容位于 `plugins/investigation-ontology/`（与未来新增套件并列）。
+
 ```
-investigation-ontology/
-├── DEVELOPMENT_GUIDE.md            ← 本文件（唯一开发方法论）
-├── CONTRIBUTING.md                 ← 外部贡献者工作流
-├── README.md                       ← 面向用户的介绍和安装说明
+investigation-ontology/                # 仓库根 = 市场根
+├── DEVELOPMENT_GUIDE.md               ← 本文件（唯一开发方法论）
+├── CONTRIBUTING.md  README.md  LICENSE  DISCLAIMER.md  SECURITY.md  CONNECTORS.md
+├── .workbuddy-plugin/
+│   └── marketplace.json               ← WorkBuddy 市场清单
 ├── .claude-plugin/
-│   ├── plugin.json                 ← 插件清单（skills/commands 声明入口）
-│   ├── marketplace.json            ← 市场元信息
-│   └── PLUGIN_SCHEMA_NOTES.md      ← Schema 踩坑记录
-│
-├── skills/                         ← 领域技能（glob 扫描 skills/*/SKILL.md）
-│   │  # 工作流类
-│   ├── investigation-foundation/
-│   ├── case-management/
-│   ├── evidence-management/
-│   ├── case-retrospective/
-│   │  # 工具赋能类
-│   ├── data-analysis/
-│   ├── mcp-integration/
-│   ├── investigation-techniques/
-│   ├── writing-reporting/
-│   ├── investigation-memory/
-│   ├── order-execution-variance-analysis/
-│   ├── interview-analysis/
-│   ├── fraud-classification/
-│   │  # 场景经验类
-│   ├── fraud-channel/
-│   ├── fraud-reimbursement/
-│   ├── fraud-procurement/
-│   ├── fraud-bid-rigging/
-│   ├── fraud-ip/
-│   ├── fraud-hr/
-│   ├── fraud-fake-chop/
-│   ├── fraud-conflicts-of-interest/
-│   │  # 底层机制
-│   ├── cold-start/
-│
-├── agents/                         ← 子代理定义（自动发现）
-├── commands/                       ← 斜杠命令（自动发现）
-├── rules/                          ← 调查准则与规范
-├── hooks/                          ← CodeBuddy hooks（hooks/hooks.json，官方规范位置）
-├── .codebuddy-plugin/              ← CodeBuddy 元数据（只有 plugin.json）
-├── .claude-plugin/                 ← Claude Code 元数据 + hooks
-├── .codex-plugin/                  ← Codex 元数据 + hooks
-├── schemas/                        ← 案件数据模型 JSON Schema
-├── docs/                           ← 跨技能索引文档 + 开发报告
-├── manifests/                      ← 安装模块化体系
-├── mcp-configs/                    ← MCP 推荐配置
-├── config-templates/               ← 配置模板
-└── project-templates/              ← 项目脚手架模板
+│   ├── marketplace.json               ← Claude Code 市场清单
+│   └── PLUGIN_SCHEMA_NOTES.md         ← Schema 踩坑记录
+├── manifests/                         ← 自有安装器（模块化按需安装）
+├── docs/                              ← 跨技能索引文档 + 开发报告
+└── plugins/
+    └── investigation-ontology/        # 主套件
+        ├── .claude-plugin/plugin.json + hooks.json
+        ├── .codebuddy-plugin/plugin.json
+        ├── .workbuddy-plugin/plugin.json + hooks.json
+        ├── .codex-plugin/plugin.json + hooks.json + mcp.json
+        ├── skills/                    ← 领域技能 (24 个，glob 扫描 skills/*/SKILL.md)
+        │  # 工作流类: investigation-foundation/ case-management/
+        │  #           evidence-management/ case-retrospective/
+        │  # 工具赋能类: data-analysis/ mcp-integration/ interview-analysis/
+        │  #           fraud-classification/ writing-reporting/ ...
+        │  # 场景经验类: fraud-channel/ fraud-procurement/ ...
+        │  # 底层机制: cold-start/
+        ├── agents/  commands/  rules/  hooks/hooks.json
+        ├── schemas/  scripts/  config-templates/
+        ├── mcp-configs/  project-templates/
+        ├── AGENTS.md  VERSION
+        └── docs/                      ← 套件内引用文档（document-parsing-design 等）
 ```
+
+> **新增套件**：`plugins/<name>/` 新建子目录（含自己的平台 plugin.json）+ 仓库根两份 marketplace.json 各加一条目。mixed-source 布局已实测验证（2026-09-10）。
+>
+> **工作区隔离（opt-in）**：`run-hook.mjs` 的 sessionStart 仅在存在 `.efio-workspace` 标记的工作区激活（cold-start Phase 0 / investigate INIT 自动创建）；无标记空间完全静默，有案件目录结构的遗留空间会收到一次性迁移提示。
 
 ***
 
@@ -190,30 +176,33 @@ investigation-ontology/
 
 ### 4.0 跨平台维护检查清单
 
-本插件支持三个平台（Claude Code、CodeBuddy、Codex）。开发时需注意平台差异：
+本插件支持四个平台（Claude Code、CodeBuddy、Codex、WorkBuddy）。开发时需注意平台差异：
 
-**平台特定文件（不共享）：**
-- `.claude-plugin/plugin.json` — Claude Code 入口
-- `.codebuddy-plugin/plugin.json` — CodeBuddy 入口  
-- `.codex-plugin/plugin.json` — Codex 入口
-- `hooks/hooks.json` — CodeBuddy hooks（环境变量：`${CODEBUDDY_PLUGIN_ROOT}`，[官方规范](https://www.codebuddy.cn/docs/zh/cli/plugins)：hooks 必须在插件根目录 `hooks/` 下）
-- `.claude-plugin/hooks.json` — Claude Code hooks（环境变量：`${CLAUDE_PLUGIN_ROOT}`）
-- `.codex-plugin/hooks.json` — Codex hooks（环境变量：`${INVESTIGATION_ONTOLOGY_ROOT}`）
-- `.mcp.json` — Codex MCP 配置（根目录）
-- `project-templates/default/.mcp.json` — 用户项目模板副本（分发用）
+**平台特定文件（不共享，全部位于 `plugins/investigation-ontology/` 内）：**
+- `plugins/investigation-ontology/.claude-plugin/plugin.json` — Claude Code 入口
+- `plugins/investigation-ontology/.codebuddy-plugin/plugin.json` — CodeBuddy 入口
+- `plugins/investigation-ontology/.workbuddy-plugin/plugin.json` + `hooks.json` — WorkBuddy 入口
+- `plugins/investigation-ontology/.codex-plugin/plugin.json` + `hooks.json` + `mcp.json` — Codex 入口
+- `plugins/investigation-ontology/hooks/hooks.json` — CodeBuddy hooks（官方规范位置，环境变量 `${CODEBUDDY_PLUGIN_ROOT}`）
+- 仓库根 `.workbuddy-plugin/marketplace.json` + `.claude-plugin/marketplace.json` — 市场级清单（`source` 均指向 `./plugins/investigation-ontology/`）
 
+> **⚠️ WorkBuddy 关键事实（二进制+日志实证）：** WorkBuddy 与 CodeBuddy 同引擎。①市场清单三候选目录通吃（`.codebuddy-plugin` → `.workbuddy-plugin` → `.claude-plugin`）；②hook 执行时引擎统一将 `${CODEBUDDY_PLUGIN_ROOT}` / `${CLAUDE_PLUGIN_ROOT}` 替换为插件根绝对路径并注入子进程 env；③原生读取 `CODEBUDDY.md` 作为项目上下文；④GUI 中插件技能仅 AI 可见，用户入口是 `/efio:*` 命令；⑤用户数据目录 `~/.h3caiwork/`（注册表 `plugins/known_marketplaces.json`、日志 `logs/`）。
+>
+> **⚠️ 双 marketplace.json 同步：** `.claude-plugin/marketplace.json` 与 `.workbuddy-plugin/marketplace.json` 内容需保持一致（插件条目、source 指向）。修改其一必须同步另一份。hooks 表同理：`hooks/hooks.json`（CodeBuddy）与 `.workbuddy-plugin/hooks.json`（WorkBuddy）需同步。
+>
 > **⚠️ CodeBuddy hooks 位置**：官方文档明确要求 hooks 文件放在插件根目录的 `hooks/hooks.json`，**不能**放在 `.codebuddy-plugin/` 目录内。`.codebuddy-plugin/` 只能放 `plugin.json`。详见 [插件开发指南](https://www.codebuddy.cn/docs/zh/cli/plugins)。
 >
 > **⚠️ Claude Code / Codex hooks 指针（2026-08-07 已修复）**：两个平台的 `plugin.json` 曾声明 `"hooks": "./hooks.json"`，指向插件根不存在的文件（实际 hooks 分别在 `.claude-plugin/hooks.json` 和 `.codex-plugin/hooks.json`）。已改为 `"./.claude-plugin/hooks.json"` 和 `"./.codex-plugin/hooks.json"`。历史分析见 `docs/development-reports/2026-07-22-codex-plugin-compliance-report.md`。
 
 **修改这些文件时的同步检查：**
 - 修改 hooks 业务逻辑 → 同步更新 Node.js 版本（`scripts/run-hook.mjs`）和 Shell 版本（`scripts/*.sh`）
-- 添加 MCP 服务器 → 同步更新根目录 `.mcp.json` **和** `project-templates/default/.mcp.json`
+- 修改 hooks 表（matcher/timeout/statusMessage）→ `hooks/hooks.json` 与 `.workbuddy-plugin/hooks.json` 两份同步
+- 添加 MCP 服务器 → 同步更新 `.codex-plugin/mcp.json` **和** `project-templates/default/.mcp.json`
 - 新增 plugin.json 字段 → 确认各平台 plugin.json 的字段兼容性（详见 [`docs/ARCHITECTURE_NOTES.md`](docs/ARCHITECTURE_NOTES.md)）
 
 **共享内容（所有平台）：**
-- `skills/` `commands/` `agents/` `rules/` `docs/` 等业务逻辑内容
-- `manifests/install-modules.json` 中各模块的 `targets` 字段应包含三平台变种
+- `plugins/investigation-ontology/` 下的 `skills/` `commands/` `agents/` `rules/` `docs/` 等业务逻辑内容
+- `manifests/install-modules.json` 中各模块的 `targets` 字段应包含四平台变种（`claude` / `codebuddy` / `codex` / `workbuddy` + 各自 `-project` 后缀）
 
 详细的跨平台架构设计和维护指南，见 [`docs/ARCHITECTURE_NOTES.md`](docs/ARCHITECTURE_NOTES.md)。
 
@@ -247,8 +236,8 @@ investigation-ontology/
   "id": "fraud-xxx",
   "kind": "skills",
   "description": "一句话描述",
-  "paths": ["skills/fraud-xxx"],
-  "targets": ["claude", "codebuddy", "codex", "claude-project", "codebuddy-project", "codex-project"],
+  "paths": ["plugins/investigation-ontology/skills/fraud-xxx"],
+  "targets": ["claude", "codebuddy", "codex", "workbuddy", "claude-project", "codebuddy-project", "codex-project", "workbuddy-project", "cursor", "repo-agent"],
   "dependencies": ["investigation-foundation", "fraud-classification"],
   "defaultInstall": false,
   "cost": "medium",
@@ -258,7 +247,8 @@ investigation-ontology/
 
 **字段说明：**
 - `id`：全局唯一，与目录名一致
-- `targets`：必须包含所有三平台的变种
+- `paths`：相对仓库根；套件内容必须带 `plugins/investigation-ontology/` 前缀
+- `targets`：必须包含所有四平台的变种（注意：此清单仅供自有安装器消费，宿主引擎不读取）
 - `dependencies`：运行时依赖的其他模块
 - `defaultInstall`：初始 alpha 阶段设为 `false`，稳定后改为 `true`
 - `cost`：对 AI 上下文的消耗，可选 `light`/`medium`/`heavy`
@@ -546,8 +536,10 @@ For multi-step tasks, state a brief plan:
 | `DEVELOPMENT_GUIDE.md`（本文件） | 唯一开发方法论权威来源 |
 | `CONTRIBUTING.md` | 外部贡献者工作流（分支策略、PR 模板、伦理许可） |
 | `docs/ARCHITECTURE_NOTES.md` | 跨平台架构细节 |
-| `manifests/install-modules.json` | 模块注册表（权威数据源） |
+| `docs/workbuddy-suite-dev.md`（工作区） | WorkBuddy 适配方案书 + §17 进展快照与 TODO |
+| `manifests/install-modules.json` | 模块注册表（权威数据源，自有安装器消费） |
 | `manifests/install-profiles.json` | 安装配置集 |
-| `project-templates/default/INVESTIGATION-HANDBOOK.md` | 用户指南（分发物） |
+| `.workbuddy-plugin/marketplace.json` + `.claude-plugin/marketplace.json` | 市场清单（双份需同步） |
+| `plugins/investigation-ontology/project-templates/default/INVESTIGATION-HANDBOOK.md` | 用户指南（分发物） |
 
-> 各平台的开发注意事项（CLAUDE.md / CODEBUDDY.md / CODEX.md）位于工作区根目录，不在本仓库内。
+> 各平台的开发注意事项（CLAUDE.md / CODEBUDDY.md / CODEX.md）位于工作区根目录，由 SessionStart hook 注入，不在本仓库内。

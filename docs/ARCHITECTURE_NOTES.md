@@ -1,7 +1,9 @@
 # investigation-ontology 跨平台架构设计说明
 
-> **⚠️ 本文档为补充参考资料。所有开发方法论以 [`DEVELOPMENT_GUIDE.md`](DEVELOPMENT_GUIDE.md) 为准。**
-> 最后更新：2026-08-07（修正 hooks 位置与实际文件对齐；Claude Code / Codex 指针已修复）
+> **⚠️ 本文档为补充参考资料。所有开发方法论以 [`DEVELOPMENT_GUIDE.md`](../DEVELOPMENT_GUIDE.md) 为准。**
+> 最后更新：2026-09-10（对称制套件布局 + WorkBuddy 适配；所有套件内容已迁入 `plugins/investigation-ontology/`）
+
+> **结构说明（2026-09-10 起）：** 仓库采用市场/套件两层对称制——仓库根保留市场级清单（`.workbuddy-plugin/marketplace.json`、`.claude-plugin/marketplace.json`）与仓库级资产（manifests/、docs/、顶层文档）；全部套件内容（含四平台套件级 `plugin.json`/hooks/mcp）位于 `plugins/investigation-ontology/`。下文所有套件内路径均以此为前缀。
 
 ---
 
@@ -10,32 +12,35 @@
 ### 1.1 `.mcp.json` / `mcp.json` 文件位置
 
 **存在位置：**
-- `.codex-plugin/mcp.json` — Codex 插件配置（由 `plugin.json` `mcpServers` 字段引用）
-- `project-templates/default/.mcp.json` — 用户项目模板（分发用，用户独立维护）
+- `plugins/investigation-ontology/.codex-plugin/mcp.json` — Codex 插件配置（由 `plugin.json` `mcpServers` 字段引用）
+- `plugins/investigation-ontology/project-templates/default/.mcp.json` — 用户项目模板（分发用，用户独立维护）
 
 **为什么这样分布？**
 
 | 文件位置 | 平台 | 用途 | 触发时机 | 生命周期 |
 |---------|------|------|---------|--------|
-| `.codex-plugin/mcp.json` | Codex | Codex 运行时发现 MCP 服务器 | 插件安装后立即生效 | 插件生命周期 |
-| `project-templates/default/.mcp.json` | 所有平台 | 分发到调查员项目的模板副本 | 用户创建项目时 | 项目生命周期 |
+| `.codex-plugin/mcp.json`（套件内） | Codex | Codex 运行时发现 MCP 服务器 | 插件安装后立即生效 | 插件生命周期 |
+| `project-templates/default/.mcp.json`（套件内） | 所有平台 | 分发到调查员项目的模板副本 | 用户创建项目时 | 项目生命周期 |
+| `~/.h3caiwork/.mcp.json`（用户机器） | WorkBuddy | 用户级 MCP 配置 | WorkBuddy 会话启动 | 用户维护 |
 
 **一致性维护：**
-- 两个文件应保持 `mcpServers` 内容一致
-- 添加新 MCP 服务器时务必同步更新两处
+- 两个仓库内文件应保持 `mcpServers` 内容一致
+- 添加新 MCP 服务器时务必同步更新两处；WorkBuddy 用户级配置由用户自行维护（cold-start 引导）
 
 ---
 
 ## 2. Hooks 环境变量与脚本语言
 
-### 2.1 三平台 Hooks 配置差异（实际文件位置）
+### 2.1 四平台 Hooks 配置差异（实际文件位置，均位于 `plugins/investigation-ontology/` 内）
 
-| 方面 | Claude Code | CodeBuddy | Codex |
-|------|-----------|-----------|-------|
-| **配置文件位置** | `.claude-plugin/hooks.json` | `hooks/hooks.json` | `.codex-plugin/hooks.json` |
-| **plugin.json hooks 指针** | `"./.claude-plugin/hooks.json"` ✅ | `"./hooks/hooks.json"` ✅ | `"./.codex-plugin/hooks.json"` ✅ |
-| **环境变量** | `${CLAUDE_PLUGIN_ROOT}` | `${CODEBUDDY_PLUGIN_ROOT}` | `${INVESTIGATION_ONTOLOGY_ROOT:-$(pwd)}` |
-| **脚本语言** | Node.js (.mjs) | Node.js (.mjs) | Shell Script (.sh) |
+| 方面 | Claude Code | CodeBuddy | Codex | WorkBuddy |
+|------|-----------|-----------|-------|-----------|
+| **配置文件位置** | `.claude-plugin/hooks.json` | `hooks/hooks.json` | `.codex-plugin/hooks.json` | `.workbuddy-plugin/hooks.json` |
+| **plugin.json hooks 指针** | `"./.claude-plugin/hooks.json"` ✅ | `"./hooks/hooks.json"` ✅ | `"./.codex-plugin/hooks.json"` ✅ | `"./.workbuddy-plugin/hooks.json"` ✅ |
+| **环境变量** | `${CLAUDE_PLUGIN_ROOT}` | `${CODEBUDDY_PLUGIN_ROOT}` | `${INVESTIGATION_ONTOLOGY_ROOT:-$(pwd)}` | `${CODEBUDDY_PLUGIN_ROOT}`（引擎统一注入） |
+| **脚本语言** | Node.js (.mjs) | Node.js (.mjs) | Shell Script (.sh) | Node.js (.mjs) |
+
+> **WorkBuddy 补充（二进制+日志实证）：** WorkBuddy 引擎加载 hooks 时自行将 `${CLAUDE_PLUGIN_ROOT}`/`${CODEBUDDY_PLUGIN_ROOT}` 替换为插件根绝对路径，并在派生 hook 子进程时注入两者 env。`scripts/run-hook.mjs` 的根解析链为 `WORKBUDDY_PLUGIN_ROOT` → `CODEBUDDY_PLUGIN_ROOT` → `CLAUDE_PLUGIN_ROOT` → 脚本路径自推。hook 以引擎自带 PortableGit bash + 系统 node 执行。
 
 > 2026-08-07 已修复：三个平台的 `plugin.json` hooks 指针均已指向实际存在的 hooks 文件。历史问题记录见 `docs/development-reports/2026-07-22-codex-plugin-compliance-report.md`。
 

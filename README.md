@@ -1,10 +1,10 @@
 # investigation-ontology 🔍
 
-**跨平台反舞弊调查全流程插件** — 调查方法论、证据链管理、访谈分析、可视化报告、审计技术、流程分析等专业技能，支持 Claude Code、CodeBuddy 和 Codex 三大平台。
+**跨平台反舞弊调查全流程插件** — 调查方法论、证据链管理、访谈分析、可视化报告、审计技术、流程分析等专业技能，支持 Claude Code、CodeBuddy、Codex 和 WorkBuddy 四大平台。
 
 ## 概述
 
-investigation-ontology 是专为反舞弊调查人员和内部审计师设计的跨平台插件，提供从报案受理到结案归档的全流程专业支持。一次开发，三平台分发。
+investigation-ontology 是专为反舞弊调查人员和内部审计师设计的跨平台插件，提供从报案受理到结案归档的全流程专业支持。一次开发，四平台分发（WorkBuddy 与 CodeBuddy 同源，共用同一插件包与适配机制）。
 
 ## 安装
 
@@ -22,9 +22,23 @@ codebuddy plugin install investigation-ontology --profile investigator
 ```
 
 
-> 注意： 当前优先适配`codebuddy`.
+> 注意： CodeBuddy 与 WorkBuddy 均已实测通过（插件加载、hooks 运行时、手册注入全链路验证）。
 >
 > 在`claude code` 或 `codex`中安装本插件，可能会存在一些问题，如发现问题，请直接要求claude 或 codex 读取整个项目，并按照各自的配置要求进行调整，确保 `agents`, `hooks`, `rules`, `skills` 安装到适当的位置。
+
+### WorkBuddy
+
+```bash
+# 添加市场源（GUI 插件页 → + 添加市场，输入 GitHub 仓库 URL；开发期也可用本地路径）
+# https://github.com/sxd007/investigation-ontology
+# 或本地路径：d:\path\to\investigation-ontology
+
+# 安装：插件页选择 investigation-ontology 安装
+```
+
+WorkBuddy 与 CodeBuddy 为同一产品体系（腾讯云），共用 `.workbuddy-plugin/` / `.codebuddy-plugin/` / `.claude-plugin/` 三个候选清单目录，无需单独适配包。
+
+**工作区激活（重要）：** 本插件采用 opt-in 工作区隔离——安装后在**调查工作区**运行 `/efio:cold-start` 完成首次配置，即自动创建 `.efio-workspace` 标记激活工具箱；未标记的工作区（面试、日常业务等）插件完全静默，不会注入调查手册或提示。
 
 ### Claude Code
 
@@ -141,53 +155,55 @@ codex plugin install investigation-ontology
 
 ## 项目结构
 
+采用**市场/套件两层对称制**：仓库根只保留市场级清单与仓库级资产，全部套件内容位于 `plugins/investigation-ontology/`，与未来新增套件真正并列。
+
 ```
-investigation-ontology/
-├── .claude-plugin/           # Claude Code 入口
-│   ├── plugin.json
-│   ├── hooks.json
-│   └── PLUGIN_SCHEMA_NOTES.md
-├── .codebuddy-plugin/        # CodeBuddy 入口
-│   ├── plugin.json
-│   ├── hooks.json
-│   └── PLUGIN_SCHEMA_NOTES.md
-├── .codex-plugin/            # Codex 入口
-│   ├── plugin.json
-│   ├── hooks.json
-│   ├── mcp.json
-│   └── PLUGIN_SCHEMA_NOTES.md
-├── hooks/                    # 跨平台 Hook 脚本
-├── manifests/                # 跨平台配置
-│   ├── install-modules.json     # 模块定义（含 stability 标记）
-│   ├── install-components.json  # 组件定义
-│   └── install-profiles.json    # 安装配置
-├── skills/                   # 技能定义 (24 个)
-├── commands/                 # 斜杠命令 (12 个)
-├── agents/                   # 子代理定义 (7 个)
-├── rules/                    # 调查准则 (4 个)
-├── schemas/                  # 文档类型 Schema (document-parsing)
-├── config-templates/         # 配置模板 (team-profile, evidence-policy)
-├── docs/                     # 文档
-├── CLAUDE.md                 # Claude Code 开发指南
-├── CODEBUDDY.md              # CodeBuddy 开发指南
-├── CODEX.md                  # Codex 开发指南
-├── DEVELOPMENT_GUIDE.md      # 跨平台开发指南
-└── README.md
+investigation-ontology/                  # 仓库根 = 市场根
+├── .workbuddy-plugin/
+│   └── marketplace.json                 # WorkBuddy 市场清单
+├── .claude-plugin/
+│   ├── marketplace.json                 # Claude Code 市场清单
+│   └── PLUGIN_SCHEMA_NOTES.md           # Schema 踩坑记录
+├── manifests/                           # 自有安装器（模块化按需安装）
+│   ├── install-modules.json             # 模块定义（含 stability 标记）
+│   ├── install-components.json          # 组件定义
+│   └── install-profiles.json            # 安装配置
+├── docs/                                # 开发文档
+├── DEVELOPMENT_GUIDE.md  CONTRIBUTING.md  README.md  ...
+└── plugins/                             # 套件层（并列，可扩展）
+    └── investigation-ontology/          # 主套件
+        ├── .claude-plugin/plugin.json  # Claude 插件清单
+        ├── .codebuddy-plugin/plugin.json
+        ├── .workbuddy-plugin/{plugin.json, hooks.json}
+        ├── .codex-plugin/{plugin.json, hooks.json, mcp.json}
+        ├── skills/                      # 技能定义 (24 个)
+        ├── commands/                    # 斜杠命令 (12 个 + 1 约定文件)
+        ├── agents/                      # 子代理定义 (7 个)
+        ├── hooks/hooks.json             # 共享 hooks 表
+        ├── rules/  schemas/  scripts/
+        ├── config-templates/  mcp-configs/  project-templates/
+        ├── AGENTS.md  VERSION
+        └── docs/                        # 套件内引用文档 (2 份)
 ```
+
+> 新增套件 = 在 `plugins/` 下新建子目录 + 市场清单加一条目，零结构变动（mixed-source 布局已实测验证）。
 
 ### 跨平台架构说明
 
-| 方面 | Claude Code | CodeBuddy | Codex |
-|------|-----------|-----------|-------|
-| **入口** | `.claude-plugin/plugin.json` | `.codebuddy-plugin/plugin.json` | `.codex-plugin/plugin.json` |
-| **Hooks 文件** | `.claude-plugin/hooks.json` | `.codebuddy-plugin/hooks.json` | `.codex-plugin/hooks.json` |
-| **Hooks 环境变量** | `${CLAUDE_PLUGIN_ROOT}` | `${CODEBUDDY_PLUGIN_ROOT}` | `${INVESTIGATION_ONTOLOGY_ROOT}` |
-| **Hook 脚本语言** | Node.js (.mjs) | Node.js (.mjs) | Shell (.sh) |
-| **MCP 配置** | 不使用 | 不使用 | `.codex-plugin/mcp.json` |
-| **Plugin.json 特有字段** | 基础 | `agents` | `interface` |
-| **共享内容** | ✓ | ✓ | ✓ |
+| 方面 | Claude Code | CodeBuddy | Codex | WorkBuddy |
+|------|-----------|-----------|-------|-----------|
+| **市场清单** | `.claude-plugin/marketplace.json` | 引擎三目录通吃¹ | — | `.workbuddy-plugin/marketplace.json` |
+| **插件入口** | `plugins/…/.claude-plugin/plugin.json` | `plugins/…/.codebuddy-plugin/plugin.json` | `plugins/…/.codex-plugin/plugin.json` | `plugins/…/.workbuddy-plugin/plugin.json` |
+| **Hooks 文件** | `.claude-plugin/hooks.json` | `hooks/hooks.json`（官方规范位置） | `.codex-plugin/hooks.json` | `.workbuddy-plugin/hooks.json` |
+| **Hooks 环境变量** | `${CLAUDE_PLUGIN_ROOT}` | `${CODEBUDDY_PLUGIN_ROOT}` | `${INVESTIGATION_ONTOLOGY_ROOT}` | `${CODEBUDDY_PLUGIN_ROOT}`（引擎统一注入²） |
+| **Hook 脚本语言** | Node.js (.mjs) | Node.js (.mjs) | Shell (.sh) | Node.js (.mjs) |
+| **MCP 配置** | 不使用 | 不使用 | `.codex-plugin/mcp.json` | 用户级 `~/.h3caiwork/.mcp.json` |
+| **项目上下文文件** | CLAUDE.md | CODEBUDDY.md | CODEX.md | CODEBUDDY.md（原生兼容） |
 
-**架构原则：** 所有平台专用配置都在各自的 `.xxx-plugin/` 目录下，确保安装器只分发该平台需要的文件。共享的业务逻辑内容（skills/, commands/, agents/ 等）在仓库根级。
+> ¹ CodeBuddy 引擎按 `.codebuddy-plugin` → `.workbuddy-plugin` → `.claude-plugin` 顺序扫描市场清单，任一存在即可。
+> ² WorkBuddy 引擎在 hook 子进程派生时统一注入 `CODEBUDDY_PLUGIN_ROOT` 与 `CLAUDE_PLUGIN_ROOT`（二进制实证），`run-hook.mjs` 另有 `WORKBUDDY_PLUGIN_ROOT` 防御探测与脚本路径自推兜底。
+
+**架构原则：** 市场级清单在仓库根（每平台一份）；套件级清单在套件目录内（每平台一份）。共享的业务逻辑内容（skills/, commands/, agents/ 等）与平台适配解耦，由市场 `source` 字段统一指向。
 
 ## 持续扩展
 
@@ -227,6 +243,7 @@ Phase 2 的 7 个舞弊类型技能已完成 SKILL.md 方法论编写（框架�
 - **首次设置向导** — Quick Presets 快速预设、配置持久化、断点续传
 - **OCR 后端解耦** — 独立配置系统，支持 4 种投递方式（auto/http/shared_fs/custom）
 - **品牌重塑** — 统一 `efio` 命令名，CodeBuddy/Codex 双平台支持
+- **WorkBuddy 适配** — `.workbuddy-plugin/` 适配器（市场+插件双级清单）、对称制套件布局（`plugins/`）、工作区 opt-in 隔离（`.efio-workspace` 标记）、cold-start Phase 0 自动标记
 
 ## 作者
 
