@@ -23,7 +23,7 @@ origin: efio
 
 此技能读取的配置项：
 
-- team-profile：审批流程（案件各行动的审批人）、案件周期约束、案件编号格式（已定义：`INV-YYYYMM-NN`，按月归零）
+- team-profile：审批流程（案件各行动的审批人）、案件周期约束、案件编号格式（**Case Number Format 字段**；未配置时默认 `CASE-YYYY-NNN`，按年序列。生成案件 ID 时必须先读此字段）
 
 ## When to Activate
 
@@ -75,7 +75,7 @@ origin: efio
 ## 案件登记信息
 
 ```
-案件编号：INV-202606-01
+案件编号：CASE-2026-001
 案件名称：张三涉嫌采购舞弊案
 案件来源：举报热线匿名举报（2024-01-10）
 受理日期：2024-01-11
@@ -375,7 +375,7 @@ origin: efio
 
 | 字段                         | 必填起始阶段 | 填写时机              | 说明                      |
 | -------------------------- | ------ | ----------------- | ----------------------- |
-| `case_id`                  | INIT   | 创建时               | 格式 `INV-YYYYMM-NN`（如 INV-202606-01），全局唯一 |
+| `case_id`                  | INIT   | 创建时               | 格式 `CASE-YYYY-NNN`（如 CASE-2026-001，或 team-profile 自定义格式），全局唯一 |
 | `status`                   | INIT   | 阶段切换时             | 枚举值，单向推进                |
 | `trigger_type`             | INIT   | 创建时               | 触发路径（举报/数据驱动/案件扩展）      |
 | `parent_case_id`           | —      | case\_expansion 时 | 父案件 ID                  |

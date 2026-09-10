@@ -150,7 +150,7 @@
 | 默认报告格式 | writing-reporting 选择模板结构 |
 | 默认语言 | 输出语言 |
 | 底稿编号格式 | working-paper command 生成编号 |
-| 案件编号格式 | case-management 生成案件 ID |
+| 案件编号格式 | case-management 生成案件 ID（未配置时默认 CASE-YYYY-NNN） |
 
 **Default Report Format:** [PLACEHOLDER]
 **Default Language:** [PLACEHOLDER]
