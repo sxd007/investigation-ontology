@@ -139,6 +139,7 @@ skills/evidence-management/SKILL.md
 investigation-ontology/                # 仓库根 = 市场根
 ├── DEVELOPMENT_GUIDE.md               ← 本文件（唯一开发方法论）
 ├── CONTRIBUTING.md  README.md  LICENSE  DISCLAIMER.md  SECURITY.md  CONNECTORS.md
+│                                        （根 README = 市场级：套件目录+统一安装）
 ├── .workbuddy-plugin/
 │   └── marketplace.json               ← WorkBuddy 市场清单
 ├── .claude-plugin/
@@ -163,7 +164,7 @@ investigation-ontology/                # 仓库根 = 市场根
         ├── schemas/  scripts/  config-templates/
         ├── mcp-configs/  project-templates/
         ├── manifests/install-profiles.json   ← 角色画像（运行时消费，随插件分发）
-        ├── AGENTS.md  VERSION
+        ├── AGENTS.md  VERSION  README.md      ← 套件 README（安装/技能/使用说明）
         └── docs/                      ← 套件内引用文档（document-parsing-design 等）
 ```
 
