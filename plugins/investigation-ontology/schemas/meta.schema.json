@@ -7,8 +7,8 @@
   "properties": {
     "case_id": {
       "type": "string",
-      "pattern": "^CASE-\\d{4}-\\d{3,}$",
-      "description": "案件编号，默认格式 CASE-YYYY-NNN（CASE + 年份 + 年内序号，如 CASE-2026-001），按 team-profile「案件编号格式」字段可自定义。全局唯一。"
+      "pattern": "^[A-Z][A-Z0-9]*(-[A-Z0-9]+)+$",
+      "description": "案件编号，默认格式 CASE-YYYY-NNN（CASE + 年份 + 年内序号，如 CASE-2026-001），可按 team-profile「案件编号格式」字段自定义（大写字母/数字/连字符结构）。全局唯一。"
     },
     "status": {
       "type": "string",
@@ -22,7 +22,7 @@
     },
     "parent_case_id": {
       "type": "string",
-      "pattern": "^CASE-\\d{4}-\\d{3,}$"
+      "pattern": "^[A-Z][A-Z0-9]*(-[A-Z0-9]+)+$"
     },
     "case_title": { "type": "string", "description": "案件名称或标题，便于识别。" },
     "created_by": { "type": "string", "description": "案件创建人（调查员 ID 或姓名）。" },
