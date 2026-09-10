@@ -58,9 +58,9 @@ ELSE IF 文件包含 "<!-- SETUP PAUSED AT:":
   → 告知用户: "检测到上次配置未完成，正在自动从断点继续。"
   → 自动执行 /efio:cold-start 断点恢复流程
 
-ELSE IF 文件包含 "[PLACEHOLDER]":
+ELSE IF 文件在**值位置**包含未填充占位符（形如 `**字段名:** [PLACEHOLDER...]` 或表格单元 `| 参数 | [PLACEHOLDER...] |` 的行；**HTML 注释块 `<!-- ... -->` 内的出现不计**——注释中提及占位符属于维护者说明，非待填值）:
   → 告知用户: "检测到配置不完整，正在自动引导补全。"
-  → 自动执行 /efio:cold-start 补全流程（定位所有 [PLACEHOLDER] 逐项填写）
+  → 自动执行 /efio:cold-start 补全流程（定位所有值位置的 [PLACEHOLDER] 逐项填写）
 
 ELSE:
   → 配置就绪。继续。
@@ -96,7 +96,7 @@ ELSE:
 |------|---------|---------|
 | DOES_NOT_EXIST | 文件路径不存在 | team-profile → 自动启动 cold-start 完整流程；evidence-policy → 使用默认值 |
 | PAUSED | 文件包含 `<!-- SETUP PAUSED AT:` | 自动 resume cold-start 断点恢复流程 |
-| HAS_PLACEHOLDER | 文件包含 `[PLACEHOLDER]`（不区分大小写） | 自动进入 cold-start 补全流程 |
+| HAS_PLACEHOLDER | **值位置**存在未填充占位符（`**字段:** [PLACEHOLDER...]` 或 `| 参数 | [PLACEHOLDER...] |` 行；HTML 注释块内的出现不计） | 自动进入 cold-start 补全流程 |
 | READY | 以上条件都不满足 | 读取配置，继续执行 |
 
 ---

@@ -5,7 +5,7 @@
   {PLUGIN_CONFIG_DIR}/ocr-backend.md
 
 此文件仅供 cold-start 作为模板读取和填充。document-parsing 技能从用户配置路径读取。
-每次发版更新此模板时，需要保留所有 [PLACEHOLDER] 标记。
+每次发版更新此模板时，需要保留所有占位符标记（即各待填值位置的方括号占位）。
 -->
 
 # OCR 后端配置

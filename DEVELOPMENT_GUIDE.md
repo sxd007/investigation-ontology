@@ -162,6 +162,7 @@ investigation-ontology/                # 仓库根 = 市场根
         ├── agents/  commands/  rules/  hooks/hooks.json
         ├── schemas/  scripts/  config-templates/
         ├── mcp-configs/  project-templates/
+        ├── manifests/install-profiles.json   ← 角色画像（运行时消费，随插件分发）
         ├── AGENTS.md  VERSION
         └── docs/                      ← 套件内引用文档（document-parsing-design 等）
 ```
@@ -224,7 +225,7 @@ investigation-ontology/                # 仓库根 = 市场根
 |---|------|------|
 | 1 | `skills/fraud-xxx/SKILL.md` | 创建技能文件，按 ACFE 分类编写 |
 | 2 | `manifests/install-modules.json` | 添加模块条目（id、paths、dependencies），`targets` 包含所有平台变种 |
-| 3 | `manifests/install-profiles.json` | 加入 `investigator` 和 `full` 两套 profile |
+| 3 | `plugins/investigation-ontology/manifests/install-profiles.json` | 加入 `investigator` 和 `full` 两套 profile |
 | 4 | `skills/fraud-classification/SKILL.md` | 在"专题舞弊类型索引"表追加一行 |
 | 5 | `agents/investigation-planner.md` | 在 Related 技能段追加引用 |
 | 6 | `agents/fraud-type-classifier.md` | 在 Cross-Reference 段和 Related 段追加引用 |
@@ -538,7 +539,7 @@ For multi-step tasks, state a brief plan:
 | `docs/ARCHITECTURE_NOTES.md` | 跨平台架构细节 |
 | `docs/workbuddy-suite-dev.md`（工作区） | WorkBuddy 适配方案书 + §17 进展快照与 TODO |
 | `manifests/install-modules.json` | 模块注册表（权威数据源，自有安装器消费） |
-| `manifests/install-profiles.json` | 安装配置集 |
+| `plugins/investigation-ontology/manifests/install-profiles.json` | 角色画像定义（运行时消费：cold-start / profile 命令，随插件分发） |
 | `.workbuddy-plugin/marketplace.json` + `.claude-plugin/marketplace.json` | 市场清单（双份需同步） |
 | `plugins/investigation-ontology/project-templates/default/INVESTIGATION-HANDBOOK.md` | 用户指南（分发物） |
 

@@ -164,10 +164,9 @@ investigation-ontology/                  # 仓库根 = 市场根
 ├── .claude-plugin/
 │   ├── marketplace.json                 # Claude Code 市场清单
 │   └── PLUGIN_SCHEMA_NOTES.md           # Schema 踩坑记录
-├── manifests/                           # 自有安装器（模块化按需安装）
+├── manifests/                           # 自有安装器（模块化按需安装，仓库侧）
 │   ├── install-modules.json             # 模块定义（含 stability 标记）
-│   ├── install-components.json          # 组件定义
-│   └── install-profiles.json            # 安装配置
+│   └── install-components.json          # 组件定义
 ├── docs/                                # 开发文档
 ├── DEVELOPMENT_GUIDE.md  CONTRIBUTING.md  README.md  ...
 └── plugins/                             # 套件层（并列，可扩展）
@@ -182,6 +181,7 @@ investigation-ontology/                  # 仓库根 = 市场根
         ├── hooks/hooks.json             # 共享 hooks 表
         ├── rules/  schemas/  scripts/
         ├── config-templates/  mcp-configs/  project-templates/
+        ├── manifests/install-profiles.json   # 角色画像（运行时消费，随插件分发）
         ├── AGENTS.md  VERSION
         └── docs/                        # 套件内引用文档 (2 份)
 ```
