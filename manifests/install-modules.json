@@ -85,7 +85,11 @@
         "plugins/investigation-ontology/.workbuddy-plugin",
         "plugins/investigation-ontology/.codebuddy-plugin",
         "plugins/investigation-ontology/.claude-plugin",
-        "plugins/investigation-ontology/.codex-plugin"
+        "plugins/investigation-ontology/.codex-plugin",
+        "plugins/process-efficiency/.workbuddy-plugin",
+        "plugins/process-efficiency/.codebuddy-plugin",
+        "plugins/process-efficiency/.claude-plugin",
+        "plugins/process-efficiency/.codex-plugin"
       ],
       "targets": [
         "claude",
@@ -686,9 +690,9 @@
     {
       "id": "policy-digest",
       "kind": "skills",
-      "description": "企业制度流程解构 — 将制度、办法、流程、授权文件及附件转化为带原文锚点的规则、流程、RACI、风险控制、问题清单与本体 candidates 入库包",
+      "description": "企业制度流程解构 — 将制度、办法、流程、授权文件及附件转化为带原文锚点的规则、流程、RACI、风险控制、问题清单与本体 candidates 入库包。属于 process-efficiency 插件；调查案件内使用时作为案件分支深化产物写入 cases/{case_id}/policy-digests/",
       "paths": [
-        "plugins/investigation-ontology/skills/policy-digest"
+        "plugins/process-efficiency/skills/policy-digest"
       ],
       "targets": [
         "claude",
@@ -701,7 +705,6 @@
         "codex-project"
       ],
       "dependencies": [
-        "case-management",
         "document-parsing"
       ],
       "defaultInstall": false,

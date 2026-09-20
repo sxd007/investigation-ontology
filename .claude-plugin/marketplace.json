@@ -5,7 +5,7 @@
     "url": "https://github.com/sxd007"
   },
   "metadata": {
-    "description": "Harness-native investigation plugin — fraud examination workflows, evidence chain management, interview statement analysis, investigation report writing, internal audit techniques, and process analysis skills for Claude Code"
+    "description": "Harness-native plugin marketplace — fraud investigation workflows and process efficiency assessment skills for Claude Code"
   },
   "plugins": [
     {
@@ -38,6 +38,34 @@
         "evidence-management",
         "interview-analysis",
         "writing"
+      ],
+      "strict": false
+    },
+    {
+      "name": "process-efficiency",
+      "source": "./plugins/process-efficiency/",
+      "description": "流程评价与效率分析技能包 — 制度流程解构（policy-digest）、流程目标/风险/控制点/效率评价，ontology_framework 的应用化插件",
+      "version": "0.1.0",
+      "author": {
+        "name": "Alpha Shen",
+        "url": "https://github.com/sxd007"
+      },
+      "homepage": "https://github.com/sxd007/investigation-ontology",
+      "repository": "https://github.com/sxd007/investigation-ontology",
+      "license": "Apache-2.0",
+      "keywords": [
+        "process-efficiency",
+        "policy-digest",
+        "process-mining",
+        "internal-audit",
+        "risk-control"
+      ],
+      "category": "workflow",
+      "tags": [
+        "process-efficiency",
+        "policy-digest",
+        "internal-audit",
+        "risk-control"
       ],
       "strict": false
     }

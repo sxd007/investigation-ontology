@@ -4,7 +4,7 @@
     "name": "Alpha Shen",
     "url": "https://github.com/sxd007"
   },
-  "description": "反舞弊调查全流程插件市场 — 调查方法论、舞弊分类、证据链管理、访谈分析、写作报告、审计技术",
+  "description": "反舞弊调查与流程评价插件市场 — 调查方法论、舞弊分类、证据链管理、访谈分析、写作报告、审计技术、流程效率评价",
   "version": "1.1.0",
   "plugins": [
     {
@@ -27,6 +27,28 @@
         "evidence",
         "interview",
         "writing"
+      ],
+      "category": "workflow",
+      "strict": false
+    },
+    {
+      "name": "process-efficiency",
+      "source": "./plugins/process-efficiency/",
+      "description": "流程评价与效率分析技能包 — 制度流程解构（policy-digest）、流程目标/风险/控制点/效率评价，ontology_framework 的应用化插件",
+      "version": "0.1.0",
+      "author": {
+        "name": "Alpha Shen",
+        "url": "https://github.com/sxd007"
+      },
+      "homepage": "https://github.com/sxd007/investigation-ontology",
+      "repository": "https://github.com/sxd007/investigation-ontology",
+      "license": "Apache-2.0",
+      "keywords": [
+        "process-efficiency",
+        "policy-digest",
+        "process-mining",
+        "internal-audit",
+        "risk-control"
       ],
       "category": "workflow",
       "strict": false

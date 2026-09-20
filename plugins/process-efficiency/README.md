@@ -1,0 +1,43 @@
+# process-efficiency
+
+流程评价与效率分析插件 — **ontology_framework 的应用化插件**。与 [investigation-ontology](../investigation-ontology/README.md)（调查应用化插件）并列，两者共同遵从 ontology_framework 的本体架构设计（proc 流程域 / risk 风控域 / org 组织域），在本体层系统统一。
+
+## 定位
+
+| 插件 | 范式 | 核心问题 |
+|------|------|---------|
+| investigation-ontology | 事后归因（调查） | 发生了什么、谁的责任 |
+| **process-efficiency** | 规范性评价 | 流程设计得好不好、跑得好不好（目标 / 风险 / 控制点 / 效率） |
+
+评价物单独维护在 `process-assessments/` 根目录，不与调查案件的 `cases/` 结构混用。
+
+## 技能
+
+| 技能 | 说明 |
+|------|------|
+| `policy-digest` | 企业制度流程解构 — 将制度、办法、流程、授权文件及附件转化为带原文锚点的规则、L1–L5 流程、RACI、风险控制、问题清单与本体 candidates 入库包 |
+
+## 与 ontology_framework 的关系
+
+本插件通过 **vendored schema + `coreVersions` 声明**对齐 ontology_framework，运行时零依赖：
+
+- `skills/policy-digest/references/schemas/candidates-0.3.0.schema.json` — vendored from ontology_framework
+- `skills/policy-digest/references/schemas/parsed-document-0.1.0.schema.json` — vendored from ontology_framework
+
+后续流程评价技能将基于 proc 域五层链（L1 ProcessCategory → L5 Task）与 Metric/ControlPoint 跨切类构建评价投影。
+
+## 与 investigation-ontology 的协作
+
+两插件可共存安装，无强依赖：
+
+- 调查案件中需要对相关制度流程做深入分析时，调查员可直接调用 `policy-digest`（属于案件分支上的深化产物，不影响调查主干）；此时输出仍写入 `cases/{case_id}/policy-digests/`；
+- 原始文件解析能力由调查插件的 `document-parsing` 技能优先承担（若已安装）；未安装时按 `policy-digest` SKILL.md 的兜底路径由模型直读并建立等价锚点。
+
+## Backlog
+
+- [ ] **policy-digest schema 0.3.0 泛化** — 语境标识字段（`case_id` → `engagement_id` 或等价物）与输出根可配置（调查语境兼容 `cases/{case_id}/policy-digests/`，评价语境默认 `process-assessments/`）；含迁移脚本与 candidates 投影器参数语义更新。迁移完成后 0.2.0 进入维护模式。
+- [ ] 流程评价技能集草案（评价基线组装 / 目标对齐 / 风险控制矩阵 / 穿行测试 / 效率诊断）— 设计讨论中。
+
+## 版本
+
+见 [VERSION](./VERSION)。当前 0.1.0（policy-digest 从 investigation-ontology v1.1.0 剥离迁入）。

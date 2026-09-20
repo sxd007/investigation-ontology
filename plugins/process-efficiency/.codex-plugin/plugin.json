@@ -1,0 +1,47 @@
+{
+  "name": "process-efficiency",
+  "version": "0.1.0",
+  "description": "Process efficiency and policy digest skills — policy/rule deconstruction, process goal/risk/control/efficiency assessment for Codex.",
+  "author": {
+    "name": "Alpha Shen",
+    "email": "",
+    "url": "https://github.com/sxd007"
+  },
+  "homepage": "https://github.com/sxd007/investigation-ontology",
+  "repository": "https://github.com/sxd007/investigation-ontology",
+  "license": "Apache-2.0",
+  "keywords": [
+    "process-efficiency",
+    "policy-digest",
+    "process-mining",
+    "internal-audit",
+    "risk-control",
+    "codex",
+    "skills"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.codex-plugin/mcp.json",
+  "interface": {
+    "displayName": "Process Efficiency",
+    "shortDescription": "Policy digest and process assessment for Codex.",
+    "longDescription": "Process Efficiency packages policy/rule document deconstruction (policy-digest) and process goal, risk, control and efficiency assessment skills as an official-style Codex plugin.",
+    "developerName": "Alpha Shen",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Shell",
+      "MCP"
+    ],
+    "websiteURL": "https://github.com/sxd007/investigation-ontology",
+    "privacyPolicyURL": "https://github.com/sxd007/investigation-ontology/blob/main/SECURITY.md",
+    "termsOfServiceURL": "https://github.com/sxd007/investigation-ontology/blob/main/DISCLAIMER.md",
+    "defaultPrompt": [
+      "Deconstruct this policy document.",
+      "Assess the design effectiveness of this process.",
+      "Analyze process efficiency from event logs."
+    ],
+    "brandColor": "#1D4ED8",
+    "screenshots": []
+  }
+}

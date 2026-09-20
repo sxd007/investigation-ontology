@@ -1,0 +1,22 @@
+{
+  "name": "process-efficiency",
+  "version": "0.1.0",
+  "description": "流程评价与效率分析插件 — 制度流程解构、流程目标/风险/控制点/效率评价，ontology_framework 的应用化插件",
+  "author": {
+    "name": "Alpha Shen",
+    "url": "https://github.com/sxd007"
+  },
+  "homepage": "https://github.com/sxd007/investigation-ontology",
+  "repository": "https://github.com/sxd007/investigation-ontology",
+  "license": "Apache-2.0",
+  "keywords": [
+    "process-efficiency",
+    "policy-digest",
+    "process-mining",
+    "internal-audit",
+    "risk-control",
+    "codebuddy",
+    "skills"
+  ],
+  "mcpServers": {}
+}

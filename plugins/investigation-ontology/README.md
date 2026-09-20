@@ -92,21 +92,22 @@ codex plugin install investigation-ontology
 | 8 | `interview-analysis` | 工具 · 访谈分析 | ✅ | 访谈策划、SCAN 陈述分析、行为分析、笔录评估 | 3 templates |
 | 9 | `data-analysis` | 工具 · 数据分析 | 🚧 | 异常检测、趋势分析、审计轨迹、数据可视化 | — |
 | 10 | `order-execution-variance-analysis` | 工具 · 数据分析 | 🧪 | 合同流/货物流/资金流多维度对比，输出差异报告 | 2 templates |
-| 11 | `policy-digest` | 工具 · 制度流程分析 | 🚧 | 制度原文解构为规则、L1–L5 流程、RACI、风险控制和本体 candidates，附原文对照导览 | 6 refs + 4 schemas + 8 scripts |
-| 12 | `investigation-techniques` | 工具 · 调查技术 | 🚧 | 访谈技巧、数字取证、文档审查、外勤调查、监控技术 | — |
-| 13 | `investigation-memory` | 工具 · 记忆系统 | 🧪 | 非结构化信息记录、支撑复盘与定向检索 | — |
-| 14 | `writing-reporting` | 工具 · 写作报告 | 🚧 | 底稿撰写、备忘录、调查报告、可视化呈现 | 1 template |
-| 15 | `cold-start` | 工具 · 平台配置 | ✅ | 首次设置向导 — 团队配置、证据策略、Quick Presets | 1 ref |
-| 16 | `mcp-integration` | 工具 · 平台配置 | ✅ | MCP 工具集成层 — 技能与 MCP 服务器的连接桥梁 | — |
+| 11 | `investigation-techniques` | 工具 · 调查技术 | 🚧 | 访谈技巧、数字取证、文档审查、外勤调查、监控技术 | — |
+| 12 | `investigation-memory` | 工具 · 记忆系统 | 🧪 | 非结构化信息记录、支撑复盘与定向检索 | — |
+| 13 | `writing-reporting` | 工具 · 写作报告 | 🚧 | 底稿撰写、备忘录、调查报告、可视化呈现 | 1 template |
+| 14 | `cold-start` | 工具 · 平台配置 | ✅ | 首次设置向导 — 团队配置、证据策略、Quick Presets | 1 ref |
+| 15 | `mcp-integration` | 工具 · 平台配置 | ✅ | MCP 工具集成层 — 技能与 MCP 服务器的连接桥梁 | — |
 | | | **三、行业舞弊类别** | | | |
-| 17 | `fraud-channel` | 舞弊 · 渠道销售 | 🧪 | 窜货、虚报终端客户、成本造假、拼单绑单等六种模式 | 2 refs |
-| 18 | `fraud-bid-rigging` | 舞弊 · 招投标 | 🚧 | 围标/串标 — 压标、陪标、轮标、市场划分等八种形态 | 无 |
-| 19 | `fraud-procurement` | 舞弊 · 采购 | 🚧 | 采购全生命周期六种模式 — 虚假供应商、化整为零、参数定制等 | 无 |
-| 20 | `fraud-hr` | 舞弊 · 人力资源 | 🚧 | 虚假员工、薪资操纵、招聘舞弊、履历造假等七种子场景 | 无 |
-| 21 | `fraud-ip` | 舞弊 · 知识产权 | 🚧 | 商业秘密窃取、竞业违规、专利侵权三种调查类型 | 无 |
-| 22 | `fraud-conflicts-of-interest` | 舞弊 · 利益冲突 | 🚧 | 采购冲突、销售冲突、裙带关系、双重角色等五种模式 | 无 |
-| 23 | `fraud-reimbursement` | 舞弊 · 费用报销 | 🚧 | 虚构、篡改、重复申报、不当归类等四种模式 | 无 |
-| 24 | `fraud-fake-chop` | 舞弊 · 伪造印章 | 🚧 | 实物印章调查 + 印文比对两条路径 | 2 scripts (seal_verify) |
+| 16 | `fraud-channel` | 舞弊 · 渠道销售 | 🧪 | 窜货、虚报终端客户、成本造假、拼单绑单等六种模式 | 2 refs |
+| 17 | `fraud-bid-rigging` | 舞弊 · 招投标 | 🚧 | 围标/串标 — 压标、陪标、轮标、市场划分等八种形态 | 无 |
+| 18 | `fraud-procurement` | 舞弊 · 采购 | 🚧 | 采购全生命周期六种模式 — 虚假供应商、化整为零、参数定制等 | 无 |
+| 19 | `fraud-hr` | 舞弊 · 人力资源 | 🚧 | 虚假员工、薪资操纵、招聘舞弊、履历造假等七种子场景 | 无 |
+| 20 | `fraud-ip` | 舞弊 · 知识产权 | 🚧 | 商业秘密窃取、竞业违规、专利侵权三种调查类型 | 无 |
+| 21 | `fraud-conflicts-of-interest` | 舞弊 · 利益冲突 | 🚧 | 采购冲突、销售冲突、裙带关系、双重角色等五种模式 | 无 |
+| 22 | `fraud-reimbursement` | 舞弊 · 费用报销 | 🚧 | 虚构、篡改、重复申报、不当归类等四种模式 | 无 |
+| 23 | `fraud-fake-chop` | 舞弊 · 伪造印章 | 🚧 | 实物印章调查 + 印文比对两条路径 | 2 scripts (seal_verify) |
+
+> **已迁出：** `policy-digest`（企业制度流程解构）已迁移至本仓库的 [process-efficiency](../process-efficiency/README.md) 插件（v0.1.0）。调查案件中需解构制度流程时，若两插件均已安装可直接调用 `policy-digest` 技能，成果作为案件分支深化产物写入 `cases/{case_id}/policy-digests/`。
 
 ## 命令
 
@@ -200,7 +201,6 @@ Phase 2 的 7 个舞弊类型技能已完成 SKILL.md 方法论编写（框架�
 - **证据链可视化 v3** — 推理链图、假设验证、治理状态多视图 (`scan-chain.js` 1438 行)
 - **案件时间线可视化** — 结构化基线 + AI 增量补充，生成 HTML 时间线 (`generate_timeline*.py`)
 - **文档结构化解析** — OCR MCP 集成、格式感知路由、版本管理 (`/parse` 命令)
-- **企业制度流程解构** — 原文锚定、L1–L5 流程、RACI、风险控制、本体 candidates 与离线审阅导览 (`policy-digest`)
 - **调查本体论** — Object/Link/Action 模型、Binding Protocol、Action 治理规则
 - **首次设置向导** — Quick Presets 快速预设、配置持久化、断点续传
 - **OCR 后端解耦** — 独立配置系统，支持 4 种投递方式（auto/http/shared_fs/custom）
