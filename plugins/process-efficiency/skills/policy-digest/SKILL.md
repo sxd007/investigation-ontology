@@ -19,6 +19,7 @@ origin: efio
 ## 职责边界
 
 - 本技能负责语义解构、候选建模、交叉检查和视图生成。
+- 本技能是下游评价技能（goal-alignment / rcm-analysis / control-testing / efficiency-diagnosis）的模板层上游：下游按 [DDR 机制](../process-assess-workflow/references/digest-defect-report.md)报告解构缺陷嫌疑（遗漏/错归类/锚点错/幻觉）时，本技能负责回读原文核验——verified 则走 supersedes/superseded_by 版本链出新版本（不就地修改），dismissed 则记录排除理由；不允许静默忽略。
 - 原始文件的文字、版面和表格解析优先交给 `document-parsing` 技能（属于 investigation-ontology 插件，跨插件按技能名发现；未安装时按阶段二兜底路径由模型直接读取并建立等价锚点）；本技能必须复核其锚点与覆盖声明，不把 OCR 清晰度当成语义置信度。
 - 不把摘要当作解构，不按章节机械摘录，不只还原正常审批链。
 - 不直接写 Enterprise TTL，不让 AI 手写 Turtle；只生成待人审的 candidates。
@@ -280,9 +281,9 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <engage
 
 ## 相关技能
 
-- [文档结构化解析](../../investigation-ontology/skills/document-parsing/SKILL.md)：原始文件解析、OCR、表格保真和版本管理（属 investigation-ontology 插件，未安装时按阶段二兜底路径由模型直读）。
-- [调查本体论](../ontology/SKILL.md)：当前仓库的调查实体/关系治理；与本技能输出的企业制度 Core candidates 不可混用。
-- [数据分析](../data-analysis/SKILL.md)：对制度执行数据进行控制测试；不替代制度模板解构。
+- [文档结构化解析](../../../investigation-ontology/skills/document-parsing/SKILL.md)：原始文件解析、OCR、表格保真和版本管理（属 investigation-ontology 插件，未安装时按阶段二兜底路径由模型直读）。
+- [调查本体论](../../../investigation-ontology/skills/ontology/SKILL.md)：当前仓库的调查实体/关系治理；与本技能输出的企业制度 Core candidates 不可混用。
+- [数据分析](../../../investigation-ontology/skills/data-analysis/SKILL.md)：对制度执行数据进行控制测试；不替代制度模板解构。
 
 ## 版本化格式
 

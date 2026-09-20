@@ -87,11 +87,25 @@ origin: efio
 
 ## 质量纪律
 
-1. **消费纪律**：只消费 digest.json（模板）与 baseline 快照（实例）；不读制度原文；不引入快照外的"顺手指令"数据；
+1. **消费纪律**：只消费 digest-schema 兼容的流程知识包（模板：controls/flow_edges，默认生产者 policy-digest）与 baseline 快照（实例）；不读制度原文；不引入快照外的"顺手指令"数据；
 2. **锚点纪律**：finding 必带 `anchor.baseline`（版本+快照+记录定位）与 `anchor.digest`（相关 control/flow_edge ID）；纯实例发现（如绕过）至少可从快照重建证据链；
 3. **协作姿态**：偏差先核实数据质量（字段缺失≠未执行），确认后再定性——与流程 Owner 的沟通在 ASSESS 门禁 `stakeholder_review_done` 中完成；
 4. finding 结构遵循 [finding-contract](../process-assess-workflow/references/finding-contract.md)（CT-NNN 前缀）；
 5. 样本与方法写死在 sampling_plan.md，他人可据此复现。
+
+## 上游缺陷识别（DDR）
+
+本技能持有**实例数据这一独立证据源**——执行日志是关于流程结构的独立先知，与 digest 模板交叉验证可发现解构遗漏。观察到以下信号时按 [DDR 机制](../process-assess-workflow/references/digest-defect-report.md)报告：
+
+| 观察 | 嫌疑 | DDR 类型 |
+|------|------|---------|
+| 实例路径出现 digest 中不存在的控制点/环节 | 模板遗漏（制度记载或实际存在的环节未提取） | omission |
+| `control_not_executed` 比例异常高（>50%）且快照覆盖核验通过 | digest 幻觉了不存在的控制（或控制在未覆盖系统执行——须同时注数据缺口可能） | hallucination |
+| 穿行测试实际路径与 flow_edges 大面积不符（>2 个环节差异） | flow_edges 提取不完整，而非实际偏离 | omission |
+
+**"未执行"的三种解释分诊**：模板有控制+实例无记录 → ①未执行（finding）②控制在快照外系统执行（数据缺口归因）③模板幻觉（DDR）。快照覆盖核验排除②，DDR 处理③，剩余才定性①。
+
+**Template-free 降级**：无流程知识包时可降级为纯实例自洽性检查（职责冲突/留痕缺失/路径自洽），跳过绕过/偏离类发现，报告标注"无模板基准"，见 [finding-contract §7](../process-assess-workflow/references/finding-contract.md)。
 
 ## Related
 

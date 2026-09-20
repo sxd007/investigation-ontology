@@ -79,7 +79,13 @@ policy-digest 的"评价味"只到**文档质量**为止（其职责边界已声
 
 ### 消费纪律（单一真相源）
 
-**评价技能永远不回头读原文，只消费 digest.json / candidates.json**；锚点追溯通过 digest 的原文锚点间接实现。这保证单一真相源，也保证场景二的调用方拿到同一套可复核结论。
+**评价技能永远不回头读原文，只消费 digest-schema 兼容的流程知识包与 baseline 快照**；锚点追溯通过 digest 的原文锚点间接实现。这保证单一真相源，也保证场景二的调用方拿到同一套可复核结论。
+
+流程知识包的生产者不限于 policy-digest（文档解构）：本体层投影（Enterprise 层 → digest 形态，未来）与实例反推（process mining，仅限 template-free 降级）为补充路径——**依赖的是契约（digest schema），不是工具**。无知识包时 control-testing / efficiency-diagnosis 可降级为纯实例评价（见 finding-contract §7），goal-alignment / rcm-analysis 不可降级。
+
+### 上游纠错（DDR 机制）
+
+下游评价技能在各自专业领域内识别上游解构缺陷（遗漏/错归类/锚点错/幻觉），报告 DDR 嫌疑；验证与修复归 policy-digest（回读原文 + supersedes 版本链），下游只报告不修改不越权定性。缺陷嫌疑最高的发现类型（如 rcm 的 `risk_unidentified`、efficiency 的 `serial_redundancy`）在 DDR 闭环前保持 provisional；dismissed 的 DDR 反向加强原 finding（排除解构遗漏=确认制度缺失）。门禁 `upstream_defects_resolved` 保证 REPORT 前闭环。详见 [digest-defect-report](../skills/process-assess-workflow/references/digest-defect-report.md)。
 
 ## 五、process-assess-workflow 与 case-management 的范式差异
 

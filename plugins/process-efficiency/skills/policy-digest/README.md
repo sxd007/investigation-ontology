@@ -476,7 +476,7 @@ L1 采购管理
 - [Policy Digest 0.3.0 Schema（当前）](references/schemas/policy-digest-0.3.0.schema.json)
 - [Policy Digest 0.2.0 Schema（旧版，可读）](references/schemas/policy-digest-0.2.0.schema.json)
 - [Candidates 0.3.0 Schema](references/schemas/candidates-0.3.0.schema.json)
-- [文档解析技能](../../investigation-ontology/skills/document-parsing/README.md)（investigation-ontology 插件）
+- [文档解析技能](../../../investigation-ontology/skills/document-parsing/README.md)（investigation-ontology 插件）
 
 ## 15. 最短上手路径
 

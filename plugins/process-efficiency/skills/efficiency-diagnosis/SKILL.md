@@ -86,11 +86,25 @@ origin: efio
 
 ## 质量纪律
 
-1. **消费纪律**：只消费 digest.json 与 baseline 快照；不读原文；不引入快照外数据；
+1. **消费纪律**：只消费 digest-schema 兼容的流程知识包（默认生产者 policy-digest）与 baseline 快照；不读原文；不引入快照外数据；
 2. **锚点纪律**：设计层 finding 带 anchor.digest（flow_edge/process_element/rule ID + source），实例层带 anchor.baseline（版本+快照+记录）；
 3. **交叉引用纪律**：与其他维度重叠的发现（时限超期=控制偏离；高频返工=规则问题）只交叉引用主责技能的 finding_id，不重复输出；
 4. **改进建议可行性**：`serial_redundancy` 类结构建议须注明数据依赖依据（"无依赖"的判定来自 input_artifact_refs 对照），避免拍脑袋建议；
 5. finding 结构遵循 [finding-contract](../process-assess-workflow/references/finding-contract.md)（ED-NNN 前缀）。
+
+## 上游缺陷识别（DDR）
+
+实例数据是流程结构的独立先知，时序分析天然暴露模板（flow_edges/artifact 依赖）的完整性。观察到以下信号时按 [DDR 机制](../process-assess-workflow/references/digest-defect-report.md)报告：
+
+| 观察 | 嫌疑 | DDR 类型 |
+|------|------|---------|
+| 实例高频返工环在 flow_edges 无对应 reject/return 边 | 流转边遗漏 | omission |
+| `serial_redundancy` 判定所依赖的 input_artifact_refs 疑似错挂（后环节实际等待前环节产出） | 依赖关系归类错误——**不排除则并行化建议是伪优化** | misclassification |
+| 环节超期但 rules 无时限条款，且条款锚点 excerpt 含时限数字 | 时限参数未提取 | omission |
+
+**纪律**：`serial_redundancy` 的并行化建议在依赖关系 DDR 闭环前不得进入 REPORT 的正式建议清单（伪优化比不优化更有害）。
+
+**Template-free 降级**：无流程知识包时 E4–E7（周期分解/瓶颈/返工/离群）完整可用，E1–E3 结构诊断跳过；报告标注"无模板基准——结论限于实证发现"，见 [finding-contract §7](../process-assess-workflow/references/finding-contract.md)。
 
 ## Related
 

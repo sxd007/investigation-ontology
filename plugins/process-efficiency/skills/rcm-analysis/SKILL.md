@@ -104,11 +104,23 @@ RISK-003 信息滞后     -            -             ●(部分)
 
 ## 质量纪律
 
-1. **消费纪律**：只消费 digest.json 与调用方提供的风险参照集；不读原文；**不做实例数据分析**（运行有效性归 control-testing）；
+1. **消费纪律**：只消费 digest-schema 兼容的流程知识包（默认生产者 policy-digest）与调用方提供的风险参照集；不读原文；**不做实例数据分析**（运行有效性归 control-testing）；
 2. **锚点纪律**：finding 带 anchor.digest（risk/control 的 ID + source）；`risk_unidentified` 带 anchor.digest.element_ref + 参照集条目说明；
 3. 制度明文风险（assertion_basis=explicit_text）与参照集识别风险在清单中分列，不得混排；
 4. finding 结构遵循 [finding-contract](../process-assess-workflow/references/finding-contract.md)（RC-NNN 前缀）；
 5. 不以"行业最佳实践"冒充制度明文——设计评价结论注明依据是制度文本还是参照集。
+
+## 上游缺陷识别（DDR）
+
+本技能是风险-控制领域的专家，**`risk_unidentified` 是全部四技能中上游缺陷嫌疑最高的发现类型**（参照集缺口既可能是制度真缺失，也可能是解构未提取）。观察到以下信号时按 [DDR 机制](../process-assess-workflow/references/digest-defect-report.md)报告：
+
+| 观察 | 嫌疑 | DDR 类型 |
+|------|------|---------|
+| `risk_unidentified`（参照集缺口） | 风险在原文有表述但未提取 | omission |
+| `control_orphaned` / `control_risk_mismatch` | 控制与风险的链接提取错误，而非设计缺陷 | misclassification |
+| 控制设计属性缺失（无 frequency/evidence），但所在条款锚点 excerpt 含频次/证据字样 | 字段在原文存在但未提取到 controls[] | omission |
+
+**纪律**：`risk_unidentified` 类 finding **必须**先发 DDR，闭环（dismissed）后才可升级为确认发现；R4 的断链类问题（rule_refs/element_ref 悬空）属明确的解构缺陷，直接记入 DDR 而非 finding。
 
 ## Related
 

@@ -2,6 +2,16 @@
 
 > 四个能力层技能（goal-alignment / rcm-analysis / control-testing / efficiency-diagnosis）产出的评价发现必须遵循本契约，REPORT 阶段才能统一收敛为评级结论与改进建议清单。本契约由 process-assess-workflow 拥有，能力技能引用并遵守。
 
+## 0. 模板层输入契约
+
+四技能的模板层输入是 **digest-schema 兼容的流程知识包**（Policy Digest 0.2.0/0.3.0 schema 形态：L1–L5 层级、flow_edges、RACI、risks/controls、带原文锚点）。生产者不限于 policy-digest：
+
+| 生产者 | 状态 | 说明 |
+|--------|------|------|
+| policy-digest（文档解构） | ✅ 已实现 | 默认路径：制度文档 → digest 成果包 |
+| 本体层投影（ontology_framework Enterprise 层 → digest 形态投影） | 规划中 | 企业流程本体已入库时直接投影，评价与本体闭环 |
+| 实例反推（process mining，事件日志 → 结构化路径） | 规划中 | 仅限 template-free 降级模式（§7），不能补足设计层评价 |
+
 ## 1. Finding 结构
 
 每个评价发现是 YAML frontmatter 文档或表格行，字段如下：
@@ -64,8 +74,26 @@ severity 是**评价技能的初判**，REPORT 阶段结合流程 Owner 反馈�
 
 ## 6. 与 digest 的边界
 
-评价发现**只消费** digest.json / candidates.json / baseline 快照：
+评价发现**只消费**流程知识包（digest-schema 兼容，见 §0）与 baseline 快照：
 
-- 不修改 digest（评价是消费者，制度解构缺陷记入 digest 的 issues 通道或反馈给归口部门）；
+- 不修改 digest（评价是消费者，制度解构缺陷走 [DDR 机制](./digest-defect-report.md)反馈，由上游验证闭环）；
 - 不读制度原文（锚点经 digest 间接追溯）；
 - 改进建议涉及制度修订的，标注 `recommendation_scope: policy_revision | execution_improvement | data_quality`，供 REPORT 区分建议性质。
+
+## 7. Template-free 降级模式
+
+无流程知识包（没有制度文档、知识包尚未建立）时，部分技能可降级为**纯实例评价**：
+
+| 技能 | 可否降级 | 降级后范围 |
+|------|---------|-----------|
+| goal-alignment | ❌ 不可 | 评价对象（目标）本身缺失，声明不适用 |
+| rcm-analysis | ❌ 不可 | 无设计即无"设计评价"可言，声明不适用 |
+| control-testing | ✅ 部分 | 仅自洽性检查（职责冲突、留痕缺失、实例路径自洽）；绕过/偏离类发现无模板基准，跳过 |
+| efficiency-diagnosis | ✅ 大部分 | E4–E7（周期分解/瓶颈/返工/离群）完整可用；E1–E3 结构诊断跳过 |
+
+降级模式纪律：
+
+1. findings 只带 `anchor.baseline`（无 digest 锚点可引）；
+2. 报告显著标注"无模板基准——结论限于实证发现，不含设计评价"；
+3. 发现实例路径高度一致的结构模式时，提示"适合后续建立流程知识包做设计层评价"，但不自行推断模板；
+4. 该模式不与正常模式混用（同一评价中知识包就位后，须重跑全部维度而非只补设计层）。

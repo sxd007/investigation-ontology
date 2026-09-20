@@ -77,11 +77,23 @@ origin: efio
 
 ## 质量纪律
 
-1. **消费纪律**：只消费 digest.json 与 baseline 声明的指标/快照；目标原文经 digest 的 source 锚点回溯，不读制度原文；
+1. **消费纪律**：只消费 digest-schema 兼容的流程知识包（默认生产者 policy-digest）与 baseline 声明的指标/快照；目标原文经 digest 的 source 锚点回溯，不读制度原文；
 2. **锚点纪律**：设计层 finding 带 `anchor.digest`（objective 的 ID + source），实例层带 `anchor.baseline`（版本+快照+记录）；
 3. analysis 推断的目标（assertion_basis=analysis）在 finding 中注明"推断目标，非制度明文"；
 4. finding 结构遵循 [finding-contract](../process-assess-workflow/references/finding-contract.md)，finding_type 用本技能枚举（GA-NNN 前缀）；
 5. 评级是初判，severity 与最终评级在 REPORT 阶段经 Owner 反馈可调整（记录理由）。
+
+## 上游缺陷识别（DDR）
+
+本技能是目标语义的专家，有能力识别上游解构的缺陷。观察到以下信号时按 [DDR 机制](../process-assess-workflow/references/digest-defect-report.md)报告嫌疑（只报告+证据，不回读原文、不修改 digest、不替上游定性）：
+
+| 观察 | 嫌疑 | DDR 类型 |
+|------|------|---------|
+| L3 无目标（`objective_missing`），但其 entry/exit_conditions 已表达结果态 | 目标在原文存在但未提取 | omission |
+| 父子目标冲突，且子目标挂接元素 hierarchy_confidence 低 / inferred_structure | 层级归错导致假冲突 | misclassification |
+| 目标 statement 与 source excerpt 语义不符 | 锚点错挂 | anchor_error |
+
+**纪律**：`objective_missing` 类 finding 在 DDR 闭环前保持 provisional；DDR 被 dismissed（原文核验确无目标）后 finding 升级为确认发现——排除解构遗漏本身就是证据加强。
 
 ## Related
 

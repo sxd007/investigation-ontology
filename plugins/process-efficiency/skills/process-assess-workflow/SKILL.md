@@ -35,6 +35,7 @@ process-assessments/
 │   │   └── baseline-v2.json         # 制度修订/数据窗口变化时新版本，不覆盖
 │   ├── scope_charter.md             # SCOPE 产物：评价范围章程
 │   ├── 01_assessments/              # ASSESS 产物：各能力技能的输出（RCM 矩阵、诊断报告等）
+│   │   └── ddr.yaml                 # DDR 汇总：下游技能报告的上游解构缺陷嫌疑（跨维度）
 │   ├── assessment_report.md         # REPORT 产物：评价报告（评级 + 缺口 + 建议）
 │   └── CHANGELOG.json               # 评价变更记录
 └── ...
@@ -110,7 +111,9 @@ TRACK（跟踪整改落实）→ CLOSED
 | 控制点 | `control-testing` | digest 的 controls + 数据快照（实例执行记录） | `01_assessments/control-testing/` |
 | 效率 | `efficiency-diagnosis` | digest 的 flow_edges/process_elements + 数据快照 | `01_assessments/efficiency-diagnosis/` |
 
-**消费纪律**：评价技能只消费 digest.json / candidates.json 与 baseline 声明的数据快照，**不回头读制度原文**（锚点追溯经 digest 间接实现），不引入基线外的未快照数据（保证结论可复现）。
+**消费纪律**：评价技能只消费 digest-schema 兼容的流程知识包（默认生产者 policy-digest；本体层投影为第二生产者，未来实现）与 baseline 声明的数据快照，**不回头读制度原文**（锚点追溯经 digest 间接实现），不引入基线外的未快照数据（保证结论可复现）。
+
+**上游纠错（DDR）**：评价技能在专业领域内识别流程知识包的缺陷嫌疑（遗漏/错归类/锚点错/幻觉），按 [DDR 机制](./references/digest-defect-report.md)报告至 `01_assessments/ddr.yaml`；验证与修复归 policy-digest（走 digest 版本链），下游不自行修改不回读原文。defect-susceptible 类 finding 在 DDR 闭环前保持 provisional。
 
 **输出**：各维度评价产物（按各技能 SKILL.md 定义的产出结构写入 `01_assessments/{dimension}/`，findings 按 [finding-contract](./references/finding-contract.md) 聚合到该维度 `findings.yaml`）。
 
@@ -137,6 +140,7 @@ TRACK（跟踪整改落实）→ CLOSED
 | `gaps_itemized` | 缺口清单已逐条列出（类型/严重度/责任建议方/建议措施） |
 | `recommendations_actionable` | 每条建议具体可执行（有明确责任方与验证方式），避免"加强管理"类空话 |
 | `baseline_referenced` | 报告注明全部结论依据的 baseline 版本 |
+| `upstream_defects_resolved` | 全部 open DDR 已闭环（verified 已修复并重新锚定 / dismissed 已记录理由 / deferred 已评估影响并经 Owner 确认） |
 
 ### TRACK 阶段（可选） — 跟踪整改
 
