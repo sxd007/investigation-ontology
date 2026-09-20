@@ -17,10 +17,12 @@
 |------|----|------|
 | `process-assess-workflow` | 工作流 | 评价组合管理 — 多流程评价并行推进、生命周期门禁（SCOPE→BASELINE→ASSESS→REPORT+TRACK）、基线组装与版本化 |
 | `policy-digest` | 能力·基座 | 企业制度流程解构 — 将制度、办法、流程、授权文件及附件转化为带原文锚点的规则、L1–L5 流程、RACI、风险控制、问题清单与本体 candidates 入库包 |
-| `goal-alignment` | 能力 | 流程目标清晰度与 KPI 达成度评价（规划中） |
-| `rcm-analysis` | 能力 | 风险-控制映射、覆盖度与控制设计有效性（规划中） |
-| `control-testing` | 能力 | 穿行测试、抽样实例 vs 模板通路（规划中） |
-| `efficiency-diagnosis` | 能力 | 路径冗余、周期时间、返工与瓶颈诊断（规划中） |
+| `goal-alignment` | 能力 | 流程目标清晰度（SMART 评级）与 KPI 达成度评价 |
+| `rcm-analysis` | 能力 | 风险-控制矩阵、覆盖度（无控/未识别风险）与控制设计有效性 |
+| `control-testing` | 能力 | 穿行测试与抽样偏差分析（未执行/绕过/偏离），可疑信号移交调查 |
+| `efficiency-diagnosis` | 能力 | 路径结构诊断（串行冗余/返工环）与周期时间分解、瓶颈识别 |
+
+四技能产出的评价发现遵循统一 [finding-contract](./skills/process-assess-workflow/references/finding-contract.md)（GA/RC/CT/ED 前缀、锚点纪律、severity 判级），REPORT 阶段由此收敛。
 
 架构与边界设计见 [docs/design.md](./docs/design.md)（双模式架构：能力层 root-agnostic 可独立嵌入；工作流层服务专职评价场景）。
 

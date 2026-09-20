@@ -112,7 +112,7 @@ TRACK（跟踪整改落实）→ CLOSED
 
 **消费纪律**：评价技能只消费 digest.json / candidates.json 与 baseline 声明的数据快照，**不回头读制度原文**（锚点追溯经 digest 间接实现），不引入基线外的未快照数据（保证结论可复现）。
 
-**输出**：各维度评价产物（技能未实施时，由 AI 按 SKILL 边界手工执行并记录于 `01_assessments/`，注明"手工评价"）。
+**输出**：各维度评价产物（按各技能 SKILL.md 定义的产出结构写入 `01_assessments/{dimension}/`，findings 按 [finding-contract](./references/finding-contract.md) 聚合到该维度 `findings.yaml`）。
 
 **门禁**（全部满足后推进至 REPORT）：
 
@@ -181,6 +181,7 @@ node skills/process-assess-workflow/scripts/scaffold-assessment.mjs process-asse
 
 ## Related
 
-- **能力层技能：** [policy-digest](../policy-digest/SKILL.md)（基座：文档→流程知识包）、goal-alignment / rcm-analysis / control-testing / efficiency-diagnosis（四维评价，规划中）
+- **能力层技能：** [policy-digest](../policy-digest/SKILL.md)（基座：文档→流程知识包）、[goal-alignment](../goal-alignment/SKILL.md)、[rcm-analysis](../rcm-analysis/SKILL.md)、[control-testing](../control-testing/SKILL.md)、[efficiency-diagnosis](../efficiency-diagnosis/SKILL.md)（四维评价）
+- **共享契约：** [finding-contract](./references/finding-contract.md) — 四技能评价发现的统一结构（GA/RC/CT/ED 前缀、锚点纪律、severity 判级），REPORT 阶段聚合的依据
 - **设计基准：** [docs/design.md](../../docs/design.md)（双模式架构、根心契约、范式差异）
 - **对照范式：** investigation-ontology 插件的 case-management（对抗性调查工作流，与本技能的协作性评价工作流互为镜像）

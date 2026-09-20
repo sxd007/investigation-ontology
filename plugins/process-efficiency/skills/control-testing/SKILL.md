@@ -1,0 +1,102 @@
+---
+name: control-testing
+description: 控制运行有效性测试 — 通过穿行测试与抽样，将实例执行记录对照 digest 的模板通路，识别未执行/绕过/偏离的控制。当需要回答"制度设计的控制实际被执行了吗"时使用。
+origin: efio
+---
+
+# 控制运行有效性测试
+
+对**实例层**的评价：制度说要有控制（digest 的 controls），实际跑了没有、跑对了没有。与 [rcm-analysis](../rcm-analysis/SKILL.md) 的边界：它评"设计得好不好"（模板层），本技能评"执行得到不到位"（实例层）。二者合起来才是完整的内控评价（COSO 的设计有效性 + 运行有效性）。
+
+## 激活条件
+
+- 测试流程控制是否按制度规定被执行（执行率/偏差）
+- 通过穿行测试核对实际路径与模板通路（flow_edges）的一致性
+- 识别控制绕过、例外未记录、留痕缺失等运行问题
+- process-assess-workflow 的 ASSESS 阶段调度本技能（dimensions 含 control）
+
+**不适用**：评价控制设计（rcm-analysis）；舞弊行为的取证与定性（investigation-ontology 的调查技能——本技能发现的可疑绕过应移交，不自行定性）；数据异常检测（data-analysis）。
+
+## 输入
+
+| 输入 | 来源 | 层 |
+|------|------|----|
+| `controls[]`（待测控制清单 / frequency / evidence 要求） | digest.json | 模板 |
+| `flow_edges[]` + `process_elements[]`（模板通路） | digest.json | 模板 |
+| 实例执行记录（含时间戳/操作人/对象/动作/路径，足以重建每笔实例的完整路径） | baseline 快照 | 实例 |
+| 授权/阈值规则（判定"偏离"的基准） | digest rules | 模板 |
+
+**数据快照的前置要求**（BASELINE 阶段应满足，不满足时先反馈）：执行记录必须能按单笔业务实例聚合出完整路径（申请→审批→执行→归档各环节的人/时间/动作）；无法聚合的记录只能支撑部分测试项，降级并列入报告限制。
+
+## 方法论
+
+### T1 抽样策略
+
+按控制频率定样本量（无统计学强制，供起评参考；全量数据可用时直接全量）：
+
+| 控制频率 | 建议样本 | 说明 |
+|---------|---------|------|
+| 每笔触发 | 全量扫描高频项 + 随机抽样复核 | 系统数据可全量 |
+| 日频 | 抽 20-30 个工作日 | 覆盖月初/月末 |
+| 月频 | 抽 3-6 个月 | 覆盖季度末 |
+| 触发式（条件控制） | 全量触发实例 | 通常量少 |
+
+抽样须记录方法与样本范围（写入选样说明），保证可复现。**偏差发现后**：涉及该控制维度扩展样本或全量核验。
+
+### T2 穿行测试（Walkthrough）
+
+选 3-5 笔典型实例（正常路径 1-2 笔 + 各条件路径各 1 笔），人工走完整路径并对照模板：
+
+- 实际路径与 `flow_edges` 模板是否一致（少了哪个环节、多了哪个环节）；
+- 每个控制点是否被经过（审批人是否是制度规定的角色——对照 RACI）；
+- 输出 Artifact 是否产生（对照 digest artifacts）。
+
+穿行结果记录为路径对照表，是理解"制度 vs 实际"差异的定性基础。
+
+### T3 执行偏差分析（全量/样本）
+
+| 偏差类型 | 判定 | finding_type |
+|---------|------|------------|
+| 应执行未执行 | 按规则应触发控制但记录中无该控制动作 | `control_not_executed` |
+| 绕过控制 | 走了模板外的路径（跳过控制点直达后端） | `control_bypassed` |
+| 执行但偏离 | 控制动作存在但参数/时限/角色不符（超时限审批、非授权角色审批） | `control_deviation` |
+| 例外未记录 | 触发了例外路径（reject/return/emergency 边）但无例外说明或审批 | `exception_unlogged` |
+| 留痕缺失 | 控制执行但证据缺失（对照 controls.evidence 要求） | `control_evidence_missing` |
+| 职责冲突 | 同一实例中不相容角色由同一人执行（申请+审批、执行+复核） | `segregation_conflict` |
+
+**偏差率统计**：每控制点计算偏差率（偏差实例数 / 应控实例数），形成控制点执行率看板。执行率低于阈值（建议 95%）的控制列为重点 finding。
+
+### T4 可疑信号移交纪律
+
+发现系统性绕过、篡改痕迹、串通迹象等**舞弊可疑信号**时：
+
+- 本技能只记录现象（`control_bypassed`，severity=high，evidence 详列实例与数据定位）；
+- **不进行舞弊定性**，在 goal_review 之外单独生成"移交建议"条目，建议调用方启动调查（investigation-ontology 的场景）；
+- 移交条目注明数据快照定位，便于调查方从同一起点取证。
+
+### 评价产出结构
+
+```text
+01_assessments/control/
+├── sampling_plan.md            # T1 选样说明（方法/范围/理由）
+├── walkthrough.md              # T2 穿行测试路径对照表
+├── control_execution_scorecard.md  # T3 执行率看板（控制点×偏差率×重点标记）
+├── deviation_details.md         # T3 偏差明细（逐条可追溯）
+└── findings.yaml               # 按 finding-contract 聚合（含移交建议区）
+```
+
+## 质量纪律
+
+1. **消费纪律**：只消费 digest.json（模板）与 baseline 快照（实例）；不读制度原文；不引入快照外的"顺手指令"数据；
+2. **锚点纪律**：finding 必带 `anchor.baseline`（版本+快照+记录定位）与 `anchor.digest`（相关 control/flow_edge ID）；纯实例发现（如绕过）至少可从快照重建证据链；
+3. **协作姿态**：偏差先核实数据质量（字段缺失≠未执行），确认后再定性——与流程 Owner 的沟通在 ASSESS 门禁 `stakeholder_review_done` 中完成；
+4. finding 结构遵循 [finding-contract](../process-assess-workflow/references/finding-contract.md)（CT-NNN 前缀）；
+5. 样本与方法写死在 sampling_plan.md，他人可据此复现。
+
+## Related
+
+- **上游**：[policy-digest](../policy-digest/SKILL.md)（controls/flow_edges 模板的生产者）；[rcm-analysis](../rcm-analysis/SKILL.md)（设计层评价——其 `control_evidence_missing` 类设计缺口是本技能受阻的预警）
+- **下游移交**：可疑舞弊信号 → investigation-ontology 插件（调查定性）
+- **同级**：[goal-alignment](../goal-alignment/SKILL.md)、[efficiency-diagnosis](../efficiency-diagnosis/SKILL.md)
+- **契约**：[finding-contract](../process-assess-workflow/references/finding-contract.md)
+- **参照系**：COSO 运行有效性测试 / 内审穿行测试方法
