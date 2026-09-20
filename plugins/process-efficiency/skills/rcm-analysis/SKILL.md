@@ -1,7 +1,7 @@
 ---
 name: rcm-analysis
 description: 风险控制矩阵评价 — 构建"风险×控制"映射矩阵，评价风险覆盖度（无控风险/未识别风险）、控制设计有效性（预防/检查、自动化、频率匹配）与冗余。当需要回答"流程的风险控制设计得好不好"时使用。
-origin: efio
+origin: process-efficiency
 ---
 
 # 风险控制矩阵评价

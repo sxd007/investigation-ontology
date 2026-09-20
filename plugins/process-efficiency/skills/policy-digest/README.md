@@ -359,7 +359,7 @@ node skills/policy-digest/scripts/migrate-policy-digest-0.1-to-0.2.mjs <成果�
 3. **流程提炼**：每个 L3 的目标、入口、出口、子活动、流程内边和 Artifact；L3 区块可折叠，L4/L5 按父子关系缩进，记录标签按类型着色；
 4. **角色职责**：「流程元素 × 角色」RACI 矩阵，行按层级树序缩进、可折叠，单元格标记与记录索引可回到来源；
 5. **规则与风控**：「流程元素 × 目标/规则/风险/控制」树形矩阵，记录按实际挂载层级进入单元格，默认折叠到 L3，控制标注关联风险并可高亮配对行；制度问题在矩阵下方独立区块；
-6. **本体投影**：candidate、proposal、Core 版本、review pool、parameter、transition、alignment 和临时 `efio:*` 映射；
+6. **本体投影**：candidate、proposal、Core 版本、review pool、parameter、transition、alignment 和临时 `临时层级键（hierarchyLevel/parentElement/owningProcess/mappingStatus）` 映射；
 7. **原文对照**：右侧始终呈现全部 parsed 原文块；点击任一记录自动定位并高亮目标块，可滑动查看上下文，块下显示锚点和判断说明。
 
 推荐审阅顺序：
@@ -454,7 +454,7 @@ L1 采购管理
 
 ## 13. 入库与安全边界
 
-当前 Process Core 0.4.0 尚未提供正式实例父子属性。Policy Digest 暂在 candidates 中使用 `efio:parentElement`、`efio:owningProcess`、`efio:hierarchyLevel` 和 `efio:mappingStatus: PENDING_CORE_ALIGNMENT` 保存层级。这些是交换层扩展，不应被静默当作正式 Core 属性序列化。
+当前 Process Core 0.4.0 尚未提供正式实例父子属性。Policy Digest 暂在 candidates 中使用 `parentElement`、`owningProcess`、`hierarchyLevel` 和 `mappingStatus: PENDING_CORE_ALIGNMENT` 保存层级。这些是交换层扩展，不应被静默当作正式 Core 属性序列化。
 
 同时注意：
 

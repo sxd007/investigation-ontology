@@ -1,7 +1,7 @@
 ---
 name: goal-alignment
 description: 流程目标对齐评价 — 评价流程目标的清晰度（SMART）、可度量性、目标与流程的挂接一致性（设计层），以及 KPI 映射与达成度（实例层）。当需要回答"流程目标定得好不好、达成了没有"时使用。
-origin: efio
+origin: process-efficiency
 ---
 
 # 流程目标对齐评价

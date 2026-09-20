@@ -153,20 +153,21 @@ transition 固定使用 `localId`、`fromActivity`、`toActivity`、`transitionK
 
 层级映射暂不修改 Process Core。每个流程元素 proposal 在 `properties` 中使用：
 
-- `efio:hierarchyLevel`；
-- 非 L1 元素的 `efio:parentElement`；
-- L3–L5 元素的 `efio:owningProcess`；
-- `efio:mappingStatus: PENDING_CORE_ALIGNMENT`。
+- `hierarchyLevel`；
+- 非 L1 元素的 `parentElement`；
+- L3–L5 元素的 `owningProcess`；
+- `mappingStatus: PENDING_CORE_ALIGNMENT`。
 
 `ontology_projection.hierarchy_mapping` 固定声明：
 
 ```json
 {
   "mode": "candidates_extension",
-  "extension_prefix": "efio",
   "serialization_policy": "PENDING_CORE_ALIGNMENT"
 }
 ```
+
+> 0.3.0 已移除 `extension_prefix` 字段——层级映射键不再使用任何前缀（framework 的 candidates schema 对 `properties` 为开放对象，前缀无契约作用）；0.2.0 历史包中的该字段由 0.2→0.3 迁移器删除。
 
 这些扩展是 candidates 层的临时兼容映射；未经 Core 对齐不得宣称已稳定序列化到 Enterprise TTL。目标、输入和输出继续使用 `hasObjective`、`hasInput`、`hasOutput` 等 Process Core 原生关系。
 

@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { migrateDigest } from './migrate-policy-digest-0.1-to-0.2.mjs';
-import { migrateDigestEngagement } from './migrate-policy-digest-0.2-to-0.3.mjs';
+import { migrateCandidates, migrateDigestEngagement } from './migrate-policy-digest-0.2-to-0.3.mjs';
 import { generateExplanation, renderExplanationHtml } from './generate-policy-digest-explanation.mjs';
 import { renderPolicyDigestMarkdown } from './generate-policy-digest-md.mjs';
 import { canonicalJson, createCandidateSeed, projectDeterministicCandidates, syncMissingCandidateSeeds } from './project-policy-digest-candidates.mjs';
@@ -41,7 +41,7 @@ function parsed() {
 }
 
 function hierarchyProperties(level, parent, owner, predecessor = null) {
-  return { 'efio:hierarchyLevel': level, ...(parent ? { 'efio:parentElement': parent } : {}), ...(owner ? { 'efio:owningProcess': owner } : {}), 'efio:mappingStatus': 'PENDING_CORE_ALIGNMENT', ...(predecessor ? { precededByActivity: predecessor } : {}) };
+  return { hierarchyLevel: level, ...(parent ? { parentElement: parent } : {}), ...(owner ? { owningProcess: owner } : {}), mappingStatus: 'PENDING_CORE_ALIGNMENT', ...(predecessor ? { precededByActivity: predecessor } : {}) };
 }
 
 function candidates() {
@@ -104,7 +104,7 @@ function digest() {
       { edge_id: 'EDGE-CERT-001', process_ref: 'PROC-CERTIFICATION', from_ref: 'ACT-DUE-DILIGENCE', to_ref: 'ACT-CERT-APPROVAL', edge_kind: 'main', condition: null, condition_parameters: [], source, review: review(), candidate_refs: [candidateId] },
     ],
     role_assignments: roleAssignments, risks: [], controls: [], issues: [], graph: { lanes: [], nodes: [], edges: [] }, pending_confirmations: [],
-    ontology_projection: { candidates_schema_version: '0.3.0', candidates_ref: 'candidates.json', parsed_schema_version: '0.1.0', parsed_ref: 'normalized.parsed.json', tenant: 'acme', core_versions: { process: '0.4.0' }, hierarchy_mapping: { mode: 'candidates_extension', extension_prefix: 'efio', serialization_policy: 'PENDING_CORE_ALIGNMENT' } },
+    ontology_projection: { candidates_schema_version: '0.3.0', candidates_ref: 'candidates.json', parsed_schema_version: '0.1.0', parsed_ref: 'normalized.parsed.json', tenant: 'acme', core_versions: { process: '0.4.0' }, hierarchy_mapping: { mode: 'candidates_extension', serialization_policy: 'PENDING_CORE_ALIGNMENT' } },
   };
 }
 
@@ -282,7 +282,7 @@ try {
   assert.throws(() => syncMissingCandidateSeeds(incrementalDigest, clauseCollisionSeed), /localId R-002-CLAUSE 已存在/);
   const seedWithRuleProposal = candidates();
   seedWithRuleProposal.candidates[0].produces.push({ localId: 'RULE-KEEP', rdfType: 'policy:Obligation', statement: '必须保留的规则投影' });
-  seedWithRuleProposal.candidates[0].produces.find((item) => item.localId === 'PROC-SCREENING').properties['efio:hierarchyLevel'] = 'L5';
+  seedWithRuleProposal.candidates[0].produces.find((item) => item.localId === 'PROC-SCREENING').properties.hierarchyLevel = 'L5';
   seedWithRuleProposal.candidates[0].disposition = 'mandatory';
   seedWithRuleProposal.candidates[0].confidence = 0.1;
   seedWithRuleProposal.document.docId = 'STALE-DOC';
@@ -291,7 +291,7 @@ try {
   digestWithParameter.rules[0].parameters = [{ parameter_type: 'duration', value: '5个工作日', value_number: 5, comparator: 'le', unit: '工作日' }];
   const projected = projectDeterministicCandidates(digestWithParameter, seedWithRuleProposal);
   const projectedCandidate = projected.candidates[0];
-  assert.equal(projected.candidates[0].produces.find((item) => item.localId === 'PROC-SCREENING').properties['efio:hierarchyLevel'], 'L3');
+  assert.equal(projected.candidates[0].produces.find((item) => item.localId === 'PROC-SCREENING').properties.hierarchyLevel, 'L3');
   assert.ok(projectedCandidate.produces.some((item) => item.localId === 'RULE-KEEP'));
   assert.deepEqual(projectedCandidate.produces.find((item) => item.localId === 'R-001-OBLIGATION'), {
     localId: 'R-001-OBLIGATION', rdfType: 'policy:Obligation', statement: '执行筛选和认证', obligationStatus: 'DRAFT', applicability: 'UNASSESSED',
@@ -420,14 +420,28 @@ try {
 
   const legacyEngagement = structuredClone(validDigest);
   legacyEngagement.digest_schema_version = '0.2.0'; legacyEngagement.case_id = legacyEngagement.engagement_id; delete legacyEngagement.engagement_id;
-  const legacyDirectory = writePackage('legacy-020', legacyEngagement, initialized);
+  legacyEngagement.ontology_projection.hierarchy_mapping.extension_prefix = 'efio';
+  const legacyCandidates = structuredClone(initialized);
+  for (const proposal of legacyCandidates.candidates.flatMap((candidate) => candidate.produces || [])) {
+    if (!proposal.properties) continue;
+    const rebuilt = {};
+    for (const [key, value] of Object.entries(proposal.properties)) {
+      rebuilt[{ hierarchyLevel: 'efio:hierarchyLevel', parentElement: 'efio:parentElement', owningProcess: 'efio:owningProcess', mappingStatus: 'efio:mappingStatus' }[key] || key] = value;
+    }
+    proposal.properties = rebuilt;
+  }
+  const legacyDirectory = writePackage('legacy-020', legacyEngagement, legacyCandidates);
   assert.deepEqual(validatePackage(legacyDirectory).issues.filter((item) => item.severity === 'ERROR'), [], '0.2.0 包应保持读有效');
   const migratedEngagement = migrateDigestEngagement(legacyEngagement);
   assert.equal(migratedEngagement.digest_schema_version, '0.3.0');
   assert.equal(migratedEngagement.engagement_id, 'ENG-ACME-2026-001');
   assert.ok(!('case_id' in migratedEngagement), '迁移后不应残留 case_id 字段');
+  assert.ok(!('extension_prefix' in migratedEngagement.ontology_projection.hierarchy_mapping), '迁移后不应残留 extension_prefix');
   assert.equal(migratedEngagement.rules.length, legacyEngagement.rules.length);
-  const migratedEngagementDirectory = writePackage('migrated-engagement-023', migratedEngagement, initialized);
+  const migratedCandidates = migrateCandidates(legacyCandidates);
+  assert.ok(migratedCandidates.candidates[0].produces.find((item) => item.localId === 'PROC-SCREENING').properties.hierarchyLevel === 'L3', 'candidates 的 efio: 键应已去前缀');
+  assert.ok(!('efio:mappingStatus' in migratedCandidates.candidates[0].produces[0].properties), '迁移后不应残留 efio: 键');
+  const migratedEngagementDirectory = writePackage('migrated-engagement-023', migratedEngagement, migratedCandidates);
   assert.deepEqual(validatePackage(migratedEngagementDirectory).issues.filter((item) => item.severity === 'ERROR'), [], '0.2→0.3 迁移结果应通过完整校验');
   assert.throws(() => migrateDigestEngagement(validDigest), /只支持 digest 0\.2\.0/);
 

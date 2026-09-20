@@ -14,10 +14,10 @@ function edgeSource(activity, byId) {
 function extensionProperties(proposal, level, parentRef, owningProcessRef) {
   return {
     ...(proposal.properties || {}),
-    'efio:hierarchyLevel': level,
-    ...(parentRef ? { 'efio:parentElement': parentRef } : {}),
-    ...(owningProcessRef ? { 'efio:owningProcess': owningProcessRef } : {}),
-    'efio:mappingStatus': 'PENDING_CORE_ALIGNMENT',
+    hierarchyLevel: level,
+    ...(parentRef ? { parentElement: parentRef } : {}),
+    ...(owningProcessRef ? { owningProcess: owningProcessRef } : {}),
+    mappingStatus: 'PENDING_CORE_ALIGNMENT',
   };
 }
 
@@ -126,7 +126,6 @@ export function migrateDigest(digest, candidates = null) {
       ...digest.ontology_projection,
       hierarchy_mapping: {
         mode: 'candidates_extension',
-        extension_prefix: 'efio',
         serialization_policy: 'PENDING_CORE_ALIGNMENT',
       },
     },

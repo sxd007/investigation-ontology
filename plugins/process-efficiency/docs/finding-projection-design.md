@@ -18,26 +18,28 @@
 | 对象 | policy:Clause / proc:Process 等新实例 | 已入库的 proc 实例（ControlPoint/Metric/ProcessActivity） |
 | review 语义 | 条款提取的提取正确性 | 评价结论的定性正确性 |
 
-结论：需要**独立的断言交换格式**（暂名 `evaluation-assertions`），沿用 efio: 扩展 + `PENDING_CORE_ALIGNMENT` 纪律，但 schema 归属待 framework 评审（可能成为 framework 的新 schema，或并入 candidates 0.4.0 的"来源类型"扩展）。
+结论：需要**独立的断言交换格式** `evaluation-assertions`（**ACP-002 已裁决**：framework 第四交换 schema）。谓词按 ACP-002 裁决 4 一次性正式化为 `proc:`/`risk:` IRI；实例未对齐时 target 用结构化 digest 坐标（裁决 2 修订：不使用任何品牌前缀键）。
 
-## 3. 映射草案（finding → 本体断言）
+## 3. 映射草案（finding → 本体断言；已按 ACP-002 裁决修订）
 
-| finding_type（示例） | 本体对象 | efio: 断言键草案（PENDING_CORE_ALIGNMENT） |
+| finding_type（示例） | 本体对象 | 断言谓词（正式化目标 IRI） |
 |--------------------|---------|------------------------------------------|
-| `risk_uncontrolled` / `risk_undercontrolled` | proc:ControlPoint（或风险所在 element） | `efio:hasControlGap`（值：severity + 参照条目 + 评价 ID） |
-| `control_design_weak` | proc:ControlPoint | `efio:designEffectivenessAssessment`（六属性缺陷明细） |
-| `control_not_executed` / `control_bypassed` | proc:ControlPoint | `efio:operatingEffectivenessObservation`（执行率/偏差构成 + 快照定位） |
-| `kpi_not_achieved` / `kpi_absent` | proc:Metric | `efio:metricObservation`（实际值/基准/基准来源/达成状态） |
-| `bottleneck_wait` / `cycle_time_outlier` | proc:ProcessActivity | `efio:bottleneckObservation`（P50/P90/等待占比） |
-| `rework_loop` | proc:ProcessActivity（返工环端点） | `efio:reworkObservation`（返工率/流向） |
-| `objective_vague` 等 | proc:ProcessObjective | `efio:objectiveQualityAssessment`（SMART 评级） |
+| `risk_uncontrolled` / `risk_undercontrolled` | proc:ControlPoint（或风险所在 element） | `proc:hasControlGap`（值：severity + 参照条目 + 评价 ID） |
+| `control_design_weak` | proc:ControlPoint | `proc:designEffectivenessAssessment`（六属性缺陷明细） |
+| `control_not_executed` / `control_bypassed` | proc:ControlPoint | `proc:operatingEffectivenessObservation`（执行率/偏差构成 + 快照定位） |
+| `kpi_not_achieved` / `kpi_absent` | proc:Metric | `proc:metricObservation`（实际值/基准/基准来源/达成状态） |
+| `bottleneck_wait` / `cycle_time_outlier` | proc:ProcessActivity | `proc:bottleneckObservation`（P50/P90/等待占比） |
+| `rework_loop` | proc:ProcessActivity（返工环端点） | `proc:reworkObservation`（返工率/流向） |
+| `objective_vague` 等 | proc:ProcessObjective | `proc:objectiveQualityAssessment`（SMART 评级） |
 
-断言记录结构（草案）：
+断言记录结构（按 ACP-002 修订）：
 
 ```yaml
 assertion_id: EAS-{assessment_id}-001
-target: {proc 实例 IRI 或 efio 临时定位键}   # 见 §4 待定项 2
-predicate: efio:hasControlGap
+target:                                  # 无前缀键；见 ACP-002 裁决 2 修订
+  alignment_status: unaligned            # aligned 时直接用 proc/risk 实例 IRI
+  digest_ref: {doc_id, element_ref}
+predicate: proc:hasControlGap            # 一次性正式化的谓词 IRI
 value: { severity, finding_ref, context }
 evidence:
   digest: {doc_id, element_ref}
@@ -56,11 +58,11 @@ status: proposed                          # 与 finding 同步；Owner 确认 �
 2. 断言不可变，评价复检后出新断言（引用旧断言 supersedes），不就地修改；
 3. severity/结论的 Owner 确认状态随断言携带（proposed/confirmed）。
 
-**待定项**（阻塞正式 schema 的三件事）：
+**待定项**（已在 ACP-002 裁决，2026-09-20）：
 
-1. **schema 归属**：evaluation-assertions 是 framework 独立 schema 还是 candidates 0.4.0 扩展——framework 侧评审定夺；
-2. **实例定位约定**：评价场景中 digest 元素（PE-xxx）映射到已入库 proc 实例 IRI 的映射关系（应通过 digest 的 `PENDING_CORE_ALIGNMENT` 对齐记录建立），未对齐时断言只能用 efio: 临时键，价值受限；
-3. **跨评价聚合语义**：同一 ControlPoint 被多次评价时的断言叠加规则（最新优先/时间序列/加权）。
+1. **schema 归属**：→ 独立 evaluation-assertions schema（framework 第四交换 schema）；
+2. **实例定位约定**：→ 接受未对齐目标降级，target 用结构化 digest 坐标（alignment_status + digest_ref），无任何前缀键；quality_gate 增未对齐率统计；
+3. **跨评价聚合语义**：→ 时间序列（supersedes 链全保留，Shapes 约束无环无断）。
 
 ## 5. 实施路径建议
 

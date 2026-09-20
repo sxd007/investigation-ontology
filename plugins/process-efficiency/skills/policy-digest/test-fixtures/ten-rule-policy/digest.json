@@ -4679,7 +4679,6 @@
     },
     "hierarchy_mapping": {
       "mode": "candidates_extension",
-      "extension_prefix": "efio",
       "serialization_policy": "PENDING_CORE_ALIGNMENT"
     }
   },

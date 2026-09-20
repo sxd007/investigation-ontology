@@ -83,15 +83,15 @@ $$
 
 每个流程 proposal 必须与 digest 同 ID、同 rdfType，并在 `properties` 中包含：
 
-- `efio:hierarchyLevel`
-- 非 L1：`efio:parentElement`
-- L3–L5：`efio:owningProcess`
-- 所有层级：`efio:mappingStatus: PENDING_CORE_ALIGNMENT`
+- `hierarchyLevel`
+- 非 L1：`parentElement`
+- L3–L5：`owningProcess`
+- 所有层级：`mappingStatus: PENDING_CORE_ALIGNMENT`
 - 目标：`hasObjective`
 - 输入：`hasInput`
 - 输出：`hasOutput`
 
-这些 `efio:*` 键是临时交换映射，不是 Process Core 0.4.0 正式属性。
+这些 `临时层级键（hierarchyLevel/parentElement/owningProcess/mappingStatus）` 键是临时交换映射，不是 Process Core 0.4.0 正式属性。
 
 Package validator 会调用同一正向投影逻辑，对完整 candidates 结果做字节级确定性比较。proposal 状态、属性单双值、parameter/transition 顺序或 transition ID 等任一确定性字段被手工改动，都会报告 `candidate_projection_drift`。先运行 projector `--check`，确认差异后再用 `--in-place` 重建。
 

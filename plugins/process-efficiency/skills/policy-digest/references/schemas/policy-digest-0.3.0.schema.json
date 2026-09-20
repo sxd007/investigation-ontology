@@ -45,11 +45,10 @@
         "core_versions": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}},
         "hierarchy_mapping": {
           "type": "object",
-          "required": ["mode", "extension_prefix", "serialization_policy"],
+          "required": ["mode", "serialization_policy"],
           "additionalProperties": false,
           "properties": {
             "mode": {"const": "candidates_extension"},
-            "extension_prefix": {"const": "efio"},
             "serialization_policy": {"const": "PENDING_CORE_ALIGNMENT"}
           }
         }

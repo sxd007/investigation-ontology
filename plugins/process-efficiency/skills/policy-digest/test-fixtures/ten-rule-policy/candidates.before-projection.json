@@ -594,8 +594,8 @@
           "rdfType": "proc:ProcessCategory",
           "label": "脱敏占位文本-0176",
           "properties": {
-            "hierarchyLevel": "L1",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L1",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": [
               "OBJ-01",
               "OBJ-02",
@@ -629,9 +629,9 @@
           "rdfType": "proc:ProcessGroup",
           "label": "脱敏占位文本-0179",
           "properties": {
-            "hierarchyLevel": "L2",
-            "parentElement": "PE-L1-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L2",
+            "efio:parentElement": "PE-L1-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": "OBJ-04",
             "hasInput": [
               "ART-01",
@@ -666,9 +666,9 @@
           "rdfType": "proc:ProcessGroup",
           "label": "脱敏占位文本-0182",
           "properties": {
-            "hierarchyLevel": "L2",
-            "parentElement": "PE-L1-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L2",
+            "efio:parentElement": "PE-L1-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": "OBJ-05",
             "hasInput": "ART-03",
             "hasOutput": [
@@ -704,9 +704,9 @@
           "rdfType": "proc:ProcessGroup",
           "label": "脱敏占位文本-0093",
           "properties": {
-            "hierarchyLevel": "L2",
-            "parentElement": "PE-L1-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L2",
+            "efio:parentElement": "PE-L1-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": "OBJ-06",
             "hasInput": "ART-03",
             "hasOutput": "ART-08"
@@ -738,9 +738,9 @@
           "rdfType": "proc:ProcessGroup",
           "label": "脱敏占位文本-0186",
           "properties": {
-            "hierarchyLevel": "L2",
-            "parentElement": "PE-L1-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L2",
+            "efio:parentElement": "PE-L1-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": "OBJ-07",
             "hasInput": "ART-03",
             "hasOutput": "ART-09"
@@ -772,10 +772,10 @@
           "rdfType": "proc:Process",
           "label": "脱敏占位文本-0189",
           "properties": {
-            "hierarchyLevel": "L3",
-            "parentElement": "PE-L2-01",
-            "owningProcess": "PE-L2-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L3",
+            "efio:parentElement": "PE-L2-01",
+            "efio:owningProcess": "PE-L2-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": "OBJ-04",
             "hasInput": [
               "ART-01",
@@ -810,10 +810,10 @@
           "rdfType": "proc:Process",
           "label": "脱敏占位文本-0191",
           "properties": {
-            "hierarchyLevel": "L3",
-            "parentElement": "PE-L2-01",
-            "owningProcess": "PE-L2-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L3",
+            "efio:parentElement": "PE-L2-01",
+            "efio:owningProcess": "PE-L2-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": "OBJ-04",
             "hasInput": "ART-01",
             "hasOutput": "ART-03"
@@ -845,10 +845,10 @@
           "rdfType": "proc:Process",
           "label": "脱敏占位文本-0192",
           "properties": {
-            "hierarchyLevel": "L3",
-            "parentElement": "PE-L2-01",
-            "owningProcess": "PE-L2-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L3",
+            "efio:parentElement": "PE-L2-01",
+            "efio:owningProcess": "PE-L2-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": "OBJ-04",
             "hasInput": "ART-03",
             "hasOutput": "ART-06"
@@ -880,10 +880,10 @@
           "rdfType": "proc:Process",
           "label": "脱敏占位文本-0194",
           "properties": {
-            "hierarchyLevel": "L3",
-            "parentElement": "PE-L2-02",
-            "owningProcess": "PE-L2-02",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L3",
+            "efio:parentElement": "PE-L2-02",
+            "efio:owningProcess": "PE-L2-02",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": "OBJ-05",
             "hasInput": "ART-03",
             "hasOutput": "ART-04"
@@ -915,10 +915,10 @@
           "rdfType": "proc:Process",
           "label": "脱敏占位文本-0197",
           "properties": {
-            "hierarchyLevel": "L3",
-            "parentElement": "PE-L2-02",
-            "owningProcess": "PE-L2-02",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L3",
+            "efio:parentElement": "PE-L2-02",
+            "efio:owningProcess": "PE-L2-02",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": "OBJ-05",
             "hasInput": "ART-03",
             "hasOutput": "ART-05"
@@ -950,10 +950,10 @@
           "rdfType": "proc:Process",
           "label": "脱敏占位文本-0092",
           "properties": {
-            "hierarchyLevel": "L3",
-            "parentElement": "PE-L2-02",
-            "owningProcess": "PE-L2-02",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L3",
+            "efio:parentElement": "PE-L2-02",
+            "efio:owningProcess": "PE-L2-02",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": "OBJ-05",
             "hasInput": "ART-03",
             "hasOutput": "ART-07"
@@ -985,10 +985,10 @@
           "rdfType": "proc:Process",
           "label": "脱敏占位文本-0093",
           "properties": {
-            "hierarchyLevel": "L3",
-            "parentElement": "PE-L2-03",
-            "owningProcess": "PE-L2-03",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L3",
+            "efio:parentElement": "PE-L2-03",
+            "efio:owningProcess": "PE-L2-03",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": "OBJ-06",
             "hasInput": "ART-03",
             "hasOutput": "ART-08"
@@ -1020,10 +1020,10 @@
           "rdfType": "proc:Process",
           "label": "脱敏占位文本-0102",
           "properties": {
-            "hierarchyLevel": "L3",
-            "parentElement": "PE-L2-04",
-            "owningProcess": "PE-L2-04",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L3",
+            "efio:parentElement": "PE-L2-04",
+            "efio:owningProcess": "PE-L2-04",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasObjective": "OBJ-07",
             "hasInput": "ART-03",
             "hasOutput": "ART-09"
@@ -1055,10 +1055,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0205",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-01",
-            "owningProcess": "PE-L3-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-01",
+            "efio:owningProcess": "PE-L3-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": [
               "ART-01",
               "ART-02"
@@ -1092,10 +1092,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0207",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-01",
-            "owningProcess": "PE-L3-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-01",
+            "efio:owningProcess": "PE-L3-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": [
               "ART-01",
               "ART-02"
@@ -1129,10 +1129,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0210",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-01",
-            "owningProcess": "PE-L3-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-01",
+            "efio:owningProcess": "PE-L3-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-01",
             "precededByActivity": "PE-L4-02"
           }
@@ -1163,10 +1163,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0212",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-01",
-            "owningProcess": "PE-L3-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-01",
+            "efio:owningProcess": "PE-L3-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-01",
             "precededByActivity": "PE-L4-03"
           }
@@ -1197,10 +1197,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0214",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-01",
-            "owningProcess": "PE-L3-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-01",
+            "efio:owningProcess": "PE-L3-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-01",
             "precededByActivity": "PE-L4-04"
           }
@@ -1240,10 +1240,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0216",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-01",
-            "owningProcess": "PE-L3-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-01",
+            "efio:owningProcess": "PE-L3-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-01",
             "hasOutput": "ART-03",
             "precededByActivity": "PE-L4-05"
@@ -1275,10 +1275,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0219",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-04",
-            "owningProcess": "PE-L3-04",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-04",
+            "efio:owningProcess": "PE-L3-04",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-03",
             "hasOutput": "ART-04"
           }
@@ -1309,10 +1309,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0222",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-04",
-            "owningProcess": "PE-L3-04",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-04",
+            "efio:owningProcess": "PE-L3-04",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-04",
             "precededByActivity": "PE-L4-07"
           }
@@ -1343,10 +1343,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0225",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-04",
-            "owningProcess": "PE-L3-04",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-04",
+            "efio:owningProcess": "PE-L3-04",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-04",
             "precededByActivity": "PE-L4-08"
           }
@@ -1377,10 +1377,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0227",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-05",
-            "owningProcess": "PE-L3-05",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-05",
+            "efio:owningProcess": "PE-L3-05",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-03"
           }
         }
@@ -1410,10 +1410,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0230",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-05",
-            "owningProcess": "PE-L3-05",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-05",
+            "efio:owningProcess": "PE-L3-05",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-03",
             "hasOutput": "ART-05",
             "precededByActivity": "PE-L4-10"
@@ -1445,10 +1445,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0231",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-05",
-            "owningProcess": "PE-L3-05",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-05",
+            "efio:owningProcess": "PE-L3-05",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-05",
             "precededByActivity": "PE-L4-11"
           }
@@ -1479,10 +1479,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0233",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-06",
-            "owningProcess": "PE-L3-06",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-06",
+            "efio:owningProcess": "PE-L3-06",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-03"
           }
         }
@@ -1512,10 +1512,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0236",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-06",
-            "owningProcess": "PE-L3-06",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-06",
+            "efio:owningProcess": "PE-L3-06",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-03",
             "hasOutput": "ART-07",
             "precededByActivity": "PE-L4-13"
@@ -1547,10 +1547,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0239",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-07",
-            "owningProcess": "PE-L3-07",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-07",
+            "efio:owningProcess": "PE-L3-07",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-03"
           }
         }
@@ -1580,10 +1580,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0242",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-07",
-            "owningProcess": "PE-L3-07",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-07",
+            "efio:owningProcess": "PE-L3-07",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-03",
             "precededByActivity": "PE-L4-15"
           }
@@ -1614,10 +1614,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0244",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-07",
-            "owningProcess": "PE-L3-07",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-07",
+            "efio:owningProcess": "PE-L3-07",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasOutput": "ART-08",
             "precededByActivity": "PE-L4-16"
           }
@@ -1648,10 +1648,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0247",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-08",
-            "owningProcess": "PE-L3-08",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-08",
+            "efio:owningProcess": "PE-L3-08",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-03"
           }
         }
@@ -1681,10 +1681,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0249",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-08",
-            "owningProcess": "PE-L3-08",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-08",
+            "efio:owningProcess": "PE-L3-08",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasOutput": "ART-09",
             "precededByActivity": "PE-L4-18"
           }
@@ -1715,10 +1715,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0252",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-02",
-            "owningProcess": "PE-L3-02",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-02",
+            "efio:owningProcess": "PE-L3-02",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-01",
             "hasOutput": "ART-01"
           }
@@ -1749,10 +1749,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0254",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-02",
-            "owningProcess": "PE-L3-02",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-02",
+            "efio:owningProcess": "PE-L3-02",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-01",
             "precededByActivity": "PE-L4-20"
           }
@@ -1783,10 +1783,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0257",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-02",
-            "owningProcess": "PE-L3-02",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-02",
+            "efio:owningProcess": "PE-L3-02",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-01",
             "hasOutput": "ART-03",
             "precededByActivity": "PE-L4-21"
@@ -1818,10 +1818,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0259",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-03",
-            "owningProcess": "PE-L3-03",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-03",
+            "efio:owningProcess": "PE-L3-03",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-03",
             "hasOutput": "ART-06"
           }
@@ -1852,10 +1852,10 @@
           "rdfType": "proc:ProcessActivity",
           "label": "脱敏占位文本-0261",
           "properties": {
-            "hierarchyLevel": "L4",
-            "parentElement": "PE-L3-03",
-            "owningProcess": "PE-L3-03",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L4",
+            "efio:parentElement": "PE-L3-03",
+            "efio:owningProcess": "PE-L3-03",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasInput": "ART-06",
             "precededByActivity": "PE-L4-23"
           }
@@ -1886,10 +1886,10 @@
           "rdfType": "proc:Task",
           "label": "脱敏占位文本-0264",
           "properties": {
-            "hierarchyLevel": "L5",
-            "parentElement": "PE-L4-01",
-            "owningProcess": "PE-L3-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L5",
+            "efio:parentElement": "PE-L4-01",
+            "efio:owningProcess": "PE-L3-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasOutput": "ART-01"
           }
         }
@@ -1919,10 +1919,10 @@
           "rdfType": "proc:Task",
           "label": "脱敏占位文本-0266",
           "properties": {
-            "hierarchyLevel": "L5",
-            "parentElement": "PE-L4-01",
-            "owningProcess": "PE-L3-01",
-            "mappingStatus": "PENDING_CORE_ALIGNMENT",
+            "efio:hierarchyLevel": "L5",
+            "efio:parentElement": "PE-L4-01",
+            "efio:owningProcess": "PE-L3-01",
+            "efio:mappingStatus": "PENDING_CORE_ALIGNMENT",
             "hasOutput": "ART-02"
           }
         }

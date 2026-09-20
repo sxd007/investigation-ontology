@@ -1,7 +1,7 @@
 ---
 name: process-assess-workflow
 description: 流程评价工作流管理 — 当专职推动流程效率优化工作、需要有序管理单个或多个流程评价（SCOPE→BASELINE→ASSESS→REPORT→TRACK 生命周期）、组装评价基线并管理其版本时使用。管理评价组合与生命周期门禁，调度能力层技能（policy-digest / goal-alignment / rcm-analysis / control-testing / efficiency-diagnosis）。
-origin: efio
+origin: process-efficiency
 ---
 
 # 流程评价工作流管理

@@ -91,7 +91,7 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <packag
 按 candidate 展示：
 
 - `candidateId`、`disposition`、`confidence`、`coreVersion`、`reviewPool` 和审核状态；
-- `produces[]` 中的 localId、rdfType、标签和临时 `efio:*` 属性；
+- `produces[]` 中的 localId、rdfType、标签和临时 `临时层级键（hierarchyLevel/parentElement/owningProcess/mappingStatus）` 属性；
 - parameter、transition 和 alignment 数量及结构；
 - `PENDING_CORE_ALIGNMENT` 的醒目标识。
 

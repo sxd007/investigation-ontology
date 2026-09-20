@@ -40,10 +40,10 @@ Policy Digest 0.2.0 的权威顺序是：
 | `element_id` | `produces[].localId` | 原值，作为稳定 proposal ID | 缺失由 digest Schema 阻断 | element 的 source/review 留在 digest；candidate 治理元数据保留 | `digest_element_candidate_missing` | 高：validator 以同 ID 查找 |
 | `rdf_type` | `produces[].rdfType` | 原值 | 类型不匹配阻断 | 同上 | `candidate_element_type_mismatch` | 高：validator 精确比较 |
 | `name` | `produces[].label` | 原值 | 缺失由 digest Schema 阻断 | 同上 | 仅两侧 Schema；暂无逐值一致性规则 | 中：schema/fixture 已有映射 |
-| `level` | `properties.efio:hierarchyLevel` | 原值 | 阻断 | 同上 | `candidate_hierarchy_level_mismatch` | 高：validator 精确比较 |
-| `parent_ref` | `properties.efio:parentElement` | 非 null 时写入 | 无父级时省略 | 同上 | `candidate_parent_mismatch` | 高：validator 精确比较 |
-| `owning_process_ref` | `properties.efio:owningProcess` | 非 null 时写入 | 无归属时省略 | 同上 | `candidate_owning_process_mismatch` | 高：validator 精确比较 |
-| 固定契约 | `properties.efio:mappingStatus` | 固定为 `PENDING_CORE_ALIGNMENT` | 不允许其他值 | 不改变 review | `candidate_mapping_status_missing` | 高：validator 固定值 |
+| `level` | `properties.hierarchyLevel` | 原值 | 阻断 | 同上 | `candidate_hierarchy_level_mismatch` | 高：validator 精确比较 |
+| `parent_ref` | `properties.parentElement` | 非 null 时写入 | 无父级时省略 | 同上 | `candidate_parent_mismatch` | 高：validator 精确比较 |
+| `owning_process_ref` | `properties.owningProcess` | 非 null 时写入 | 无归属时省略 | 同上 | `candidate_owning_process_mismatch` | 高：validator 精确比较 |
+| 固定契约 | `properties.mappingStatus` | 固定为 `PENDING_CORE_ALIGNMENT` | 不允许其他值 | 不改变 review | `candidate_mapping_status_missing` | 高：validator 固定值 |
 | `objective_refs` | `properties.hasObjective` | 1 个为标量，多个为数组 | 空数组省略 | objective 自身 source/review 留在 digest | `candidate_objective_projection_mismatch` | 高：validator 集合比较 |
 | `input_artifact_refs` | `properties.hasInput` | 1 个为标量，多个为数组 | 空数组省略 | Artifact source/review 留在 digest | `candidate_input_projection_mismatch` | 高：validator 集合比较 |
 | `output_artifact_refs` | `properties.hasOutput` | 1 个为标量，多个为数组 | 空数组省略 | Artifact source/review 留在 digest | `candidate_output_projection_mismatch` | 高：validator 集合比较 |
@@ -108,7 +108,7 @@ node skills/policy-digest/scripts/project-policy-digest-candidates.mjs <package-
 
 已解决：
 
-- 流程元素的 ID、类型、标签和 `efio:*` 不再双写；
+- 流程元素的 ID、类型、标签和 `临时层级键（hierarchyLevel/parentElement/owningProcess/mappingStatus）` 不再双写；
 - candidate 的来源、分类、置信度和 review pool 不再双写；
 - 每条非空 requirement 的 `policy:Obligation` 及 parameter target 不再双写；
 - objective/input/output 不再双写；

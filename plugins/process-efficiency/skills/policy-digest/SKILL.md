@@ -1,7 +1,7 @@
 ---
 name: policy-digest
 description: 企业制度与流程文件解构 — 当需要把制度、办法、细则及附件转化为可追溯的规则、流程、权责和风控候选，或独立生成原文对照式解构导览时使用。
-origin: efio
+origin: process-efficiency
 ---
 
 # 企业制度流程解构
@@ -70,7 +70,7 @@ node skills/policy-digest/scripts/scaffold-policy-digest.mjs <engagement-root>/p
 
 Schema 只验证单文件形状；跨 parsed/digest/candidates/Markdown 的引用与投影纪律见 [校验契约速查](./references/validation-cheat-sheet.md)。
 
-当前默认契约为 Policy Digest 0.3.0（语境标识 `engagement_id`，root-agnostic：调查案件为 `CASE-*`，流程评价为 `PA-*`，其他调用方自定义）。复杂流程制度按 L1 ProcessCategory → L2 ProcessGroup → L3 Process → L4 ProcessActivity → L5 Task 分层；`process_elements[]` 是层级真相源，`flow_edges[]` 是顺序真相源，`artifacts[]` 是跨 L3 流程衔接的首选载体。父子层级暂以 candidates 中的 `efio:parentElement`、`efio:owningProcess`、`efio:hierarchyLevel` 和 `efio:mappingStatus: PENDING_CORE_ALIGNMENT` 投影，不修改 Process Core。旧 0.1.0 包必须先运行 0.1→0.2 迁移脚本，并对推断层级全量人审；0.2.0 包（`case_id`）仍可校验读取，入库前建议运行 0.2→0.3 迁移器泛化语境标识。具体约束见 [分层流程解构实施方案](./references/hierarchical-process-decomposition-plan.md)。
+当前默认契约为 Policy Digest 0.3.0（语境标识 `engagement_id`，root-agnostic：调查案件为 `CASE-*`，流程评价为 `PA-*`，其他调用方自定义）。复杂流程制度按 L1 ProcessCategory → L2 ProcessGroup → L3 Process → L4 ProcessActivity → L5 Task 分层；`process_elements[]` 是层级真相源，`flow_edges[]` 是顺序真相源，`artifacts[]` 是跨 L3 流程衔接的首选载体。父子层级暂以 candidates 中的 `parentElement`、`owningProcess`、`hierarchyLevel` 和 `mappingStatus: PENDING_CORE_ALIGNMENT` 投影，不修改 Process Core。旧 0.1.0 包必须先运行 0.1→0.2 迁移脚本，并对推断层级全量人审；0.2.0 包（`case_id`）仍可校验读取，入库前建议运行 0.2→0.3 迁移器泛化语境标识。具体约束见 [分层流程解构实施方案](./references/hierarchical-process-decomposition-plan.md)。
 
 ## 运行流程
 
@@ -174,7 +174,7 @@ Schema 只验证单文件形状；跨 parsed/digest/candidates/Markdown 的引�
 5. 未确认记录保持 `review.status: proposed`；AI 不写 confirmed、modified、rejected 或 serialized，也不得把确定性 Obligation 从 `DRAFT/UNASSESSED` 改成 `EFFECTIVE/APPLICABLE`。
 6. 低解析置信、低语义置信、混合条款、未识别区域、跨文档冲突和关键字段缺失全部进入全审池。
 7. Core 版本、tenant 或必要 parsedRef 缺失时，将成果标为“分析草稿/不可入库”，不得用占位版本通过校验。
-8. candidates 必须为每个流程元素、目标和 Artifact 建立 proposal；流程元素使用临时 `efio:*` 层级属性，目标/输入/输出继续使用 Process Core 原生关系。
+8. candidates 必须为每个流程元素、目标和 Artifact 建立 proposal；流程元素使用临时 `临时层级键（hierarchyLevel/parentElement/owningProcess/mappingStatus）` 层级属性，目标/输入/输出继续使用 Process Core 原生关系。
 9. 校验通过后从 `digest.json + normalized.parsed.json + candidates.json` 机械生成 `explanation.html`；不得在导览中新增分析事实或改写原文。
 
 确定性规则/流程投影使用：
@@ -238,7 +238,7 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <engage
 - “流程提炼”页：按 L3 展示目标、流程内边和 Artifact 输入输出交接；L3 区块可折叠，L4/L5 按父子关系缩进，记录类型标签按类型着色；
 - “角色职责”页：以“流程元素 × 角色”RACI 矩阵展示，行按层级树序缩进、可折叠，单元格标记与记录索引均可单独回到来源；
 - “规则与风控”页：以“流程元素 × 目标/规则/风险/控制”树形矩阵展示，记录按实际挂载层级进入单元格（不上卷、不继承），默认折叠到 L3，控制标注关联风险并可高亮配对行；问题清单在矩阵下方独立区块；
-- “本体投影”页：展示 candidate、proposal、Core 版本、review pool、parameter、transition、alignment 和临时 `efio:*` 映射；
+- “本体投影”页：展示 candidate、proposal、Core 版本、review pool、parameter、transition、alignment 和临时 `临时层级键（hierarchyLevel/parentElement/owningProcess/mappingStatus）` 映射；
 - “原文对照”栏：始终按文档顺序呈现全部 parsed 原文块；点击任一结构化记录，定位 `block_id + block_path + clause_ref + page_hint` 并高亮目标块，上下文保持可见可滑动，块下显示该类型的判断说明；
 - 全文搜索、窄屏布局和打印样式，且不依赖联网资源。
 

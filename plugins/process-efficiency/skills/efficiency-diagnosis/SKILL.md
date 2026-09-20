@@ -1,7 +1,7 @@
 ---
 name: efficiency-diagnosis
 description: 流程效率诊断 — 评价流程路径结构的冗余与返工（设计层：串行审批/并行机会/返工环/交接链），以及周期时间分解与瓶颈识别（实例层：耗时分布/等待时间/返工率）。当需要回答"流程跑得快不快、卡在哪里、为什么慢"时使用。
-origin: efio
+origin: process-efficiency
 ---
 
 # 流程效率诊断

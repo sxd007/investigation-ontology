@@ -28,10 +28,10 @@ function oneCandidateRef(record, id, kind) {
 
 function processProperties(element, predecessors) {
   const properties = {
-    'efio:hierarchyLevel': element.level,
-    ...(element.parent_ref ? { 'efio:parentElement': element.parent_ref } : {}),
-    ...(element.owning_process_ref ? { 'efio:owningProcess': element.owning_process_ref } : {}),
-    'efio:mappingStatus': 'PENDING_CORE_ALIGNMENT',
+    hierarchyLevel: element.level,
+    ...(element.parent_ref ? { parentElement: element.parent_ref } : {}),
+    ...(element.owning_process_ref ? { owningProcess: element.owning_process_ref } : {}),
+    mappingStatus: 'PENDING_CORE_ALIGNMENT',
     ...(element.objective_refs?.length ? { hasObjective: element.objective_refs.length === 1 ? element.objective_refs[0] : [...element.objective_refs] } : {}),
     ...(element.input_artifact_refs?.length ? { hasInput: element.input_artifact_refs.length === 1 ? element.input_artifact_refs[0] : [...element.input_artifact_refs] } : {}),
     ...(element.output_artifact_refs?.length ? { hasOutput: element.output_artifact_refs.length === 1 ? element.output_artifact_refs[0] : [...element.output_artifact_refs] } : {}),

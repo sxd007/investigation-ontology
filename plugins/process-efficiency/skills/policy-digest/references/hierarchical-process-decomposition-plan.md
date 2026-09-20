@@ -8,14 +8,14 @@
 
 1. **版本策略**：0.2.0 采用破坏式升级；`process_elements + flow_edges` 取代扁平 `activities[]`，同时提供 0.1→0.2 迁移器，不长期维护两个权威模型。
 2. **Process Core 范围**：本迭代不修改 Process Core 0.4.0。
-3. **临时层级投影**：层级在 digest 中完整保存，并在 candidates `produces[].properties` 使用版本化扩展键 `efio:parentElement`、`efio:owningProcess`、`efio:hierarchyLevel`；同时写 `efio:mappingStatus: PENDING_CORE_ALIGNMENT`。这些键不得直接序列化为 Process Core 属性，后续 Core 提供正式属性时由迁移映射替换。
+3. **临时层级投影**：层级在 digest 中完整保存，并在 candidates `produces[].properties` 使用版本化扩展键 `parentElement`、`owningProcess`、`hierarchyLevel`；同时写 `mappingStatus: PENDING_CORE_ALIGNMENT`。这些键不得直接序列化为 Process Core 属性，后续 Core 提供正式属性时由迁移映射替换。
 4. **推断策略**：允许模型推断层级，但 `decomposition_basis: inferred_structure` 必须进入全审池；确认前不得进入 `ready_for_ingestion`。
 5. **首迭代范围**：实现五层流程树、Artifact 生产/消费、流程内主干/异常边、RACI/风险控制分层挂接。
 6. **后续迭代**：分层 Markdown、Mermaid 全景图和逐 L3 泳道图不进入首迭代。
 
 ### 临时扩展的退出条件
 
-- `efio:*` 是 candidates 交换层扩展，不是 Process Core 公理。
+- `临时层级键（hierarchyLevel/parentElement/owningProcess/mappingStatus）` 是 candidates 交换层扩展，不是 Process Core 公理。
 - 扩展值必须引用本 candidates 文件中的 localId，跨文件目标使用明确 IRI，不允许名称字符串充当引用。
 - serializer 遇到 `PENDING_CORE_ALIGNMENT` 必须保留为待映射数据或拒绝正式 TTL 序列化，不得静默丢弃。
 - Process Core 发布正式父子属性后，新增显式版本迁移；禁止仅改字段名而不留迁移记录。
@@ -70,7 +70,7 @@ Candidates 0.3.0 的 `produces[].properties` 可暂存 Core 已存在的属性�
 - schema 不校验 `parentElement`、`hasInput`、`hasOutput` 的 localId 引用；
 - 不能保证层级相邻、唯一父级和无环。
 
-结论：Digest Schema、解构指令、迁移器和校验器已在 0.2.0 落地；本迭代不修改 Process Core。正式 TTL 序列化仍须等待 Core 父子属性，或由明确支持 `efio:*` 临时扩展的摄取端保留待映射状态。
+结论：Digest Schema、解构指令、迁移器和校验器已在 0.2.0 落地；本迭代不修改 Process Core。正式 TTL 序列化仍须等待 Core 父子属性，或由明确支持 `临时层级键（hierarchyLevel/parentElement/owningProcess/mappingStatus）` 临时扩展的摄取端保留待映射状态。
 
 ## 3. 目标数据模型
 
@@ -268,8 +268,8 @@ proc:hasChildElement a owl:ObjectProperty ;
 Process Core 暂不修改时：
 
 - 每个 `process_elements[]` 仍产生相应 L1–L5 `rdfType` 实例；
-- 层级临时投影到 `properties.efio:parentElement`、`properties.efio:owningProcess` 和 `properties.efio:hierarchyLevel`；
-- 所有使用临时层级键的提案写 `properties.efio:mappingStatus: PENDING_CORE_ALIGNMENT`；
+- 层级临时投影到 `properties.parentElement`、`properties.owningProcess` 和 `properties.hierarchyLevel`；
+- 所有使用临时层级键的提案写 `properties.mappingStatus: PENDING_CORE_ALIGNMENT`；
 - `hasObjective`、`hasInput`、`hasOutput`、`precededByActivity` 等 Process Core 0.4.0 已存在属性继续使用原生映射；
 - 正式 TTL 入库前必须由摄取端明确支持该扩展，或保持 candidates/digest 待映射状态。
 
@@ -282,7 +282,7 @@ Process Core 将来发布正式父子属性后：
 - RACI 产生 `proc:Role` + `proc:RoleAssignment`；
 - L4/L5 主干产生 `precededByActivity`；异常边产生 `transitions[]`。
 
-Candidates 格式首迭代维持 0.3.0，使用 `produces[].properties` 承载版本化 `efio:*` 扩展；Policy Digest 校验器承担引用、层级和 `mappingStatus` 校验。后续可将通用层级引用能力纳入 Candidates 0.4.0。
+Candidates 格式首迭代维持 0.3.0，使用 `produces[].properties` 承载版本化 `临时层级键（hierarchyLevel/parentElement/owningProcess/mappingStatus）` 扩展；Policy Digest 校验器承担引用、层级和 `mappingStatus` 校验。后续可将通用层级引用能力纳入 Candidates 0.4.0。
 
 ## 7. 确定性校验新增项
 
@@ -323,7 +323,7 @@ Candidates 格式首迭代维持 0.3.0，使用 `produces[].properties` 承载�
 
 ### 阶段 0：临时映射契约（不改 Process Core）
 
-- 固化 `efio:*` 层级扩展键、localId 引用规则和退出条件；
+- 固化 `临时层级键（hierarchyLevel/parentElement/owningProcess/mappingStatus）` 层级扩展键、localId 引用规则和退出条件；
 - serializer 默认不得把临时扩展冒充 Process Core 属性；
 - 将未来正式 Core 映射列为独立迁移事项，不阻塞 Digest 0.2.0。
 

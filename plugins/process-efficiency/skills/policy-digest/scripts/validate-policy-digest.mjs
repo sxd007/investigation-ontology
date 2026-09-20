@@ -468,10 +468,11 @@ function validateDigestReferences(digest, candidateInfo, issues) {
     else {
       if (proposal.rdfType !== element.rdf_type) addIssue(issues, 'ERROR', 'candidate_element_type_mismatch', `${element.element_id} candidate rdfType 与 digest 不一致`, pointer);
       const properties = proposal.properties || {};
-      if (properties['efio:hierarchyLevel'] !== element.level) addIssue(issues, 'ERROR', 'candidate_hierarchy_level_mismatch', `${element.element_id} 缺少或错误 efio:hierarchyLevel`, pointer);
-      if (element.parent_ref && properties['efio:parentElement'] !== element.parent_ref) addIssue(issues, 'ERROR', 'candidate_parent_mismatch', `${element.element_id} efio:parentElement 与 digest 不一致`, pointer);
-      if (element.owning_process_ref && properties['efio:owningProcess'] !== element.owning_process_ref) addIssue(issues, 'ERROR', 'candidate_owning_process_mismatch', `${element.element_id} efio:owningProcess 与 digest 不一致`, pointer);
-      if (properties['efio:mappingStatus'] !== 'PENDING_CORE_ALIGNMENT') addIssue(issues, 'ERROR', 'candidate_mapping_status_missing', `${element.element_id} 必须标记 PENDING_CORE_ALIGNMENT`, pointer);
+      const hierarchyKeyPrefix = digest.digest_schema_version === '0.2.0' ? 'efio:' : '';
+      if (properties[`${hierarchyKeyPrefix}hierarchyLevel`] !== element.level) addIssue(issues, 'ERROR', 'candidate_hierarchy_level_mismatch', `${element.element_id} 缺少或错误 ${hierarchyKeyPrefix}hierarchyLevel`, pointer);
+      if (element.parent_ref && properties[`${hierarchyKeyPrefix}parentElement`] !== element.parent_ref) addIssue(issues, 'ERROR', 'candidate_parent_mismatch', `${element.element_id} ${hierarchyKeyPrefix}parentElement 与 digest 不一致`, pointer);
+      if (element.owning_process_ref && properties[`${hierarchyKeyPrefix}owningProcess`] !== element.owning_process_ref) addIssue(issues, 'ERROR', 'candidate_owning_process_mismatch', `${element.element_id} ${hierarchyKeyPrefix}owningProcess 与 digest 不一致`, pointer);
+      if (properties[`${hierarchyKeyPrefix}mappingStatus`] !== 'PENDING_CORE_ALIGNMENT') addIssue(issues, 'ERROR', 'candidate_mapping_status_missing', `${element.element_id} 必须标记 PENDING_CORE_ALIGNMENT`, pointer);
       const propertyRefs = (name) => new Set(asRefs(properties[name]));
       for (const ref of element.objective_refs || []) if (!propertyRefs('hasObjective').has(ref)) addIssue(issues, 'ERROR', 'candidate_objective_projection_missing', `${element.element_id} 未投影 hasObjective ${ref}`, pointer);
       for (const ref of element.input_artifact_refs || []) if (!propertyRefs('hasInput').has(ref)) addIssue(issues, 'ERROR', 'candidate_input_projection_missing', `${element.element_id} 未投影 hasInput ${ref}`, pointer);
@@ -650,7 +651,7 @@ export function validatePackage(inputPath) {
     validateSourceCoverage(parsed, digest, candidates, sourceIndex, issues);
     const candidateInfo = validateCandidateReferences(candidates, parsed, issues);
     validateDigestReferences(digest, candidateInfo, issues);
-    if (!issues.some((item) => item.severity === 'ERROR')) validateCandidateProjection(digest, candidates, issues);
+    if (!issues.some((item) => item.severity === 'ERROR') && digest.digest_schema_version === '0.3.0') validateCandidateProjection(digest, candidates, issues);
     validateMarkdown(paths.markdown, digest, issues);
     const parsedRef = candidates.document?.parsedRef?.path;
     if (parsedRef && basename(parsedRef) !== basename(paths.parsed)) addIssue(issues, 'ERROR', 'parsed_ref_path', `parsedRef 应指向 ${basename(paths.parsed)}`, 'candidates/document/parsedRef/path');

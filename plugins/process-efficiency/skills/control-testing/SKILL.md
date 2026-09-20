@@ -1,7 +1,7 @@
 ---
 name: control-testing
 description: 控制运行有效性测试 — 通过穿行测试与抽样，将实例执行记录对照 digest 的模板通路，识别未执行/绕过/偏离的控制。当需要回答"制度设计的控制实际被执行了吗"时使用。
-origin: efio
+origin: process-efficiency
 ---
 
 # 控制运行有效性测试

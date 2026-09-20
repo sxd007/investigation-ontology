@@ -106,7 +106,7 @@ export function buildScaffold({ engagementId, docId, tenant = null, title = '待
     ontology_projection: {
       candidates_schema_version: '0.3.0', candidates_ref: 'candidates.json', parsed_schema_version: '0.1.0',
       parsed_ref: 'normalized.parsed.json', tenant, core_versions: { process: '0.4.0' },
-      hierarchy_mapping: { mode: 'candidates_extension', extension_prefix: 'efio', serialization_policy: 'PENDING_CORE_ALIGNMENT' },
+      hierarchy_mapping: { mode: 'candidates_extension', serialization_policy: 'PENDING_CORE_ALIGNMENT' },
     },
   };
   const candidateSeed = {
