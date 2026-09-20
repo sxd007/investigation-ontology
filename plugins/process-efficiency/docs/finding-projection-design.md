@@ -1,6 +1,6 @@
 # 评价发现的本体投影设计（提案）
 
-> **状态：Draft 提案**（2026-09-20）。涉及 ontology_framework 的本体层交换契约，本仓库不单方面发明正式 schema——efio: 扩展键与断言格式须与 ontology_framework 评审对齐后才能升级为正式契约。评价闭环（SCOPE→…→REPORT）**不依赖**本投影，投影是跨评价沉淀的增强路径。
+> **状态：Draft 提案**（2026-09-20）。已按 framework 治理流程升级为正式 ACP：**ontology_domain 仓库 `ontology_process/design/decisions/ACP-002.md`**（评价发现断言层），待各 steward 角色审批。本文件保留为插件侧背景材料；审批与实施以 ACP-002 为准。评价闭环（SCOPE→…→REPORT）**不依赖**本投影，投影是跨评价沉淀的增强路径。
 
 ## 1. 动机
 
