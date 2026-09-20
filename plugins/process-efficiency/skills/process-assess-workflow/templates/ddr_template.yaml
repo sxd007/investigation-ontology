@@ -1,0 +1,21 @@
+# Digest 缺陷报告汇总（ddr.yaml）
+# 跨维度汇总（不属于任何单一技能）；机制见 ../references/digest-defect-report.md
+# 纪律：下游只报告不修改不回读原文；验证归 policy-digest（回读原文 + supersedes 版本链）
+# 不允许静默忽略：无法核验时 status 置 deferred 并记录原因
+
+ddrs:
+  - ddr_id: DDR-001
+    reporter: rcm-analysis                 # goal-alignment | rcm-analysis | control-testing | efficiency-diagnosis
+    suspicion_type: omission               # omission | misclassification | anchor_error | hallucination
+    suspected_location:
+      doc_id: {doc_id}
+      element_ref: {RISK-007}              # 被怀疑位置；omission 时为"应存在而缺失"的挂接点
+    description: {缺陷嫌疑描述}
+    evidence:                              # 下游视角证据，不回读原文
+      - {证据明细}
+    status: open                           # open | verified | dismissed | deferred
+    resolution:
+      verified_by: null                    # policy-digest 侧或人工审核者
+      outcome: null                        # verified | dismissed（须给理由）
+      note: null
+      digest_action: null                  # 修复时记录新 digest 版本号

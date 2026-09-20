@@ -1,0 +1,29 @@
+# 评价发现清单（findings.yaml）
+# 由各维度技能聚合产出；字段契约见 ../references/finding-contract.md
+# finding_id 前缀按维度：GA(goal) / RC(risk) / CT(control) / ED(efficiency)
+# DDR 分诊纪律：defect-susceptible 类 finding 在 DDR 闭环前 status 保持 provisional
+# upstream_review: pending —— 锚定的 digest 内容 review.status 非 confirmed 时必填
+
+findings:
+  - finding_id: GA-001
+    dimension: goal
+    finding_type: objective_vague          # 枚举见 finding-contract §3
+    severity: medium                        # high | medium | low
+    anchor:
+      digest:
+        doc_id: {doc_id}
+        block_id: {block_id}
+        element_ref: {OBJ-001}             # 相关 objective/element/risk/control/flow_edge ID
+      baseline:                             # 实例层发现时必填；设计层可省
+        version: baseline-v1
+        snapshot_ref: {snapshots/xxx.json}
+        record_ref: {rec-xxx}
+    statement: {一句话发现}
+    evidence:
+      - {支撑细节，引用锚点内容}
+    recommendation: {改进建议，REPORT 前不得为空}
+    recommendation_scope: policy_revision   # policy_revision | execution_improvement | data_quality
+    owner_suggestion: {建议责任方}
+    status: proposed                       # proposed | confirmed
+    upstream_review: pending               # 可选，见文件头注释
+    cross_ref: {CT-003}                     # 可选，交叉引用主责技能的 finding_id

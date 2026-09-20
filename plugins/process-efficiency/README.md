@@ -35,6 +35,13 @@
 
 后续流程评价技能将基于 proc 域五层链（L1 ProcessCategory → L5 Task）与 Metric/ControlPoint 跨切类构建评价投影。
 
+## 设计文档
+
+| 文档 | 内容 |
+|------|------|
+| [docs/design.md](./docs/design.md) | 插件设计基准（双模式架构、范式差异、生命周期） |
+| [docs/finding-projection-design.md](./docs/finding-projection-design.md) | 评价发现本体投影提案（Draft，待 ontology_framework 对齐） |
+
 ## 与 investigation-ontology 的协作
 
 两插件可共存安装，无强依赖：
