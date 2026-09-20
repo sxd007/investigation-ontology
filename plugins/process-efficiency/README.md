@@ -15,7 +15,7 @@
 
 | 技能 | 层 | 说明 |
 |------|----|------|
-| `process-assess-workflow` | 工作流 | 评价组合管理 — 多流程评价并行推进、生命周期门禁、基线组装与版本化（规划中） |
+| `process-assess-workflow` | 工作流 | 评价组合管理 — 多流程评价并行推进、生命周期门禁（SCOPE→BASELINE→ASSESS→REPORT+TRACK）、基线组装与版本化 |
 | `policy-digest` | 能力·基座 | 企业制度流程解构 — 将制度、办法、流程、授权文件及附件转化为带原文锚点的规则、L1–L5 流程、RACI、风险控制、问题清单与本体 candidates 入库包 |
 | `goal-alignment` | 能力 | 流程目标清晰度与 KPI 达成度评价（规划中） |
 | `rcm-analysis` | 能力 | 风险-控制映射、覆盖度与控制设计有效性（规划中） |

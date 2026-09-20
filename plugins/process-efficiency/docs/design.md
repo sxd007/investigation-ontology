@@ -111,6 +111,6 @@ SCOPE（圈定流程范围与指标）
 ## 七、Backlog
 
 - [x] **policy-digest schema 0.3.0 泛化**（2026-09-20 完成）— `case_id`→`engagement_id`、输出根按语境约定（调查语境 `cases/{case_id}/policy-digests/`，评价语境 `process-assessments/{assessment_id}/policy-digests/`）；新增 0.2→0.3 机械迁移器；validator/projector/explanation 接受 0.2.0 与 0.3.0（0.2.0 读有效，入库前迁移）；scaffold `--engagement-id` 干净切换；fixture 已迁移 0.3.0。
-- [ ] `process-assess-workflow` 技能实施（生命周期门禁、组合管理、基线版本化）
+- [x] `process-assess-workflow` 技能实施（2026-09-20 首版：生命周期门禁、组合管理、基线版本化；四维评价技能未实施前 ASSESS 阶段支持手工评价过渡）
 - [ ] 四个评价技能实施（goal-alignment / rcm-analysis / control-testing / efficiency-diagnosis）
 - [ ] 本体投影：评价发现（控制缺口等）通过 candidates 机制投影回 proc 域（ControlPoint 标注等），与 policy-digest 的 `PENDING_CORE_ALIGNMENT` 模式一致
