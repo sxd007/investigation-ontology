@@ -42,7 +42,7 @@
 
 ## Backlog
 
-- [ ] **policy-digest schema 0.3.0 泛化** — 语境标识字段（`case_id` → `engagement_id` 或等价物）与输出根可配置（调查语境兼容 `cases/{case_id}/policy-digests/`，评价语境默认 `process-assessments/`）；含迁移脚本与 candidates 投影器参数语义更新。迁移完成后 0.2.0 进入维护模式。
+- [x] **policy-digest schema 0.3.0 泛化**（已完成）— 语境标识 `case_id`→`engagement_id`，输出根按语境约定（调查语境 `cases/{case_id}/policy-digests/`，评价语境 `process-assessments/{assessment_id}/policy-digests/`）；0.2→0.3 机械迁移器就位，validator/projector/explanation 双版本兼容（0.2.0 读有效），scaffold `--engagement-id`。0.2.0 进入维护模式。
 - [ ] 流程评价技能集草案（评价基线组装 / 目标对齐 / 风险控制矩阵 / 穿行测试 / 效率诊断）— 设计讨论中。
 
 ## 版本

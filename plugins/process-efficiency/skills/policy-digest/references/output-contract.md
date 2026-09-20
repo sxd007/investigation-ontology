@@ -1,11 +1,11 @@
-# Policy Digest 0.2.0 输出契约
+# Policy Digest 0.3.0 输出契约
 
 ## 1. 分层与单一真相源
 
 成果包采用四个数据/视图层，并附一个独立解释界面：
 
 1. `normalized.parsed.json`：结构与锚点层，兼容 parsed schema 0.1.0。
-2. `digest.json`：完整分析的单一真相源，遵循 Policy Digest schema 0.2.0。
+2. `digest.json`：完整分析的单一真相源，遵循 Policy Digest schema 0.3.0（语境标识 `engagement_id`）。
 3. `candidates.json`：面向本体审核和摄取的窄化交换层；Rule Obligation、参数和流程生成区域从 digest 机械投影，共享 Clause、alignment、Core 选择等本体决策从已有候选保留，兼容 candidates schema 0.3.0。
 4. `digest.md`：从 digest 生成的人读视图，不承载独有事实。
 5. `explanation.html`：从 digest、parsed 和 candidates 层生成的原文对照式审阅界面，可离线独立打开，不承载独有事实。
@@ -18,7 +18,7 @@
 
 不得用文档章节层级替代流程层级，不得用 `flow_edges[]` 表达父子关系，也不得用跨 L3 顺序边替代 Artifact 交接。
 
-机器契约位于 `./schemas/`。0.2.0 是当前默认；0.1.0 仅用于读取和显式迁移。
+机器契约位于 `./schemas/`。0.3.0 是当前默认（`engagement_id` 语境标识，root-agnostic）；0.2.0（`case_id`）与 0.1.0 仅用于读取和显式迁移。
 
 ## 2. 通用来源与审核记录
 
@@ -49,9 +49,9 @@
 
 ```json
 {
-  "digest_schema_version": "0.2.0",
+  "digest_schema_version": "0.3.0",
   "digest_id": "PD-ACME-POL-001-v2",
-  "case_id": "CASE-2026-001",
+  "engagement_id": "CASE-2026-001",
   "status": "review_required",
   "generated_at": "ISO 8601",
   "source_index_ref": "source-index.json",

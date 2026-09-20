@@ -135,7 +135,7 @@ function resolveCandidateCoreVersion(digest, requestedCoreVersion, context) {
 }
 
 export function createCandidateSeed(digest, requestedCoreVersion = null) {
-  if (digest.digest_schema_version !== '0.2.0') throw new Error(`仅支持 Policy Digest 0.2.0，实际为 ${digest.digest_schema_version}`);
+  if (!['0.2.0', '0.3.0'].includes(digest.digest_schema_version)) throw new Error(`仅支持 Policy Digest 0.2.0 / 0.3.0，实际为 ${digest.digest_schema_version}`);
   const coreVersions = Object.values(digest.ontology_projection?.core_versions || {});
   const uniqueCoreVersions = [...new Set(coreVersions)];
   const coreVersion = requestedCoreVersion || (uniqueCoreVersions.length === 1 ? uniqueCoreVersions[0] : null);
@@ -186,7 +186,7 @@ export function createCandidateSeed(digest, requestedCoreVersion = null) {
 }
 
 export function syncMissingCandidateSeeds(digest, seedCandidates, requestedCoreVersion = null) {
-  if (digest.digest_schema_version !== '0.2.0') throw new Error(`仅支持 Policy Digest 0.2.0，实际为 ${digest.digest_schema_version}`);
+  if (!['0.2.0', '0.3.0'].includes(digest.digest_schema_version)) throw new Error(`仅支持 Policy Digest 0.2.0 / 0.3.0，实际为 ${digest.digest_schema_version}`);
   if (seedCandidates.candidatesSchemaVersion !== '0.3.0') throw new Error(`仅支持 Candidates 0.3.0，实际为 ${seedCandidates.candidatesSchemaVersion}`);
 
   const synced = structuredClone(seedCandidates);
@@ -249,7 +249,7 @@ export function syncMissingCandidateSeeds(digest, seedCandidates, requestedCoreV
 }
 
 export function projectDeterministicCandidates(digest, seedCandidates) {
-  if (digest.digest_schema_version !== '0.2.0') throw new Error(`仅支持 Policy Digest 0.2.0，实际为 ${digest.digest_schema_version}`);
+  if (!['0.2.0', '0.3.0'].includes(digest.digest_schema_version)) throw new Error(`仅支持 Policy Digest 0.2.0 / 0.3.0，实际为 ${digest.digest_schema_version}`);
   if (seedCandidates.candidatesSchemaVersion !== '0.3.0') throw new Error(`仅支持 Candidates 0.3.0，实际为 ${seedCandidates.candidatesSchemaVersion}`);
 
   const projected = structuredClone(seedCandidates);

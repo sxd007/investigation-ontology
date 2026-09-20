@@ -29,7 +29,7 @@ origin: efio
 
 执行前确认：
 
-1. `case_root`：成果默认写入 `cases/{case_id}/policy-digests/`；找不到案件目录时先要求用户指定，不写仓库根目录。
+1. `engagement`（语境与输出根）：本技能 root-agnostic，成果写入调用方指定的输出根。默认约定：调查案件 `cases/{case_id}/policy-digests/`；流程评价 `process-assessments/{assessment_id}/policy-digests/`；其他语境由调用方指定，找不到时先要求用户确认，不写仓库根目录。
 2. 输入清单：正文、附件、表单、流程图、权限表及可用的发布/审批页。
 3. 文档关系：上位依据、关联制度、替代/废止关系；未知时明确记为待确认。
 4. 本体上下文：`tenant`、各目标域 `coreVersions`、candidates schema 版本。缺失时允许完成分析草稿，但禁止标记为“可入库”。
@@ -42,7 +42,7 @@ origin: efio
 每份文档写入：
 
 ```text
-cases/{case_id}/policy-digests/{doc_id}/
+<engagement-root>/policy-digests/{doc_id}/          # 调查案件: cases/{case_id}/；流程评价: process-assessments/{assessment_id}/
 ├── normalized.parsed.json      # 兼容 parsed schema 0.1.0 的结构与锚点中间层
 ├── digest.json                 # 完整结构化分析，六表一图的单一真相源
 ├── candidates.json             # 严格 candidates schema 投影，供本体摄取
@@ -54,7 +54,7 @@ cases/{case_id}/policy-digests/{doc_id}/
 文档集另写入：
 
 ```text
-cases/{case_id}/policy-digests/{set_id}/
+<engagement-root>/policy-digests/{set_id}/         # 同上，文档集目录
 ├── document-set.json           # 成员、效力顺序与跨文档关系
 └── consistency-report.md       # 冲突、重复、缺口及待裁决项
 ```
@@ -64,12 +64,12 @@ cases/{case_id}/policy-digests/{set_id}/
 首次构建不要从空白手写六个文件。先运行脚手架生成一个结构校验为绿色、但明确带 blocking 占位项的起步包，再从 `normalized.parsed.json` 开始逐步替换：
 
 ```text
-node skills/policy-digest/scripts/scaffold-policy-digest.mjs cases/{case_id}/policy-digests/{doc_id} --case-id {case_id} --doc-id {doc_id} --tenant {tenant}
+node skills/policy-digest/scripts/scaffold-policy-digest.mjs <engagement-root>/policy-digests/{doc_id} --engagement-id {engagement_id} --doc-id {doc_id} --tenant {tenant}
 ```
 
 Schema 只验证单文件形状；跨 parsed/digest/candidates/Markdown 的引用与投影纪律见 [校验契约速查](./references/validation-cheat-sheet.md)。
 
-当前默认契约为 Policy Digest 0.2.0。复杂流程制度按 L1 ProcessCategory → L2 ProcessGroup → L3 Process → L4 ProcessActivity → L5 Task 分层；`process_elements[]` 是层级真相源，`flow_edges[]` 是顺序真相源，`artifacts[]` 是跨 L3 流程衔接的首选载体。父子层级暂以 candidates 中的 `efio:parentElement`、`efio:owningProcess`、`efio:hierarchyLevel` 和 `efio:mappingStatus: PENDING_CORE_ALIGNMENT` 投影，不修改 Process Core。旧 0.1.0 包必须先运行迁移脚本，并对推断层级全量人审。具体约束见 [分层流程解构实施方案](./references/hierarchical-process-decomposition-plan.md)。
+当前默认契约为 Policy Digest 0.3.0（语境标识 `engagement_id`，root-agnostic：调查案件为 `CASE-*`，流程评价为 `PA-*`，其他调用方自定义）。复杂流程制度按 L1 ProcessCategory → L2 ProcessGroup → L3 Process → L4 ProcessActivity → L5 Task 分层；`process_elements[]` 是层级真相源，`flow_edges[]` 是顺序真相源，`artifacts[]` 是跨 L3 流程衔接的首选载体。父子层级暂以 candidates 中的 `efio:parentElement`、`efio:owningProcess`、`efio:hierarchyLevel` 和 `efio:mappingStatus: PENDING_CORE_ALIGNMENT` 投影，不修改 Process Core。旧 0.1.0 包必须先运行 0.1→0.2 迁移脚本，并对推断层级全量人审；0.2.0 包（`case_id`）仍可校验读取，入库前建议运行 0.2→0.3 迁移器泛化语境标识。具体约束见 [分层流程解构实施方案](./references/hierarchical-process-decomposition-plan.md)。
 
 ## 运行流程
 
@@ -179,7 +179,7 @@ Schema 只验证单文件形状；跨 parsed/digest/candidates/Markdown 的引�
 确定性规则/流程投影使用：
 
 ```text
-node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{case_id}/policy-digests/{doc_id} --in-place
+node skills/policy-digest/scripts/project-policy-digest-candidates.mjs <engagement-root>/policy-digests/{doc_id} --in-place
 ```
 
 已有 `candidates.json` 时，先省略 `--in-place` 生成并列的 `candidates.projected.json` 复核；使用 `--check` 可在不写文件的情况下检测规则/流程投影漂移。常规模式从 seed candidates 保留候选 ID、共享 Clause、Core 选择、alignment 和审核数据。
@@ -199,7 +199,7 @@ node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{ca
 成果生成后必须运行：
 
 ```text
-node skills/policy-digest/scripts/validate-policy-digest.mjs cases/{case_id}/policy-digests/{doc_id}
+node skills/policy-digest/scripts/validate-policy-digest.mjs <engagement-root>/policy-digests/{doc_id}
 ```
 
 校验器不做语义补全，只检查可确定的契约：
@@ -227,7 +227,7 @@ node skills/policy-digest/scripts/validate-policy-digest.mjs cases/{case_id}/pol
 当用户说“解释这份解构结果”“对照原文看流程分层”“让我审阅角色职责来源”或已有 Policy Digest 包但不要求重新分析时，独立执行导览生成，不重跑语义解构：
 
 ```text
-node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs cases/{case_id}/policy-digests/{doc_id}
+node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <engagement-root>/policy-digests/{doc_id}
 ```
 
 也可用 `--output <path>` 指定输出。生成的 `explanation.html` 是无外部依赖的单文件，可直接发送给制度归口部门并在浏览器离线打开。它必须提供：
@@ -280,7 +280,7 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs cases/{
 
 ## 相关技能
 
-- [文档结构化解析](../document-parsing/SKILL.md)：原始文件解析、OCR、表格保真和版本管理。
+- [文档结构化解析](../../investigation-ontology/skills/document-parsing/SKILL.md)：原始文件解析、OCR、表格保真和版本管理（属 investigation-ontology 插件，未安装时按阶段二兜底路径由模型直读）。
 - [调查本体论](../ontology/SKILL.md)：当前仓库的调查实体/关系治理；与本技能输出的企业制度 Core candidates 不可混用。
 - [数据分析](../data-analysis/SKILL.md)：对制度执行数据进行控制测试；不替代制度模板解构。
 

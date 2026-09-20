@@ -68,7 +68,7 @@ Policy Digest 将制度、管理办法、实施细则、操作规范、授权文
 
 ### 2.4 五级流程分层
 
-Policy Digest 0.2.0 使用五级流程模型：
+Policy Digest 0.3.0 使用五级流程模型：
 
 | 层级 | 类型 | 含义 | 示例 |
 |---|---|---|---|
@@ -143,7 +143,7 @@ Policy Digest 支持：
 - 制度正文及可识别版本；
 - 附件、表单、权限表、流程图和审批页；
 - 上位依据、关联制度、修订或废止文件；
-- 文档所属案件目录和期望的 `case_id`；
+- 期望的语境标识 `engagement_id` 与输出根（调查案件为 `cases/{case_id}/`，流程评价为 `process-assessments/{assessment_id}/`，其他语境自定义）；
 - 如需投影本体：`tenant`、目标 Core 版本和 candidates schema 版本；
 - 希望分析单文档还是一组关联文档。
 
@@ -155,7 +155,7 @@ Policy Digest 支持：
 
 ### 5.1 单份制度完整解构
 
-> 请使用 policy-digest 解构案件目录中的《供应商管理办法》。正文、附件、供应商准入表和权限表都要纳入。按 Policy Digest 0.2.0 生成完整成果包，识别 L1–L5 流程、RACI、Artifact、风险控制和待确认项。所有结论必须能回到原文，最后运行校验并生成制度解构导览。
+> 请使用 policy-digest 解构案件目录中的《供应商管理办法》。正文、附件、供应商准入表和权限表都要纳入。按 Policy Digest 0.3.0 生成完整成果包（engagement_id 取该案件 `case_id`，输出根 `cases/{case_id}/policy-digests/`），识别 L1–L5 流程、RACI、Artifact、风险控制和待确认项。所有结论必须能回到原文，最后运行校验并生成制度解构导览。
 
 ### 5.2 只关注某个业务范围
 
@@ -209,14 +209,16 @@ flowchart LR
 9. 从 digest、parsed 与 candidates 生成 `explanation.html`；
 10. 由业务负责人处理 blocking 和 proposed 项，再决定是否入库。
 
-当前 0.2.0 投影器会从 digest 覆盖生成 candidate 来源/分类、Rule Obligation、parameter target、流程层级、目标、Artifact 和流程边，同时从已有 candidates 保留候选 ID、共享 Clause、alignment、Core 选择和审核数据。具体生成区域与保留区域见 [Digest → Candidates 正向投影契约](references/candidates-projection-contract.md)。
+当前投影器（支持 digest 0.2.0 / 0.3.0）会从 digest 覆盖生成 candidate 来源/分类、Rule Obligation、parameter target、流程层级、目标、Artifact 和流程边，同时从已有 candidates 保留候选 ID、共享 Clause、alignment、Core 选择和审核数据。具体生成区域与保留区域见 [Digest → Candidates 正向投影契约](references/candidates-projection-contract.md)。
 
 增量修改已有包时，如果新增 rule 使用新的 `candidate_ref`，先用 `--sync-missing-candidates` 补齐可无歧义生成的独立 candidate/Clause 壳，再执行普通投影检查；不要等常规投影报“未知 candidateId”后手工复制旧 candidate。
 
 ## 7. 标准成果包
 
+输出根按语境选择：调查案件 `cases/{case_id}/`、流程评价 `process-assessments/{assessment_id}/`、其他语境由调用方指定（下文以 `<engagement-root>` 表示）。
+
 ```text
-cases/{case_id}/policy-digests/{doc_id}/
+<engagement-root>/policy-digests/{doc_id}/
 ├── normalized.parsed.json      # 原文结构、完整文本块和锚点
 ├── digest.json                 # 结构化分析的单一真相源
 ├── candidates.json             # 本体候选投影
@@ -243,7 +245,7 @@ cases/{case_id}/policy-digests/{doc_id}/
 ### 8.1 生成起步包
 
 ```text
-node skills/policy-digest/scripts/scaffold-policy-digest.mjs cases/{case_id}/policy-digests/{doc_id} --case-id {case_id} --doc-id {doc_id} --tenant {tenant}
+node skills/policy-digest/scripts/scaffold-policy-digest.mjs <engagement-root>/policy-digests/{doc_id} --engagement-id {engagement_id} --doc-id {doc_id} --tenant {tenant}
 ```
 
 脚手架会同时生成符合 Parsed 0.1.0 camelCase 字段规范的 `normalized.parsed.json`，并包含一个 parsed block、一条规则、L1→L4、流程目标、输出 Artifact 和最小 RACI，可直接通过确定性结构校验。所有内容均是低置信度占位项，并带 blocking 提醒；它的作用是让使用者从绿色基线增量构建，不是提供可入库结论。
@@ -255,7 +257,7 @@ node skills/policy-digest/scripts/scaffold-policy-digest.mjs cases/{case_id}/pol
 完成 digest 后先生成并复核 candidates 的确定性规则/流程投影：
 
 ```text
-node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{case_id}/policy-digests/{doc_id}
+node skills/policy-digest/scripts/project-policy-digest-candidates.mjs <engagement-root>/policy-digests/{doc_id}
 ```
 
 默认写出 `candidates.projected.json`，不会覆盖原文件。确认后可添加 `--in-place`（自动备份原 candidates），或用 `--check` 仅检测漂移。常规模式从已有 candidates 保留候选 ID、共享 Clause、Core 选择、alignment 和审核数据；同一 candidate 下的 rules 若来源块或 disposition 冲突会阻断，而不是猜测。
@@ -263,7 +265,7 @@ node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{ca
 如果尚无 `candidates.json`，但 digest 已明确填写全部 `candidate_refs[]`，可严格初始化：
 
 ```text
-node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{case_id}/policy-digests/{doc_id} --init --in-place
+node skills/policy-digest/scripts/project-policy-digest-candidates.mjs <engagement-root>/policy-digests/{doc_id} --init --in-place
 ```
 
 这只会采用 digest 已声明的 candidate ID，不会自行分组。每个 candidate 必须关联至少一条同来源、同 disposition 的 rule；若 `ontology_projection.core_versions` 含多个不同版本，还必须添加 `--core-version <version>`。process-only candidate 或版本歧义会阻断并要求提供 seed candidates。
@@ -271,7 +273,7 @@ node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{ca
 已有 candidates 时，可从 digest 重新初始化到其他文件，用于确定性比对而不触碰包内审核结果：
 
 ```text
-node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{case_id}/policy-digests/{doc_id} --init --output <临时或评审路径>
+node skills/policy-digest/scripts/project-policy-digest-candidates.mjs <engagement-root>/policy-digests/{doc_id} --init --output <临时或评审路径>
 ```
 
 输出路径不得是包内 `candidates.json`，也不能与 `--in-place` 同时使用。candidate_refs 的基数、拆分准则及 procedural 单 requirement 限制见 [Digest → Candidates 正向投影契约](references/candidates-projection-contract.md#41-candidate_refs-基数与拆分准则)。
@@ -279,13 +281,13 @@ node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{ca
 已有包新增独立规则时，先安全同步缺失 seed：
 
 ```text
-node skills/policy-digest/scripts/project-policy-digest-candidates.mjs cases/{case_id}/policy-digests/{doc_id} --sync-missing-candidates
+node skills/policy-digest/scripts/project-policy-digest-candidates.mjs <engagement-root>/policy-digests/{doc_id} --sync-missing-candidates
 ```
 
 默认只生成 `candidates.projected.json` 供复核；确认新增 candidate 的 `coreVersion`、Clause 原文和 review 元数据后，改用 `--sync-missing-candidates --in-place`。该模式只处理恰好关联一条 rule 的缺失 candidate；process-only candidate、多 rule 共享 Clause 和 ID 冲突仍需人工建立 seed。写入后必须另行运行普通 `--check`。
 
 ```text
-node skills/policy-digest/scripts/validate-policy-digest.mjs cases/{case_id}/policy-digests/{doc_id}
+node skills/policy-digest/scripts/validate-policy-digest.mjs <engagement-root>/policy-digests/{doc_id}
 ```
 
 需要机器可读报告时添加 `--json`。校验器检查：
@@ -319,7 +321,7 @@ ERROR 阻止交付入库；WARN 必须写入人工复核说明。校验器只发
 先从最终 digest 生成六表一图 Markdown：
 
 ```text
-node skills/policy-digest/scripts/generate-policy-digest-md.mjs cases/{case_id}/policy-digests/{doc_id}
+node skills/policy-digest/scripts/generate-policy-digest-md.mjs <engagement-root>/policy-digests/{doc_id}
 ```
 
 默认生成并列的 `digest.generated.md`。复核后添加 `--in-place` 覆盖 `digest.md` 并自动备份原文件；使用 `--check` 可检测 Markdown 是否漂移。
@@ -327,13 +329,13 @@ node skills/policy-digest/scripts/generate-policy-digest-md.mjs cases/{case_id}/
 随后生成独立 HTML 导览：
 
 ```text
-node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs cases/{case_id}/policy-digests/{doc_id}
+node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <engagement-root>/policy-digests/{doc_id}
 ```
 
 指定其他输出位置：
 
 ```text
-node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs cases/{case_id}/policy-digests/{doc_id} --output <目标路径>
+node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <engagement-root>/policy-digests/{doc_id} --output <目标路径>
 ```
 
 建议先校验、后生成导览。导览不联网、不上传数据，也不会修改 digest、parsed 或 candidates。
@@ -471,16 +473,17 @@ L1 采购管理
 - [制度解构导览规范](references/explanation-view.md)
 - [校验契约速查](references/validation-cheat-sheet.md)
 - [Digest → Candidates 正向投影契约](references/candidates-projection-contract.md)
-- [Policy Digest 0.2.0 Schema](references/schemas/policy-digest-0.2.0.schema.json)
+- [Policy Digest 0.3.0 Schema（当前）](references/schemas/policy-digest-0.3.0.schema.json)
+- [Policy Digest 0.2.0 Schema（旧版，可读）](references/schemas/policy-digest-0.2.0.schema.json)
 - [Candidates 0.3.0 Schema](references/schemas/candidates-0.3.0.schema.json)
-- [文档解析技能](../document-parsing/README.md)
+- [文档解析技能](../../investigation-ontology/skills/document-parsing/README.md)（investigation-ontology 插件）
 
 ## 15. 最短上手路径
 
 如果只记住五件事：
 
 1. 把正文、附件、表单、权限表和版本信息一起交给 AI；
-2. 明确要求使用 Policy Digest 0.2.0，并让所有结论回到原文；
+2. 明确要求使用 Policy Digest 0.3.0（并声明 engagement_id 与输出根），让所有结论回到原文；
 3. 重点审阅 L3 边界、父子层级、Artifact 交接和 RACI；
 4. 运行确定性校验，处理所有 ERROR 和 blocking 项；
 5. 打开 `explanation.html`，逐项对照原文后再决定是否入库。

@@ -34,7 +34,7 @@ function digestSource(source = {}) {
 }
 
 export function buildExplanationModel(digest, parsed, candidates = null, sourceIndex = null) {
-  if (digest.digest_schema_version !== '0.2.0') throw new Error(`仅支持 Policy Digest 0.2.0，实际为 ${digest.digest_schema_version}`);
+  if (!['0.2.0', '0.3.0'].includes(digest.digest_schema_version)) throw new Error(`仅支持 Policy Digest 0.2.0 / 0.3.0，实际为 ${digest.digest_schema_version}`);
   const elements = digest.process_elements || [];
   const byElement = new Map(elements.map((item) => [item.element_id, item]));
   const children = new Map(elements.map((item) => [item.element_id, []]));

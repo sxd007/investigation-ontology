@@ -1,6 +1,6 @@
 # ten-rule-policy 回归 fixture
 
-本目录保存完全脱敏、内容合成的 Policy Digest 0.2.0 回归包，用于在接近真实复杂度的规模下保护 projector、validator、Markdown 和 HTML 生成链路。
+本目录保存完全脱敏、内容合成的 Policy Digest 0.3.0 回归包，用于在接近真实复杂度的规模下保护 projector、validator、Markdown 和 HTML 生成链路。
 
 ## 固定规模
 

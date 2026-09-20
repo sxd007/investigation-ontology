@@ -1,7 +1,6 @@
 {
-  "digest_schema_version": "0.2.0",
+  "digest_schema_version": "0.3.0",
   "digest_id": "DIGEST-FIXTURE-POLICY-001-v1",
-  "case_id": "CASE-FIXTURE-001",
   "status": "draft",
   "generated_at": "2026-08-26T09:40:00+08:00",
   "supersedes": null,
@@ -4683,5 +4682,6 @@
       "extension_prefix": "efio",
       "serialization_policy": "PENDING_CORE_ALIGNMENT"
     }
-  }
+  },
+  "engagement_id": "CASE-FIXTURE-001"
 }

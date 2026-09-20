@@ -1,7 +1,7 @@
 # 分层流程解构实施方案
 
 > 状态：implemented design record（0.2.0 已实现；后续 Core 正式属性与增强图表仍待办）<br>
-> 目标版本：Policy Digest 0.2.0
+> 目标版本：Policy Digest 0.2.0（注：分层解构设计不变，0.3.0 仅泛化语境标识 `case_id`→`engagement_id`）
 > 对齐基线：Process Core 0.4.0、Candidates 0.3.0
 
 ## 0. 已确认实施决策（2026-08-26）

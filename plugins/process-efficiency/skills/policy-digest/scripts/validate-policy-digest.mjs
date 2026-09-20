@@ -637,8 +637,9 @@ export function validatePackage(inputPath) {
   const hints = parsed ? collectDiagnosticHints(parsed) : [];
 
   if (digest) {
-    if (digest.digest_schema_version !== '0.2.0') addIssue(issues, 'ERROR', 'digest_version_unsupported', '当前校验器只接受 0.2.0；请先运行 0.1→0.2 迁移器', 'digest/digest_schema_version');
-    const digestSchema = loadSchema('policy-digest-0.2.0.schema.json');
+    const digestSchemaFile = { '0.2.0': 'policy-digest-0.2.0.schema.json', '0.3.0': 'policy-digest-0.3.0.schema.json' }[digest.digest_schema_version];
+    if (!digestSchemaFile) addIssue(issues, 'ERROR', 'digest_version_unsupported', '当前校验器只接受 0.2.0 / 0.3.0；0.1.0 请先运行 0.1→0.2 迁移器，0.2.0 建议运行 0.2→0.3 迁移器泛化语境标识', 'digest/digest_schema_version');
+    const digestSchema = loadSchema(digestSchemaFile || 'policy-digest-0.3.0.schema.json');
     validateBySchema(digest, digestSchema, digestSchema, 'digest', issues);
     validateProjectableParameters(digest, issues);
   }

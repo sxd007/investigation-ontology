@@ -145,7 +145,7 @@ transition 的固定字段为：
 - `value`：保留权威字面量的 string；数值规范化另写 `valueNumber`；
 - 可选 `valueNumber`、`comparator`、`unit`、`note` 和 `target` 必须符合 Candidates 0.3 对应类型。
 
-当前 Policy Digest 0.2.0 Schema 仍保留开放 object 以避免静默破坏既有包；package validator 通过 `parameter_shape_invalid` 执行可投影性门禁。下一次 Digest Schema 版本升级时再把该形状固化为 `$defs`。
+当前 Policy Digest 0.3.0 Schema 仍保留开放 object 以避免静默破坏既有包；package validator 通过 `parameter_shape_invalid` 执行可投影性门禁。后续 Digest Schema 版本升级时再把该形状固化为 `$defs`。
 
 Candidates 0.3.0 的单文件 Schema 没有把 `target` 标成必填，但 Policy Digest 包级契约要求：
 

@@ -17,7 +17,7 @@
 
 ## 2. 输入与输出
 
-**输入：** Policy Digest 0.2.0 包中的 `digest.json`、parsed schema 0.1.0 `normalized.parsed.json` 和 candidates schema 0.3.0 `candidates.json`。<br>
+**输入：** Policy Digest 0.2.0 / 0.3.0 包中的 `digest.json`、parsed schema 0.1.0 `normalized.parsed.json` 和 candidates schema 0.3.0 `candidates.json`。<br>
 **输出：** 同目录下的 `explanation.html`，或 `--output` 指定的单文件 HTML。<br>
 **前置门禁：** 应先运行 Policy Digest 确定性校验；存在锚点错误时不得用界面掩盖缺陷。
 

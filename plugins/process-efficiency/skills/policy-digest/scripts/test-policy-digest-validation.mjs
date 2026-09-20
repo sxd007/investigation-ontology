@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { migrateDigest } from './migrate-policy-digest-0.1-to-0.2.mjs';
+import { migrateDigestEngagement } from './migrate-policy-digest-0.2-to-0.3.mjs';
 import { generateExplanation, renderExplanationHtml } from './generate-policy-digest-explanation.mjs';
 import { renderPolicyDigestMarkdown } from './generate-policy-digest-md.mjs';
 import { canonicalJson, createCandidateSeed, projectDeterministicCandidates, syncMissingCandidateSeeds } from './project-policy-digest-candidates.mjs';
@@ -85,7 +86,7 @@ function digest() {
     if (item.level === 'L3') roleAssignments.push({ assignment_id: `RA-${item.element_id}-A`, element_ref: item.element_id, role: `${item.name}负责人`, raci: 'A', authorization_basis: null, source, review: review() });
   }
   return {
-    digest_schema_version: '0.2.0', digest_id: 'PD-ACME-SUPPLIER-001-v1', case_id: 'CASE-2026-001', status: 'review_required', generated_at: '2026-08-26T00:00:00Z', source_index_ref: 'source-index.json',
+    digest_schema_version: '0.3.0', digest_id: 'PD-ACME-SUPPLIER-001-v1', engagement_id: 'ENG-ACME-2026-001', status: 'review_required', generated_at: '2026-08-26T00:00:00Z', source_index_ref: 'source-index.json',
     document_identity: { doc_id: source.doc_id, title: '供应商管理制度', doc_number: source.doc_id, version: null, policy_level: null, drafting_department: null, owning_department: '采购部', approving_authority: null, publication_date: null, effective_date: null, applicability_summary: null, higher_authorities: [], related_documents: [], superseded_documents: [], attachments: [], interpretation_authority: null, validity: 'pending_confirmation', source },
     scope: { subjects: ['采购部'], scenarios: ['供应商管理'], matters: ['筛选', '认证'], triggers: ['供应商准入需求'], exclusions: [] },
     rules: [{ rule_id: 'R-001', source, original_text: source.excerpt, disposition: 'process-step', clause_types: ['process-step'], applicable_subjects: ['采购部'], trigger: '供应商准入需求', requirement: '执行筛选和认证', responsible_roles: ['采购部'], parameters: [], evidence_requirements: [], exception_note: null, operationalized_by: ['PROC-SCREENING', 'PROC-CERTIFICATION'], semantic_confidence: 0.95, uncertainty_reason: null, review: review(), candidate_refs: [candidateId] }],
@@ -131,7 +132,7 @@ function runMarkdownGenerator(args) {
 
 try {
   const scaffoldDirectory = join(root, 'scaffold');
-  generateScaffold(scaffoldDirectory, { caseId: 'CASE-STARTER', docId: 'DOC-STARTER', tenant: 'acme' });
+  generateScaffold(scaffoldDirectory, { engagementId: 'ENG-STARTER', docId: 'DOC-STARTER', tenant: 'acme' });
   const scaffoldValidation = validatePackage(scaffoldDirectory);
   assert.deepEqual(scaffoldValidation.issues.filter((item) => item.severity === 'ERROR'), [], JSON.stringify(scaffoldValidation.issues, null, 2));
   assert.equal(scaffoldValidation.summary.errors, 0);
@@ -409,12 +410,26 @@ try {
   assert.equal(grouped.by_code[0].total, 2);
 
   const old = structuredClone(validDigest);
-  old.digest_schema_version = '0.1.0'; old.activities = [{ activity_id: 'ACT-OLD', name: '旧活动', responsible_roles: [], inputs: [], action: '执行', outputs: [], main_next: null, transitions: [], control_refs: [], source, review: review() }];
+  old.digest_schema_version = '0.1.0'; old.case_id = 'CASE-OLD-2026-001'; delete old.engagement_id;
+  old.activities = [{ activity_id: 'ACT-OLD', name: '旧活动', responsible_roles: [], inputs: [], action: '执行', outputs: [], main_next: null, transitions: [], control_refs: [], source, review: review() }];
   old.role_assignments = []; old.risks = []; old.controls = []; old.issues = []; old.pending_confirmations = [];
   delete old.process_elements; delete old.process_objectives; delete old.artifacts; delete old.flow_edges; delete old.ontology_projection.hierarchy_mapping;
   const migrated = migrateDigest(old, candidates()).digest;
   assert.equal(migrated.digest_schema_version, '0.2.0'); assert.equal(migrated.process_elements[0].hierarchy_status, 'unresolved');
   assert.ok(migrated.issues.some((item) => item.blocking));
 
-  console.log('✓ policy-digest 0.2 tests passed (scaffold + projector CLI + Markdown CLI + diagnostics + hierarchy + artifacts + edges + migration + explanation)');
+  const legacyEngagement = structuredClone(validDigest);
+  legacyEngagement.digest_schema_version = '0.2.0'; legacyEngagement.case_id = legacyEngagement.engagement_id; delete legacyEngagement.engagement_id;
+  const legacyDirectory = writePackage('legacy-020', legacyEngagement, initialized);
+  assert.deepEqual(validatePackage(legacyDirectory).issues.filter((item) => item.severity === 'ERROR'), [], '0.2.0 包应保持读有效');
+  const migratedEngagement = migrateDigestEngagement(legacyEngagement);
+  assert.equal(migratedEngagement.digest_schema_version, '0.3.0');
+  assert.equal(migratedEngagement.engagement_id, 'ENG-ACME-2026-001');
+  assert.ok(!('case_id' in migratedEngagement), '迁移后不应残留 case_id 字段');
+  assert.equal(migratedEngagement.rules.length, legacyEngagement.rules.length);
+  const migratedEngagementDirectory = writePackage('migrated-engagement-023', migratedEngagement, initialized);
+  assert.deepEqual(validatePackage(migratedEngagementDirectory).issues.filter((item) => item.severity === 'ERROR'), [], '0.2→0.3 迁移结果应通过完整校验');
+  assert.throws(() => migrateDigestEngagement(validDigest), /只支持 digest 0\.2\.0/);
+
+  console.log('✓ policy-digest 0.3 tests passed (scaffold + projector CLI + Markdown CLI + diagnostics + hierarchy + artifacts + edges + migration 0.1→0.2 + migration 0.2→0.3 + explanation)');
 } finally { rmSync(root, { recursive: true, force: true }); }

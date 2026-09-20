@@ -47,7 +47,7 @@ function element(docId, elementId, level, rdfType, name, parentRef, owningProces
   };
 }
 
-export function buildScaffold({ caseId, docId, tenant = null, title = '待解构制度', generatedAt = new Date().toISOString() }) {
+export function buildScaffold({ engagementId, docId, tenant = null, title = '待解构制度', generatedAt = new Date().toISOString() }) {
   const src = source(docId);
   const processElements = [
     element(docId, 'CAT-001', 'L1', 'proc:ProcessCategory', '待确认业务域', null, null),
@@ -58,9 +58,9 @@ export function buildScaffold({ caseId, docId, tenant = null, title = '待解构
     element(docId, 'ACT-001', 'L4', 'proc:ProcessActivity', '待确认活动', 'PROC-001', 'PROC-001'),
   ];
   const digest = {
-    digest_schema_version: '0.2.0',
+    digest_schema_version: '0.3.0',
     digest_id: `PD-${docId}-STARTER`,
-    case_id: caseId,
+    engagement_id: engagementId,
     status: 'draft',
     generated_at: generatedAt,
     source_index_ref: 'source-index.json',
@@ -166,10 +166,10 @@ function option(args, name) {
 function runCli() {
   const args = process.argv.slice(2);
   const output = args[0]?.startsWith('--') ? null : args[0];
-  const caseId = option(args, '--case-id');
+  const engagementId = option(args, '--engagement-id');
   const docId = option(args, '--doc-id');
-  if (!output || !caseId || !docId) throw new Error('用法: node scaffold-policy-digest.mjs <output-directory> --case-id <CASE-ID> --doc-id <DOC-ID> [--tenant <tenant>] [--title <title>] [--force]');
-  const result = generateScaffold(output, { caseId, docId, tenant: option(args, '--tenant'), title: option(args, '--title') || '待解构制度', force: args.includes('--force') });
+  if (!output || !engagementId || !docId) throw new Error('用法: node scaffold-policy-digest.mjs <output-directory> --engagement-id <ENGAGEMENT-ID> --doc-id <DOC-ID> [--tenant <tenant>] [--title <title>] [--force]');
+  const result = generateScaffold(output, { engagementId, docId, tenant: option(args, '--tenant'), title: option(args, '--title') || '待解构制度', force: args.includes('--force') });
   console.log(`✓ 已生成可通过结构校验的 Policy Digest 起步包：${result.directory}`);
   console.log('⚠ 包内均为占位内容且含 blocking 项；请先替换真实 parsed 来源，再按 Pass A–G 增量构建。');
 }
