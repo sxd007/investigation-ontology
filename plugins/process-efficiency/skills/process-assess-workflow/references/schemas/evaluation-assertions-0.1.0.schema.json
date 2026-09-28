@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/ontology/schemas/evaluation-assertions.schema.json",
+  "title": "Evaluation Assertions",
+  "description": "Vendored evaluation-assertions schema 0.1.0 from ontology_framework (2026-09-28, ACP-002).",
+  "type": "object",
+  "required": ["assertionsSchemaVersion", "engagement", "coreVersions", "assertions"],
+  "additionalProperties": false,
+  "properties": {
+    "assertionsSchemaVersion": {"type": "string", "const": "0.1.0"},
+    "engagement": {
+      "type": "object",
+      "required": ["engagementId"],
+      "additionalProperties": false,
+      "properties": {
+        "engagementId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "评价工作流标识（process-assess-workflow 的 assessment_id，或场景二调用方 engagement）"
+        },
+        "tenant": {"type": "string", "description": "租户段（IRI 命名空间用）"}
+      }
+    },
+    "coreVersions": {
+      "type": "object",
+      "description": "文件级各域 Core 版本（断言谓词正式化基线）",
+      "additionalProperties": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}
+    },
+    "assertions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/assertion"}
+    }
+  },
+  "$defs": {
+    "digestCoord": {
+      "type": "object",
+      "required": ["docId", "elementRef"],
+      "additionalProperties": false,
+      "properties": {
+        "docId": {"type": "string", "minLength": 1},
+        "elementRef": {
+          "type": "string",
+          "minLength": 1,
+          "description": "digest 元素标识（如 CTL-002 / PE-003），经 PENDING_CORE_ALIGNMENT 对齐记录解析为实例 IRI"
+        }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "required": ["assertionId", "target", "predicate", "value", "evidence",
+                   "sourceAssessment", "sourceFinding", "generatedAt", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "assertionId": {
+          "type": "string",
+          "pattern": "^EAS-.+-\\d+$",
+          "description": "EAS-{engagement_id}-NNN"
+        },
+        "target": {
+          "type": "object",
+          "required": ["alignmentStatus"],
+          "additionalProperties": false,
+          "description": "裁决 2（修订）：无前缀键——aligned 用正式 IRI，unaligned 用结构化 digest 坐标",
+          "properties": {
+            "alignmentStatus": {"enum": ["aligned", "unaligned"]},
+            "iri": {
+              "type": "string",
+              "description": "aligned 时必填：proc 实例正式 IRI（ControlPoint/Metric/ProcessActivity/ProcessObjective）"
+            },
+            "digestRef": {
+              "$ref": "#/$defs/digestCoord",
+              "description": "unaligned 时必填：digest 坐标降级定位"
+            }
+          }
+        },
+        "predicate": {
+          "enum": [
+            "proc:hasControlGap",
+            "proc:designEffectivenessAssessment",
+            "proc:operatingEffectivenessObservation",
+            "proc:metricObservation",
+            "proc:bottleneckObservation",
+            "proc:reworkObservation",
+            "proc:objectiveQualityAssessment"
+          ],
+          "description": "裁决 4/5：7 个断言对象谓词一次性正式化为 proc: IRI（domain=断言目标类，range=proc:EvaluationAssertion）"
+        },
+        "value": {
+          "type": "object",
+          "required": ["severity"],
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "type": "string",
+              "minLength": 1,
+              "description": "裁决 8：暂沿用插件 findings 词表，schema 层以 string 承载（跨插件统一治理另案）"
+            },
+            "context": {"type": "string", "description": "断言上下文注记（评价观察说明）"}
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "required": ["digest", "baseline"],
+          "additionalProperties": false,
+          "description": "双源证据（裁决 5）：模板层锚点 + 实例层快照，缺一不可",
+          "properties": {
+            "digest": {
+              "$ref": "#/$defs/digestCoord",
+              "description": "模板层锚点（经 digest 可回溯原文）"
+            },
+            "baseline": {
+              "type": "object",
+              "required": ["version", "snapshotRef"],
+              "additionalProperties": false,
+              "properties": {
+                "version": {"type": "string", "minLength": 1, "description": "基线版本（process-assess-workflow 基线版本化）"},
+                "snapshotRef": {"type": "string", "minLength": 1, "description": "数据快照定位（路径或哈希）"}
+              }
+            }
+          }
+        },
+        "sourceAssessment": {"type": "string", "minLength": 1, "description": "来源评价（如 PA-2026-001）"},
+        "sourceFinding": {
+          "type": "string",
+          "minLength": 1,
+          "description": "裁决 8：跨仓 finding 引用（插件侧 finding ID，如 RC-001）；framework 不校验引用完整性，仅约定非空"
+        },
+        "generatedAt": {"type": "string", "format": "date-time"},
+        "status": {
+          "enum": ["proposed", "confirmed"],
+          "description": "随 Owner 确认同步（评价定性的正确性，区别于 candidates 的提取正确性）"
+        },
+        "supersedesAssertion": {
+          "type": "string",
+          "description": "裁决 3/7：被本断言重写的旧断言 assertionId（unaligned→aligned 升级与评价复检均走 supersedes，不就地修改）"
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"target": {"properties": {"alignmentStatus": {"const": "aligned"}}}}},
+          "then": {
+            "description": "aligned 目标必须用正式 IRI，禁带 digest 坐标",
+            "properties": {
+              "target": {
+                "required": ["iri"],
+                "not": {"required": ["digestRef"]}
+              }
+            }
+          }
+        },
+        {
+          "if": {"properties": {"target": {"properties": {"alignmentStatus": {"const": "unaligned"}}}}},
+          "then": {
+            "description": "unaligned 目标必须用 digest 坐标，禁带正式 IRI",
+            "properties": {
+              "target": {
+                "required": ["digestRef"],
+                "not": {"required": ["iri"]}
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

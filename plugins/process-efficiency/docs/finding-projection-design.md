@@ -1,6 +1,7 @@
 # 评价发现的本体投影设计（提案）
 
-> **状态：Draft 提案**（2026-09-20）。已按 framework 治理流程升级为正式 ACP：**ontology_domain 仓库 `ontology_process/design/decisions/ACP-002.md`**（评价发现断言层），待各 steward 角色审批。本文件保留为插件侧背景材料；审批与实施以 ACP-002 为准。评价闭环（SCOPE→…→REPORT）**不依赖**本投影，投影是跨评价沉淀的增强路径。
+> **状态：已实施**（2026-09-28）。ACP-002（ontology_domain 仓库 `ontology_process/design/decisions/ACP-002.md`）已批准并完成框架侧实施：framework schema v0.1.0 + process-core v0.5.0（proc:EvaluationAssertion + 7 谓词 + supersedes 链）+ process-shapes v0.2.0。插件侧：vendored schema 与投影契约见 `skills/process-assess-workflow/references/assertion-projection.md`（**投影操作的权威依据**；本文件保留为设计背景材料）。
+> **注意**：本文 §3 的 YAML 草案为 snake_case 记号；正式 schema 为 camelCase（assertionId/alignmentStatus/digestRef/sourceAssessment/generatedAt），以 vendored schema 与投影契约为准。
 
 ## 1. 动机
 

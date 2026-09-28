@@ -35,7 +35,8 @@ process-assessments/
 │   │   └── baseline-v2.json         # 制度修订/数据窗口变化时新版本，不覆盖
 │   ├── scope_charter.md             # SCOPE 产物：评价范围章程
 │   ├── 01_assessments/              # ASSESS 产物：各能力技能的输出（RCM 矩阵、诊断报告等）
-│   │   └── ddr.yaml                 # DDR 汇总：下游技能报告的上游解构缺陷嫌疑（跨维度）
+│   │   ├── ddr.yaml                 # DDR 汇总：下游技能报告的上游解构缺陷嫌疑（跨维度）
+│   │   └── evaluation-assertions.yaml  # REPORT 可选投影产物：findings → 本体断言（ACP-002）
 │   ├── assessment_report.md         # REPORT 产物：评价报告（评级 + 缺口 + 建议）
 │   └── CHANGELOG.json               # 评价变更记录
 └── ...
@@ -130,7 +131,7 @@ TRACK（跟踪整改落实）→ CLOSED
 
 **目标**：将各维度发现收敛为评级结论与改进建议，形成流程 Owner 可认领的行动清单。
 
-**输出**：`assessment_report.md`。
+**输出**：`assessment_report.md`；**可选**投影产物 `01_assessments/evaluation-assertions.yaml`——把双锚点且谓词族覆盖的 findings 按 framework evaluation-assertions schema（ACP-002）投影为本体断言，供跨评价沉淀与本体摄取。投影范围/映射/校验流程见 [断言投影契约](./references/assertion-projection.md)；投影失败不阻塞本阶段门禁。
 
 **门禁**（全部满足后推进至 CLOSED；TRACK 为可选延长态）：
 
@@ -187,5 +188,6 @@ node skills/process-assess-workflow/scripts/scaffold-assessment.mjs process-asse
 
 - **能力层技能：** [policy-digest](../policy-digest/SKILL.md)（基座：文档→流程知识包）、[goal-alignment](../goal-alignment/SKILL.md)、[rcm-analysis](../rcm-analysis/SKILL.md)、[control-testing](../control-testing/SKILL.md)、[efficiency-diagnosis](../efficiency-diagnosis/SKILL.md)（四维评价）
 - **共享契约：** [finding-contract](./references/finding-contract.md) — 四技能评价发现的统一结构（GA/RC/CT/ED 前缀、锚点纪律、severity 判级），REPORT 阶段聚合的依据
+- **本体投影：** [assertion-projection](./references/assertion-projection.md) — findings → evaluation-assertions 投影契约（ACP-002，可选增强路径）
 - **设计基准：** [docs/design.md](../../docs/design.md)（双模式架构、根心契约、范式差异）
 - **对照范式：** investigation-ontology 插件的 case-management（对抗性调查工作流，与本技能的协作性评价工作流互为镜像）
