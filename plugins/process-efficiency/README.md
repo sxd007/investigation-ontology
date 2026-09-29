@@ -24,6 +24,21 @@
 
 四技能产出的评价发现遵循统一 [finding-contract](./skills/process-assess-workflow/references/finding-contract.md)（GA/RC/CT/ED 前缀、锚点纪律、severity 判级），REPORT 阶段由此收敛。
 
+### 工具与脚手架
+
+流程评价能力的落地工具（零依赖 Node 脚本 + 规范模板），位于 `skills/process-assess-workflow/scripts/`：
+
+| 工具 | 用途 |
+|------|------|
+| `validate-findings.mjs` | findings 校验 — 检查 `findings.yaml` 是否符合 finding-contract（前缀 / 锚点 / severity），输出校验报告 |
+| `aggregate-findings.mjs` | findings 聚合 — 跨维度收集并收敛 findings，供 REPORT 阶段汇总 |
+| `yaml-lite.mjs` | 极简 YAML 解析（零依赖）— 被上述工具复用，规避外部 YAML 库 |
+| `scaffold-dimension.mjs` | 维度脚手架 — 为新增评价维度生成规范模板 + `findings.yaml` 骨架（root-agnostic） |
+
+四能力技能（`goal-alignment` / `rcm-analysis` / `control-testing` / `efficiency-diagnosis`）各内置 `templates/` 规范模板（评价表 / 清单类，结构与各自 SKILL.md 对齐，统一待填占位符），由脚手架生成、被评价流程消费。
+
+findings 闭环：评价产出 → `findings.yaml`（脚手架生成骨架）→ `validate-findings` 校验 → `aggregate-findings` 收敛 → REPORT 阶段汇总。
+
 架构与边界设计见 [docs/design.md](./docs/design.md)（双模式架构：能力层 root-agnostic 可独立嵌入；工作流层服务专职评价场景）。
 
 ## 与 ontology_framework 的关系
@@ -52,7 +67,8 @@
 ## Backlog
 
 - [x] **policy-digest schema 0.3.0 泛化**（已完成）— 语境标识 `case_id`→`engagement_id`，输出根按语境约定（调查语境 `cases/{case_id}/policy-digests/`，评价语境 `process-assessments/{assessment_id}/policy-digests/`）；0.2→0.3 机械迁移器就位，validator/projector/explanation 双版本兼容（0.2.0 读有效），scaffold `--engagement-id`。0.2.0 进入维护模式。
-- [ ] 流程评价技能集草案（评价基线组装 / 目标对齐 / 风险控制矩阵 / 穿行测试 / 效率诊断）— 设计讨论中。
+- [x] **流程评价能力落地工具就位**（已完成）— 四能力技能 `templates/` 规范模板 + `scaffold-dimension.mjs` 维度脚手架 + findings 闭环工具（`validate-findings` / `aggregate-findings` / `yaml-lite`）；产出的 findings 遵循 finding-contract 收敛。
+- [ ] 流程评价技能集深化（评价基线组装 / 多流程并行 / 与 ontology_framework Metric·ControlPoint 投影对齐）— 进行中。
 
 ## 版本
 

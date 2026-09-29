@@ -7,6 +7,7 @@
 | 套件 | 版本 | 说明 | 状态 |
 |------|------|------|------|
 | [investigation-ontology](plugins/investigation-ontology/) | 1.1.0 | 反舞弊调查全流程套件 — 调查方法论、证据链管理、访谈分析、可视化报告、审计技术、24 技能 / 12 命令 / 7 代理 | ✅ 已发布 |
+| [process-efficiency](plugins/process-efficiency/) | 0.1.0 | 流程评价与效率分析套件 — 制度流程解构（policy-digest）、流程目标/风险/控制点/效率评价、findings 闭环工具 | ✅ 已发布 |
 
 > 新套件规划中（如专项审计、合规检查等方向）。新套件落地形态：`plugins/<name>/` 子目录 + 市场清单加条目，详见 [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md)。
 
@@ -39,6 +40,7 @@ investigation-ontology/                  # 仓库根 = 市场根
 ├── .workbuddy-plugin/marketplace.json   # WorkBuddy 市场清单
 ├── .claude-plugin/marketplace.json      # Claude Code 市场清单
 ├── manifests/                           # 仓库级安装器（模块化按需安装声明）
+├── scripts/                             # 根级工作空间机制（边界护栏脚本；激活经本地 .codebuddy/settings.json，gitignore 不随套件分发）
 ├── docs/                                # 开发文档（架构、开发报告）
 ├── README.md  DEVELOPMENT_GUIDE.md  CONTRIBUTING.md
 ├── DISCLAIMER.md  LICENSE  SECURITY.md  CONNECTORS.md
