@@ -70,6 +70,7 @@ severity 是**评价技能的初判**，REPORT 阶段结合流程 Owner 反馈�
 
 - 单维度产物写入 `01_assessments/{dimension}/`（由 process-assess-workflow 的 ASSESS 调度矩阵指定）；
 - findings 同时汇总到 `01_assessments/{dimension}/findings.yaml`（该维度全部 finding 的清单，REPORT 阶段由此聚合）；
+- 契约校验工具：`process-assess-workflow/scripts/validate-findings.mjs`（零依赖；AI 填充真实数据后运行，检查必填/枚举/前缀-维度一致/锚点纪律/占位符，REPORT 收敛前应 0 错误）。
 - 调查案件嵌入场景（场景二）：调用方指定输出根时，findings 写入调用方指定位置，不创建本契约 §5 的目录结构。
 
 ## 6. 与 digest 的边界

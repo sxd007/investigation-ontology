@@ -85,6 +85,18 @@ origin: process-efficiency
 └── findings.yaml               # 按 finding-contract 聚合（含移交建议区）
 ```
 
+## 起步脚手架
+
+直接复制本技能 `templates/` 下的产出骨架到目标维度目录（或由工作流 `scaffold-dimension.mjs` 统一生成）：
+
+```text
+node skills/process-assess-workflow/scripts/scaffold-dimension.mjs {output_root}/01_assessments/<dim> --skill <dim> [--assessment-id PA-2026-001] [--date 2026-09-29]
+```
+
+骨架含本技能文档化的全部 .md 产出与 `findings.yaml` 占位；占位符 `{assessment_id}`/`{date}` 自动替换。findings 结构遵循 finding-contract，聚合到 `findings.yaml`。
+
+填充真实数据后运行 `node skills/process-assess-workflow/scripts/validate-findings.mjs 01_assessments/control/findings.yaml` 做契约校验，0 错误方可进入 REPORT（可加 `--strict` 把警告也计为错误）。
+
 ## 质量纪律
 
 1. **消费纪律**：只消费 digest-schema 兼容的流程知识包（模板：controls/flow_edges，默认生产者 policy-digest）与 baseline 快照（实例）；不读制度原文；不引入快照外的"顺手指令"数据；

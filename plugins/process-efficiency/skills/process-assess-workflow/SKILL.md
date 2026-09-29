@@ -107,10 +107,16 @@ TRACK（跟踪整改落实）→ CLOSED
 
 | 维度 | 调度技能 | 输入 | 输出位置 |
 |------|---------|------|---------|
-| 目标 | `goal-alignment` | digest 的 process_objectives + 指标定义 | `01_assessments/goal-alignment/` |
-| 风险 | `rcm-analysis` | digest 的 risks/controls + 风险参照集 | `01_assessments/rcm-analysis/` |
-| 控制点 | `control-testing` | digest 的 controls + 数据快照（实例执行记录） | `01_assessments/control-testing/` |
-| 效率 | `efficiency-diagnosis` | digest 的 flow_edges/process_elements + 数据快照 | `01_assessments/efficiency-diagnosis/` |
+| 目标 | `goal-alignment` | digest 的 process_objectives + 指标定义 | `01_assessments/goal/` |
+| 风险 | `rcm-analysis` | digest 的 risks/controls + 风险参照集 | `01_assessments/risk/` |
+| 控制点 | `control-testing` | digest 的 controls + 数据快照（实例执行记录） | `01_assessments/control/` |
+| 效率 | `efficiency-diagnosis` | digest 的 flow_edges/process_elements + 数据快照 | `01_assessments/efficiency/` |
+
+**维度产物脚手架**：每个维度起步时运行 `scaffold-dimension.mjs` 复制对应技能 `templates/` 骨架（占位符 `{assessment_id}`/`{date}` 自动替换）：
+
+```text
+node skills/process-assess-workflow/scripts/scaffold-dimension.mjs {output_root}/01_assessments/goal --skill goal [--assessment-id PA-2026-001] [--date 2026-09-29]
+```
 
 **消费纪律**：评价技能只消费 digest-schema 兼容的流程知识包（默认生产者 policy-digest；本体层投影为第二生产者，未来实现）与 baseline 声明的数据快照，**不回头读制度原文**（锚点追溯经 digest 间接实现），不引入基线外的未快照数据（保证结论可复现）。
 
@@ -130,6 +136,10 @@ TRACK（跟踪整改落实）→ CLOSED
 ### REPORT 阶段 — 收敛定性
 
 **目标**：将各维度发现收敛为评级结论与改进建议，形成流程 Owner 可认领的行动清单。
+
+**校验**：REPORT 收敛前，对各维度 `findings.yaml` 运行 `scripts/validate-findings.mjs`（可加 `--strict`），确保 finding-contract 合规、无悬空结论，再行聚合。
+
+**聚合**：`node scripts/aggregate-findings.mjs <assessment_root>` 生成 `assessment_report.md`（评级结论 / 发现明细 / 改进建议清单），并按 assertion-projection.md 投影 `01_assessments/evaluation-assertions.yaml`（加 `--no-projection` 可跳过投影）。
 
 **输出**：`assessment_report.md`；**可选**投影产物 `01_assessments/evaluation-assertions.yaml`——把双锚点且谓词族覆盖的 findings 按 framework evaluation-assertions schema（ACP-002）投影为本体断言，供跨评价沉淀与本体摄取。投影范围/映射/校验流程见 [断言投影契约](./references/assertion-projection.md)；投影失败不阻塞本阶段门禁。
 
