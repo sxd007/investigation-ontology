@@ -76,4 +76,4 @@ findings 闭环：评价产出 → `findings.yaml`（脚手架生成骨架）→
 
 ## 版本
 
-见 [VERSION](./VERSION)。当前 0.2.0（policy-digest 从 investigation-ontology v1.1.0 剥离迁入）。
+见 [VERSION](./VERSION)。当前 0.3.0（评价基线组装工具化 + 维度产物初稿生成器 + 断言本地校验器 + 工具链回归测试，2026-09-30；0.2.0 为 policy-digest 从 investigation-ontology v1.1.0 剥离迁入）。
