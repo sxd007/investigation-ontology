@@ -35,7 +35,7 @@
       "name": "process-efficiency",
       "source": "./plugins/process-efficiency/",
       "description": "流程评价与效率分析技能包 — 制度流程解构（policy-digest）、流程目标/风险/控制点/效率评价，ontology_framework 的应用化插件",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": {
         "name": "Alpha Shen",
         "url": "https://github.com/sxd007"
