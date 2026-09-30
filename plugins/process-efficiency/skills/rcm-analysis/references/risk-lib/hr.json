@@ -145,5 +145,186 @@
       "statement_ref": "应用指引第三条"
     }
   ],
-  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。"
+  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。 fraud_patterns 为调查插件 fraud-* 技能类型学反哺层（2026-09-30）：红旗信号视角，供 R2 场景对照与 control-testing 移交联动；非指引条文。",
+  "fraud_patterns": [
+    {
+      "pattern_id": "HR-FP01",
+      "name": "虚假员工",
+      "scenario": "虚构员工或将离职者保留在薪资清单冒领工资",
+      "red_flags": [
+        "多人薪资打入同一账户",
+        "无社保记录却领工资",
+        "无人认识、无任何产出"
+      ],
+      "stage": "薪酬发放",
+      "related_risk_refs": [
+        "HR-R02"
+      ],
+      "source_skill": "fraud-hr"
+    },
+    {
+      "pattern_id": "HR-FP02",
+      "name": "薪资操纵",
+      "scenario": "篡改薪资参数：虚报工时/加班/调高基数",
+      "red_flags": [
+        "加班时长远超部门均值",
+        "门禁早退但加班满时",
+        "调薪无审批链"
+      ],
+      "stage": "薪酬计算",
+      "related_risk_refs": [
+        "HR-R02"
+      ],
+      "source_skill": "fraud-hr"
+    },
+    {
+      "pattern_id": "HR-FP03",
+      "name": "佣金/奖金舞弊",
+      "scenario": "虚报业绩、重复计业绩、合谋虚假交易获佣",
+      "red_flags": [
+        "结算前冲业绩后退货",
+        "同一客户多人计业绩",
+        "相互挂单分单"
+      ],
+      "stage": "佣金结算",
+      "related_risk_refs": [
+        "HR-R02"
+      ],
+      "source_skill": "fraud-hr"
+    },
+    {
+      "pattern_id": "HR-FP04",
+      "name": "招聘舞弊",
+      "scenario": "收受贿赂或定向录用，放宽标准定制面试",
+      "red_flags": [
+        "低分录用高分淘汰",
+        "JD量身定制",
+        "面试轮次被跳过"
+      ],
+      "stage": "招聘流程",
+      "related_risk_refs": [
+        "HR-R01"
+      ],
+      "source_skill": "fraud-hr"
+    },
+    {
+      "pattern_id": "HR-FP05",
+      "name": "履历/资质造假",
+      "scenario": "提交虚假学历、证书、经历获取岗位",
+      "red_flags": [
+        "学信网无法验证",
+        "证明人失联",
+        "经历空档/重合"
+      ],
+      "stage": "招聘/入职",
+      "related_risk_refs": [
+        "HR-R01"
+      ],
+      "source_skill": "fraud-hr"
+    },
+    {
+      "pattern_id": "HR-FP06",
+      "name": "考勤舞弊/福利滥用",
+      "scenario": "代打卡虚报出勤；冒用资格滥用福利",
+      "red_flags": [
+        "多人打卡时间高度同步",
+        "出差记录与打卡重叠",
+        "福利使用率远超平均"
+      ],
+      "stage": "考勤+福利",
+      "related_risk_refs": [
+        "HR-R02"
+      ],
+      "source_skill": "fraud-hr"
+    },
+    {
+      "pattern_id": "HR-FP07",
+      "name": "商业秘密窃取（离职带走）",
+      "scenario": "离职前批量下载/打印/外发敏感文件",
+      "red_flags": [
+        "离职前1-3个月批量下载",
+        "访问与本职无关的秘密级文件",
+        "异常设备重置申请"
+      ],
+      "stage": "离职前",
+      "related_risk_refs": [
+        "HR-R02"
+      ],
+      "source_skill": "fraud-ip"
+    },
+    {
+      "pattern_id": "HR-FP08",
+      "name": "个人设备/网盘外泄",
+      "scenario": "公司数据同步至个人设备或第三方网盘",
+      "red_flags": [
+        "个人设备数据残留",
+        "USB批量复制",
+        "批量重命名规避DLP"
+      ],
+      "stage": "离职前",
+      "related_risk_refs": [
+        "HR-R02"
+      ],
+      "source_skill": "fraud-ip"
+    },
+    {
+      "pattern_id": "HR-FP09",
+      "name": "竞业违规",
+      "scenario": "竞业期内入职竞对、自营或经第三方向原客户服务",
+      "red_flags": [
+        "出现在竞对场所",
+        "新雇主经营范围重叠",
+        "竞业补偿金被退回"
+      ],
+      "stage": "离职后",
+      "related_risk_refs": [
+        "HR-R02"
+      ],
+      "source_skill": "fraud-ip"
+    },
+    {
+      "pattern_id": "HR-FP10",
+      "name": "隐蔽竞业（壳结构）",
+      "scenario": "通过空壳公司/名义职位/中间人规避竞业限制",
+      "red_flags": [
+        "竞业期内注册重叠业务公司",
+        "以个人身份服务原客户"
+      ],
+      "stage": "离职后",
+      "related_risk_refs": [
+        "HR-R02"
+      ],
+      "source_skill": "fraud-ip"
+    },
+    {
+      "pattern_id": "HR-FP11",
+      "name": "裙带关系",
+      "scenario": "为亲属关系人提供雇佣、晋升、合同机会",
+      "red_flags": [
+        "部门家族聚合",
+        "亲属供应商无竞争获合同",
+        "定向录用"
+      ],
+      "stage": "招聘+采购",
+      "related_risk_refs": [
+        "HR-R01"
+      ],
+      "source_skill": "fraud-conflicts-of-interest"
+    },
+    {
+      "pattern_id": "HR-FP12",
+      "name": "双重角色",
+      "scenario": "同时在对立方任职或持股，无法忠于双方",
+      "red_flags": [
+        "在外任法代/董监高",
+        "竞对方向其定期付款",
+        "长期不在岗"
+      ],
+      "stage": "任职期间",
+      "related_risk_refs": [
+        "HR-R02"
+      ],
+      "source_skill": "fraud-conflicts-of-interest"
+    }
+  ]
 }

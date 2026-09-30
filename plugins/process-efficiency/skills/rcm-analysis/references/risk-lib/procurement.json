@@ -4,7 +4,7 @@
   "domain_label": "采购业务",
   "framework_ref": "企业内部控制应用指引第7号",
   "risk_text_status": "complete",
-  "calibration_note": "2026-09-30 人工校准：R01 asset_safety→error（经营计划类，非资产安全）；R05 fraud→compliance（复合风险按未经授权成分优先）。重跑 import-risk-library.py 会覆盖校准，需重新应用（见 risk-lib-contract.md §校准纪律）。",
+  "calibration_note": "2026-09-30 人工校准：R01 asset_safety→error（经营计划类，非资产安全）；R05 fraud→compliance（复合风险按未经授权成分优先）。重跑 import-risk-library.py 会覆盖校准，需重新应用（见 risk-lib-contract.md §校准纪律）。 fraud_patterns 为调查插件 fraud-* 技能类型学反哺层（2026-09-30）：红旗信号视角，供 R2 场景对照与 control-testing 移交联动；非指引条文。",
   "generated_at": "2026-09-30T03:07:22.571125+00:00",
   "processes": [
     {
@@ -388,6 +388,234 @@
           "importance": "一般控制"
         }
       ]
+    }
+  ],
+  "fraud_patterns": [
+    {
+      "pattern_id": "PROC-FP01",
+      "name": "围标/串标",
+      "scenario": "供应商投标前串通，约定轮流中标、陪标报价或瓜分市场，使采购方无法获得真实竞争报价",
+      "red_flags": [
+        "投标人数刚好满足最低要求（凑人头）",
+        "陪标标书相同错误/格式/排版",
+        "IP、联系人高度重合；交叉持股/共享董事"
+      ],
+      "stage": "定标/评标",
+      "related_risk_refs": [
+        "PROC-R03"
+      ],
+      "source_skill": "fraud-procurement"
+    },
+    {
+      "pattern_id": "PROC-FP02",
+      "name": "技术参数量身定制",
+      "scenario": "编写需求和技术规格时偏向特定供应商，限制竞争排斥他人",
+      "red_flags": [
+        "只有特定品牌/型号能满足的非功能性要求",
+        "主观评分权重异常偏高",
+        "发布后只有一家能有效投标"
+      ],
+      "stage": "需求编写/寻源",
+      "related_risk_refs": [
+        "PROC-R03"
+      ],
+      "source_skill": "fraud-procurement"
+    },
+    {
+      "pattern_id": "PROC-FP03",
+      "name": "化整为零",
+      "scenario": "将超过审批限额的大额采购拆为多个小额订单，规避更高层级审批、招标或合同审查",
+      "red_flags": [
+        "同一供应商订单频繁卡线（阈值10万每次9.8万）",
+        "同日/短时多笔近额订单",
+        "使用不同成本中心/项目编码规避系统识别"
+      ],
+      "stage": "订单创建/审批",
+      "related_risk_refs": [
+        "PROC-R02"
+      ],
+      "source_skill": "fraud-procurement"
+    },
+    {
+      "pattern_id": "PROC-FP04",
+      "name": "虚假供应商",
+      "scenario": "虚构供应商或串通空壳公司提交虚假发票，货款入账后被提取转移",
+      "red_flags": [
+        "注册时间极短、注册资本与合同金额不匹配",
+        "联系人与员工同名/同电话/同地址",
+        "付款账户与合同签章名称不一致或为个人账户"
+      ],
+      "stage": "供应商准入/付款",
+      "related_risk_refs": [
+        "PROC-R03"
+      ],
+      "source_skill": "fraud-procurement"
+    },
+    {
+      "pattern_id": "PROC-FP05",
+      "name": "虚假收货/虚增数量",
+      "scenario": "供应商未交付或少交付，采购员或仓库人员虚假签收确认，按合同全额付款",
+      "red_flags": [
+        "签收单无签章或字迹可疑",
+        "入库远大于消耗、签收集中月末季末",
+        "服务类采购无交付记录（工作报告/工时）"
+      ],
+      "stage": "收货/验收",
+      "related_risk_refs": [
+        "PROC-R07"
+      ],
+      "source_skill": "fraud-procurement"
+    },
+    {
+      "pattern_id": "PROC-FP06",
+      "name": "截标/缩短投标期",
+      "scenario": "刻意缩短投标周期或非公开时间截标，使潜在投标人来不及准备，确保内定供应商中标",
+      "red_flags": [
+        "投标期短于行业惯例/公司规定",
+        "截标设在非正常工作时间",
+        "中标方招标前已备货"
+      ],
+      "stage": "招标发布/截标",
+      "related_risk_refs": [
+        "PROC-R03"
+      ],
+      "source_skill": "fraud-procurement"
+    },
+    {
+      "pattern_id": "PROC-FP07",
+      "name": "压标",
+      "scenario": "潜在投标人约定某些方不参与投标或撤回标书，减少竞争确保指定方中标",
+      "red_flags": [
+        "有资质/有历史投标记录者突然缺席",
+        "购买标书（记录在案）但未递交",
+        "退出者随后成为中标方分包商"
+      ],
+      "stage": "投标报名/资格预审",
+      "related_risk_refs": [
+        "PROC-R03"
+      ],
+      "source_skill": "fraud-bid-rigging"
+    },
+    {
+      "pattern_id": "PROC-FP08",
+      "name": "陪标/掩护性投标",
+      "scenario": "有意中标方安排他人提交掩护性标书（报价明显偏高或明知不合要求），形式上经充分竞争胜出",
+      "red_flags": [
+        "陪标报价高中标方5%-20%且无成本解释",
+        "相同排版/拼写/计算公式错误",
+        "多家保函同一银行同一天出票"
+      ],
+      "stage": "标书制作/开标",
+      "related_risk_refs": [
+        "PROC-R03"
+      ],
+      "source_skill": "fraud-bid-rigging"
+    },
+    {
+      "pattern_id": "PROC-FP09",
+      "name": "轮标",
+      "scenario": "投标商约定轮流中标，长期获取大致均等市场份额，伴随明确补偿机制",
+      "red_flags": [
+        "同一供应商群轮流中标有规律",
+        "中标份额接近甚至相等",
+        "长期中标记录统计分布不服从随机性"
+      ],
+      "stage": "长期多项目定标",
+      "related_risk_refs": [
+        "PROC-R03"
+      ],
+      "source_skill": "fraud-bid-rigging"
+    },
+    {
+      "pattern_id": "PROC-FP10",
+      "name": "市场划分",
+      "scenario": "投标商划分客户、地域、产品或项目类型分配市场，各自领地独占",
+      "red_flags": [
+        "特定供应商只出现在特定区域/客户/品类",
+        "领地内中标率极高、领地外从不投标",
+        "客户反映被供应商推荐找另一家"
+      ],
+      "stage": "投标报名（长期格局）",
+      "related_risk_refs": [
+        "PROC-R03"
+      ],
+      "source_skill": "fraud-bid-rigging"
+    },
+    {
+      "pattern_id": "PROC-FP11",
+      "name": "转包回补",
+      "scenario": "中标方将部分合同分包给配合围标的未中标方或支付补偿金，是围标合谋的结算机制",
+      "red_flags": [
+        "中标方与未中标方存在分包合同/咨询协议",
+        "咨询费与中标金额呈可计算固定比例",
+        "补偿发生在投标结束后短时间内"
+      ],
+      "stage": "合同执行/分包（投标后）",
+      "related_risk_refs": [
+        "PROC-R03"
+      ],
+      "source_skill": "fraud-bid-rigging"
+    },
+    {
+      "pattern_id": "PROC-FP12",
+      "name": "信息泄露",
+      "scenario": "招标方员工将标底、竞争对手报价、评审标准/进度泄露给特定投标人",
+      "red_flags": [
+        "报价精准卡线（次低价的99.5%或略高于底价）",
+        "技术方案契合未公开评审偏好",
+        "开标前已备货投入"
+      ],
+      "stage": "发标—开标全过程",
+      "related_risk_refs": [
+        "PROC-R03"
+      ],
+      "source_skill": "fraud-bid-rigging"
+    },
+    {
+      "pattern_id": "PROC-FP13",
+      "name": "招标参数操控",
+      "scenario": "为特定投标人量身定制参数、评分规则或评审标准，形式合规实质排他",
+      "red_flags": [
+        "排他性参数；主观权重异常偏高",
+        "资质年限刚好卡住特定投标人",
+        "发标后修改评审标准且方向有利于特定方"
+      ],
+      "stage": "需求编写/评审标准制定",
+      "related_risk_refs": [
+        "PROC-R03"
+      ],
+      "source_skill": "fraud-bid-rigging"
+    },
+    {
+      "pattern_id": "PROC-FP14",
+      "name": "采购利益冲突",
+      "scenario": "决策员工偏向有经济利益的供应商，高价采购或授独家合同",
+      "red_flags": [
+        "单一来源/卡线中标",
+        "拆合同规避限额",
+        "供应商与员工存在股权/亲属关联"
+      ],
+      "stage": "采购/招投标",
+      "related_risk_refs": [
+        "PROC-R03"
+      ],
+      "source_skill": "fraud-conflicts-of-interest"
+    },
+    {
+      "pattern_id": "PROC-FP15",
+      "name": "回扣关联",
+      "scenario": "供应商向决策员工支付回扣换取商业利益",
+      "red_flags": [
+        "通过中介方账户过账",
+        "员工私人大额资金往来",
+        "生活方式与收入不符"
+      ],
+      "stage": "付款/决策环节",
+      "related_risk_refs": [
+        "PROC-R03",
+        "PROC-R08"
+      ],
+      "source_skill": "fraud-conflicts-of-interest"
     }
   ]
 }

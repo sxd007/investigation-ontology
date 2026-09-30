@@ -191,5 +191,66 @@
       "statement_ref": "应用指引第三条"
     }
   ],
-  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。"
+  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。 fraud_patterns 为调查插件 fraud-* 技能类型学反哺层（2026-09-30）：红旗信号视角，供 R2 场景对照与 control-testing 移交联动；非指引条文。",
+  "fraud_patterns": [
+    {
+      "pattern_id": "CON-FP01",
+      "name": "私刻印章（全假）",
+      "scenario": "无权刻制而仿制公司印章用于订立合同或文件",
+      "red_flags": [
+        "材质廉价、字体排版差异",
+        "备案编号查无"
+      ],
+      "stage": "刻制来源",
+      "related_risk_refs": [
+        "CON-R01"
+      ],
+      "source_skill": "fraud-fake-chop"
+    },
+    {
+      "pattern_id": "CON-FP02",
+      "name": "变造印章（局部改）",
+      "scenario": "在真实印章基础上局部修改印文",
+      "red_flags": [
+        "印文细部不可解释差异（套印嫌疑）",
+        "噪点局部不一致"
+      ],
+      "stage": "用印环节",
+      "related_risk_refs": [
+        "CON-R01"
+      ],
+      "source_skill": "fraud-fake-chop"
+    },
+    {
+      "pattern_id": "CON-FP03",
+      "name": "盗用印章（真章假用）",
+      "scenario": "真章在未经授权情形下被盖用",
+      "red_flags": [
+        "盖章发生在保管人休假期间",
+        "用印审批缺失",
+        "同一章同日出现在两地"
+      ],
+      "stage": "用印审批/保管",
+      "related_risk_refs": [
+        "CON-R01",
+        "CON-R02"
+      ],
+      "source_skill": "fraud-fake-chop"
+    },
+    {
+      "pattern_id": "CON-FP04",
+      "name": "冒用印文（PS/合成）",
+      "scenario": "印文以PS/抠图方式贴入合成文件",
+      "red_flags": [
+        "印文边缘过于锐利",
+        "印文位于文字层之下",
+        "PDF编辑痕迹"
+      ],
+      "stage": "文件制作",
+      "related_risk_refs": [
+        "CON-R01"
+      ],
+      "source_skill": "fraud-fake-chop"
+    }
+  ]
 }

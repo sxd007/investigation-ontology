@@ -667,5 +667,69 @@
         }
       ]
     }
-  ]
+  ],
+  "fraud_patterns": [
+    {
+      "pattern_id": "TRY-FP01",
+      "name": "费用性质篡改",
+      "scenario": "个人消费申报为业务费用套取资金",
+      "red_flags": [
+        "节假日/非工作日报销",
+        "品名笼统无明细",
+        "发票地与行程不符"
+      ],
+      "stage": "报销申报",
+      "related_risk_refs": [
+        "TRY-R14"
+      ],
+      "source_skill": "fraud-reimbursement"
+    },
+    {
+      "pattern_id": "TRY-FP02",
+      "name": "费用金额虚增",
+      "scenario": "真实费用上篡改金额或与商家合谋抬价分成",
+      "red_flags": [
+        "整数/贴阈值金额",
+        "同商家人票金额接近",
+        "票据涂改拼接"
+      ],
+      "stage": "报销申报",
+      "related_risk_refs": [
+        "TRY-R14"
+      ],
+      "source_skill": "fraud-reimbursement"
+    },
+    {
+      "pattern_id": "TRY-FP03",
+      "name": "虚构费用",
+      "scenario": "凭空捏造未发生的费用，用假发票套取资金",
+      "red_flags": [
+        "发票税务系统查无此票",
+        "商家工商信息存疑",
+        "定期定额习惯性报销"
+      ],
+      "stage": "报销申报",
+      "related_risk_refs": [
+        "TRY-R14"
+      ],
+      "source_skill": "fraud-reimbursement"
+    },
+    {
+      "pattern_id": "TRY-FP04",
+      "name": "重复报销",
+      "scenario": "同一费用多途径/多时间重复申报",
+      "red_flags": [
+        "同金额+日期+商家多次出现",
+        "电子纸质双轨提交",
+        "一费多类型申报"
+      ],
+      "stage": "报销申报+财务审核",
+      "related_risk_refs": [
+        "TRY-R14",
+        "TRY-R12"
+      ],
+      "source_skill": "fraud-reimbursement"
+    }
+  ],
+  "calibration_note": "fraud_patterns 为调查插件 fraud-* 技能类型学反哺层（2026-09-30）：红旗信号视角，供 R2 场景对照与 control-testing 移交联动；非指引条文。"
 }

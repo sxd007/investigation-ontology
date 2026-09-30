@@ -84,7 +84,7 @@ RISK-003 信息滞后     -            -             ●(部分)
 **域风险库**（[references/risk-lib/](./references/risk-lib/risk-lib-contract.md)）：按《企业内部控制应用指引》18 域组织的结构化风险参照（风险条目 + 典型控制 + 指引条款出处 + 六类标签）。加载规则：
 
 1. SCOPE 阶段确认评价对象的域归属（可多域并列，如采购流程挂 procurement + treasury + contract），记录选域理由；
-2. 加载对应域库 JSON 作为 R2 覆盖度分析的对照基准——库条目的 `typical_controls` 同时是 `risk_undercontrolled` 判级的参照组合；
+2. 加载对应域库 JSON 作为 R2 覆盖度分析的对照基准——库条目的 `typical_controls` 同时是 `risk_undercontrolled` 判级的参照组合；5 个域另带 `fraud_patterns` 补充层（调查插件 fraud-* 类型学：手法场景+红旗信号），用于 `risk_unidentified` 的具体场景对照与移交联动（纪律见库契约 §fraud_patterns）；
 3. `risk_text_status: pending` 的域（纯控制型，风险文本待补）只能用于控制侧参照，不得据此判 `risk_unidentified`；
 4. 参照库是**询问的起点不是判决的终点**：`risk_unidentified` 仍须先发 DDR + 典型场景说明；库不完备，库外风险靠评价者独立判断（完整纪律见[库契约](./references/risk-lib/risk-lib-contract.md)）。
 

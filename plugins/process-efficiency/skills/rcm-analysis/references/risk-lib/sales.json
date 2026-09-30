@@ -405,5 +405,114 @@
         }
       ]
     }
-  ]
+  ],
+  "fraud_patterns": [
+    {
+      "pattern_id": "SAL-FP01",
+      "name": "虚报终端客户",
+      "scenario": "申报给A客户实际交付B或无真实终端",
+      "red_flags": [
+        "激活地址与申报不符",
+        "签收方与合同不符",
+        "体量与需求不匹配"
+      ],
+      "stage": "特价申报（发起→审批）",
+      "related_risk_refs": [
+        "SAL-R06"
+      ],
+      "source_skill": "fraud-channel"
+    },
+    {
+      "pattern_id": "SAL-FP02",
+      "name": "渠道窜货",
+      "scenario": "特价产品跨区域销售破坏价格体系",
+      "red_flags": [
+        "激活地址超授权范围",
+        "二手市场出现定向产品",
+        "跨区序列号段激活"
+      ],
+      "stage": "执行",
+      "related_risk_refs": [
+        "SAL-R03"
+      ],
+      "source_skill": "fraud-channel"
+    },
+    {
+      "pattern_id": "SAL-FP03",
+      "name": "成本造假",
+      "scenario": "虚增第三方成本/服务费以加深折扣",
+      "red_flags": [
+        "虚增仓储驻场等费用",
+        "第三方与代理隐性关联",
+        "无交付凭证"
+      ],
+      "stage": "特价申报",
+      "related_risk_refs": [
+        "SAL-R04"
+      ],
+      "source_skill": "fraud-channel"
+    },
+    {
+      "pattern_id": "SAL-FP04",
+      "name": "拼单绑单",
+      "scenario": "真实项目捆绑虚构SKU，多余设备挪用出售",
+      "red_flags": [
+        "部分设备无激活记录",
+        "合同与BOM差异",
+        "数量超实际需求"
+      ],
+      "stage": "申报+执行",
+      "related_risk_refs": [
+        "SAL-R07"
+      ],
+      "source_skill": "fraud-channel"
+    },
+    {
+      "pattern_id": "SAL-FP05",
+      "name": "隐瞒渠道链路",
+      "scenario": "隐瞒中间层/关联公司/非认证代理获取高折扣",
+      "red_flags": [
+        "发票链层级多于申报",
+        "存在未申报中间实体",
+        "交易对手与合同不一致"
+      ],
+      "stage": "特价申报",
+      "related_risk_refs": [
+        "SAL-R03"
+      ],
+      "source_skill": "fraud-channel"
+    },
+    {
+      "pattern_id": "SAL-FP06",
+      "name": "隐瞒渠道利润",
+      "scenario": "隐瞒下游真实成交价误导定价政策",
+      "red_flags": [
+        "申报价显著低于实际成交价",
+        "利润率申报与实际差异",
+        "异常返点支出"
+      ],
+      "stage": "执行",
+      "related_risk_refs": [
+        "SAL-R04"
+      ],
+      "source_skill": "fraud-channel"
+    },
+    {
+      "pattern_id": "SAL-FP07",
+      "name": "销售利益冲突",
+      "scenario": "将客户/商机转移给自持权益实体或给予不当折扣",
+      "red_flags": [
+        "大客户流失至特定代理",
+        "异常折扣/信用期",
+        "离职前集中转移客户"
+      ],
+      "stage": "销售/渠道",
+      "related_risk_refs": [
+        "SAL-R02",
+        "SAL-R06"
+      ],
+      "source_skill": "fraud-conflicts-of-interest"
+    }
+  ],
+  "calibration_note": "fraud_patterns 为调查插件 fraud-* 技能类型学反哺层（2026-09-30）：红旗信号视角，供 R2 场景对照与 control-testing 移交联动；非指引条文。"
 }

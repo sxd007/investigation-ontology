@@ -52,6 +52,15 @@
       "guideline_refs": ["基本规范第三十三条", "应用指引第六条"],
       "frequency": "业务发生时", "execution_mode": "人工控制", "importance": "一般控制 | 重要控制"
     }]
+  }],
+  "fraud_patterns": [{
+    "pattern_id": "PROC-FP03",
+    "name": "化整为零",
+    "scenario": "手法操作描述（怎么做的）",
+    "red_flags": ["可观察信号1（数据/单据里能看到什么）"],
+    "stage": "易发环节",
+    "related_risk_refs": ["PROC-R02"],
+    "source_skill": "fraud-procurement"
   }]
 }
 ```
@@ -73,3 +82,11 @@
 ## 与调查插件的协同
 
 舞弊类（fraud）条目可通过 investigation-ontology 的 `fraud-*` 场景技能（采购/报销/投标/渠道/HR/知产/印章/利益冲突）深化：库条目回答"这类流程该防什么"，fraud-* 类型学回答"舞弊实际长什么样、怎么查"。评价发现的可疑信号移交调查时，域库条目 ID 可作为两侧共通语言。
+
+### fraud_patterns 补充层（2026-09-30 落地）
+
+5 个域已带 `fraud_patterns`（42 条：procurement 15 / hr 12 / sales 7 / treasury 4 / contract 4），从 fraud-* 技能的舞弊类型学提炼，**是红旗信号视角的补充层，不是指引条文**：
+
+- **用途一（评价侧）**：R2 覆盖度分析与 `risk_unidentified` 判定时，用 red_flags 做具体场景对照（"同一供应商订单频繁卡线"比"请购未经审批"更可查）；`related_risk_refs` 把手法挂回制度风险条目；
+- **用途二（联动侧）**：control-testing 发现可疑信号移交调查（T4）时，`pattern_id` + `risk_ref` 是两插件的共通语言——评价说"疑似 PROC-FP03（化整为零）"，调查侧立刻知道查什么、怎么查；
+- **纪律**：patterns 只作场景对照与移交索引，不构成发现本身——finding 仍须锚定 digest/baseline 证据；pattern 库同样不完备，未被列举的手法不等于不存在。
