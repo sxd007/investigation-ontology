@@ -140,12 +140,12 @@ function handoffs(m, paths) {
   return out;
 }
 
-// ---------- 域风险参照库（rcm-analysis references/risk-libraries） ----------
+// ---------- 域风险参照库（rcm-analysis references/risk-lib） ----------
 function loadRiskLibraries(domains) {
-  const libDir = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', 'rcm-analysis', 'references', 'risk-libraries');
+  const libDir = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', 'rcm-analysis', 'references', 'risk-lib');
   return domains.map((domain) => {
     const p = join(libDir, `${domain}.json`);
-    if (!existsSync(p)) throw new Error(`域风险库不存在：${domain}（可用域见 risk-libraries/risk-library-contract.md）`);
+    if (!existsSync(p)) throw new Error(`域风险库不存在：${domain}（可用域见 risk-lib/risk-lib-contract.md）`);
     return JSON.parse(readFileSync(p, 'utf8'));
   });
 }

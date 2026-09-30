@@ -4,7 +4,7 @@
   "domain_label": "采购业务",
   "framework_ref": "企业内部控制应用指引第7号",
   "risk_text_status": "complete",
-  "calibration_note": "2026-09-30 人工校准：R01 asset_safety→error（经营计划类，非资产安全）；R05 fraud→compliance（复合风险按未经授权成分优先）。重跑 import-risk-library.py 会覆盖校准，需重新应用（见 risk-library-contract.md §校准纪律）。",
+  "calibration_note": "2026-09-30 人工校准：R01 asset_safety→error（经营计划类，非资产安全）；R05 fraud→compliance（复合风险按未经授权成分优先）。重跑 import-risk-library.py 会覆盖校准，需重新应用（见 risk-lib-contract.md §校准纪律）。",
   "generated_at": "2026-09-30T03:07:22.571125+00:00",
   "processes": [
     {
