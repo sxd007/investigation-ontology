@@ -48,6 +48,8 @@ origin: process-efficiency
 
 ### 实例层 — 周期时间分析（+ baseline 快照）
 
+**前置（强制）**：E4 之前按 [data-feasibility](../process-assess-workflow/references/data-feasibility.md) 完成数据可行性预检并签署测试项可行性矩阵——时间戳粒度（F1）与实例可聚合性（F2）直接决定 E4-E7 可做范围；先声明后分析，不合格按契约降级路径执行。
+
 **E4 周期时间分解**：对每笔实例计算端到端周期，分解到环节：
 
 ```text

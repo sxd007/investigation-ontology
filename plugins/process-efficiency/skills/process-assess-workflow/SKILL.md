@@ -143,6 +143,8 @@ risk 维度可加 `--risk-library <域,逗号分隔>` 加载[域风险参照库]
 
 **消费纪律**：评价技能只消费 digest-schema 兼容的流程知识包（默认生产者 policy-digest；本体层投影为第二生产者，未来实现）与 baseline 声明的数据快照，**不回头读制度原文**（锚点追溯经 digest 间接实现），不引入基线外的未快照数据（保证结论可复现）。
 
+**数据可行性预检（实例层维度强制前置）**：control-testing / efficiency-diagnosis 动手分析前，先按 [data-feasibility](./references/data-feasibility.md) 完成 F1-F6 检查并签署各维度 `data_feasibility.md` 的测试项可行性矩阵（full/degraded/excluded，generate-dimension-drafts 已预填骨架）——先声明后分析；矩阵是门禁 `data_sufficiency_assessed` 的直接证据。
+
 **上游纠错（DDR）**：评价技能在专业领域内识别流程知识包的缺陷嫌疑（遗漏/错归类/锚点错/幻觉），按 [DDR 机制](./references/digest-defect-report.md)报告至 `01_assessments/ddr.yaml`；验证与修复归 policy-digest（走 digest 版本链），下游不自行修改不回读原文。defect-susceptible 类 finding 在 DDR 闭环前保持 provisional。
 
 **输出**：各维度评价产物（按各技能 SKILL.md 定义的产出结构写入 `01_assessments/{dimension}/`，findings 按 [finding-contract](./references/finding-contract.md) 聚合到该维度 `findings.yaml`）。

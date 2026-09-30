@@ -15,6 +15,7 @@
 | P90/P50 比值 > **3** → `cycle_time_outlier` | efficiency-diagnosis E7 | 统计启发式（分布偏度经验界） | 可用 IQR 法（> Q3 + 1.5×IQR）替代，更稳健 |
 | SMART 缺 **3+ 项** → vague / 缺 1-2 项 → partial | goal-alignment G2 | 经验值（SMART 为通用管理工具，无权威判级标准） | 一般无需校准 |
 | 串行链长 / 交接次数阈值（E1/E3 目前无数值） | efficiency-diagnosis | 待实践校准——golden case 积累后补充 | 从实例数据分布反推 |
+| 实例可聚合 ≥ **90%** / 环节映射覆盖 ≥ **80%** | 数据可行性预检 F2/F3（control-testing / efficiency-diagnosis 实例层前置） | 经验值（首个 golden case 后校准） | 企业有数据质量标准时优先用内部标准；<50% 时 F3 触发"快照外系统"排查 |
 
 ## 使用纪律
 

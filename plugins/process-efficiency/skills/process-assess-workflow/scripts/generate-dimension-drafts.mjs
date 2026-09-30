@@ -191,6 +191,43 @@ function libraryEntries(libraries, digestRisks) {
 }
 
 // ---------- 各维度生成器 ----------
+// 数据可行性预检（data-feasibility.md）：实例层技能（control/efficiency）的强制前置产物
+function genDataFeasibility(dim, baseline, testItems) {
+  const snapshots = baseline?.data.snapshots || [];
+  const srows = snapshots.map((s) => `| ${s.path} | ${s.data_window ? `${s.data_window.start}~${s.data_window.end}` : '{…}'} | {…} |`);
+  return `# 数据可行性预检（${dim} 维度，实例层分析前置）
+
+> 初稿由 generate-dimension-drafts.mjs 预填骨架（快照清单来自 ${baseline ? baseline.name : '（无基线）'}）；F1-F6 实测结论与测试项矩阵由 AI 检查后填充 {…}。
+> 方法论与降级路径见 [data-feasibility](../../process-assess-workflow/references/data-feasibility.md)（或插件内同名契约）；**先声明后分析**——本矩阵签署前不得产出实例层 finding。
+
+## 快照清单
+
+| 快照 | 数据窗口 | 备注 |
+|------|---------|------|
+${srows.length ? srows.join('\n') : '| （baseline 无快照——实例层分析不可行，转 template-free 降级路径） | | |'}
+
+## F1-F6 检查
+
+| # | 检查项 | 合格标准 | 实测结论 | 降级决定 |
+|---|--------|---------|---------|---------|
+| F1 | 时间戳粒度 | 分钟级及以上 | {…} | {…} |
+| F2 | 实例可聚合性 | ≥90% 实例可拼出完整路径（经验值） | {…} | {…} |
+| F3 | 环节可映射 | 快照环节→digest L4 映射覆盖 ≥80%（经验值） | {…} | {…} |
+| F4 | 字段完整性 | 操作人/动作/时间/对象四要素齐全 | {…} | {…} |
+| F5 | 快照覆盖核验 | 窗口实例量与业务量级一致 | {…（可引用 BASELINE 已做核验）} | {…} |
+| F6 | 触发条件可判定 | 条件控制的触发字段可圈定应控实例 | {…} | {…} |
+
+## 测试项可行性矩阵（预检结论）
+
+| 测试项 | 结论 | 依据（检查项） | 降级/限制说明 |
+|--------|------|--------------|--------------|
+${testItems.map((t) => `| ${t} | {full/degraded/excluded} | {…} | {…} |`).join('\n')}
+
+## 限制声明（摘编进 REPORT 限制节）
+
+- {…}
+`;
+}
 function genGoal(m, baseline) {
   const files = {};
   // objective_inventory.md
@@ -358,6 +395,7 @@ ${crows.length ? crows.join('\n') : '| （digest 无 controls） | | | | | | | |
 
 function genControl(m, baseline) {
   const files = {};
+  files['data_feasibility.md'] = genDataFeasibility('control', baseline, ['T1 选样', 'T2 穿行测试', 'T3 执行偏差分析', 'segregation_conflict 检查']);
   const snapshots = baseline?.data.snapshots || [];
   // sampling_plan.md
   const srows = snapshots.map((s) =>
@@ -472,8 +510,8 @@ ${erows.length ? erows.join('\n') : '| （digest 无 controls） | | | | | | | |
 }
 
 function genEfficiency(m, baseline) {
-  void baseline;
   const files = {};
+  files['data_feasibility.md'] = genDataFeasibility('efficiency', baseline, ['E4 周期时间分解', 'E5 瓶颈识别', 'E6 返工率分析', 'E7 离群诊断']);
   const paths = mainPaths(m);
   const rework = reworkEdges(m);
   const hoffs = handoffs(m, paths);

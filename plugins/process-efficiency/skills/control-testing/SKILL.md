@@ -28,6 +28,8 @@ origin: process-efficiency
 
 **数据快照的前置要求**（BASELINE 阶段应满足，不满足时先反馈）：执行记录必须能按单笔业务实例聚合出完整路径（申请→审批→执行→归档各环节的人/时间/动作）；无法聚合的记录只能支撑部分测试项，降级并列入报告限制。
 
+**T0 数据可行性预检（强制前置）**：T1 之前按 [data-feasibility](../process-assess-workflow/references/data-feasibility.md) 完成 F1-F6 检查并签署 `data_feasibility.md` 的测试项可行性矩阵（full/degraded/excluded）——**先声明后分析**，矩阵签署前不得产出实例层 finding。
+
 ## 方法论
 
 ### T1 抽样策略

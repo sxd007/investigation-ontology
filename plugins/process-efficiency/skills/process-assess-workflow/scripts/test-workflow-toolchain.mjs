@@ -107,6 +107,11 @@ try {
   assert.ok(dimFile('efficiency', 'structure_review.md').includes('主路径 6 环节'), 'E1 走链');
   assert.ok(dimFile('efficiency', 'structure_review.md').includes('共 1 条'), 'E2 返工边');
   assert.ok(dimFile('efficiency', 'structure_review.md').includes('共 12 处'), 'E3 交接点');
+  // 数据可行性预检（实例层两维度强制前置产物）
+  assert.ok(dimFile('control', 'data_feasibility.md').includes('测试项可行性矩阵'), 'control 预检矩阵');
+  assert.ok(dimFile('control', 'data_feasibility.md').includes('T2 穿行测试'), 'control 预检测试项');
+  assert.ok(dimFile('efficiency', 'data_feasibility.md').includes('E4 周期时间分解'), 'efficiency 预检测试项');
+  assert.ok(dimFile('control', 'data_feasibility.md').includes('oa-export-2026q3.json'), '预检快照清单预填');
   // 重跑跳过 + --force 覆盖
   r = run('generate-dimension-drafts.mjs', [A, '--skill', 'risk']);
   assert.ok(r.out.includes('已跳过'), `重跑应跳过：${r.out}`);
