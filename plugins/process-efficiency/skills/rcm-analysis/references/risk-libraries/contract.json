@@ -3,7 +3,7 @@
   "domain": "contract",
   "domain_label": "合同管理",
   "framework_ref": "企业内部控制应用指引第16号",
-  "risk_text_status": "pending",
+  "risk_text_status": "complete",
   "generated_at": "2026-09-30T03:07:22.596482+00:00",
   "processes": [
     {
@@ -13,10 +13,6 @@
     {
       "process_l1": "二、合同的履行",
       "process_l2": null
-    },
-    {
-      "process_l1": "评价报告：",
-      "process_l2": null
     }
   ],
   "risks": [
@@ -24,10 +20,10 @@
       "risk_ref": "CON-R01",
       "process_l1": "一、合同的订立",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（一）未订立合同、未经授权对外订立合同、合同对方主体资格未达要求、合同内容存在重大疏漏和欺诈，可能导致企业合法权益受到侵害。",
+      "category": "compliance",
+      "category_basis": "calibrated",
+      "reference_level": "high",
       "typical_controls": [
         {
           "control_ref": "CON-C01",
@@ -109,16 +105,17 @@
           "execution_mode": "人工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     },
     {
       "risk_ref": "CON-R02",
       "process_l1": "二、合同的履行",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（二）合同未全面履行或监控不当，可能导致企业诉讼失败、经济利益受损。（三）合同纠纷处理不当，可能损害企业利益、信誉和形象。",
+      "category": "compliance",
+      "category_basis": "calibrated",
+      "reference_level": "high",
       "typical_controls": [
         {
           "control_ref": "CON-C09",
@@ -190,17 +187,9 @@
           "execution_mode": "人工控制",
           "importance": "重要控制"
         }
-      ]
-    },
-    {
-      "risk_ref": "CON-R03",
-      "process_l1": "评价报告：",
-      "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
-      "typical_controls": []
+      ],
+      "statement_ref": "应用指引第三条"
     }
-  ]
+  ],
+  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。"
 }

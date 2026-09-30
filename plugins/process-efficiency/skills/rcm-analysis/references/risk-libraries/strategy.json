@@ -3,7 +3,7 @@
   "domain": "strategy",
   "domain_label": "发展战略",
   "framework_ref": "企业内部控制应用指引第2号",
-  "risk_text_status": "pending",
+  "risk_text_status": "complete",
   "generated_at": "2026-09-30T03:07:22.559653+00:00",
   "processes": [
     {
@@ -20,10 +20,10 @@
       "risk_ref": "STR-R01",
       "process_l1": "一、发展战略制定",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（一）缺乏明确的发展战略或发展战略实施不到位，可能导致企业盲目发展，难以形成竞争优势，丧失发展机遇和动力。（二）发展战略过于激进，脱离企业实际能力或偏离主业，可能导致企业过度扩张，甚至经营失败。",
+      "category": "error",
+      "category_basis": "calibrated",
+      "reference_level": "medium",
       "typical_controls": [
         {
           "control_ref": "STR-C01",
@@ -145,16 +145,17 @@
           "execution_mode": "人工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     },
     {
       "risk_ref": "STR-R02",
       "process_l1": "二、发展战略实施",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（一）缺乏明确的发展战略或发展战略实施不到位，可能导致企业盲目发展，难以形成竞争优势，丧失发展机遇和动力。（三）发展战略因主观原因频繁变动，可能导致资源浪费，甚至危及企业的生存和持续发展。",
+      "category": "error",
+      "category_basis": "calibrated",
+      "reference_level": "medium",
       "typical_controls": [
         {
           "control_ref": "STR-C13",
@@ -196,7 +197,9 @@
           "execution_mode": "人工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     }
-  ]
+  ],
+  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。"
 }

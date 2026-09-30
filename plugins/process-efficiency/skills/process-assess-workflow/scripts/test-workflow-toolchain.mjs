@@ -113,6 +113,16 @@ try {
   r = run('generate-dimension-drafts.mjs', [join(root, 'embedded-risk'), '--skill', 'risk', '--digest', join(A, 'policy-digests', 'TEN-RULE', 'digest.json')]);
   assert.equal(r.status, 0, r.out);
   assert.ok(existsSync(join(root, 'embedded-risk', 'rcm_matrix.md')), '场景二产物');
+  // --risk-library 域风险库集成（参照行 + 未识别风险表预填；非 risk 维度警告；未知域报错）
+  r = run('generate-dimension-drafts.mjs', [A, '--skill', 'risk', '--risk-library', 'procurement', '--force']);
+  assert.equal(r.status, 0, r.out);
+  assert.ok(dimFile('risk', 'rcm_matrix.md').includes('[参照] PROC-R01'), '矩阵参照行预填');
+  assert.ok(dimFile('risk', 'coverage_analysis.md').includes('PROC-R01（采购业务）'), '未识别风险表预填');
+  r = run('generate-dimension-drafts.mjs', [A, '--skill', 'goal', '--risk-library', 'procurement', '--force']);
+  assert.equal(r.status, 0, r.out);
+  assert.ok(r.out.includes('仅作用于 risk 维度'), `非 risk 维度应警告：${r.out}`);
+  r = run('generate-dimension-drafts.mjs', [A, '--skill', 'risk', '--risk-library', 'nonexistent-domain']);
+  assert.notEqual(r.status, 0, '未知域应报错');
 
   // ---- 7. validate-findings --baseline 锚点跨文件校验 ----
   const findingsPath = join(A, '01_assessments', 'control', 'findings.yaml');

@@ -3,7 +3,7 @@
   "domain": "culture",
   "domain_label": "企业文化",
   "framework_ref": "企业内部控制应用指引第5号",
-  "risk_text_status": "pending",
+  "risk_text_status": "complete",
   "generated_at": "2026-09-30T03:07:22.568113+00:00",
   "processes": [
     {
@@ -20,10 +20,10 @@
       "risk_ref": "CUL-R01",
       "process_l1": "一、企业文化建设",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（一）缺乏积极向上的企业文化，可能导致员工丧失对企业的信心和认同感，企业缺乏凝聚力和竞争力。（二）缺乏开拓创新、团队协作和风险意识，可能导致企业发展目标难以实现，影响可持续发展。（三）缺乏诚实守信的经营理念，可能导致舞弊事件的发生，造成企业损失，影响企业信誉。（四）忽视企业间的文化差异和理念冲突，可能导致并购重组失败。",
+      "category": "fraud",
+      "category_basis": "calibrated",
+      "reference_level": "high",
       "typical_controls": [
         {
           "control_ref": "CUL-C01",
@@ -77,16 +77,17 @@
           "execution_mode": "手工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     },
     {
       "risk_ref": "CUL-R02",
       "process_l1": "二、企业文化评估",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（一）缺乏积极向上的企业文化，可能导致员工丧失对企业的信心和认同感，企业缺乏凝聚力和竞争力。（二）缺乏开拓创新、团队协作和风险意识，可能导致企业发展目标难以实现，影响可持续发展。（三）缺乏诚实守信的经营理念，可能导致舞弊事件的发生，造成企业损失，影响企业信誉。（四）忽视企业间的文化差异和理念冲突，可能导致并购重组失败。",
+      "category": "fraud",
+      "category_basis": "calibrated",
+      "reference_level": "high",
       "typical_controls": [
         {
           "control_ref": "CUL-C06",
@@ -118,7 +119,9 @@
           "execution_mode": "手工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     }
-  ]
+  ],
+  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。域级风险四并为两个阶段共用；类别取组内最高优先级项（含舞弊项→fraud）。"
 }

@@ -8,8 +8,8 @@
 //   node generate-dimension-drafts.mjs <assessment_root> --skill <goal|risk|control|efficiency> [--baseline baseline-vN] [--force]
 //   node generate-dimension-drafts.mjs <output_dir> --skill <dim> --digest <digest.json>...   （场景二：无基线直接喂 digest）
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const DIM_TO_DIR = { goal: 'goal', risk: 'risk', control: 'control', efficiency: 'efficiency' };
 const DIMENSIONS = Object.keys(DIM_TO_DIR);
@@ -140,6 +140,56 @@ function handoffs(m, paths) {
   return out;
 }
 
+// ---------- 域风险参照库（rcm-analysis references/risk-libraries） ----------
+function loadRiskLibraries(domains) {
+  const libDir = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', 'rcm-analysis', 'references', 'risk-libraries');
+  return domains.map((domain) => {
+    const p = join(libDir, `${domain}.json`);
+    if (!existsSync(p)) throw new Error(`域风险库不存在：${domain}（可用域见 risk-libraries/README.md）`);
+    return JSON.parse(readFileSync(p, 'utf8'));
+  });
+}
+
+// 字符 bigram 重合度：库条目 statement vs digest 风险 description 的机械相似度提示（非语义结论，须 AI 复核）
+function bigrams(s) {
+  const set = new Set();
+  const t = String(s || '');
+  for (let i = 0; i + 1 < t.length; i++) set.add(t.slice(i, i + 2));
+  return set;
+}
+
+function similarity(a, b) {
+  const A = bigrams(a);
+  const B = bigrams(b);
+  if (!A.size || !B.size) return 0;
+  let n = 0;
+  for (const g of A) if (B.has(g)) n++;
+  return n / Math.min(A.size, B.size);
+}
+
+const SIMILARITY_HINT = 0.4;
+
+function libraryEntries(libraries, digestRisks) {
+  const entries = [];
+  for (const lib of libraries) {
+    for (const r of lib.risks || []) {
+      if (!r.statement) continue; // 风险文本缺省的条目不作未识别风险候选（SKILL 纪律）
+      let hint = null;
+      let best = 0;
+      for (const dr of digestRisks) {
+        const s = similarity(r.statement, dr.description);
+        if (s > best) { best = s; hint = dr._q; }
+      }
+      entries.push({
+        ref: r.risk_ref, domain: lib.domain_label, statement: r.statement,
+        level: r.reference_level, controls: (r.typical_controls || []).length,
+        coveredHint: best >= SIMILARITY_HINT ? hint : null,
+      });
+    }
+  }
+  return entries;
+}
+
 // ---------- 各维度生成器 ----------
 function genGoal(m, baseline) {
   const files = {};
@@ -204,8 +254,9 @@ ${grows.length ? grows.join('\n') : '| （无已归因数据缺口） | | |'}
   return files;
 }
 
-function genRisk(m) {
+function genRisk(m, baseline, libraries = []) {
   const files = {};
+  const refEntries = libraryEntries(libraries, m.risks);
   // rcm_matrix.md
   const riskIds = new Set(m.risks.map((r) => `${r._doc}:${r.risk_id}`));
   const orphans = m.controls.filter((c) => !Array.isArray(c.risk_refs) || c.risk_refs.length === 0 || c.risk_refs.every((r) => !riskIds.has(`${c._doc}:${r}`)));
@@ -218,11 +269,14 @@ function genRisk(m) {
 
 > 初稿由 generate-dimension-drafts.mjs 按 \`controls[].risk_refs\` 机械生成；●/○（主要/辅助）区分需 AI 语义复核后下调。
 > 行 = digest \`risks[]\`，列 = digest \`controls[]\`。● 主要应对  ○ 辅助应对  - 无关联
+${libraries.length ? `> [参照] 行来自域风险库（${libraries.map((l) => l.domain_label).join('、')}，共 ${refEntries.length} 条）：AI 逐条判定 digest 是否覆盖——覆盖在附注登记映射，未覆盖 → \`risk_unidentified\` 候选（须先 DDR）。` : ''}
 
 | 风险 \\ 控制 | ${header.join(' | ') || '（无控制）'} |
 |------------|${header.map(() => '---').join('|') || '---'}|
 ${rows.length ? rows.join('\n') : '| （digest 无 risks） | |'}
-| **[参照] {参照集条目}** 制度未声明 | {…} | → \`risk_unidentified\`（须先 DDR） |
+${refEntries.length
+    ? refEntries.map((e) => `| **[参照] ${e.ref}** ${cell(e.statement, 40)}${e.coveredHint ? `<br>疑似已覆盖→${e.coveredHint}（机械相似，语义复核）` : ''} | ${header.map(() => '{…}').join(' | ')} |`).join('\n')
+    : '| **[参照] {参照集条目}** 制度未声明 | {…} | → `risk_unidentified`（须先 DDR） |'}
 
 ## 标记
 
@@ -260,9 +314,11 @@ ${uncontrolled.length ? uncontrolled.map((r) => `| ${r._q} ${cell(r.description,
 
 | 参照集条目 | 典型场景 | 制度未声明说明 | finding |
 |-----------|---------|--------------|---------|
-| {…} | {…} | {…} | {RC-xxx} |
+${refEntries.length
+    ? refEntries.map((e) => `| ${e.ref}（${e.domain}） | ${cell(e.statement, 60)} | ${e.coveredHint ? `机械相似 ${e.coveredHint}——疑似已覆盖，语义复核后排除或走 DDR` : '{…}（参照等级 ' + (e.level || '?') + '；典型控制参照 ' + e.controls + ' 条）'} | {RC-xxx} |`).join('\n')
+    : '| {…} | {…} | {…} | {RC-xxx} |'}
 
-> 纪律：\`risk_unidentified\` 必须先行 DDR（open），dismissed 后才升级为确认发现；不允许只凭直觉列风险。
+> 纪律：\`risk_unidentified\` 必须先行 DDR（open），dismissed 后才升级为确认发现；不允许只凭直觉列风险。参照库是询问的起点不是判决的终点；机械相似度提示仅辅助定位，不构成覆盖结论。
 `;
 
   // control_design_review.md
@@ -516,7 +572,7 @@ function runCli() {
   const args = process.argv.slice(2);
   const root = args[0]?.startsWith('--') ? null : args[0];
   const dim = option(args, '--skill');
-  if (!root || !dim) throw new Error('用法: node generate-dimension-drafts.mjs <assessment_root|output_dir> --skill <goal|risk|control|efficiency> [--baseline baseline-vN] [--digest <路径>]... [--force]');
+  if (!root || !dim) throw new Error('用法: node generate-dimension-drafts.mjs <assessment_root|output_dir> --skill <goal|risk|control|efficiency> [--baseline baseline-vN] [--digest <路径>]... [--risk-library <域,逗号分隔>] [--force]');
   if (!DIMENSIONS.includes(dim)) throw new Error(`不支持的维度：${dim}；可选值：${DIMENSIONS.join(', ')}`);
   const absRoot = resolve(root);
   const explicitDigests = optionsAll(args, '--digest');
@@ -528,10 +584,16 @@ function runCli() {
   if (!baseline && !explicitDigests.length) {
     throw new Error('未找到可用基线（baselines/baseline-v*.json）；请先运行 scaffold-baseline.mjs，或用 --digest 直接指定 digest.json（场景二）');
   }
+  const libraryOpt = option(args, '--risk-library');
+  let libraries = [];
+  if (libraryOpt) {
+    if (dim !== 'risk') console.log(`🟡 --risk-library 仅作用于 risk 维度，当前 ${dim} 已忽略`);
+    else libraries = loadRiskLibraries(libraryOpt.split(',').map((s) => s.trim()).filter(Boolean));
+  }
   const digests = loadDigests(absRoot, baseline, explicitDigests);
   if (!digests.length) throw new Error('未加载到任何 digest（检查基线 digests 引用或 --digest 路径）');
   const merged = mergeDigests(digests);
-  const files = GENERATORS[dim](merged, baseline);
+  const files = GENERATORS[dim](merged, baseline, libraries);
 
   // 输出目录：评价根语境 → 01_assessments/{dim}/；--digest 直喂语境 → 当前目录即输出目录
   const outDir = explicitDigests.length ? absRoot : join(absRoot, '01_assessments', DIM_TO_DIR[dim]);
@@ -546,7 +608,7 @@ function runCli() {
     written.push(name);
   }
   console.log(`✓ 维度初稿生成（${dim}）：${outDir}`);
-  console.log(`  digest：${digests.map((d) => d.doc_id).join(', ')} ｜ 基线：${baseline ? baseline.name : '（--digest 直喂，无基线）'}`);
+  console.log(`  digest：${digests.map((d) => d.doc_id).join(', ')} ｜ 基线：${baseline ? baseline.name : '（--digest 直喂，无基线）'}${libraries.length ? ` ｜ 风险库：${libraries.map((l) => l.domain).join(', ')}` : ''}`);
   if (written.length) console.log(`  已生成：${written.join(', ')}`);
   if (skipped.length) console.log(`  已跳过（存在，--force 覆盖）：${skipped.join(', ')}`);
   console.log('⚠ 初稿中 {…} 为 AI 判断留白；机械预填部分（映射/清单/路径）复核语义后可直接采用。');

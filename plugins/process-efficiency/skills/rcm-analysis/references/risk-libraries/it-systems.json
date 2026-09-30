@@ -3,7 +3,7 @@
   "domain": "it-systems",
   "domain_label": "信息系统",
   "framework_ref": "企业内部控制应用指引第18号",
-  "risk_text_status": "pending",
+  "risk_text_status": "complete",
   "generated_at": "2026-09-30T03:07:22.601490+00:00",
   "processes": [
     {
@@ -20,10 +20,10 @@
       "risk_ref": "ITS-R01",
       "process_l1": "一、信息系统的开发",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（一）信息系统缺乏或规划不合理，可能造成信息孤岛或重复建设，导致企业经营管理效率低下。（二）系统开发不符合内部控制要求，授权管理不当，可能导致无法利用信息技术实施有效控制。",
+      "category": "compliance",
+      "category_basis": "calibrated",
+      "reference_level": "high",
       "typical_controls": [
         {
           "control_ref": "ITS-C01",
@@ -135,16 +135,17 @@
           "execution_mode": "人工控制",
           "importance": "一般控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     },
     {
       "risk_ref": "ITS-R02",
       "process_l1": "二、信息系统的运行与维护",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（三）系统运行维护和安全措施不到位，可能导致信息泄漏或毁损，系统无法正常运行。",
+      "category": "asset_safety",
+      "category_basis": "calibrated",
+      "reference_level": "high",
       "typical_controls": [
         {
           "control_ref": "ITS-C12",
@@ -316,7 +317,9 @@
           "execution_mode": "人工控制",
           "importance": "一般控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     }
-  ]
+  ],
+  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。"
 }

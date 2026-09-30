@@ -3,7 +3,7 @@
   "domain": "org-structure",
   "domain_label": "组织架构",
   "framework_ref": "企业内部控制应用指引第1号",
-  "risk_text_status": "pending",
+  "risk_text_status": "complete",
   "generated_at": "2026-09-30T03:07:22.557666+00:00",
   "processes": [
     {
@@ -20,10 +20,10 @@
       "risk_ref": "ORG-R01",
       "process_l1": "一、组织架构设计",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（一）治理结构形同虚设，缺乏科学决策、良性运行机制和执行力，可能导致企业经营失败，难以实现发展战略。（二）内部机构设计不科学，权责分配不合理，可能导致机构重叠、职能交叉或缺失、推诿扯皮，运行效率低下。",
+      "category": "error",
+      "category_basis": "calibrated",
+      "reference_level": "medium",
       "typical_controls": [
         {
           "control_ref": "ORG-C01",
@@ -145,16 +145,17 @@
           "execution_mode": "人工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     },
     {
       "risk_ref": "ORG-R02",
       "process_l1": "二、组织架构运行",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（一）治理结构形同虚设，缺乏科学决策、良性运行机制和执行力，可能导致企业经营失败，难以实现发展战略。（二）内部机构设计不科学，权责分配不合理，可能导致机构重叠、职能交叉或缺失、推诿扯皮，运行效率低下。",
+      "category": "error",
+      "category_basis": "calibrated",
+      "reference_level": "medium",
       "typical_controls": [
         {
           "control_ref": "ORG-C13",
@@ -246,7 +247,9 @@
           "execution_mode": "人工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     }
-  ]
+  ],
+  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。域级风险跨设计/运行两阶段，两组均引用全量两项。"
 }

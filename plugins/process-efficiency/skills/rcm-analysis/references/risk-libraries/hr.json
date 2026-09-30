@@ -3,7 +3,7 @@
   "domain": "hr",
   "domain_label": "人力资源",
   "framework_ref": "企业内部控制应用指引第3号",
-  "risk_text_status": "pending",
+  "risk_text_status": "complete",
   "generated_at": "2026-09-30T03:07:22.563599+00:00",
   "processes": [
     {
@@ -20,10 +20,10 @@
       "risk_ref": "HR-R01",
       "process_l1": "一、人力资源引进与开发",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（一）人力资源缺乏或过剩、结构不合理、开发机制不健全，可能导致企业发展战略难以实现。",
+      "category": "error",
+      "category_basis": "calibrated",
+      "reference_level": "medium",
       "typical_controls": [
         {
           "control_ref": "HR-C01",
@@ -77,16 +77,17 @@
           "execution_mode": "手工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     },
     {
       "risk_ref": "HR-R02",
       "process_l1": "二、人力资源使用与退出",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（二）人力资源激励约束制度不合理、关键岗位人员管理不完善，可能导致人才流失、经营效率低下或关键技术、商业秘密和国家机密泄露。（三）人力资源退出机制不当，可能导致法律诉讼或企业声誉受损。",
+      "category": "compliance",
+      "category_basis": "calibrated",
+      "reference_level": "high",
       "typical_controls": [
         {
           "control_ref": "HR-C06",
@@ -140,7 +141,9 @@
           "execution_mode": "手工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     }
-  ]
+  ],
+  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。"
 }

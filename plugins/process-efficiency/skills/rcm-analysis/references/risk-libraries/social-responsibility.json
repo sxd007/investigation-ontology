@@ -3,7 +3,7 @@
   "domain": "social-responsibility",
   "domain_label": "社会责任",
   "framework_ref": "企业内部控制应用指引第4号",
-  "risk_text_status": "pending",
+  "risk_text_status": "complete",
   "generated_at": "2026-09-30T03:07:22.567113+00:00",
   "processes": [
     {
@@ -28,10 +28,10 @@
       "risk_ref": "SR-R01",
       "process_l1": "一、安全生产",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（一）安全生产措施不到位，责任不落实，可能导致企业发生安全事故。",
+      "category": "compliance",
+      "category_basis": "calibrated",
+      "reference_level": "high",
       "typical_controls": [
         {
           "control_ref": "SR-C01",
@@ -73,16 +73,17 @@
           "execution_mode": "手工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     },
     {
       "risk_ref": "SR-R02",
       "process_l1": "二、产品质量",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（二）产品质量低劣，侵害消费者利益，可能导致企业巨额赔偿、形象受损，甚至破产。",
+      "category": "compliance",
+      "category_basis": "calibrated",
+      "reference_level": "high",
       "typical_controls": [
         {
           "control_ref": "SR-C05",
@@ -114,16 +115,17 @@
           "execution_mode": "手工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     },
     {
       "risk_ref": "SR-R03",
       "process_l1": "三、环境保护与资源节约",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（三）环境保护投入不足，资源耗费大，造成环境污染或资源枯竭，可能导致企业巨额赔偿、缺乏发展后劲，甚至停业。",
+      "category": "compliance",
+      "category_basis": "calibrated",
+      "reference_level": "high",
       "typical_controls": [
         {
           "control_ref": "SR-C08",
@@ -165,16 +167,17 @@
           "execution_mode": "手工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     },
     {
       "risk_ref": "SR-R04",
       "process_l1": "四、促进就业与员工权益保护",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（四）促进就业和员工权益保护不够，可能导致员工积极性受挫，影响企业发展和社会稳定。",
+      "category": "error",
+      "category_basis": "calibrated",
+      "reference_level": "medium",
       "typical_controls": [
         {
           "control_ref": "SR-C12",
@@ -236,7 +239,9 @@
           "execution_mode": "手工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     }
-  ]
+  ],
+  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。"
 }

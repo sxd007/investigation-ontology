@@ -72,7 +72,8 @@ findings 闭环：评价产出 → `findings.yaml`（脚手架生成骨架）→
 - [x] **维度产物初稿生成器**（2026-09-30 完成）— `generate-dimension-drafts.mjs`：从基线引用的 digest 机械预填四维度 12 类产物（目标清单+G3 对齐检查、KPI 计分卡、RCM 矩阵+orphan 控制、无控风险清单、控制设计表+冗余候选、选样计划、穿行模板路径、执行率看板、结构诊断 E1-E3、周期分解/瓶颈环节行、返工设计层对照）；判断列留白 `{…}`，既有文件默认跳过；支持 `--digest` 直喂（场景二）。
 - [x] **evaluation-assertions 本地校验器 + 锚点跨文件校验**（2026-09-30 完成）— `validate-evaluation-assertions.mjs`（结构/XOR/supersedes 链：指向存在·无环·不分叉/未对齐率，替代跨仓 Python 工具）；`validate-findings.mjs --baseline` 跨文件校验（anchor.baseline 的 version/snapshot_ref 必须命中基线声明）。附带修复：`aggregate-findings.mjs` 投影 status 的 provisional→proposed 映射（schema 枚举仅 proposed/confirmed）与断言块缩进（yaml-lite 兼容）。
 - [x] **工作流工具链回归测试**（2026-09-30 完成）— `test-workflow-toolchain.mjs`：9 脚本 × 8 组链路 × 40+ 断言固化（脚手架/基线冻结与哈希篡改/版本链/四维度初稿/锚点跨文件校验/投影与 provisional 映射/断言校验正负面六类），数据源复用 policy-digest ten-rule-policy fixture。
-- [x] **域风险参照库**（2026-09-30 完成）— rcm-analysis `references/risk-libraries/`：《企业内部控制应用指引》18 域全覆盖（194 风险条目 / 508 典型控制，含指引条款出处与六类标签；9 域风险文本 pending 待补录）；`import-risk-library.py` 转换器（表头自适应、风险型/纯控制型双布局、合并单元格处理）；使用/校准纪律见库 README（参照库=询问起点非判决终点、reference_level 粗粒度初判、单标签优先级）。采购域已人工校准（R01/R05）。
+- [x] **域风险参照库**（2026-09-30 完成）— rcm-analysis `references/risk-libraries/`：《企业内部控制应用指引》18 域全覆盖（194 风险条目 / 508 典型控制，含指引条款出处与六类标签；9 个纯控制型域已按财政部官方指引全文逐字补录风险文本，18/18 complete）；转换器 gitignored 维护侧持有；使用/校准纪律见库 README。采购域已人工校准（R01/R05）。
+- [x] **初稿生成器集成域风险库**（2026-09-30 完成）— `generate-dimension-drafts.mjs --risk-library <域,...>`：RCM 矩阵 [参照] 行与「未识别风险」候选表机械预填（参照等级/典型控制条数），bigram 机械相似度提示疑似已覆盖（≥0.4，须语义复核，DDR 纪律不变）；回归测试已覆盖。
 - [ ] 流程评价技能集深化（多流程并行 / 与 ontology_framework Metric·ControlPoint 投影对齐）— 进行中。
 
 ## 版本

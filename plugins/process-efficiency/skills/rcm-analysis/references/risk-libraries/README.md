@@ -4,28 +4,28 @@
 
 ## 库清单
 
-| 域 | 文件 | 风险/控制 | 风险文本 |
-|----|------|----------|---------|
-| 组织架构 | [org-structure.json](./org-structure.json) | 2 / 21 | ⚠ pending |
-| 发展战略 | [strategy.json](./strategy.json) | 2 / 16 | ⚠ pending |
-| 人力资源 | [hr.json](./hr.json) | 2 / 10 | ⚠ pending |
-| 社会责任 | [social-responsibility.json](./social-responsibility.json) | 4 / 17 | ⚠ pending |
-| 企业文化 | [culture.json](./culture.json) | 2 / 8 | ⚠ pending |
-| 资金活动 | [treasury.json](./treasury.json) | 19 / 39 | ✓ |
-| 采购业务 | [procurement.json](./procurement.json) | 9 / 26 | ✓（已人工校准） |
-| 资产管理 | [assets.json](./assets.json) | 20 / 43 | ✓ |
-| 销售业务 | [sales.json](./sales.json) | 10 / 27 | ✓ |
-| 研发与开发 | [rnd.json](./rnd.json) | 19 / 32 | ✓ |
-| 工程项目 | [engineering.json](./engineering.json) | 30 / 74 | ✓ |
-| 担保业务 | [guarantee.json](./guarantee.json) | 12 / 31 | ✓ |
-| 业务外包 | [outsourcing.json](./outsourcing.json) | 19 / 39 | ✓ |
-| 财务报告 | [financial-reporting.json](./financial-reporting.json) | 34 / 49 | ✓ |
-| 全面预算 | [budget.json](./budget.json) | 3 / 19 | ⚠ pending |
-| 合同管理 | [contract.json](./contract.json) | 3 / 15 | ⚠ pending |
-| 内部信息传递 | [info-flow.json](./info-flow.json) | 2 / 14 | ⚠ pending |
-| 信息系统 | [it-systems.json](./it-systems.json) | 2 / 28 | ⚠ pending |
+| 域 | 文件 | 风险/控制 |
+|----|------|----------|
+| 组织架构 | [org-structure.json](./org-structure.json) | 2 / 21 |
+| 发展战略 | [strategy.json](./strategy.json) | 2 / 16 |
+| 人力资源 | [hr.json](./hr.json) | 2 / 10 |
+| 社会责任 | [social-responsibility.json](./social-responsibility.json) | 4 / 17 |
+| 企业文化 | [culture.json](./culture.json) | 2 / 8 |
+| 资金活动 | [treasury.json](./treasury.json) | 19 / 39 |
+| 采购业务 | [procurement.json](./procurement.json) | 9 / 26（已人工校准） |
+| 资产管理 | [assets.json](./assets.json) | 20 / 43 |
+| 销售业务 | [sales.json](./sales.json) | 10 / 27 |
+| 研发与开发 | [rnd.json](./rnd.json) | 19 / 32 |
+| 工程项目 | [engineering.json](./engineering.json) | 30 / 74 |
+| 担保业务 | [guarantee.json](./guarantee.json) | 12 / 31 |
+| 业务外包 | [outsourcing.json](./outsourcing.json) | 19 / 39 |
+| 财务报告 | [financial-reporting.json](./financial-reporting.json) | 34 / 49 |
+| 全面预算 | [budget.json](./budget.json) | 3 / 19 |
+| 合同管理 | [contract.json](./contract.json) | 2 / 15 |
+| 内部信息传递 | [info-flow.json](./info-flow.json) | 2 / 14 |
+| 信息系统 | [it-systems.json](./it-systems.json) | 2 / 28 |
 
-`risk_text_status: pending` 的 9 个域：源矩阵为纯控制型布局（无风险点列），条目按业务流程分组、`statement/category/reference_level` 缺省，待按指引原文补录风险文本。补录后把 `category_basis` 置为 `calibrated`、`risk_text_status` 置为 `complete`。
+全部 18 域 `risk_text_status: complete`（2026-09-30：9 个纯控制型域已按财政部官方指引全文 PDF 逐字核对补录第三条风险文本，并人工校准类别；org-structure/culture 的域级风险跨阶段共用，见各文件 `calibration_note`）。风险条目带 `statement_ref`（指引条款出处）。
 
 ## Schema 0.1.0
 
@@ -41,7 +41,8 @@
   "risks": [{
     "risk_ref": "PROC-R02",
     "process_l1": "一、采购", "process_l2": "请购",
-    "statement": "风险描述（指引条文原文，保留'是否存在'问句式）",
+    "statement": "风险描述（指引条文原文，保留'是否存在'问句式或（一）（二）编号）",
+    "statement_ref": "（可选）风险文本出处，如 应用指引第三条",
     "category": "fraud | compliance | asset_safety | delay | data_quality | error",
     "category_basis": "heuristic | calibrated | pending_risk_text",
     "reference_level": "high | medium | null",

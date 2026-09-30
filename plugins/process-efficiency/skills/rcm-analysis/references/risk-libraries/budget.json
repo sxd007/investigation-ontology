@@ -3,7 +3,7 @@
   "domain": "budget",
   "domain_label": "全面预算",
   "framework_ref": "企业内部控制应用指引第15号",
-  "risk_text_status": "pending",
+  "risk_text_status": "complete",
   "generated_at": "2026-09-30T03:07:22.593972+00:00",
   "processes": [
     {
@@ -24,10 +24,10 @@
       "risk_ref": "BUD-R01",
       "process_l1": "一、预算的编制",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（一）不编制预算或预算不健全，可能导致企业经营缺乏约束或盲目经营。（二）预算目标不合理、编制不科学，可能导致企业资源浪费或发展战略难以实现。",
+      "category": "error",
+      "category_basis": "calibrated",
+      "reference_level": "medium",
       "typical_controls": [
         {
           "control_ref": "BUD-C01",
@@ -110,16 +110,17 @@
           "execution_mode": "人工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     },
     {
       "risk_ref": "BUD-R02",
       "process_l1": "二、预算的执行",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（三）预算缺乏刚性、执行不力、考核不严，可能导致预算管理流于形式。",
+      "category": "error",
+      "category_basis": "calibrated",
+      "reference_level": "medium",
       "typical_controls": [
         {
           "control_ref": "BUD-C09",
@@ -201,16 +202,17 @@
           "execution_mode": "人工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     },
     {
       "risk_ref": "BUD-R03",
       "process_l1": "三、预算的考核",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（三）预算缺乏刚性、执行不力、考核不严，可能导致预算管理流于形式。",
+      "category": "error",
+      "category_basis": "calibrated",
+      "reference_level": "medium",
       "typical_controls": [
         {
           "control_ref": "BUD-C17",
@@ -242,7 +244,9 @@
           "execution_mode": "人工控制",
           "importance": "重要控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     }
-  ]
+  ],
+  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。"
 }

@@ -3,7 +3,7 @@
   "domain": "info-flow",
   "domain_label": "内部信息传递",
   "framework_ref": "企业内部控制应用指引第17号",
-  "risk_text_status": "pending",
+  "risk_text_status": "complete",
   "generated_at": "2026-09-30T03:07:22.599492+00:00",
   "processes": [
     {
@@ -20,10 +20,10 @@
       "risk_ref": "INF-R01",
       "process_l1": "一、内部报告的形成",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（一）内部报告系统缺失、功能不健全、内容不完整，可能影响生产经营有序运行。",
+      "category": "data_quality",
+      "category_basis": "calibrated",
+      "reference_level": "medium",
       "typical_controls": [
         {
           "control_ref": "INF-C01",
@@ -115,16 +115,17 @@
           "execution_mode": "人工控制",
           "importance": "一般控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     },
     {
       "risk_ref": "INF-R02",
       "process_l1": "二、内部报告的使用",
       "process_l2": null,
-      "statement": null,
-      "category": null,
-      "category_basis": "pending_risk_text",
-      "reference_level": null,
+      "statement": "（二）内部信息传递不通畅、不及时，可能导致决策失误、相关政策措施难以落实。（三）内部信息传递中泄露商业秘密，可能削弱企业核心竞争力。",
+      "category": "asset_safety",
+      "category_basis": "calibrated",
+      "reference_level": "high",
       "typical_controls": [
         {
           "control_ref": "INF-C10",
@@ -176,7 +177,9 @@
           "execution_mode": "人工控制",
           "importance": "一般控制"
         }
-      ]
+      ],
+      "statement_ref": "应用指引第三条"
     }
-  ]
+  ],
+  "calibration_note": "2026-09-30 按《企业内部控制应用指引》第三条补录风险文本（财政部官方全文 PDF 逐字核对），并人工校准类别。"
 }
