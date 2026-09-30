@@ -81,12 +81,12 @@ RISK-003 信息滞后     -            -             ●(部分)
 
 **两层结构：域风险库（深化）+ 通用六类（兜底）。**
 
-**域风险库**（[references/risk-libraries/](./references/risk-libraries/README.md)）：按《企业内部控制应用指引》18 域组织的结构化风险参照（风险条目 + 典型控制 + 指引条款出处 + 六类标签）。加载规则：
+**域风险库**（[references/risk-libraries/](./references/risk-libraries/risk-library-contract.md)）：按《企业内部控制应用指引》18 域组织的结构化风险参照（风险条目 + 典型控制 + 指引条款出处 + 六类标签）。加载规则：
 
 1. SCOPE 阶段确认评价对象的域归属（可多域并列，如采购流程挂 procurement + treasury + contract），记录选域理由；
 2. 加载对应域库 JSON 作为 R2 覆盖度分析的对照基准——库条目的 `typical_controls` 同时是 `risk_undercontrolled` 判级的参照组合；
 3. `risk_text_status: pending` 的域（纯控制型，风险文本待补）只能用于控制侧参照，不得据此判 `risk_unidentified`；
-4. 参照库是**询问的起点不是判决的终点**：`risk_unidentified` 仍须先发 DDR + 典型场景说明；库不完备，库外风险靠评价者独立判断（完整纪律见库 README）。
+4. 参照库是**询问的起点不是判决的终点**：`risk_unidentified` 仍须先发 DDR + 典型场景说明；库不完备，库外风险靠评价者独立判断（完整纪律见[库契约](./references/risk-libraries/risk-library-contract.md)）。
 
 **通用兜底集**（无域库或库外补充时使用）：
 
@@ -149,5 +149,5 @@ node skills/process-assess-workflow/scripts/scaffold-dimension.mjs {output_root}
 - **下游**：[control-testing](../control-testing/SKILL.md)（本技能判设计有效性，它判运行有效性；本技能的 evidence 缺口 finding 是它抽样受阻的预警）
 - **同级**：[goal-alignment](../goal-alignment/SKILL.md)、[efficiency-diagnosis](../efficiency-diagnosis/SKILL.md)
 - **契约**：[finding-contract](../process-assess-workflow/references/finding-contract.md)
-- **参照集**：[域风险参照库](./references/risk-libraries/README.md)（18 域，风险条目+典型控制+指引出处；通用六类兜底）
+- **参照集**：[域风险参照库契约](./references/risk-libraries/risk-library-contract.md)（18 域，风险条目+典型控制+指引出处；通用六类兜底）
 - **参照系**：COSO 内控框架 / RCM（Risk-Control Matrix）方法；《企业内部控制应用指引》18 域；risk 域本体（threatens/impacts 桥接）

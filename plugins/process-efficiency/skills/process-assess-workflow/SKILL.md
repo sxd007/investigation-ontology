@@ -139,7 +139,7 @@ node skills/process-assess-workflow/scripts/generate-dimension-drafts.mjs proces
 
 场景二（无基线）可用 `--digest <digest.json>...` 直喂，输出目录由调用方指定。
 
-risk 维度可加 `--risk-library <域,逗号分隔>` 加载[域风险参照库](../rcm-analysis/references/risk-libraries/README.md)（SCOPE 选定的域，可多域并列）：RCM 矩阵机械预填 [参照] 行、coverage_analysis 预填「未识别风险」候选表（含参照等级与典型控制条数），并给出库条目与 digest 风险的机械相似度提示（bigram 重合 ≥0.4 标"疑似已覆盖"，仅辅助定位、不构成覆盖结论，须 AI 语义复核 + DDR 纪律不变）。
+risk 维度可加 `--risk-library <域,逗号分隔>` 加载[域风险参照库](../rcm-analysis/references/risk-libraries/risk-library-contract.md)（SCOPE 选定的域，可多域并列）：RCM 矩阵机械预填 [参照] 行、coverage_analysis 预填「未识别风险」候选表（含参照等级与典型控制条数），并给出库条目与 digest 风险的机械相似度提示（bigram 重合 ≥0.4 标"疑似已覆盖"，仅辅助定位、不构成覆盖结论，须 AI 语义复核 + DDR 纪律不变）。
 
 **消费纪律**：评价技能只消费 digest-schema 兼容的流程知识包（默认生产者 policy-digest；本体层投影为第二生产者，未来实现）与 baseline 声明的数据快照，**不回头读制度原文**（锚点追溯经 digest 间接实现），不引入基线外的未快照数据（保证结论可复现）。
 

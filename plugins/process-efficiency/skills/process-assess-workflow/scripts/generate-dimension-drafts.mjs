@@ -145,7 +145,7 @@ function loadRiskLibraries(domains) {
   const libDir = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', 'rcm-analysis', 'references', 'risk-libraries');
   return domains.map((domain) => {
     const p = join(libDir, `${domain}.json`);
-    if (!existsSync(p)) throw new Error(`域风险库不存在：${domain}（可用域见 risk-libraries/README.md）`);
+    if (!existsSync(p)) throw new Error(`域风险库不存在：${domain}（可用域见 risk-libraries/risk-library-contract.md）`);
     return JSON.parse(readFileSync(p, 'utf8'));
   });
 }
