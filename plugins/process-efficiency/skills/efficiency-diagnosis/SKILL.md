@@ -102,7 +102,8 @@ node skills/process-assess-workflow/scripts/scaffold-dimension.mjs {output_root}
 2. **锚点纪律**：设计层 finding 带 anchor.digest（flow_edge/process_element/rule ID + source），实例层带 anchor.baseline（版本+快照+记录）；
 3. **交叉引用纪律**：与其他维度重叠的发现（时限超期=控制偏离；高频返工=规则问题）只交叉引用主责技能的 finding_id，不重复输出；
 4. **改进建议可行性**：`serial_redundancy` 类结构建议须注明数据依赖依据（"无依赖"的判定来自 input_artifact_refs 对照），避免拍脑袋建议；
-5. finding 结构遵循 [finding-contract](../process-assess-workflow/references/finding-contract.md)（ED-NNN 前缀）。
+5. finding 结构遵循 [finding-contract](../process-assess-workflow/references/finding-contract.md)（ED-NNN 前缀）；
+6. **阈值纪律**：本技能全部数值阈值（40% 等待占比 / 10% 返工率 / P90:P50>3 等）的出处与校准状态见 [threshold-baseline](../process-assess-workflow/references/threshold-baseline.md)；标注"经验值"者不得包装为行业标准，企业有内部基准时优先替代并注明。
 
 ## 上游缺陷识别（DDR）
 

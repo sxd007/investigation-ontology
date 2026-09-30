@@ -74,6 +74,7 @@ findings 闭环：评价产出 → `findings.yaml`（脚手架生成骨架）→
 - [x] **工作流工具链回归测试**（2026-09-30 完成）— `test-workflow-toolchain.mjs`：9 脚本 × 8 组链路 × 40+ 断言固化（脚手架/基线冻结与哈希篡改/版本链/四维度初稿/锚点跨文件校验/投影与 provisional 映射/断言校验正负面六类），数据源复用 policy-digest ten-rule-policy fixture。
 - [x] **域风险参照库**（2026-09-30 完成）— rcm-analysis `references/risk-lib/`：《企业内部控制应用指引》18 域全覆盖（194 风险条目 / 508 典型控制，含指引条款出处与六类标签；9 个纯控制型域已按财政部官方指引全文逐字补录风险文本，18/18 complete）；转换器 gitignored 维护侧持有；使用/校准纪律见[库契约](./skills/rcm-analysis/references/risk-lib/risk-lib-contract.md)。采购域已人工校准（R01/R05）。
 - [x] **初稿生成器集成域风险库**（2026-09-30 完成）— `generate-dimension-drafts.mjs --risk-library <域,...>`：RCM 矩阵 [参照] 行与「未识别风险」候选表机械预填（参照等级/典型控制条数），bigram 机械相似度提示疑似已覆盖（≥0.4，须语义复核，DDR 纪律不变）；回归测试已覆盖。
+- [x] **业务接地小批次**（2026-09-30 完成）— ①control-testing 模板吸收审计工作底稿惯例：逐控制穿行结论表（是否得到执行=本技能/设计有效性=引用 RC-finding 不重复评判）、测试程序词表（重新执行/检查/观察/询问）、全部测试结论强制工作底稿索引；②[threshold-baseline](./skills/process-assess-workflow/references/threshold-baseline.md) 阈值出处表（95%/50%/2环节/40%/10%/P90:P50>3 等全部登记出处与校准指引，经验值不得包装为行业标准）；③finding-contract §8 负面清单（8 类反模式：空话建议/复述而非发现/越权定性/重复计数/占位残留/证据不定位/严重度通胀/阈值当判据）+ validate-findings 空话建议机械检测。回归测试已覆盖。
 - [ ] 流程评价技能集深化（多流程并行 / 与 ontology_framework Metric·ControlPoint 投影对齐）— 进行中。
 
 ## 版本

@@ -362,7 +362,7 @@ function genControl(m, baseline) {
   // sampling_plan.md
   const srows = snapshots.map((s) =>
     `| ${s.path} | ${s.data_window ? `${s.data_window.start}~${s.data_window.end}` : '{…}'}${s.record_count != null ? ` / ${s.record_count} 条` : ''} | {…} | {…} |`);
-  const crows = m.controls.map((c) => `| ${c._q} | ${c.frequency || '{…}'} | {…} | {…} | {…} |`);
+  const crows = m.controls.map((c) => `| ${c._q} | ${c.frequency || '{…}'} | {…} | {…} | {…} | {…} |`);
   files['sampling_plan.md'] = `# 抽样计划（T1）
 
 > 初稿由 generate-dimension-drafts.mjs 预填（快照清单来自 ${baseline ? baseline.name : '（无基线）'}，待测控制来自 digest controls）；样本策略与范围留白 {…}。
@@ -383,9 +383,11 @@ ${srows.length ? srows.join('\n') : '| {…} | {…} | {…} | {…} |'}
 | 月频 | 抽 3-6 个月 | 覆盖季度末 |
 | 触发式 | 全量触发实例 | 通常量少 |
 
-| 待测控制 | 频率 | 样本策略 | 样本范围 | 理由 |
-|---------|------|---------|---------|------|
-${crows.length ? crows.join('\n') : '| {…} | {…} | {…} | {…} | {…} |'}
+| 待测控制 | 频率 | 样本策略 | 样本范围 | 测试程序 | 理由 |
+|---------|------|---------|---------|---------|------|
+${crows.length ? crows.join('\n') : '| {…} | {…} | {…} | {…} | {…} | {…} |'}
+
+> 测试程序词表：**重新执行**（独立重跑控制逻辑，证明力最强）/ **检查**（查验记录与单据）/ **观察**（现场查看执行过程）/ **询问**（访谈执行人，不可单独作为结论依据）。
 
 ## 本次抽样
 
@@ -424,10 +426,20 @@ ${pathLines.length ? pathLines.join('\n') : '- （digest 无 main 边）'}
 |------|---------|---------------------|-----------|-----------|--------------|
 | {rec-001} | {…} | {…} | {…} | {…} | {…} |
 
+## 控制点穿行结论（逐控制，已预填控制点行）
+
+> 「是否得到执行」= 本技能结论（运行有效性）；「设计有效性」**不重复评判**——引用 rcm-analysis 的 RC-finding 或标 n/a。
+> 测试程序 ∈ 重新执行 / 检查 / 观察 / 询问（可组合；重新执行证明力最强，询问不可单独作为结论依据）。
+
+| 控制点 | 穿行测试程序 | 控制证据 | 是否得到执行 | 设计有效性（RC-xxx / n/a） | 工作底稿索引 |
+|--------|------------|---------|------------|--------------------------|------------|
+${m.controls.length ? m.controls.map((c) => `| ${c._q} | {…} | {…} | {…} | {…} | {…} |`).join('\n') : '| {CTL-xxx} | {…} | {…} | {…} | {…} | {…} |'}
+
 ## 说明
 
 - 实际路径与 \`flow_edges\` 大面积不符（>2 环节差异）→ 先发 DDR（omission），不定性为偏离
 - 每个控制点是否被经过（审批人对照 RACI）；输出 Artifact 对照 digest artifacts
+- 每条结论必须有工作底稿索引（无索引 = 未完成）
 
 ## 汇总
 
@@ -435,15 +447,15 @@ ${pathLines.length ? pathLines.join('\n') : '- （digest 无 main 边）'}
 `;
 
   // control_execution_scorecard.md
-  const erows = m.controls.map((c) => `| ${c._q} | {…} | {…} | {…} | {…} | {…} | {…} |`);
+  const erows = m.controls.map((c) => `| ${c._q} | {…} | {…} | {…} | {…} | {…} | {…} | {…} |`);
   files['control_execution_scorecard.md'] = `# 控制执行率看板（T3）
 
 > 初稿由 generate-dimension-drafts.mjs 预填控制点行（来自 digest controls）；实例计数与偏差构成留白 {…}（须从 baseline 快照统计）。
 > 偏差率 = 偏差实例数 / 应控实例数。执行率低于建议阈值（95%）的控制列为重点 finding。
 
-| 控制点 | 应控实例 | 偏差实例 | 偏差率 | 重点标记 | 偏差构成（finding_type→条数） | finding |
-|--------|---------|---------|-------|---------|------------------------------|---------|
-${erows.length ? erows.join('\n') : '| （digest 无 controls） | | | | | | |'}
+| 控制点 | 应控实例 | 偏差实例 | 偏差率 | 重点标记 | 偏差构成（finding_type→条数） | finding | 工作底稿索引 |
+|--------|---------|---------|-------|---------|------------------------------|---------|------------|
+${erows.length ? erows.join('\n') : '| （digest 无 controls） | | | | | | | |'}
 
 ## 偏差类型
 

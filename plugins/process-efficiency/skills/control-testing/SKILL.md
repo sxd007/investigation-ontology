@@ -51,7 +51,7 @@ origin: process-efficiency
 - 每个控制点是否被经过（审批人是否是制度规定的角色——对照 RACI）；
 - 输出 Artifact 是否产生（对照 digest artifacts）。
 
-穿行结果记录为路径对照表，是理解"制度 vs 实际"差异的定性基础。
+穿行结果记录为路径对照表 + **逐控制穿行结论**（walkthrough.md 结论表）：每控制填「是否得到执行」（本技能结论，运行有效性）与「设计有效性」（**不重复评判**——引用 rcm-analysis R3 的 RC-finding，未覆盖标 n/a）。测试程序用词表：**重新执行**（独立重跑控制逻辑，证明力最强）/ **检查** / **观察** / **询问**（不可单独作为结论依据）。
 
 ### T3 执行偏差分析（全量/样本）
 
@@ -64,7 +64,7 @@ origin: process-efficiency
 | 留痕缺失 | 控制执行但证据缺失（对照 controls.evidence 要求） | `control_evidence_missing` |
 | 职责冲突 | 同一实例中不相容角色由同一人执行（申请+审批、执行+复核） | `segregation_conflict` |
 
-**偏差率统计**：每控制点计算偏差率（偏差实例数 / 应控实例数），形成控制点执行率看板。执行率低于阈值（建议 95%）的控制列为重点 finding。
+**偏差率统计**：每控制点计算偏差率（偏差实例数 / 应控实例数），形成控制点执行率看板。执行率低于阈值（建议 95%，依据与校准见 [threshold-baseline](../process-assess-workflow/references/threshold-baseline.md)）的控制列为重点 finding。
 
 ### T4 可疑信号移交纪律
 
@@ -103,7 +103,9 @@ node skills/process-assess-workflow/scripts/scaffold-dimension.mjs {output_root}
 2. **锚点纪律**：finding 必带 `anchor.baseline`（版本+快照+记录定位）与 `anchor.digest`（相关 control/flow_edge ID）；纯实例发现（如绕过）至少可从快照重建证据链；
 3. **协作姿态**：偏差先核实数据质量（字段缺失≠未执行），确认后再定性——与流程 Owner 的沟通在 ASSESS 门禁 `stakeholder_review_done` 中完成；
 4. finding 结构遵循 [finding-contract](../process-assess-workflow/references/finding-contract.md)（CT-NNN 前缀）；
-5. 样本与方法写死在 sampling_plan.md，他人可据此复现。
+5. 样本与方法写死在 sampling_plan.md，他人可据此复现；
+6. **底稿索引纪律**：每条测试结论（执行/偏差/放行）必须带工作底稿索引——指向 walkthrough/deviation_details 具体行或快照记录定位；无索引的结论视为未完成（对齐审计工作底稿惯例）；
+7. **设计/执行结论分离**：本技能只判"是否得到执行"（运行有效性）；"设计是否有效"引用 rcm-analysis R3 结论，不重复评判（COSO 两有效性边界）。
 
 ## 上游缺陷识别（DDR）
 

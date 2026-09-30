@@ -222,6 +222,7 @@ node skills/process-assess-workflow/scripts/scaffold-assessment.mjs process-asse
 - **能力层技能：** [policy-digest](../policy-digest/SKILL.md)（基座：文档→流程知识包）、[goal-alignment](../goal-alignment/SKILL.md)、[rcm-analysis](../rcm-analysis/SKILL.md)、[control-testing](../control-testing/SKILL.md)、[efficiency-diagnosis](../efficiency-diagnosis/SKILL.md)（四维评价）
 - **共享契约：** [finding-contract](./references/finding-contract.md) — 四技能评价发现的统一结构（GA/RC/CT/ED 前缀、锚点纪律、severity 判级），REPORT 阶段聚合的依据
 - **基线契约：** [baseline-contract](./references/baseline-contract.md) — 评价基线的结构/冻结纪律/版本链（schema 0.1.0），finding 实例层锚点的载体；配套 `scaffold-baseline.mjs` / `validate-baseline.mjs`
+- **阈值基线：** [threshold-baseline](./references/threshold-baseline.md) — 四技能全部数值阈值的出处/性质/校准指引（经验值不得包装为行业标准）
 - **本体投影：** [assertion-projection](./references/assertion-projection.md) — findings → evaluation-assertions 投影契约（ACP-002，可选增强路径）
 - **设计基准：** [docs/design.md](../../docs/design.md)（双模式架构、根心契约、范式差异）
 - **对照范式：** investigation-ontology 插件的 case-management（对抗性调查工作流，与本技能的协作性评价工作流互为镜像）

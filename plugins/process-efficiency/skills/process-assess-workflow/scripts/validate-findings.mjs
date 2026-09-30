@@ -106,8 +106,15 @@ function validate(obj, baselineCtx = null) {
       else if (f.evidence.some((e) => !e || String(e).trim() === '')) at('evidence', '含空条目');
     }
 
-    // recommendation 非空（去占位符后）
-    if (typeof f.recommendation === 'string' && f.recommendation.trim() === '') at('recommendation', '不得为空');
+    // recommendation 非空（去占位符后）+ 空话检测（负面清单 §8）
+    if (typeof f.recommendation === 'string') {
+      if (f.recommendation.trim() === '') at('recommendation', '不得为空');
+      else {
+        const rec = f.recommendation.replace(/\s/g, '');
+        const VAGUE_RE = /^(加强|强化|提高|提升|完善|健全|规范|严格|重视|深化|加大)(管理|意识|认识|制度|控制|监督|执行|力度|建设)*$/;
+        if (VAGUE_RE.test(rec) || rec.length < 8) at('recommendation', '疑似空话建议（负面清单 §8：须含具体动作+责任方+可验证方式）', 'warn');
+      }
+    }
 
     // 可选字段
     if (f.cross_ref && typeof f.cross_ref === 'string') {

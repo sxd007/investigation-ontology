@@ -100,7 +100,10 @@ try {
   assert.ok(dimFile('goal', 'objective_inventory.md').includes('| OBJ-01'), '目标行');
   assert.ok(dimFile('goal', 'objective_inventory.md').includes('| 无目标的 L3 | 无 |'), 'G3 实算');
   assert.ok(dimFile('control', 'walkthrough.md').includes('模板路径参考'), '穿行模板路径');
+  assert.ok(dimFile('control', 'walkthrough.md').includes('控制点穿行结论'), '穿行结论表（底稿惯例）');
+  assert.ok(dimFile('control', 'control_execution_scorecard.md').includes('工作底稿索引'), '看板底稿索引列');
   assert.ok(dimFile('control', 'sampling_plan.md').includes('oa-export-2026q3.json'), '快照覆盖表');
+  assert.ok(dimFile('control', 'sampling_plan.md').includes('测试程序词表'), '测试程序词表');
   assert.ok(dimFile('efficiency', 'structure_review.md').includes('主路径 6 环节'), 'E1 走链');
   assert.ok(dimFile('efficiency', 'structure_review.md').includes('共 1 条'), 'E2 返工边');
   assert.ok(dimFile('efficiency', 'structure_review.md').includes('共 12 处'), 'E3 交接点');
@@ -142,7 +145,7 @@ try {
     statement: test finding ${id}
     evidence:
       - "detail"
-    recommendation: fix it
+    recommendation: enforce approval step and verify via sampled records
     owner_suggestion: ops
     status: ${status}
 `;
@@ -151,6 +154,12 @@ try {
   assert.equal(r.status, 1, '坏锚点应失败');
   assert.ok(r.out.includes('[CT-002] anchor.baseline.version') && r.out.includes('未命中基线 snapshots[].path'), r.out);
   assert.ok(!r.out.includes('[CT-001] anchor'), '好锚点不应误报');
+  // 空话建议检测（负面清单 §8）：warning 但不阻塞
+  const vague = finding('CT-003', 'control_deviation', 'baseline-v1', 'snapshots/oa-export-2026q3.json', 'proposed').replace('enforce approval step and verify via sampled records', '加强管理');
+  writeFileSync(findingsPath, `findings:\n${finding('CT-001', 'control_not_executed', 'baseline-v1', 'snapshots/oa-export-2026q3.json', 'provisional')}${vague}`, 'utf8');
+  r = run('validate-findings.mjs', [findingsPath, '--baseline', v1Path]);
+  assert.equal(r.status, 0, '空话建议只应警告');
+  assert.ok(r.out.includes('[CT-003] recommendation') && r.out.includes('疑似空话建议'), `空话检测：${r.out}`);
   writeFileSync(findingsPath, `findings:\n${finding('CT-001', 'control_not_executed', 'baseline-v1', 'snapshots/oa-export-2026q3.json', 'provisional')}${finding('CT-002', 'control_deviation', 'baseline-v1', 'snapshots/oa-export-2026q3.json', 'proposed')}`, 'utf8');
   r = run('validate-findings.mjs', [findingsPath, '--baseline', v1Path]);
   assert.equal(r.status, 0, `修正后应通过：${r.out}`);
