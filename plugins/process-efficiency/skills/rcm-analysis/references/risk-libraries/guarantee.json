@@ -1,0 +1,420 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "guarantee",
+  "domain_label": "担保业务",
+  "framework_ref": "企业内部控制应用指引第12号",
+  "risk_text_status": "complete",
+  "generated_at": "2026-09-30T03:07:22.585905+00:00",
+  "processes": [
+    {
+      "process_l1": "一、担保业务调查评估与审批",
+      "process_l2": "1、受理申请"
+    },
+    {
+      "process_l1": "一、担保业务调查评估与审批",
+      "process_l2": "2、调查和评估"
+    },
+    {
+      "process_l1": "一、担保业务调查评估与审批",
+      "process_l2": "3、审批"
+    },
+    {
+      "process_l1": "二、担保业务执行与监控",
+      "process_l2": "1、签订担保合同"
+    },
+    {
+      "process_l1": "二、担保业务执行与监控",
+      "process_l2": "2、日常监控"
+    },
+    {
+      "process_l1": "二、担保业务执行与监控",
+      "process_l2": "3、会计控制"
+    },
+    {
+      "process_l1": "二、担保业务执行与监控",
+      "process_l2": "7、代为清偿和权利追索"
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "GUA-R01",
+      "process_l1": "一、担保业务调查评估与审批",
+      "process_l2": "1、受理申请",
+      "statement": "⑴是否企业担保政策和相关管理制度不健全，导致难以对担保申请人提出的担保申请进行初步评价和审核；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "GUA-C01",
+          "measure": "依法制定和完善本企业的担保政策和相关管理制度，明确担保的对象、范围、方式、条件、程序、担保限额和禁止担保的事项；",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "GUA-R02",
+      "process_l1": "一、担保业务调查评估与审批",
+      "process_l2": "1、受理申请",
+      "statement": "⑵是否虽然建立了担保政策和相关管理制度，但对担保申请人提出的担保申请审查把关不严，导致申请受理流于形式。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "GUA-C02",
+          "measure": "严格按照担保政策和相关管理制度对担保申请人提出的担保申请进行审核。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "GUA-R03",
+      "process_l1": "一、担保业务调查评估与审批",
+      "process_l2": "2、调查和评估",
+      "statement": "是否对担保申请人的资信调查不深入、不透彻，对担保项目的风险评估不全面、不科学，导致企业担保决策失误或遭受欺诈，为担保业务埋下巨大隐患。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "GUA-C03",
+          "measure": "委派具备胜任能力的专业人员开展调查和评估。调查评估人员与担保业务审批人员应当分离。担保申请人为企业关联方的，与关联方存在经济利益或近亲属关系的有关人员不得参与调查评估。企业可以自行对担保申请人进行资信调查和风险评估，也可以委托中介机构承担这一工作，同时应加强对中介机构工作情况的监控。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C04",
+          "measure": "对担保申请人资信状况和有关情况进行全面、客观的调查评估。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C05",
+          "measure": "对担保项目经营前景和盈利能力进行合理预测。企业整体的资信状况和担保项目的预期运营情况，构成判断担保申请人偿债能力的两大重要方面，应当予以重视",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C06",
+          "measure": "划定不予担保的“红线”，并结合调查评估情况作出判断。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C07",
+          "measure": "形成书面评估报告，全面反映调查评估情况，为担保决策提供第一手资料。企业应当规范评估报告的形式和内容，妥善保管评估报告，并作为日后追究有关人员担保责任的重要依据。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "GUA-R04",
+      "process_l1": "一、担保业务调查评估与审批",
+      "process_l2": "3、审批",
+      "statement": "⑴是否授权审批制度不健全，导致对担保业务的审批不规范；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "GUA-C08",
+          "measure": "建立和完善担保授权审批制度，明确授权批准的方式、权限、程序、责任和相关控制措施，规定各层级人员应当在授权范围内进行审批，不得超越权限审批。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "GUA-R05",
+      "process_l1": "一、担保业务调查评估与审批",
+      "process_l2": "3、审批",
+      "statement": "⑵是否审批不严格或者越权审批，导致担保决策出现重大疏漏，可能引发严重后果；",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "GUA-C09",
+          "measure": "企业内设机构不得以企业名义对外提供担保。企业应当加大对分公司对外提供担保的管控力度，严格限制分公司担保行为，避免因分公司违规担保为本企业带来不利后果。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "GUA-R06",
+      "process_l1": "一、担保业务调查评估与审批",
+      "process_l2": "3、审批",
+      "statement": "⑶是否审批过程存在舞弊行为，可能导致经办审批等相关人员涉案或企业利益受损。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "GUA-C10",
+          "measure": "企业为关联方提供担保的，与关联方存在经济利益或近亲属关系的有关人员在评估与审批环节应当回避。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C11",
+          "measure": "对境外企业进行担保的，应当遵守外汇管理规定，并关注被担保人所在国家的政治、经济、法律等因素。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C12",
+          "measure": "建立和完善重大担保业务的集体决策审批制度。明确重大担保业务的判断标准、审批权限和程序。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C13",
+          "measure": "认真审查对担保申请人的调查评估报告，在充分了解掌握有关情况的基础上，权衡比较本企业净资产状况、担保限额与担保申请人提出的担保金额，确保将担保金额控制在企业设定的担保限额之内。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C14",
+          "measure": "从严办理担保变更审批。被担保人要求变更担保事项的，企业应当重新履行调查评估程序，根据新的调查评估报告重新履行审批手续。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "GUA-R07",
+      "process_l1": "二、担保业务执行与监控",
+      "process_l2": "1、签订担保合同",
+      "statement": "是否未经授权对外订立担保合同，或者担保合同内容存在重大疏漏和欺诈，可能导致企业诉讼失败、权利追索被动、经济利益和形象信誉受损。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "GUA-C15",
+          "measure": "严格按照经审核批准的担保业务订立担保合同。合同订立经办人员应当在职责范围内，按照审批人员的批准意见拟订合同条款。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C16",
+          "measure": "认真审核合同条款，确保担保合同条款内容完整、表述严谨准确、相关手续齐备。在担保合同中应明确被担保人的权利、义务、违约责任等相关内容，并要求被担保人定期提供财务报告和有关资料，及时通报担保事项的实施情况。如果担保申请人同时向多方申请担保的，企业应当在担保合同中明确约定本企业的担保份额和相应的责任。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C17",
+          "measure": "实行担保合同会审联签。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C18",
+          "measure": "加强对有关身份证明和印章的管理。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C19",
+          "measure": "规范担保合同记录、传递和保管，确保担保合同运转轨迹清晰完整、有案可查。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "GUA-R08",
+      "process_l1": "二、担保业务执行与监控",
+      "process_l2": "2、日常监控",
+      "statement": "是否重合同签订，轻后续管理，对担保合同履行情况疏于监控或监控不当，导致企业不能及时发现和妥善应对被担保人的异常情况，可能延误处置时机，加剧担保风险，加重经济损失。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "GUA-C20",
+          "measure": "指定专人定期监测被担保人的经营情况和财务状况，对被担保人进行跟踪和监督，了解担保项目的执行、资金的使用、贷款的归还、财务运行及风险等情况，促进担保合同有效履行。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C21",
+          "measure": "企业财会部门要及时，最好是按月或者按季收集、分析被担保人担保期内的财务报告等相关资料，持续关注被担保人的财务状况、经营成果、现金流量以及担保合同的履行情况，积极配合担保经办部门防范担保业务风险。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C22",
+          "measure": "及时报告被担保人异常情况和重要信息。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "GUA-R09",
+      "process_l1": "二、担保业务执行与监控",
+      "process_l2": "3、会计控制",
+      "statement": "⑴是否会计系统控制不力，可能导致担保业务记录残缺不全，日常监控难以奏效。",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "GUA-C23",
+          "measure": "健全担保业务经办部门与财会部门的信息沟通机制，促进担保信息及时有效沟通；",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "GUA-R10",
+      "process_l1": "二、担保业务执行与监控",
+      "process_l2": "3、会计控制",
+      "statement": "⑵是否担保会计处理和信息披露不符合有关监管要求，可能引发行政处罚。",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "GUA-C24",
+          "measure": "建立担保事项台账，详细记录担保对象、金额、期限、用于抵押和质押的物品或权利以及其他有关事项；同时，及时足额收取担保费用，维护企业担保权益；",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C25",
+          "measure": "严格按照国家统一的会计准则制度进行担保会计处理，发现被担保人出现财务状况恶化、资不抵债、破产清算等情形的，应当合理确认预计负债和损失。属于上市公司的，还应当区别不同情况依法予以公告；",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C26",
+          "measure": "切实加强对反担保财产的管理，妥善保管被担保人用于反担保的权利凭证，定期核实财产的存续状况和价值，发现问题及时处理，确保反担保财产安全完整；",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C27",
+          "measure": "夯实担保合同基础管理，妥善保管担保合同、与担保合同相关的主合同、反担保函或反担保合同，以及抵押、质押的权利凭证和有关原始资料，做到担保业务档案完整无缺。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C28",
+          "measure": "当担保合同到期时，企业要全面清查用于担保的财产、权利凭证，按照合同约定及时终止担保关系。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "GUA-R11",
+      "process_l1": "二、担保业务执行与监控",
+      "process_l2": "7、代为清偿和权利追索",
+      "statement": "⑴是否违背担保合同约定不履行代为清偿义务，可能被银行等债权人诉诸法律成为连带被告，影响企业形象和声誉；",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "GUA-C29",
+          "measure": "强化法制意识和责任观念，在被担保人确实无力偿付债务或履行相关合同义务时，自觉按照担保合同承担代偿义务，维护企业诚实守信的市场形象；",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "GUA-R12",
+      "process_l1": "二、担保业务执行与监控",
+      "process_l2": "7、代为清偿和权利追索",
+      "statement": "⑵是否承担代为清偿义务后向被担保人追索权利不力，可能造成较大经济损失。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "GUA-C30",
+          "measure": "运用法律武器向被担保人追索赔偿权利，在此过程中，企业担保业务经办部门、财会部门、法律部门等应当通力合作，做到在司法程序中举证有力；同时，依法处置被担保人的反担保财产，尽力减少企业经济损失；",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "GUA-C31",
+          "measure": "启动担保业务后评估工作，严格落实担保业务责任追究制度，对在担保中出现重大决策失误、未履行集体审批程序或不按规定管理担保业务的部门及人员，严格追究其行政责任和经济责任，并深入开展总结分析，举一反三，不断完善担保业务内控制度，严控担保风险，促进企业健康稳健发展。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,322 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "it-systems",
+  "domain_label": "信息系统",
+  "framework_ref": "企业内部控制应用指引第18号",
+  "risk_text_status": "pending",
+  "generated_at": "2026-09-30T03:07:22.601490+00:00",
+  "processes": [
+    {
+      "process_l1": "一、信息系统的开发",
+      "process_l2": null
+    },
+    {
+      "process_l1": "二、信息系统的运行与维护",
+      "process_l2": null
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "ITS-R01",
+      "process_l1": "一、信息系统的开发",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "ITS-C01",
+          "measure": "企业首先应当确立系统建设目标，并根据目标进行系统建设战略规划，再将规划细化为项目建设方案。",
+          "guideline_refs": [
+            "应用指引第三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C02",
+          "measure": "企业负责人对信息系统建设工作负责。",
+          "guideline_refs": [
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C03",
+          "measure": "企业信息系统归口管理部门应当组织内部各单位提出开发需求和关键控制点，规范开发流程，明确系统设计、编程、安装调试、验收、上线等全过程的管理要求，严格按照建设方案、开发流程和相关要求组织开发工作。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C04",
+          "measure": "企业开发信息系统，可以采取自行开发、外购调试、业务外包等方式。选定外购调试或业务外包方式的，应当采用公开招标等形式择优确定供应商或开发单位。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C05",
+          "measure": "企业开发信息系统，应当将生产经营管理业务流程、关键控制点和处理规则嵌入系统程序，实现手工环境下难以实现的控制功能。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C06",
+          "measure": "企业在系统开发过程中，应当按照不同业务的控制要求，通过信息系统中的权限管理功能控制用户的操作权限，避免将不相容职责的处理权限授予同一用户。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C07",
+          "measure": "企业应当针对不同数据的输入方式，考虑对进入系统数据的检查和校验功能。对于必需的后台操作，应当加强管理，建立规范的流程制度，对操作情况进行监控或者审计。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C08",
+          "measure": "企业应当在信息系统中设置操作日志功能，确保操作的可审计性。对异常的或者违背内部控制要求的交易和数据，应当设计由系统自动报告并设置跟踪处理机制。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C09",
+          "measure": "企业信息系统归口管理部门应当加强信息系统开发全过程的跟踪管理，组织开发单位与内部各单位的日常沟通和协调，督促开发单位按照建设方案、计划进度和质量要求完成编程工作，对配备的硬件设备和系统软件进行检查验收，组织系统上线运行等。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C10",
+          "measure": "企业应当组织独立于开发单位的专业机构对开发完成的信息系统进行验收测试，确保在功能、性能、控制要求和安全性等方面符合开发需求。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C11",
+          "measure": "企业应当切实做好信息系统上线的各项准备工作，培训业务操作和系统管理人员，制定科学的上线计划和新旧系统转换方案，考虑应急预案，确保新旧系统顺利切换和平稳衔接。系统上线涉及数据迁移的，还应制定详细的数据迁移计划。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ITS-R02",
+      "process_l1": "二、信息系统的运行与维护",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "ITS-C12",
+          "measure": "企业应当加强信息系统运行与维护的管理，制定信息系统工作程序、信息管理制度以及各模块子系统的具体操作规范，及时跟踪、发现和解决系统运行中存在的问题，确保信息系统按照规定的程序、制度和操作规范持续稳定运行。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C13",
+          "measure": "企业应当建立信息系统变更管理流程，信息系统变更应当严格遵照管理流程进行操作。信息系统操作人员不得擅自进行系统软件的删除、修改等操作；不得擅自升级、改变系统软件版本；不得擅自改变软件系统环境配置。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C14",
+          "measure": "切实做好系统运行记录，尤其是对于系统运行不正常或无法运行的情况，应对异常现象发生时间和可能的原因作出详细记录",
+          "guideline_refs": [
+            "基本规范第四十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C15",
+          "measure": "配备专业人员负责信息系统运行和硬件设备的日常维护",
+          "guideline_refs": [
+            "基本规范第四十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C16",
+          "measure": "配备专业人员处理信息系统运行中的突发事件，必要时应会同系统开发人员或软硬件供应商共同解决",
+          "guideline_refs": [
+            "基本规范第四十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C17",
+          "measure": "系统变更程序(如软件升级)需要遵循与新系统开发项目同样的验证和测试程序，必要时还应当进行额外测试",
+          "guideline_refs": [
+            "基本规范第四十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C18",
+          "measure": "企业应当根据业务性质、重要性程度、涉密情况等确定信息系统的安全等级，建立不同等级信息的授权使用制度，采用相应技术手段保证信息系统运行安全有序。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C19",
+          "measure": "企业应当建立信息系统安全保密和泄密责任追究制度。委托专业机构进行系统运行与维护管理的，应当审查该机构的资质，并与其签订服务合同和保密协议。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C20",
+          "measure": "企业应当采取安装安全软件等措施防范信息系统受到病毒等恶意软件的感染和破坏。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C21",
+          "measure": "企业应当建立用户管理制度，加强对重要业务系统的访问权限管理，定期审阅系统账号，避免授权不当或存在非授权账号，禁止不相容职务用户账号的交叉操作。",
+          "guideline_refs": [
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C22",
+          "measure": "企业应当综合利用防火墙、路由器等网络设备，漏洞扫描、入侵检测等软件技术以及远程访问安全策略等手段，加强网络安全，防范来自网络的攻击和非法侵入。",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C23",
+          "measure": "企业对于通过网络传输的涉密或关键数据，应当采取加密措施，确保信息传递的保密性、准确性和完整性。",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C24",
+          "measure": "建立系统数据定期备份制度，明确备份范围、频度、方法、责任人、存放地点、有效性检查等内容",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C25",
+          "measure": "企业应当建立信息系统相关资产的管理制度，加强服务器等关键信息设备的管理，建立良好的物理环境，指定专人负责检查，及时处理异常情况。未经授权，任何人不得接触关键信息设备，保证电子设备的安全。",
+          "guideline_refs": [
+            "应用指引第十五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C26",
+          "measure": "建立信息系统开发、运行与维护等环节的岗位责任制度和不相容职务分离制度，防范利用计算机舞弊和犯罪。",
+          "guideline_refs": [
+            "基本规范第二十九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C27",
+          "measure": "定期对信息系统进行安全评估，及时发现系统安全问题并加以整改。",
+          "guideline_refs": [
+            "基本规范第二十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ITS-C28",
+          "measure": "建立信息系统终止使用时的相关信息的转移、销毁制度，严格按照国家有关法规制度和对电子档案的管理规定，妥善保管相关信息档案。",
+          "guideline_refs": [
+            "基本规范第四十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    }
+  ]
+}

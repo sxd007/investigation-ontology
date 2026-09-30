@@ -1,0 +1,146 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "hr",
+  "domain_label": "人力资源",
+  "framework_ref": "企业内部控制应用指引第3号",
+  "risk_text_status": "pending",
+  "generated_at": "2026-09-30T03:07:22.563599+00:00",
+  "processes": [
+    {
+      "process_l1": "一、人力资源引进与开发",
+      "process_l2": null
+    },
+    {
+      "process_l1": "二、人力资源使用与退出",
+      "process_l2": null
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "HR-R01",
+      "process_l1": "一、人力资源引进与开发",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "HR-C01",
+          "measure": "企业应当根据人力资源总体规划，结合生产经营实际需要，制定年度人力资源需求计划，完善人力资源引进制度，规范工作流程，按照计划、制度和程序组织人力资源引进工作。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "每年",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "HR-C02",
+          "measure": "企业应当根据人力资源能力框架要求，明确各岗位的职责权限、任职条件和工作要求，遵循德才兼备、以德为先和公开、公平、公正的原则，通过公开招聘、竞争上岗等多种方式选聘优秀人才，重点关注选聘对象的价值取向和责任意识。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "HR-C03",
+          "measure": "企业确定选聘人员后，应当依法签订劳动合同，建立劳动用工关系。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "HR-C04",
+          "measure": "企业应当建立选聘人员试用期和岗前培训制度，对试用人员进行严格考察，促进选聘员工全面了解岗位职责，掌握岗位基本技能，适应工作要求。试用期满考核合格后，方可正式上岗；试用期满考核不合格者，应当及时解除劳动关系。",
+          "guideline_refs": [
+            "基本规范第十七条",
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "HR-C05",
+          "measure": "企业应当重视人力资源开发工作，建立员工培训长效机制，营造尊重知识、尊重人才和关心员工职业发展的文化氛围，加强后备人才队伍建设，促进全体员工的知识、技能持续更新，不断提升员工的服务效能。",
+          "guideline_refs": [
+            "基本规范第十七条",
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "HR-R02",
+      "process_l1": "二、人力资源使用与退出",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "HR-C06",
+          "measure": "企业应当建立和完善人力资源的激励约束机制，设置科学的业绩考核指标体系，对各级管理人员和全体员工进行严格考核与评价，以此作为确定员工薪酬、职级调整和解除劳动合同等的重要依据，确保员工队伍处于持续优化状态。",
+          "guideline_refs": [
+            "基本规范第三十五条",
+            "应用指引第十条"
+          ],
+          "frequency": "每季度",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "HR-C07",
+          "measure": "企业应当制定与业绩考核挂钩的薪酬制度，切实做到薪酬安排与员工贡献相协调，体现效率优先，兼顾公平。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "HR-C08",
+          "measure": "企业应当制定各级管理人员和关键岗位员工定期轮岗制度，明确轮岗范围、轮岗周期、轮岗方式等，形成相关岗位员工的有序持续流动，全面提升员工素质。",
+          "guideline_refs": [
+            "基本规范第十六条",
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "HR-C09",
+          "measure": "企业应当按照有关法律法规规定，结合企业实际，建立健全员工退出（辞职、解除劳动合同、退休等）机制，明确退出的条件和程序，确保员工退出机制得到有效实施。",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "HR-C10",
+          "measure": "企业应当定期对年度人力资源计划执行情况进行评估，总结人力资源管理经验，分析存在的主要缺陷和不足，完善人力资源政策，促进企业整体团队充满生机和活力。",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "每年",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        }
+      ]
+    }
+  ]
+}

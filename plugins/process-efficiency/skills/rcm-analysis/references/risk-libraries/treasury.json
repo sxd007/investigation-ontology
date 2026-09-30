@@ -1,0 +1,671 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "treasury",
+  "domain_label": "资金活动",
+  "framework_ref": "企业内部控制应用指引第6号",
+  "risk_text_status": "complete",
+  "generated_at": "2026-09-30T03:07:22.570112+00:00",
+  "processes": [
+    {
+      "process_l1": "一、投资",
+      "process_l2": "拟定投资方案"
+    },
+    {
+      "process_l1": "一、投资",
+      "process_l2": "投资方案可行性论证"
+    },
+    {
+      "process_l1": "一、投资",
+      "process_l2": "投资方案决策"
+    },
+    {
+      "process_l1": "一、投资",
+      "process_l2": "投资计划编制与审批"
+    },
+    {
+      "process_l1": "一、投资",
+      "process_l2": "投资计划实施"
+    },
+    {
+      "process_l1": "一、投资",
+      "process_l2": "投资项目的到期处置"
+    },
+    {
+      "process_l1": "二、筹资",
+      "process_l2": "提出筹资方案"
+    },
+    {
+      "process_l1": "二、筹资",
+      "process_l2": "筹资方案论证"
+    },
+    {
+      "process_l1": "二、筹资",
+      "process_l2": "筹资方案审批"
+    },
+    {
+      "process_l1": "二、筹资",
+      "process_l2": "筹资计划编制与执行"
+    },
+    {
+      "process_l1": "二、筹资",
+      "process_l2": "筹资活动的监督、评价与责任追究"
+    },
+    {
+      "process_l1": "三、资金运营",
+      "process_l2": "职责分工"
+    },
+    {
+      "process_l1": "三、资金运营",
+      "process_l2": "审批控制点"
+    },
+    {
+      "process_l1": "三、资金运营",
+      "process_l2": "复核控制"
+    },
+    {
+      "process_l1": "三、资金运营",
+      "process_l2": "收付控制"
+    },
+    {
+      "process_l1": "三、资金运营",
+      "process_l2": "记账控制"
+    },
+    {
+      "process_l1": "三、资金运营",
+      "process_l2": "对账控制点"
+    },
+    {
+      "process_l1": "三、资金运营",
+      "process_l2": "银行账户管理控制点"
+    },
+    {
+      "process_l1": "三、资金运营",
+      "process_l2": "印章保管控制点"
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "TRY-R01",
+      "process_l1": "一、投资",
+      "process_l2": "拟定投资方案",
+      "statement": "是否存在投资活动与企业战略不符带来的风险",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C01",
+          "measure": "进行投资方案的战略性评估，包括是否与企业发展战略相符合",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C02",
+          "measure": "投资规模、方向和时机是否适当",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C03",
+          "measure": "对投资方案进行技术、市场、财务可行性研究，深入分析项目的技术可行性与先进性、市场容量与前景，以及项目预计现金流量、风险与报酬，比较或评价不同项目的可行性",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R02",
+      "process_l1": "一、投资",
+      "process_l2": "投资方案可行性论证",
+      "statement": "是否存在投资与筹资在资金数量、期限、成本与收益上不匹配的风险",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C04",
+          "measure": "不同的筹资方式，可筹集资金的数量、偿还期限、筹资成本不一样，这就要求投资应量力而为，不可贪大求全，超过企业资金实力和筹资能力进行投资；投资的现金流量在数量和时间上要与筹资现金流量保持一致，以避免财务危机发生；投资收益要与筹资成本相匹配，保证筹资成本的足额补偿和投资盈利性",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R03",
+      "process_l1": "一、投资",
+      "process_l2": "投资方案决策",
+      "statement": "是否存在投资活动忽略资产结构与流动性的风险",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C05",
+          "measure": "企业投资中要恰当处理资产流动性和盈利性的关系，通过投资保持合理的资产结构，在保证企业资产适度流动性的前提下追求最大盈利性",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R04",
+      "process_l1": "一、投资",
+      "process_l2": "投资计划编制与审批",
+      "statement": "是否存在缺乏严密的授权审批制度和不相容职务分离制度的风险，是否存在有授权审批制度和不相容职务未分离制度，导致企业投资呈现出随意、无序、无效的状况，投资失误和企业生产经营失败",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C06",
+          "measure": "建立与投资责任制度相适应，严密的责任追究制度，使责权利得到统一",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C07",
+          "measure": "明确审批人对投资业务的授权批准方式、权限、程序和责任，不得越权",
+          "guideline_refs": [
+            "基本规范第三十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C08",
+          "measure": "审批中应实行集体决策审议或者联签制度",
+          "guideline_refs": [
+            "基本规范第三十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C09",
+          "measure": "与有关被投资方签署投资协议",
+          "guideline_refs": [
+            "应用指引第十五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R05",
+      "process_l1": "一、投资",
+      "process_l2": "投资计划实施",
+      "statement": "是否存在缺乏严密的投资资产保管与会计记录的风险，投资资产的处理是否符合企业的利益",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C10",
+          "measure": "核查企业当前资金额及正常生产经营预算对资金的需求量，积极筹措投资项目所需资金",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C11",
+          "measure": "制定详细的投资计划，并根据授权审批制度报有关部门审批",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C12",
+          "measure": "根据投资计划进度，严格分期、按进度适时投放资金，严格控制资金流量和时间",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C13",
+          "measure": "以投资计划为依据，按照职务分离制度和授权审批制度，各环节和各责任人正确履行审批监督责任，对项目实施过程进行监督和控制，防止各种舞弊行为，保证项目建设的质量和进度要求",
+          "guideline_refs": [
+            "基本规范第二十九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C14",
+          "measure": "做好严密的会计记录，发挥会计控制的作用，企业应建立严密的资产保管制度，明确保管责任，建立健全账簿体系，严格账簿记录，通过账簿记录对投资资产进行详细、动态反映和控制",
+          "guideline_refs": [
+            "应用指引第十六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C15",
+          "measure": "做好跟踪分析工作，及时评价投资的进展，将分析和评价的结果反馈给决策层，以便及时调整投资策略或制定投资退出策略",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R06",
+      "process_l1": "一、投资",
+      "process_l2": "投资项目的到期处置",
+      "statement": "投资资产的处理是否符合企业的利益",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C16",
+          "measure": "投资资产的处置应该通过专业中介机构，选择相应的资产评估方法，客观评估投资价值，同时确定处置策略",
+          "guideline_refs": [
+            "应用指引第十七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C17",
+          "measure": "投资资产的处置必须经过董事会的授权批准",
+          "guideline_refs": [
+            "基本规范第三十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R07",
+      "process_l1": "二、筹资",
+      "process_l2": "提出筹资方案",
+      "statement": "是否存在缺乏完整的筹资战略规划导致的风险，如果忽视战略导向，缺乏对目标资本结构的清晰认识，容易导致盲目筹资，使得企业资本结构、资金来源结构、利率结构等处于频繁变动中，给企业的生产经营带来巨大的财务风险。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C18",
+          "measure": "进行筹资方案的战略性评估，包括是否与企业发展战略相符合，筹资规模是否适当",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C19",
+          "measure": "进行筹资方案的经济性评估，如筹资成本是否最低，资本结构是否恰当，筹资成本与资金收益是否匹配",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C20",
+          "measure": "进行筹资方案的风险性评估，如筹资方案面临哪些风险，风险大小是否适当、可控，是否与收益匹配。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R08",
+      "process_l1": "二、筹资",
+      "process_l2": "筹资方案论证",
+      "statement": "是否缺乏对企业资金现状的全面认识导致的风险，因无法保证支付筹资成本导致的风险",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C21",
+          "measure": "企业在筹资之前，应首先对企业的资金现状有一个全面正确的了解，并在此基础上结合企业战略和宏、微观形势等提出筹资方案。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R09",
+      "process_l1": "二、筹资",
+      "process_l2": "筹资方案审批",
+      "statement": "是否存在缺乏完善的授权审批制度导致的风险，",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C22",
+          "measure": "根据分级授权审批制度，按照规定程序严格审批经过可行性论证的筹资方案",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C23",
+          "measure": "审批中应实行集体审议或联签制度，保证决策的科学性",
+          "guideline_refs": [
+            "基本规范第三十条",
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R10",
+      "process_l1": "二、筹资",
+      "process_l2": "筹资计划编制与执行",
+      "statement": "是否存在缺乏对筹资条款的认真审核导致的风险，是否存在因合同条款而给企业带来潜在的不利影响，使得企业在未来可能发生的经济纠纷或诉讼中处于不利地位。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C24",
+          "measure": "企业在筹资活动中，都要签订相应的筹资合同、协议等法律文件，筹资合同一般应载明筹资数额、期限、利率、违约责任等内容",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C25",
+          "measure": "可以借助专业的法律中介机构来进行合同文本的审核。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C26",
+          "measure": "根据筹资方案，结合当时经济金融形势，分析不同筹资方式的资金成本，正确选择筹资方式和不同方式的筹资数量，财务部门或资金管理部门制定具体筹资计划",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R11",
+      "process_l1": "二、筹资",
+      "process_l2": "筹资活动的监督、评价与责任追究",
+      "statement": "是否存在缺乏严密的跟踪管理制度导致的风险，缺乏严密的跟踪管理，可能会使企业资金管理失控，因资金被挪用而导致财务损失，也可能因此导致利息没有及时支付而被银行罚息，这些都会使得企业面临不必要的财务风险",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C27",
+          "measure": "促成各部门严格按照确定的用途使用资金",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C28",
+          "measure": "监督检查，督促各环节严密保管未发行的股票、债券",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C29",
+          "measure": "监督检查，督促正确计提、支付利息",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C30",
+          "measure": "加强债务偿还和股利支付环节的监督管理",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "TRY-C31",
+          "measure": "评价筹资活动过程，追究违规人员责任",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R12",
+      "process_l1": "三、资金运营",
+      "process_l2": "职责分工",
+      "statement": "是否存在不相容岗位由一人负责的情况，导致工作舞弊",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C32",
+          "measure": "不相容工作岗位由不同的人员担任",
+          "guideline_refs": [
+            "基本规范第二十九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R13",
+      "process_l1": "三、资金运营",
+      "process_l2": "审批控制点",
+      "statement": "是否制定资金的限制接近措施，是否有经办人员进行业务活动时未得到授权审批，经办人员未在原始凭证上签章；经办部门负责人、主管总经理和财务部门负责人未审批并签章，导致资金活动管控不严，可能导致资金被挪用、侵占、抽逃或遭受欺诈。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C33",
+          "measure": "制定资金的限制接近措施，经办人员进行业务活动时应该得到授权审批，任务未经授权的人员不得办理资金收支业务；使用资金的部门应提出用款申请，记载用途、金额、时间等事项；经办人员在原始凭证上签章；经办部门负责人、主管总经理和财务部门负责人审批并签章",
+          "guideline_refs": [
+            "应用指引第二十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R14",
+      "process_l1": "三、资金运营",
+      "process_l2": "复核控制",
+      "statement": "是否存在资金营运活动会计主管未审查原始凭证反映的收支业务是否真实合法，未审核通过并签字盖章后填制原始凭证；凭证上的主管、审核、出纳和制单等印章不齐全。导致错误和舞弊的情况",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C34",
+          "measure": "根据企业内部层级的隶属关系可以划分为纵向复核和横向复核这两种类型。前者是指上级主管对下级活动的复核；后者是指平级或无上下级关系人员的相互核对，如财务系统内部的核对",
+          "guideline_refs": [
+            "应用指引第二十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R15",
+      "process_l1": "三、资金运营",
+      "process_l2": "收付控制",
+      "statement": "出纳人员未按照审核后的原始凭证收付款，或未对已完成收付的凭证加盖戳记，并登记日记账；主管会计人员未及时准确地记录在相关账簿中，定期与出纳人员的日记账核对，导致不能反映着资金的来龙去脉",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C35",
+          "measure": "出纳人员按照审核后的原始凭证收付款，并对已完成收付的凭证加盖戳记，并登记日记账；主管会计人员及时准确地记录在相关账簿中，定期与出纳人员的日记账核对",
+          "guideline_refs": [
+            "应用指引第二十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R16",
+      "process_l1": "三、资金运营",
+      "process_l2": "记账控制",
+      "statement": "是否存在记账环节出现管理漏洞，导致整个会计信息处理结果失真",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C36",
+          "measure": "出纳人员根据资金收付凭证登记日记账，会计人员根据相关凭证登记有关明细分类账；主管会计登记总分类账。",
+          "guideline_refs": [
+            "应用指引第二十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R17",
+      "process_l1": "三、资金运营",
+      "process_l2": "对账控制点",
+      "statement": "是否未进行账证核对、账账核对、账表核对、账实核对等，使会计信息的丧失真实性",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C37",
+          "measure": "定期进行账证核对、账账核对、账表核对、账实核对等。",
+          "guideline_refs": [
+            "基本规范第三十一条",
+            "应用指引第二十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R18",
+      "process_l1": "三、资金运营",
+      "process_l2": "银行账户管理控制点",
+      "statement": "是否有未按规定开立账户，办理存款、取款和结算等。银行账户的开立、使用和撤消是否有授权，下属企业或单位是否有账外账",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C38",
+          "measure": "企业应当严格按照《支付结算办法》等国家有关规定，加强银行账户的管理，严格按规定开立账户，办理存款、取款和结算。",
+          "guideline_refs": [
+            "应用指引第二十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "TRY-R19",
+      "process_l1": "三、资金运营",
+      "process_l2": "印章保管控制点",
+      "statement": "印章的保管是否遵守不相容职务分离的原则，是否将办理资金支付业务的相关印章和票据集中一人保管，印章是否与空白票据分管，财务专用章是否与企业法人章分管。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "TRY-C39",
+          "measure": "建立印章保管制度，印章的保管要贯彻不相容职务分离的原则。",
+          "guideline_refs": [
+            "应用指引第二十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    }
+  ]
+}

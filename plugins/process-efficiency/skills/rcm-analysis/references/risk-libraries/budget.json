@@ -1,0 +1,248 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "budget",
+  "domain_label": "全面预算",
+  "framework_ref": "企业内部控制应用指引第15号",
+  "risk_text_status": "pending",
+  "generated_at": "2026-09-30T03:07:22.593972+00:00",
+  "processes": [
+    {
+      "process_l1": "一、预算的编制",
+      "process_l2": null
+    },
+    {
+      "process_l1": "二、预算的执行",
+      "process_l2": null
+    },
+    {
+      "process_l1": "三、预算的考核",
+      "process_l2": null
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "BUD-R01",
+      "process_l1": "一、预算的编制",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "BUD-C01",
+          "measure": "企业应当加强全面预算工作的组织领导，明确预算管理体制以及各预算执行单位的职责权限、授权批准程序和工作协调机制。",
+          "guideline_refs": [
+            "基本规范第三十三条",
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C02",
+          "measure": "企业应当设立预算管理委员会履行全面预算管理职责，其成员由企业负责人及内部相关部门负责人组成。预算管理委员会下设预算管理工作机构，由其履行日常管理职责。预算管理工作机构一般设在财会部门。",
+          "guideline_refs": [
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C03",
+          "measure": "企业应当结合战略发展目标、年度生产经营计划、市场环境以及内部绩效考核体系等制定预算目标和预算指标体系。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C04",
+          "measure": "企业应当建立和完善预算编制工作制度，明确编制依据、编制程序、编制方法等内容，确保预算编制依据合理、程序适当、方法科学，避免预算指标过高或过低。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C05",
+          "measure": "企业应当在预算年度开始前完成全面预算草案的编制工作。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C06",
+          "measure": "企业应当根据发展战略和年度生产经营计划，综合考虑预算期内经济政策、市场环境等因素，按照上下结合、分级编制、逐级汇总的程序，编制年度全面预算。可以选择或综合运用固定预算、弹性预算、滚动预算等方法编制预算。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C07",
+          "measure": "企业预算管理委员会应当对预算管理工作机构在综合平衡基础上提交的预算方案进行研究论证，从企业发展全局角度提出建议，形成全面预算草案，并提交董事会。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C08",
+          "measure": "企业董事会审核全面预算草案，企业全面预算应当按照相关法律法规及企业章程的规定报经审议批准。批准后，应当以文件形式下达执行。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "BUD-R02",
+      "process_l1": "二、预算的执行",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "BUD-C09",
+          "measure": "企业应当加强对预算执行的管理，明确预算指标分解方式、预算执行审批权限和要求、预算执行情况报告等，落实预算执行责任制，确保预算刚性，严格预算执行。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C10",
+          "measure": "企业全面预算一经批准下达，各预算执行单位应当认真组织实施，将预算指标层层分解，从横向和纵向落实到内部各部门、各环节和各岗位，形成全方位的预算执行责任体系。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C11",
+          "measure": "企业应当建立预算执行的实时监控制度，确保企业内部各环节的业务活动均符合预算的要求。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C12",
+          "measure": "企业应当建立重大预算项目的特别关注制度，密切关注、跟踪和监控重大预算项目的实施进度和完成情况。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C13",
+          "measure": "企业应当建立预算执行情况的预警机制，科学选择预警指标，合理确定预警范围。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C14",
+          "measure": "企业预算管理工作机构应当加强与各预算执行单位的沟通，运用财务信息和其他相关资料监控预算执行情况，采用恰当方式及时向决策机构和各预算执行单位报告、反馈预算执行进度、执行差异及其对预算目标的影响，促进企业全面预算目标的实现。",
+          "guideline_refs": [
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C15",
+          "measure": "企业预算管理工作机构和各预算执行单位应当建立预算执行情况分析制度，定期召开预算执行分析会议，通报预算执行情况，研究、解决预算执行中存在的问题，提出改进措施。",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C16",
+          "measure": "企业批准下达的预算应当保持稳定，不得随意调整。由于市场环境、国家政策或不可抗力等客观因素，导致预算执行发生重大差异确需调整预算的，应当履行严格的审批程序。",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "BUD-R03",
+      "process_l1": "三、预算的考核",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "BUD-C17",
+          "measure": "企业应当建立严格的预算执行考核制度，对各预算执行单位和个人进行考核，切实做到有奖有惩、奖惩分明。",
+          "guideline_refs": [
+            "应用指引第十五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C18",
+          "measure": "企业应当建立科学的预算考核指标体系，企业预算管理委员会应当定期组织预算执行情况考核，将各预算执行单位负责人签字上报的预算执行报告和已掌握的动态监控信息进行核对，确认各执行单位预算完成情况。必要时，实行预算执行情况内部审计制度。",
+          "guideline_refs": [
+            "应用指引第十五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "BUD-C19",
+          "measure": "企业预算执行情况考核工作，应当坚持公开、公平、公正的原则，考核过程及结果应有完整的记录。",
+          "guideline_refs": [
+            "应用指引第十七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        }
+      ]
+    }
+  ]
+}

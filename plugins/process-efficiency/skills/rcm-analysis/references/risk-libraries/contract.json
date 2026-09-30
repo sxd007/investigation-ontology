@@ -1,0 +1,206 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "contract",
+  "domain_label": "合同管理",
+  "framework_ref": "企业内部控制应用指引第16号",
+  "risk_text_status": "pending",
+  "generated_at": "2026-09-30T03:07:22.596482+00:00",
+  "processes": [
+    {
+      "process_l1": "一、合同的订立",
+      "process_l2": null
+    },
+    {
+      "process_l1": "二、合同的履行",
+      "process_l2": null
+    },
+    {
+      "process_l1": "评价报告：",
+      "process_l2": null
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "CON-R01",
+      "process_l1": "一、合同的订立",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "CON-C01",
+          "measure": "合同订立前，应当充分了解合同对方的主体资格、信用状况等有关内容，确保对方当事人具备履约能力。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C02",
+          "measure": "合同承办部门应在授权范围内与对方进行合同谈判。对影响较大、涉及较高专业技术或法律关系复杂的合同，应当组织法律、技术、财会等专业人员谈判，必要时可聘请外部专家参与。谈判过程中的重要事项和谈判人员的主要意见，应当予以记录并妥善保存。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C03",
+          "measure": "合同文本一般由业务承办部门起草、法律部门审核。重大合同或法律关系复杂的特殊合同应当由法律部门参与起草。国家或行业有合同示范文本的，可以优先选用，但对涉及权利义务关系的条款应当进行认真审查，并根据实际情况进行适当修改。合同文本须报经国家有关主管部门审查或备案的，应当履行相应程序。 。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C04",
+          "measure": "企业应当建立合同的审核制度，对合同文本进行严格审核，重点关注合同的主体、内容和形式是否合法，合同内容是否符合企业的经济利益，对方当事人是否具有履约能力，合同权利和义务、违约责任和争议解决条款是否明确等。对影响重大或法律关系复杂的合同文本，应当组织内部相关部门进行审核。相关部门提出不同意见的，应当认真分析研究，慎重对待，并准确无误地加以记录；必要时应对合同条款作出修改。内部相关部门应当认真履行职责。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C05",
+          "measure": "企业应当按照规定的权限和程序与对方当事人签署合同。正式对外订立的合同，应当由企业法定代表人或由其授权的代理人签名或加盖有关印章。授权签署合同的，应当签署授权委托书。 属于上级管理权限的合同，下级单位不得签署。下级单位认为确有需要签署涉及上级管理权限的合同，应当提出申请，并经上级合同管理机构批准后办理。上级单位应当加强对下级单位合同订立、履行情况的监督检查。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C06",
+          "measure": "企业应当建立合同专用章保管制度。合同经编号、审批及企业法定代表人或由其授权的代理人签署后，方可加盖合同专用章。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C07",
+          "measure": "企业应当加强合同信息安全保密工作，未经批准，不得以任何形式泄露合同订立与履行过程中涉及的商业秘密或国家机密。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C08",
+          "measure": "确定合同的归口管理部门，明确合同的拟定、审批、执行各环节的程序和要求",
+          "guideline_refs": [
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "CON-R02",
+      "process_l1": "二、合同的履行",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "CON-C09",
+          "measure": "强化对合同履行情况及效果的检查、分析和验收，全面适当执行本企业义务，敦促对方积极执行合同，确保合同全面有效履行。对合同对方的合同履行情况实施有效监控，一旦发现有违约可能或违约行为，应当及时提示风险，并立即采取相应措施将合同损失降到最低。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C10",
+          "measure": "根据需要及时补充、变更甚至解除合同。对于合同没有约定或约定不明确的内容，通过双方协商一致对原有合同进行补充；无法达成补充协议的，按照国家相关法律法规、合同有关条款或者交易习惯确定；对于显失公平、条款有误或存在欺诈行为的合同，以及因政策调整、市场变化等客观因素已经或可能导致企业利益受损的合同，按规定程序及时报告，并经双方协商一致，按照规定权限和程序办理合同变更或解除事宜；对方当事人提出中止、转让、解除合同的，造成企业经济损失的，应向对方当事人书面提出索赔",
+          "guideline_refs": [
+            "应用指引第十一条 第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C11",
+          "measure": "企业应当加强合同纠纷管理，在履行合同过程中发生纠纷的，应当依据国家相关法律法规，在规定时效内与对方当事人协商并按规定权限和程序及时报告。 合同纠纷经协商一致的，双方应当签订书面协议。合同纠纷经协商无法解决的，应当根据合同约定选择仲裁或诉讼方式解决。 企业内部授权处理合同纠纷的，应当签署授权委托书。纠纷处理过程中，未经授权批准，相关经办人员不得向对方当事人作出实质性答复或承诺。",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C12",
+          "measure": "企业财会部门应当根据合同条款审核后办理结算业务。未按合同条款履约的，或应签订书面合同而未签订的，财会部门有权拒绝付款，并及时向企业有关负责人报告。",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C13",
+          "measure": "合同管理部门应当加强合同登记管理，充分利用信息化手段，定期对合同进行统计、分类和归档，详细登记合同的订立、履行和变更等情况，实行合同的全过程封闭管理。",
+          "guideline_refs": [
+            "应用指引第十五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C14",
+          "measure": "企业应当建立合同履行情况评估制度，至少于每年年末对合同履行的总体情况和重大合同履行的具体情况进行分析评估，对分析评估中发现合同履行中存在的不足，应当及时加以改进。",
+          "guideline_refs": [
+            "应用指引第十六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CON-C15",
+          "measure": "企业应当健全合同管理考核与责任追究制度。对合同订立、履行过程中出现的违法违规行为，应当追究有关机构或人员的责任。",
+          "guideline_refs": [
+            "应用指引第十六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "CON-R03",
+      "process_l1": "评价报告：",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": []
+    }
+  ]
+}

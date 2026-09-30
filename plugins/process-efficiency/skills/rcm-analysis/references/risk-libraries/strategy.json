@@ -1,0 +1,202 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "strategy",
+  "domain_label": "发展战略",
+  "framework_ref": "企业内部控制应用指引第2号",
+  "risk_text_status": "pending",
+  "generated_at": "2026-09-30T03:07:22.559653+00:00",
+  "processes": [
+    {
+      "process_l1": "一、发展战略制定",
+      "process_l2": null
+    },
+    {
+      "process_l1": "二、发展战略实施",
+      "process_l2": null
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "STR-R01",
+      "process_l1": "一、发展战略制定",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "STR-C01",
+          "measure": "企业应当在充分调查研究、科学分析预测和广泛征求意见的基础上制定发展目标。",
+          "guideline_refs": [
+            "应用指引第二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C02",
+          "measure": "发展目标应当突出主业",
+          "guideline_refs": [
+            "应用指引第三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C03",
+          "measure": "发展目标不能过于激进，不能盲目追逐市场热点，不能脱离企业实际，否则可能导致企业过度扩张或经营失败。",
+          "guideline_refs": [
+            "应用指引第三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C04",
+          "measure": "企业应当在充分调查研究、科学分析预测和广泛征求意见的基础上制定发展目标。 企业应当根据发展目标制定战略规划。战略规划应当明确发展的阶段性和发展程度，确定每个发展阶段的具体目标、工作任务和实施路径。",
+          "guideline_refs": [
+            "应用指引第四条 第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C05",
+          "measure": "企业应当在董事会下设立战略委员会，或指定相关机构负责发展战略管理工作，履行相应职责。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C06",
+          "measure": "董事会应当严格审议战略委员会提交的发展战略方案，重点关注其全局性、长期性和可行性。董事会在审议方案中如果发现重大问题，应当责成战略委员会对方案作出调整。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C07",
+          "measure": "发展战略是否符合国家行业发展规划和产业政策",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C08",
+          "measure": "发展战略是否符合国家经济结构战略性调整方向",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C09",
+          "measure": "发展战略是否突出主业，有助于提升企业核心竞争力",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C10",
+          "measure": "发展战略是否具有可操作性",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C11",
+          "measure": "发展战略是否客观全面地对未来商业机会和风险进行分析预测",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C12",
+          "measure": "发展战略是否有相应的人力、财务、信息等资源保障等。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "STR-R02",
+      "process_l1": "二、发展战略实施",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "STR-C13",
+          "measure": "企业应当根据发展战略，制定年度工作计划，编制全面预算，将年度目标分解、落实；同时完善发展战略管理制度，确保发展战略有效实施。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C14",
+          "measure": "企业应当重视发展战略的宣传工作，通过内部各层级会议和教育培训等有效方式，将发展战略及其分解落实情况传递到内部各管理层级和全体员工。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C15",
+          "measure": "战略委员会应当加强对发展战略实施情况的监控，定期收集和分析相关信息，对于明显偏离发展战略的情况，应当及时报告。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "STR-C16",
+          "measure": "由于经济形势、产业政策、技术进步、行业状况以及不可抗力等因素发生重大变化，确需对发展战略作出调整的，应当按照规定权限和程序调整发展战略。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        }
+      ]
+    }
+  ]
+}

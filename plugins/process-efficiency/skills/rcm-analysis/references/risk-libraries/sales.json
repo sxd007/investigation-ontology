@@ -1,0 +1,409 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "sales",
+  "domain_label": "销售业务",
+  "framework_ref": "企业内部控制应用指引第9号",
+  "risk_text_status": "complete",
+  "generated_at": "2026-09-30T03:07:22.575406+00:00",
+  "processes": [
+    {
+      "process_l1": "一、销售",
+      "process_l2": "销售计划"
+    },
+    {
+      "process_l1": "一、销售",
+      "process_l2": "客户开发与信用管理"
+    },
+    {
+      "process_l1": "一、销售",
+      "process_l2": "销售政策及销售定价"
+    },
+    {
+      "process_l1": "一、销售",
+      "process_l2": "销售谈判"
+    },
+    {
+      "process_l1": "一、销售",
+      "process_l2": "订立销售合同"
+    },
+    {
+      "process_l1": "一、销售",
+      "process_l2": "发货"
+    },
+    {
+      "process_l1": "二、收款",
+      "process_l2": "收款"
+    },
+    {
+      "process_l1": "三、其他方面",
+      "process_l2": "客户服务"
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "SAL-R01",
+      "process_l1": "一、销售",
+      "process_l2": "销售计划",
+      "statement": "是否存在销售计划缺乏或不合理，或未经授权审批，导致产品结构和生产安排不合理，难以实现企业生产经营的良性循环。",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "SAL-C01",
+          "measure": "企业应当根据发展战略和年度生产经营计划，结合企业实际情况，制定年度销售计划，在此基础上，结合客户订单情况，制定月度销售计划，并按规定的权限和程序审批后下达执行。",
+          "guideline_refs": [
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C02",
+          "measure": "定期对各产品（商品）的区域销售额、进销差价、销售计划与实际销售情况等进行分析，结合生产现状，根据市场变化及时调整销售计划，调整后的销售计划需履行相应的审批程序。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "SAL-R02",
+      "process_l1": "一、销售",
+      "process_l2": "客户开发与信用管理",
+      "statement": "是否存在现有客户管理不足、潜在市场需求开发不够，可能导致客户丢失或市场拓展不利；客户档案不健全，缺乏合理的资信评估，可能导致客户选择不当、结算方式选择不当，销售款项不能收回或遭受欺诈，从而影响企业的资金流转和正常经营。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "SAL-C03",
+          "measure": "企业应当在进行充分市场调查的基础上，合理细分市场并确定目标市场，根据不同目标群体的具体需求，确定定价机制和信用方式，灵活运用销售折扣、销售折让、信用销售、代销和广告宣传等多种策略和营销方式，促进销售目标实现，不断提高市场占有率。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C04",
+          "measure": "建立和不断更新维护客户信用动态档案，由与销售部门相对独立的信用管理部门对客户付款情况进行持续跟踪和监控，提出划分、调整客户信用等级的方案。根据客户信用等级和企业信用政策，拟定客户赊销限额和时限，经销售、财会等部门具有相关权限的人员审批。对于境外客户和新开发客户，应当建立严格的信用保证制度。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "SAL-R03",
+      "process_l1": "一、销售",
+      "process_l2": "销售政策及销售定价",
+      "statement": "是否存在销售政策和策略导致市场预测不准确，销售渠道管理不当等，并且导致销售不畅使库存积压、经营难以为继。",
+      "category": "delay",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "SAL-C05",
+          "measure": "应根据有关价格政策、综合考虑企业财务目标、营销目标、产品成本、市场状况及竞争对手情况等多方面因素，确定产品基准定价。定期评价产品基准价格的合理性，定价或调价需经具有相应权限人员的审核批准。",
+          "guideline_refs": [
+            "基本规范第三十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C06",
+          "measure": "在执行基准定价的基础上，针对某些商品可以授予销售部门一定限度的价格浮动权，销售部门可结合产品市场特点，将价格浮动权向下实行逐级递减分配，同时明确权限执行人。价格浮动权限执行人必须严格遵守规定的价格浮动范围，不得擅自突破",
+          "guideline_refs": [
+            "基本规范第三十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "SAL-R04",
+      "process_l1": "一、销售",
+      "process_l2": "销售政策及销售定价",
+      "statement": "是否存在定价或调价不符合价格政策，未能结合市场供需状况、盈利测算等进行适时调整，造成价格过高或过低、销售受损；商品销售价格未经恰当审批，或存在舞弊，导致损害企业经济利益或者企业形象。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "SAL-C07",
+          "measure": "销售折扣、销售折让等政策的制定应由具有相应权限人员审核批准。销售折扣、销售折让授予的实际金额、数量、原因及对象应予以记录，并归档备查。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "SAL-R05",
+      "process_l1": "一、销售",
+      "process_l2": "销售谈判",
+      "statement": "是否在销售合同订立前与客户进行洽谈、搓商或谈判，是否制定合适的信用政策、定价方式及结算工方式，重大的销售合同谈判是否吸收财务、法律等专业人员参加",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "SAL-C08",
+          "measure": "订立销售合同前，企业应当指定专门人员与客户进行业务洽谈、磋商或谈判，关注客户信用状况，明确销售定价、结算方式、权利与义务条款等相关内容。重大的销售业务谈判还应当吸收财会、法律等专业人员参加，并形成完整的书面记录",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "SAL-R06",
+      "process_l1": "一、销售",
+      "process_l2": "订立销售合同",
+      "statement": "是否有合同内容存在重大疏漏和欺诈，未经授权对外订立销售合同，导致企业合法权益受到侵害；是否存在销售价格、收款期限等违背企业销售政策，可能导致企业经济利益受损。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "SAL-C09",
+          "measure": "企业应当建立健全销售合同订立及审批管理制度，明确必须签订合同的范围，规范合同订立程序，确定具体的审核、审批程序和所涉及的部门人员及相应权责。审核、审批应当重点关注销售合同草案中提出的销售价格、信用政策、发货及收款方式等。重要的销售合同，应当征询法律专业人员的意见",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C10",
+          "measure": "销售合同草案经审批同意后，企业应授权有关人员与客户签订正式销售合同",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "SAL-R07",
+      "process_l1": "一、销售",
+      "process_l2": "发货",
+      "statement": "是否未经授权发货或发货不符合合同约定，可能导致货物损失或客户与企业的销售争议、销售款项不能收回",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "SAL-C11",
+          "measure": "销售部门应当按照经审核后的销售合同开具相关的销售通知交仓储部门和财会部门",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C12",
+          "measure": "仓储部门应当落实出库、计量、运输等环节的岗位责任，对销售通知进行审核，严格按照所列的发货品种和规格、发货数量、发货时间、发货方式、接货地点等，按规定时间组织发货，形成相应的发货单据，并应连续编号",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C13",
+          "measure": "应当以运输合同或条款等形式明确运输方式、商品短缺、毁损或变质的责任、到货验收方式、运输费用承担、保险等内容，货物交接环节应做好装卸和检验工作，确保货物的安全发运，由客户验收确认。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C14",
+          "measure": "应当做好发货各环节的记录，填制相应的凭证，设置销售台账，实现全过程的销售登记制度",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "SAL-R08",
+      "process_l1": "二、收款",
+      "process_l2": "收款",
+      "statement": "是否存在企业信用管理不到位，结算方式选择不当，票据管理不善，账款回收不力，导致销售款项不能收回或遭受欺诈；收款过程中存在舞弊，使企业经济利益受损。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "SAL-C15",
+          "measure": "结合公司销售政策，选择恰当的结算方式，加快款项回收，提高资金的使用效率。对于商业票据，结合销售政策和信用政策，明确应收票据的受理范围和管理措施",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C16",
+          "measure": "建立票据管理制度，特别是加强商业汇票的管理：一是，对票据的取得、贴现、背书、保管等活动予以明确规定；二是，严格审查票据的真实性和合法性，防止票据欺诈；三是，由专人保管应收票据，对即将到期的应收票据，及时办理托收，定期核对盘点；四是，票据贴现、背书应经恰当审批",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C17",
+          "measure": "加强赊销管理。一是，需要赊销的商品，应由信用管理部门按照客户信用等级审核，并经具有相应权限的人员审批。二是，赊销商品一般应取得客户的书面确认，必要时，要求客户办理资产抵押、担保等收款保证手续。三是，应完善应收款项管理制度，落实责任、严格考核、实行奖惩。销售部门负责应收款项的催收，催收记录（包括往来函电）应妥善保存",
+          "guideline_refs": [
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C18",
+          "measure": "加强代销业务款项的管理，及时与代销商结算款项。第五，收取的现金、银行本票、汇票等应及时缴存银行并登记入账。防止由销售人员直接收取款项，如必须由销售人员收取的，应由财会部门加强监控",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "SAL-R09",
+      "process_l1": "三、其他方面",
+      "process_l2": "客户服务",
+      "statement": "是否存在客户服务水平低，消费者满意度不足，影响公司品牌形象，造成客户流失。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "SAL-C19",
+          "measure": "结合竞争对手客户服务水平，建立和完善客户服务制度，包括客户服务内容、标准、方式等",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C20",
+          "measure": "设专人或部门进行客户服务和跟踪。有条件的企业可以按产品线或地理区域建立客户服务中心。加强售前、售中和售后技术服务，实行客户服务人员的薪酬与客户满意度挂钩",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C21",
+          "measure": "建立产品质量管理制度，加强销售、生产、研发、质量检验等相关部门之间的沟通协调",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C22",
+          "measure": "做好客户回访工作，定期或不定期开展客户满意度调查；建立客户投诉制度，记录所有的客户投诉，并分析产生原因及解决措施",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C23",
+          "measure": "加强销售退回控制。销售退回需经具有相应权限的人员审批后方可执行；销售退回的商品应当参照物资采购入库管理。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "SAL-R10",
+      "process_l1": null,
+      "process_l2": "会计系统控制",
+      "statement": "是否缺乏有效的销售业务会计系统控制，可能导致企业账实不符、账证不符、账账不符或者账表不符，影响销售收入、销售成本、应收款项等会计核算的真实性和可靠性。",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "SAL-C24",
+          "measure": "企业应当加强对销售、发货、收款业务的会计系统控制，详细记录销售客户、销售合同、销售通知、发运凭证、商业票据、款项收回等情况，确保会计记录、销售记录与仓储记录核对一致。具体为：财会部门开具发票时，应当依据相关单据（计量单、出库单、货款结算单、销售通知单等）并经相关岗位审核。销售发票应遵循有关发票管理规定，严禁开具虚假发票。财会部门对销售报表等原始凭证审核销售价格、数量等，并根据国家统一的会计准则制度确认销售收入，登记入账。财会部门与相关部门月末应核对当月销售数量，保证各部门销售数量的一致性",
+          "guideline_refs": [
+            "基本规范第三十一条",
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C25",
+          "measure": "建立应收账款清收核查制度，销售部门应定期与客户对账，并取得书面对账凭证，财会部门负责办理资金结算并监督款项回收",
+          "guideline_refs": [
+            "基本规范第三十二条",
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C26",
+          "measure": "及时收集应收账款相关凭证资料并妥善保管；及时要求客户提供担保；对未按时还款的客户，采取申请支付令、申请诉前保全和起诉等方式及时清收欠款。对收回的非货币性资产应经评估和恰当审批",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "SAL-C27",
+          "measure": "企业对于可能成为坏账的应收账款，应当按照国家统一的会计准则规定计提坏账准备，并按照权限范围和审批程序进行审批。对确定发生的各项坏账，应当查明原因，明确责任，并在履行规定的审批程序后作出会计处理。企业核销的坏账应当进行备查登记，做到账销案存。已核销的坏账又收回时应当及时入账，防止形成账外资金。",
+          "guideline_refs": [
+            "基本规范第三十一条",
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    }
+  ]
+}

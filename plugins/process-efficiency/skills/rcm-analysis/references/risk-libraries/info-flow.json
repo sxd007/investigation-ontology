@@ -1,0 +1,182 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "info-flow",
+  "domain_label": "内部信息传递",
+  "framework_ref": "企业内部控制应用指引第17号",
+  "risk_text_status": "pending",
+  "generated_at": "2026-09-30T03:07:22.599492+00:00",
+  "processes": [
+    {
+      "process_l1": "一、内部报告的形成",
+      "process_l2": null
+    },
+    {
+      "process_l1": "二、内部报告的使用",
+      "process_l2": null
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "INF-R01",
+      "process_l1": "一、内部报告的形成",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "INF-C01",
+          "measure": "企业应当根据发展战略、风险控制和业绩考核要求，科学规范不同级次内部报告的指标体系，采用经营快报等多种形式，全面反映与企业生产经营管理相关的各种内外部信息。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "INF-C02",
+          "measure": "内部报告指标体系的设计应当与全面预算管理相结合，并随着环境和业务的变化不断进行修订和完善。设计内部报告指标体系时，应当关注企业成本费用预算的执行情况。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "INF-C03",
+          "measure": "内部报告应当简洁明了、通俗易懂、传递及时，便于企业各管理层级和全体员工掌握相关信息，正确履行职责。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "INF-C04",
+          "measure": "企业应当制定严密的内部报告流程，充分利用信息技术，强化内部报告信息集成和共享，将内部报告纳入企业统一信息平台，构建科学的内部报告网络体系。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "INF-C05",
+          "measure": "企业内部各管理层级均应当指定专人负责内部报告工作，重要信息应及时上报，并可以直接报告高级管理人员。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "INF-C06",
+          "measure": "企业应当建立内部报告审核制度，确保内部报告信息质量。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "INF-C07",
+          "measure": "企业应当关注市场环境、政策变化等外部信息对企业生产经营管理的影响，广泛收集、分析、整理外部信息，并通过内部报告传递到企业内部相关管理层级，以便采取应对策略。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "INF-C08",
+          "measure": "企业应当拓宽内部报告渠道，通过落实奖励措施等多种有效方式，广泛收集合理化建议。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "INF-C09",
+          "measure": "企业应当重视和加强反舞弊机制建设,通过设立员工信箱、投诉热线等方式，鼓励员工及企业利益相关方举报和投诉企业内部的违法违规、舞弊和其他有损企业形象的行为。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "INF-R02",
+      "process_l1": "二、内部报告的使用",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "INF-C10",
+          "measure": "企业各级管理人员应当充分利用内部报告管理和指导企业的生产经营活动，及时反映全面预算执行情况，协调企业内部相关部门和各单位的运营进度，严格绩效考核和责任追究，确保企业实现发展目标。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "INF-C11",
+          "measure": "企业应当有效利用内部报告进行风险评估，准确识别和系统分析企业生产经营活动中的内外部风险，确定风险应对策略，实现对风险的有效控制。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "INF-C12",
+          "measure": "企业对于内部报告反映出的问题应当及时解决；涉及突出问题和重大风险的，应当启动应急预案。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "INF-C13",
+          "measure": "企业应当制定严格的内部报告保密制度，明确保密内容、保密措施、密级程度和传递范围，防止泄露商业秘密。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "INF-C14",
+          "measure": "企业应当建立内部报告的评估制度，定期对内部报告的形成和使用进行全面评估，重点关注内部报告的及时性、安全性和有效性。",
+          "guideline_refs": [
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    }
+  ]
+}

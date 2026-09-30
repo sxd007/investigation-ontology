@@ -1,0 +1,994 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "engineering",
+  "domain_label": "工程项目",
+  "framework_ref": "企业内部控制应用指引第11号",
+  "risk_text_status": "complete",
+  "generated_at": "2026-09-30T03:07:22.583395+00:00",
+  "processes": [
+    {
+      "process_l1": "一、工程立项",
+      "process_l2": "1、编制项目建议书"
+    },
+    {
+      "process_l1": "一、工程立项",
+      "process_l2": "2、可行性研究"
+    },
+    {
+      "process_l1": "一、工程立项",
+      "process_l2": "3、项目评审与决策"
+    },
+    {
+      "process_l1": "二、工程设计",
+      "process_l2": "1、初步设计"
+    },
+    {
+      "process_l1": "二、工程设计",
+      "process_l2": "2、施工图设计"
+    },
+    {
+      "process_l1": "三、工程招标",
+      "process_l2": "1、招标"
+    },
+    {
+      "process_l1": "三、工程招标",
+      "process_l2": "2、投标"
+    },
+    {
+      "process_l1": "三、工程招标",
+      "process_l2": "3、开标、评标和定标"
+    },
+    {
+      "process_l1": "三、工程招标",
+      "process_l2": "4、签订合同"
+    },
+    {
+      "process_l1": "四、工程建设",
+      "process_l2": "1-1、施工进度"
+    },
+    {
+      "process_l1": "四、工程建设",
+      "process_l2": "1-2施工质量"
+    },
+    {
+      "process_l1": "四、工程建设",
+      "process_l2": "2、工程物资采购"
+    },
+    {
+      "process_l1": "四、工程建设",
+      "process_l2": "3、工程价款结算"
+    },
+    {
+      "process_l1": "四、工程建设",
+      "process_l2": "4、工程变更"
+    },
+    {
+      "process_l1": "五、工程验收",
+      "process_l2": "竣工验收"
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "ENG-R01",
+      "process_l1": "一、工程立项",
+      "process_l2": "1、编制项目建议书",
+      "statement": "⑴是否投资意向与国家产业政策和企业发展战略脱节；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C01",
+          "measure": "企业应当明确投资分析、编制和评审项目建议书的职责分工。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C02",
+          "measure": "企业应当全面了解所处行业和地区的相关政策规定，以法律法规和政策规定为依据，结合实际建设条件和经济环境变化趋势，客观分析投资机会，确定工程投资意向。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R02",
+      "process_l1": "一、工程立项",
+      "process_l2": "1、编制项目建议书",
+      "statement": "⑵是否项目建议书内容不合规、不完整，项目性质、用途模糊，拟建规模、标准不明确，项目投资估算和进度安排不协调。",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C03",
+          "measure": "企业应当根据国家和行业有关要求，结合本企业实际，规定项目建议书的主要内容和格式，明确编制要求；在编制过程中，要对工程质量标准、投资规模和进度计划等进行分析论证，做到协调平衡。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C04",
+          "measure": "对于专业性较强和较为复杂的工程项目，可以委托专业机构进行工程投资分析，编制项目建议书。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C05",
+          "measure": "企业决策机构应当对项目建议书进行集体审议，必要时，可以成立专家组或委托专业机构进行评审；承担评审任务的专业机构不得参与项目建议书的编制。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C06",
+          "measure": "根据国家规定应当报批的项目建议书必须及时报批并取得有效批文。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R03",
+      "process_l1": "一、工程立项",
+      "process_l2": "2、可行性研究",
+      "statement": "⑴是否缺乏可行性研究，或可行性研究流于形式，导致决策不当，难以实现预期效益，甚至可能导致项目失败；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C07",
+          "measure": "企业应当根据国家和行业有关规定以及本企业实际，确定可行性研究报告的内容和格式，明确编制要求。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C08",
+          "measure": "委托专业机构进行可行性研究的，应当制定专业机构的选择标准，确保可行性研究科学、准确、公正。在选择专业机构时，应当重点关注其专业资质、业绩和声誉、专业人员素质、相关业务经验等。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R04",
+      "process_l1": "一、工程立项",
+      "process_l2": "2、可行性研究",
+      "statement": "⑵是否可行性研究的深度达不到质量标准和实际要求，无法为项目决策提供充分、可靠的依据；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C09",
+          "measure": "切实做到投资、质量和进度控制的有机统一，即技术先进性和经济可行性要有机结合。建设标准要符合企业实际情况和财力、物力的承受能力，技术要先进适用，对于拟采用的工艺，既要考虑其对产品质量的提升作用，又要考虑企业营销状况和走势，避免盲目追求技术先进而造成投资损失浪费。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R05",
+      "process_l1": "一、工程立项",
+      "process_l2": "3、项目评审与决策",
+      "statement": "⑴是否项目评审流于形式，误导项目决策；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C10",
+          "measure": "企业应当组建项目评审组或委托具有资质的专业机构对可行性研究报告进行评审。项目评审组成员不得参与可行性研究，委托专业机构进行评审的，该专业机构不得参与项目可行性研究；",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R06",
+      "process_l1": "一、工程立项",
+      "process_l2": "3、项目评审与决策",
+      "statement": "⑵是否权限配置不合理，或者决策程序不规范，导致决策失误，给企业带来巨大经济损失。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C11",
+          "measure": "评审组成员应当熟悉工程业务，并具有较广泛的代表性；",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C12",
+          "measure": "评审组的决策机制不能简单采用“少数服从多数”原则，而要充分兼顾项目投资、质量、进度各方面的不同意见；",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C13",
+          "measure": "项目评审应实行问责制，评审组成员要对其出具的评审意见承担责任。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C14",
+          "measure": "在项目评审中，要重点关注项目投资方案、投资规模、资金筹措、生产规模、布局选址、技术、安全、环境保护等方面情况，核实相关资料的来源和取得途径是否真实、可靠，特别要对经济技术可行性进行深入分析和全面论证。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C15",
+          "measure": "企业应当按照规定的权限和程序对工程项目进行决策，决策过程必须有完整的书面记录，并实行决策责任追究制度。重大工程项目，应当报经董事会或者类似决策机构集体审议批准，任何个人不得单独决策或者擅自改变集体决策意见，防止出现“一言堂”、“一支笔”。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C16",
+          "measure": "企业应当在工程项目立项后、正式施工前，依法取得建设用地、城市规划、环境保护、安全、施工等方面的许可。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R07",
+      "process_l1": "二、工程设计",
+      "process_l2": "1、初步设计",
+      "statement": "⑴是否设计单位不符合项目资质要求；",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C17",
+          "measure": "建设单位应当引入竞争机制，尽量采用招标方式确定设计单位，根据项目特点选择具有相应资质和经验的设计单位。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R08",
+      "process_l1": "二、工程设计",
+      "process_l2": "1、初步设计",
+      "statement": "⑵是否初步设计未进行多方案比选；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C18",
+          "measure": "在工程设计合同中，要细化设计单位的权利和义务，特别是一个项目由几个单位共同设计时，要指定一个设计单位为主体设计单位，主体设计单位对建设项目设计的合理性和整体性负责。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R09",
+      "process_l1": "二、工程设计",
+      "process_l2": "1、初步设计",
+      "statement": "⑶是否设计人员对相关资料研究不透彻，初步设计出现较大疏漏；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C19",
+          "measure": "建设单位应当向设计单位提供开展设计所需的详细的基础资料，并进行有效的技术经济交流，避免因资料不完整造成设计保守、投资失控等问题。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R10",
+      "process_l1": "二、工程设计",
+      "process_l2": "1、初步设计",
+      "statement": "⑷是否设计深度不足，造成施工组织不周密、工程质量存隐患、投资失控以及投产后运行成本过高等。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C20",
+          "measure": "建立严格的初步设计审查和批准制度，通过严格的复核、专家评议等制度，层层把关，确保评审工作质量。在初步设计审查中，技术方案是审查的核心和重点，重大技术方案必须进行技术经济分析比较、多方案比选。此外，还应关注初步设计规模是否与可行性研究报告、设计任务书一致，有无夹带项目、超规模、超面积和超标准的问题。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R11",
+      "process_l1": "二、工程设计",
+      "process_l2": "2、施工图设计",
+      "statement": "⑴是否概预算严重脱离实际，导致项目投资失控；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C21",
+          "measure": "建立严格的概预算编制与审核制度。概预算的编制要严格执行国家、行业和地方政府有关建设和造价管理的各项规定和标准，完整、准确地反映设计内容和当时当地的价格水平。建设单位应当组织工程、技术、财会等部门的相关专业人员或委托具有相应资质的中介机构对编制的概算进行审核，重点审查编制依据、项目内容、工程量的计算、定额套用等是否真实、完整和准确。如发现施工图预算如超过初步设计批复的投资概算规模，应对项目概算进行修正，并经审批。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R12",
+      "process_l1": "二、工程设计",
+      "process_l2": "2、施工图设计",
+      "statement": "⑵是否工程设计与后续施工未有效衔接或过早衔接，导致技术方案未得到有效落实，影响工程质量，或造成工程变更，发生重大经济损失。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C22",
+          "measure": "建立严格的施工图设计管理制度和交底制度。在对施工图设计进行审查时，应重点关注施工图设计深度能否满足全面施工及各类设备安装要求，施工图设计质量是否符合国家和行业规定，各专业工种之间是否做到了有效配合等。施工图设计基本完成后，应召开施工图会审会议，由建设单位、设计单位、施工单位、监理单位等共同审阅施工图文件，设计单位应进行技术交底，介绍设计意图和技术要求，及时沟通问题，修改不符合实际和有错误的图纸，会议应形成书面纪要。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C23",
+          "measure": "制定严格的设计变更管理制度。设计单位应当提供全面、及时的现场服务，避免设计与施工相脱节的现象发生，减少设计变更的发生。对确需进行的变更，应尽量控制在设计阶段，采用层层审批等方法，以使投资得到有效控制。因设计单位的过失造成设计变更的，应由设计单位承担相应责任。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C24",
+          "measure": "建设单位应当严格按照国家法律法规和本单位管理要求执行各项设计报批要求，上一环节尚未批准的，不得进入下一环节，杜绝出现边勘察、边设计、边施工的“三边”现象。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C25",
+          "measure": "可以引入设计监理，提高设计质量。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R13",
+      "process_l1": "三、工程招标",
+      "process_l2": "1、招标",
+      "statement": "⑴是否招标人肢解建设项目，致使招标项目不完整，或逃避公开招标；",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C26",
+          "measure": "建设单位应当按照《招标投标法》、《工程建设施工招标投标管理办法》等相关法律法规，结合本单位实际情况，本着公开、公正、平等竞争的原则，建立健全本单位的招投标管理制度，明确应当进行招标的工程项目范围、招标方式、招标程序，以及投标、开标、评标、定标等各环节的管理要求。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R14",
+      "process_l1": "三、工程招标",
+      "process_l2": "1、招标",
+      "statement": "⑵是否投标资格条件因人而设，未做到公平、合理，可能导致中标人并非最优选择；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C27",
+          "measure": "工程立项后，对于是否采用招标，以及招标方式、标段划分等，应由建设单位工程管理部门牵头提出方案，报经建设单位招标决策机构集体审议通过后执行。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R15",
+      "process_l1": "三、工程招标",
+      "process_l2": "1、招标",
+      "statement": "⑶是否相关人员违法违纪泄露标底，存在舞弊行为。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C28",
+          "measure": "建设单位确需划分标段组织招标的，应当进行科学分析和评估，提出专业意见；划分标段时，应当考虑项目的专业要求、管理要求、对工程投资的影响以及各项工作的衔接，不得违背工程施工组织设计和招标设计方案，将应当由一个承包单位完成的工程项目肢解成若干部分发包给几个承包单位。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C29",
+          "measure": "招标公告的编制要公开、透明，严格根据项目特点确定投标人的资格要求，不得根据“意向中标人”的实际情况确定投标人资格要求。建设单位不具备自行招标能力的，应当委托具有相应资质的招标机构代理招标。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C30",
+          "measure": "建设单位应当根据项目特点决定是否编制标底；需要编制标底的，标底编制过程和标底应当严格保密。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R16",
+      "process_l1": "三、工程招标",
+      "process_l2": "2、投标",
+      "statement": "⑴是否招标人与投标人串通投标，存在舞弊行为；",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C31",
+          "measure": "对投标人的信息采取严格的保密措施，防止投标人之间串通舞弊。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R17",
+      "process_l1": "三、工程招标",
+      "process_l2": "2、投标",
+      "statement": "⑵是否投标人的资质条件不符合要求或挂靠、冒用他人名义投标，可能导致工程质量难以达到规定标准等。",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C32",
+          "measure": "科学编制招标公告，合理确定投标人资格要求，尽量扩大潜在投标人的范围，增强市场竞争性。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C33",
+          "measure": "严格按照招标公告或资格预审文件中确定的投标人资格条件对投标人进行实质审查，通过查验资质原件、实地考察，或到工商和税务机关调查核实等方式，确定投标人的实际资质，预防假资质中标。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C34",
+          "measure": "建设单位应当履行完备的标书签收、登记和保管手续。签收人要记录投标文件签收日期、地点和密封状况，签收标书后应将投标文件存放在安全保密的地方，任何人不得在开标前开启投标文件。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R18",
+      "process_l1": "三、工程招标",
+      "process_l2": "3、开标、评标和定标",
+      "statement": "⑴是否开标不公开、不透明，损害投标人利益；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C35",
+          "measure": "开标过程应邀请所有投标人或其代表出席，并委托公证机构进行检查和公证。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R19",
+      "process_l1": "三、工程招标",
+      "process_l2": "3、开标、评标和定标",
+      "statement": "⑵是否评标委员会成员缺乏专业水平，或者建设单位向评标委员会施加影响，致使评标流于形式；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C36",
+          "measure": "依法组建评标委员会，确保其成员具有较高的职业道德水平，并具备招标项目专业知识和丰富经验。评标委员会成员名单在中标结果确定前应当严格保密。评标委员会成员和参与评标的有关工作人员不得私下接触投标人，不得收受投标人任何形式的商业贿赂。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R20",
+      "process_l1": "三、工程招标",
+      "process_l2": "3、开标、评标和定标",
+      "statement": "⑶是否评标委员会成员与投标人串通作弊，损害招标人利益。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C37",
+          "measure": "建设单位应当为保证评标委员会独立、客观地进行评标工作创造良好条件，不得向评标委员会成员施加影响，干扰其客观评判。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C38",
+          "measure": "评标委员会应当在评标报告中详细说明每位成员的评价意见以及集体评审结果，对于中标候选人和落标人要分别陈述具体理由。每位成员应对其出具的评审意见承担个人责任。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C39",
+          "measure": "中标候选人是1个以上时，招标人应当按照规定的程序和权限，由决策机构审议决定中标人。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R21",
+      "process_l1": "三、工程招标",
+      "process_l2": "4、签订合同",
+      "statement": "⑴是否签订的合同另行订立背离招标文件实质性内容的其他协议",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C40",
+          "measure": "中标人确定后，建设单位应当在规定期限内同中标人订立书面合同，双方不得另行订立背离招标文件实质性内容的其他协议。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R22",
+      "process_l1": "三、工程招标",
+      "process_l2": "4、签订合同",
+      "statement": "⑵是否工程项目的合同管理方面不符合《合同管理》的要求",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C41",
+          "measure": "建设单位应当制定工程合同管理制度，明确各部门在工程合同管理和履行中的职责，严格按照合同行使权力和履行义务。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C42",
+          "measure": "建设工程施工合同、各类分包合同、工程项目施工内部承包合同应当按照国家或本建设单位制定的示范文本的内容填写，清楚列明质量、进度、资金、安全等各项具体标准，有施工图纸的，施工图纸是合同的重要附件，与合同具有同等法律效力。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C43",
+          "measure": "建设单位应当建立合同履行执行情况台账，记录合同的实际履约情况，并随时督促对方当事人及时履行其义务，建设单位的履约情况也应及时做好记录并经对方确认。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R23",
+      "process_l1": "四、工程建设",
+      "process_l2": "1-1、施工进度",
+      "statement": "是否盲目赶进度，牺牲质量、费用目标，导致质量低劣，费用超支；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C44",
+          "measure": "监理单位应当建立监理进度控制体系，明确相关程序、要求和责任。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C45",
+          "measure": "承包单位应按合同规定的工程进度编制详细的分阶段或分项进度计划，报送监理机构审批后，严格按照进度计划开展工作。制定的进度计划应当适合建设工程的实际条件和施工现场的实际情况，并与承包单位劳动力、材料、机械设备的供应计划协调一致。确需调整进度的，必须优先保证质量，并同建设单位、监理机构达成一致意见。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C46",
+          "measure": "承包单位至少应按月对完成投资情况进行统计、分析和对比，工程的实际进度与批准的合同进度计划不符时，承包单位应提交修订合同进度计划的申请报告，并附原因分析和相关措施，报监理机构审批。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R24",
+      "process_l1": "四、工程建设",
+      "process_l2": "1-2施工质量",
+      "statement": "是否质量、安全监管不到位，存在质量隐患。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C47",
+          "measure": "承包单位应当建立全面的质量控制制度，按照国家相关法律法规和本单位质量控制体系进行建设，并在施工前列出重要的质量控制点，报经监理机构同意后，在此基础上实施质量预控。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C48",
+          "measure": "承包单位应按合同约定对材料、工程设备以及工程的所有部位及其施工工艺进行全过程的质量检查和检验，定期编制工程质量报表，报送监理机构审查。关键工序作业人员必须持证上岗。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C49",
+          "measure": "监理机构有权对工程的所有部位及其施工工艺进行检查验收，发现工程质量不符合要求的，应当要求承包单位立即返工修改，直至符合验收标准为止。对于主要工序作业，只有监理机构审验后，才能进行下道工序。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C50",
+          "measure": "建设单位应当加强对施工单位的安全检查，并授权监理机构按合同约定的安全工作内容监督、检查承包单位安全工作的实施。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C51",
+          "measure": "建设单位不得对承包单位、监理机构等提出不符合建设工程安全生产法律、法规和强制性标准规定的要求，不得压缩合同约定的工期。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C52",
+          "measure": "建设单位在编制工程概算时，应当确定建设工程安全作业环境及安全施工措施所需费用。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C53",
+          "measure": "工程监理单位和监理工程师应当按照法律、法规和工程建设强制性标准实施监理，并对建设工程安全生产承担监理责任。在实施监理过程中，发现存在安全事故隐患的，应当要求施工单位整改；情况严重的，应当要求施工单位暂时停止施工，并及时报告建设单位。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C54",
+          "measure": "承包单位应当设立安全生产管理机构，配备专职安全生产管理人员，依法建立安全生产、文明施工管理制度，细化各项安全防范措施。承包单位应当对所承担的建设工程进行定期和专项安全检查，并做好安全检查记录。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R25",
+      "process_l1": "四、工程建设",
+      "process_l2": "2、工程物资采购",
+      "statement": "是否工程物资采购过程控制不力，材料和设备质次价高，不符合设计标准和合同要求，影响工程质量和进度。",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C55",
+          "measure": "企业自行采购工程物资的，应当按照《企业内部控制应用指引第7号——采购业务》等相关指引的规定，组织工程物资采购、验收和付款；",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C56",
+          "measure": "重大设备和大宗材料的采购应当采用招标方式。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C57",
+          "measure": "对于由承包单位购买的工程物资，建设单位应当采取必要措施，确保工程物资符合设计标准和合同要求。首先，在施工合同中，建设单位应具体说明建筑材料和设备应达到的质量标准，明确责任追究方式。其次，对于承包单位提供的重要材料和工程设备，应由监理机构进行检验，查验材料合格证明和产品合格证书，一般材料要进行抽检。未经监理人员签字，工程物资不得在工程上使用或安装，不得进行下一道工序施工。再次，运入施工场地的材料、工程设备，包括备品、备件、安装专用工器具等，必须专用于合同工程，未经监理人员同意，承包单位不得运出施工场地或挪作他用。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R26",
+      "process_l1": "四、工程建设",
+      "process_l2": "3、工程价款结算",
+      "statement": "是否建设资金使用管理混乱，项目资金不落实，导致工程进度延迟或中断。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C58",
+          "measure": "建设单位应当建立完善的工程价款结算制度，明确工作流程和职责权限划分，并切实遵照执行。财会部门应当安排专职的工程财会人员，认真开展工程项目核算与财务管理工作。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C59",
+          "measure": "资金筹集和使用应与工程进度协调一致，建设单位应当根据项目组成（分部、分项工程）结合时间进度编制资金使用计划，作为资产管控和工程价款结算的重要依据。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C60",
+          "measure": "建设单位财会部门应当加强与承包单位和监理机构的沟通，准确掌握工程进度，确保财务报表能够准确、全面地反映资产价值，并根据施工合同约定，按照规定的审批权限和程序办理工程价款结算。建设单位财会部门应认真审核相关凭证，严格按合同规定的付款方式付款，既不应违规预支，也不得无故拖欠。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C61",
+          "measure": "施工过程中，如果工程的实际成本突破了工程项目预算，建设单位应当及时分析原因，按照规定的程序予以处理。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R27",
+      "process_l1": "四、工程建设",
+      "process_l2": "4、工程变更",
+      "statement": "是否现场控制不当，工程变更频繁，导致费用超支、工期延误。",
+      "category": "delay",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C62",
+          "measure": "建设单位要建立严格的工程变更审批制度，严格控制工程变更，确需变更的，要按照规定程序尽快办理变更手续，减少经济损失。对于重大的变更事项，必须经建设单位、监理机构和承包单位集体商议，同时严加审核文件，提高审批层级，依法需报有关政府部门审批的，必须取得同意变更的批复文件。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C63",
+          "measure": "工程变更获得批准后，应尽快落实变更设计和施工，承包单位应在规定期限内全面落实变更指令。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C64",
+          "measure": "如因人为原因引发工程变更，如设计失误、施工缺陷等，应当追究当事单位和人员的责任。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C65",
+          "measure": "对工程变更价款的支付实施更为严格的审批制度，变更文件必须齐备，变更工程量的计算必须经过监理机构复核并签字确认，防止承包单位虚列工程费用。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R28",
+      "process_l1": "五、工程验收",
+      "process_l2": "竣工验收",
+      "statement": "⑴是否竣工验收不规范，质量检验把关不严，可能导致工程存在重大质量隐患；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C66",
+          "measure": "建设单位应当健全竣工验收各项管理制度，明确竣工验收的条件、标准、程序、组织管理和责任追究等。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R29",
+      "process_l1": "五、工程验收",
+      "process_l2": "竣工验收",
+      "statement": "⑵是否虚报项目投资完成额、虚列建设成本或者隐匿结余资金，竣工决算失真；",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C67",
+          "measure": "竣工验收必须履行规定的程序，至少应经过承包单位初检、监理机构审核、正式竣工验收三个程序。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C68",
+          "measure": "正式竣工验收前，根据合同规定应当进行试运行的，应当由建设单位、监理单位和承包单位共同参与试运行。试运行符合要求的，才能进行正式验收。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C69",
+          "measure": "正式验收时，应当组成由建设单位、设计单位、施工单位、监理单位等组成的验收组，共同审验。重大项目的验收，可吸收相关方面专家组进行评审。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ENG-R30",
+      "process_l1": "五、工程验收",
+      "process_l2": "竣工验收",
+      "statement": "⑶是否固定资产达到预定可使用状态后，未及时进行估价、结转。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "ENG-C70",
+          "measure": "初检后，确定固定资产达到预定可使用状态的，承包单位应及时通知建设单位，建设单位会同监理单位初验后应及时对项目价值进行暂估，转入固定资产核算。建设单位财务部门应定期根据所掌握的工程项目进度核对项目固定资产暂估记录。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C71",
+          "measure": "建设单位应当加强对工程竣工决算的审核，应先自行审核，再委托具有相应资质的中介机构实施审计；未经审计的，不得办理竣工验收手续。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C72",
+          "measure": "建设单位要加强对完工后剩余物资的管理。工程竣工后，建设单位对各种节约的材料、设备、施工机械工具等，要清理核实，妥善处理。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C73",
+          "measure": "建设单位应当按照国家有关档案管理的规定，及时收集、整理工程建设各环节的文件资料，建立工程项目档案。需报政府有关部门备案的，应当及时备案。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "ENG-C74",
+          "measure": "企业应当建立完工项目后评估制度，重点评价工程项目预期目标的实现情况和项目投资效益等，并以此作为绩效考核和责任追究的依据。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    }
+  ]
+}

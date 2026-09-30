@@ -1,0 +1,393 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "procurement",
+  "domain_label": "采购业务",
+  "framework_ref": "企业内部控制应用指引第7号",
+  "risk_text_status": "complete",
+  "calibration_note": "2026-09-30 人工校准：R01 asset_safety→error（经营计划类，非资产安全）；R05 fraud→compliance（复合风险按未经授权成分优先）。重跑 import-risk-library.py 会覆盖校准，需重新应用（见 README §校准纪律）。",
+  "generated_at": "2026-09-30T03:07:22.571125+00:00",
+  "processes": [
+    {
+      "process_l1": "一、采购",
+      "process_l2": "编制需求计划和采购计划"
+    },
+    {
+      "process_l1": "一、采购",
+      "process_l2": "请购"
+    },
+    {
+      "process_l1": "一、采购",
+      "process_l2": "选择供应商"
+    },
+    {
+      "process_l1": "一、采购",
+      "process_l2": "确定采购价格"
+    },
+    {
+      "process_l1": "一、采购",
+      "process_l2": "订立框架协议或采购合同"
+    },
+    {
+      "process_l1": "一、采购",
+      "process_l2": "管理供应过程"
+    },
+    {
+      "process_l1": "一、采购",
+      "process_l2": "验收"
+    },
+    {
+      "process_l1": "二、付款",
+      "process_l2": "付款"
+    },
+    {
+      "process_l1": "三、其他",
+      "process_l2": "会计控制"
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "PROC-R01",
+      "process_l1": "一、采购",
+      "process_l2": "编制需求计划和采购计划",
+      "statement": "是否存在需求或采购计划不合理、不按实际需求安排采购或随意超计划采购，造成库存短缺或积压，导致企业生产停滞或资源浪费，甚至与企业生产经营计划不协调。",
+      "category": "error",
+      "category_basis": "calibrated",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "PROC-C01",
+          "measure": "生产、经营、项目建设等部门，应当根据实际需求准确、及时编制需求计划。需求部门提出需求计划时，不能指定或变相指定供应商。对独家代理、专有、专利等特殊产品应提供相应的独家、专有资料，经专业技术部门研讨后，经具备相应审批权限的部门或人员审批",
+          "guideline_refs": [
+            "应用指引第四条"
+          ],
+          "frequency": "每月",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C02",
+          "measure": "采购计划是企业年度生产经营计划的一部分，在制定年度生产经营计划过程中，企业应当根据发展目标实际需要，结合库存和在途情况，科学安排采购计划，防止采购过高或过低",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C03",
+          "measure": "采购计划应纳入采购预算管理，经相关负责人审批后，作为企业刚性指令严格执行。",
+          "guideline_refs": [
+            "基本规范第三十三条",
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "PROC-R02",
+      "process_l1": "一、采购",
+      "process_l2": "请购",
+      "statement": "是否存在缺乏采购申请制度，请购未经适当审批或超越授权审批，导致采购物资过量或短缺，影响企业正常生产经营",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "PROC-C04",
+          "measure": "建立采购申请制度，依据购买物资或接受劳务的类型，确定归口管理部门，授予相应的请购权，明确相关部门或人员的职责权限及相应的请购程序。企业可以根据实际需要设置专门的请购部门，对需求部门提出的采购需求进行审核，并进行归类汇总，统筹安排企业的采购计划",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C05",
+          "measure": "有请购权的部门对于预算内采购项目，应当严格按照预算执行进度办理请购手续，并根据市场变化提出合理采购申请。对于超预算和预算外采购项目，应先履行预算调整程序，由具备相应审批权限的部门或人员审批后，再行办理请购手续。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C06",
+          "measure": "具备相应审批权限的部门或人员审批采购申请时，应重点关注采购申请内容是否准确、完整，是否符合生产经营需要，是否符合采购计划，是否在采购预算范围内等。对不符合规定的采购申请，应要求请购部门调整请购内容或拒绝批准",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "PROC-R03",
+      "process_l1": "一、采购",
+      "process_l2": "选择供应商",
+      "statement": "供应商选择不当，采购方式不合理，招投标或定价机制不科学，授权审批不规范，导致采购物资质次价高，出现舞弊或遭受欺诈",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "PROC-C07",
+          "measure": "建立科学的供应商评估和准入制度，对供应商资质信誉情况的真实性和合法性进行审查，确定合格的供应商清单，健全企业统一的供应商网络。企业新增供应商的市场准入、供应商新增服务关系以及调整供应商物资目录，都要由采购部门根据需要提出申请，并按规定的权限和程序审核批准后，纳入供应商网络。企业可委托具有相应资质的中介机构对供应商进行资信调查。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C08",
+          "measure": "采购部门应当按照公平、公正和竞争的原则，择优确定供应商，在切实防范舞弊风险的基础上，与供应商签订质量保证协议",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C09",
+          "measure": "建立供应商管理信息系统和供应商淘汰制度，对供应商提供物资或劳务的质量、价格、交货及时性、供货条件及其资信、经营状况等进行实时管理和考核评价，根据考核评价结果，提出供应商淘汰和更换名单，经审批后对供应商进行合理选择和调整，并在供应商管理系统中作出相应记录",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "PROC-R04",
+      "process_l1": "一、采购",
+      "process_l2": "确定采购价格",
+      "statement": "是否采购定价机制不科学，采购定价方式选择不当，缺乏对重要物资品种价格的跟踪监控，引起采购价格不合理，造成企业资金损失",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "PROC-C10",
+          "measure": "健全采购定价机制，采取协议采购、招标采购、询比价采购、动态竞价采购等多种方式，科学合理地确定采购价格。对标准化程度高、需求计划性强、价格相对稳定的物资，通过招标、联合谈判等公开、竞争方式签订框架协议",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C11",
+          "measure": "采购部门应当定期研究大宗通用重要物资的成本构成与市场价格变动趋势,确定重要物资品种的采购执行价格或参考价格。建立采购价格数据库，定期开展重要物资的市场供求形势及价格走势商情分析并合理利用",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "PROC-R05",
+      "process_l1": "一、采购",
+      "process_l2": "订立框架协议或采购合同",
+      "statement": "是否存在框架协议签订不当，导致物资采购不顺畅；未经授权对外订立采购合同，合同对方主体资格、履约能力等未达要求、合同内容存在重大疏漏和欺诈，导致企业合法权益受到侵害",
+      "category": "compliance",
+      "category_basis": "calibrated",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "PROC-C12",
+          "measure": "对拟签订框架协议的供应商的主体资格、信用状况等进行风险评估；框架协议的签订应引入竞争制度，确保供应商具备履约能力",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C13",
+          "measure": "根据确定的供应商、采购方式、采购价格等情况，拟订采购合同，准确描述合同条款，明确双方权利、义务和违约责任，按照规定权限签署采购合同。对于影响重大、涉及较高专业技术或法律关系复杂的合同，应当组织法律、技术、财会等专业人员参与谈判，必要时可聘请外部专家参与相关工作",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C14",
+          "measure": "对重要物资验收量与合同量之间允许的差异，应当作出统一规定",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "PROC-R06",
+      "process_l1": "一、采购",
+      "process_l2": "管理供应过程",
+      "statement": "是否缺乏对采购合同履行情况的有效跟踪，运输方式选择不合理，忽视运输过程保险风险，导致采购物资损失或无法保证供应",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "PROC-C15",
+          "measure": "根据采购合同中确定的主要条款跟踪合同履行情况，对有可能影响生产或工程进度的异常情况，应出具书面报告并及时提出解决方案，采取必要措施，保证需求物资的及时供应",
+          "guideline_refs": [
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C16",
+          "measure": "对重要物资建立并执行合同履约过程中的巡视、点检和监造制度。对需要监造的物资，择优确定监造单位，签订监造合同，落实监造责任人，审核确认监造大纲，审定监造报告，并及时向技术等部门通报",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C17",
+          "measure": "根据生产建设进度和采购物资特性等因素，选择合理的运输工具和运输方式，办理运输、投保等事宜",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C18",
+          "measure": "实行全过程的采购登记制度或信息化管理，确保采购过程的可追溯性。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "PROC-R07",
+      "process_l1": "一、采购",
+      "process_l2": "验收",
+      "statement": "是否存在验收标准不明确、验收程序不规范、对验收中存在的异常情况不作处理的情况，造成账实不符、采购物资损失",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "PROC-C19",
+          "measure": "制定明确的采购验收标准，结合物资特性确定必检物资目录，规定此类物资出具质量检验报告后方可入库",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C20",
+          "measure": "验收机构或人员应当根据采购合同及质量检验部门出具的质量检验证明，重点关注采购合同、发票等原始单据与采购物资的数量、质量、规格型号等核对一致。对验收合格的物资，填制入库凭证，加盖物资\"收讫章\"，登记实物账，及时将入库凭证传递给财会部门。物资入库前，采购部门须检查质量保证书、商检证书或合格证等证明文件。验收时涉及技术性强的、大宗的和新、特物资，还应进行专业测试，必要时可委托具有检验资质的机构或聘请外部专家协助验收",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C21",
+          "measure": "对于验收过程中发现的异常情况，比如无采购合同或大额超采购合同的物资、超采购预算采购的物资、毁损的物资等，验收机构或人员应当立即向企业有权管理的相关机构报告，相关机构应当查明原因并及时处理。对于不合格物资，采购部门依据检验结果办理让步接收、退货、索赔等事宜。对延迟交货造成生产建设损失的，采购部门要按照合同约定索赔",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "PROC-R08",
+      "process_l1": "二、付款",
+      "process_l2": "付款",
+      "statement": "是否存在付款审核不严格、付款方式不恰当、付款金额控制不严的情况，导致企业资金损失或信用受损",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "PROC-C22",
+          "measure": "严格审查采购发票等票据的真实性、合法性和有效性，判断采购款项是否确实应予支付。如审查发票填制的内容是否与发票种类相符合、发票加盖的印章是否与票据的种类相符合等。企业应当重视采购付款的过程控制和跟踪管理，如果发现异常情况，应当拒绝向供应商付款，避免出现资金损失和信用受损",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C23",
+          "measure": "根据国家有关支付结算的相关规定和企业生产经营的实际，合理选择付款方式，并严格遵循合同规定，防范付款方式不当带来的法律风险，保证资金安全。除了不足转账起点金额的采购可以支付现金外，采购价款应通过银行办理转账",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C24",
+          "measure": "加强预付账款和定金的管理，涉及大额或长期的预付款项，应当定期进行追踪核查，综合分析预付账款的期限、占用款项的合理性、不可收回风险等情况，发现有疑问的预付款项，应当及时采取措施，尽快收回款项",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "PROC-R09",
+      "process_l1": "三、其他",
+      "process_l2": "会计控制",
+      "statement": "是否缺乏有效的采购会计系统控制，未能全面真实地记录和反映企业采购各环节的资金流和实物流情况，相关会计记录与相关采购记录、仓储记录不一致，可能导致企业采购业务未能如实反映，以及采购物资和资金受损。",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "PROC-C25",
+          "measure": "企业应当加强对购买、验收、付款业务的会计系统控制，详细记录供应商情况、采购申请、采购合同、采购通知、验收证明、入库凭证、退货情况、商业票据、款项支付等情况，做好采购业务各环节的记录，确保会计记录、采购记录与仓储记录核对一致",
+          "guideline_refs": [
+            "应用指引第十五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "PROC-C26",
+          "measure": "指定专人通过函证等方式，定期向供应商寄发对账函，核对应付账款、应付票据、预付账款等往来款项，对供应商提出的异议应及时查明原因，报有权管理的部门或人员批准后，做出相应调整",
+          "guideline_refs": [
+            "应用指引第十五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    }
+  ]
+}

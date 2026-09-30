@@ -1,0 +1,252 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "org-structure",
+  "domain_label": "组织架构",
+  "framework_ref": "企业内部控制应用指引第1号",
+  "risk_text_status": "pending",
+  "generated_at": "2026-09-30T03:07:22.557666+00:00",
+  "processes": [
+    {
+      "process_l1": "一、组织架构设计",
+      "process_l2": null
+    },
+    {
+      "process_l1": "二、组织架构运行",
+      "process_l2": null
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "ORG-R01",
+      "process_l1": "一、组织架构设计",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "ORG-C01",
+          "measure": "治理结构层面的设计要求：",
+          "guideline_refs": [
+            "应用指引/"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C02",
+          "measure": "一般要求：企业应当根据国家有关法律法规的规定，明确董事会、监事会和经理层的职责权限、任职条件、议事规则和工作程序，确保决策、执行和监督相互分离，形成制衡。",
+          "guideline_refs": [
+            "基本规范第十一条",
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C03",
+          "measure": "特殊要求：",
+          "guideline_refs": [
+            "应用指引/"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C04",
+          "measure": "是否建立独立董事制度",
+          "guideline_refs": [
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C05",
+          "measure": "应根据需要设立战略决策、审计、提名、薪酬与考核等专门委员会。董事会下设的审计委员会、薪酬与考核委员会中，独立董事是否占多数并担任负责人，审计委员会中是否至少有一名独立董事是会计专业人士。",
+          "guideline_refs": [
+            "基本规范第十三条",
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C06",
+          "measure": "是否设立董事会秘书",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C07",
+          "measure": "董事会成员中是否有职工董事",
+          "guideline_refs": [],
+          "frequency": null,
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C08",
+          "measure": "内部机构层面的设计要求：",
+          "guideline_refs": [
+            "应用指引/"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C09",
+          "measure": "职能机构设置：企业应当按照科学、精简、高效、透明、制衡的原则，综合考虑企业性质、发展战略、文化理念和管理要求等因素，合理设置内部职能机构，明确各机构的职责权限，避免职能交叉、缺失或权责过于集中，形成各司其职、各负其责、相互制约、相互协调的工作机制。",
+          "guideline_refs": [
+            "基本规范第十四条",
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C10",
+          "measure": "岗位职责划分：企业应当对各机构的职能进行科学合理的分解，确定具体岗位的名称、职责和工作要求等，明确各个岗位的权限和相互关系。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C11",
+          "measure": "权限体系的分配：企业应当制定组织结构图、业务流程图、岗（职）位说明书和权限指引等内部管理制度或相关文件，使员工了解和掌握组织架构设计及权责分配情况，正确履行职责。",
+          "guideline_refs": [
+            "基本规范第十四条",
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C12",
+          "measure": "企业的重大决策、重大事项、重要人事任免及大额资金支付业务等，应当按照规定的权限和程序实行集体决策审批或者联签制度。任何个人不得单独进行决策或者擅自改变集体决策意见。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "ORG-R02",
+      "process_l1": "二、组织架构运行",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "ORG-C13",
+          "measure": "组织架构的全面梳理",
+          "guideline_refs": [
+            "应用指引/"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C14",
+          "measure": "治理结构层面的梳理要求：",
+          "guideline_refs": [
+            "应用指引/"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C15",
+          "measure": "关注董事、监事、经理及其他高级管理人员的任职资格和履职情况。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C16",
+          "measure": "关注董事会、监事会和经理层的运行效果。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C17",
+          "measure": "内部机构层面的梳理要求：",
+          "guideline_refs": [
+            "应用指引/"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C18",
+          "measure": "内部机构设置的合理性",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C19",
+          "measure": "内部机构设置的高效性：关注职责分工的效率、权力制衡的效率和信息沟通的效率",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C20",
+          "measure": "对母子公司组织架构梳理的特殊要求：重点关注母子公司在业务、资产、财务、人员和机构等五个方面的独立性。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "ORG-C21",
+          "measure": "组织架构的评估调整：企业应当定期对组织架构设计与运行的效率和效果进行全面评估，发现组织架构设计与运行中存在缺陷的，应当进行优化调整。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        }
+      ]
+    }
+  ]
+}

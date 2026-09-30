@@ -1,0 +1,918 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "financial-reporting",
+  "domain_label": "财务报告",
+  "framework_ref": "企业内部控制应用指引第14号",
+  "risk_text_status": "complete",
+  "generated_at": "2026-09-30T03:07:22.590913+00:00",
+  "processes": [
+    {
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "1、制定财务报告编制方案"
+    },
+    {
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "2、确定重大事项的会计处理"
+    },
+    {
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "3、清查资产核实债务"
+    },
+    {
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "4、完成对账、调账、差错更正等业务"
+    },
+    {
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "5、编制个别财务报告"
+    },
+    {
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "6、编制合并财务报告"
+    },
+    {
+      "process_l1": "二、财务报告对外提供",
+      "process_l2": "1、审核财务报告"
+    },
+    {
+      "process_l1": "二、财务报告对外提供",
+      "process_l2": "2、选择具有相关业务资格的会计师事务所进行审计"
+    },
+    {
+      "process_l1": "二、财务报告对外提供",
+      "process_l2": "3、财务报告的对外提供"
+    },
+    {
+      "process_l1": "三、财务报告分析利用",
+      "process_l2": "1、制定财务分析制度"
+    },
+    {
+      "process_l1": "三、财务报告分析利用",
+      "process_l2": "2、编写财务分析报告"
+    },
+    {
+      "process_l1": "三、财务报告分析利用",
+      "process_l2": "3、整改落实"
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "FIN-R01",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "1、制定财务报告编制方案",
+      "statement": "⑴是否会计政策未能有效更新，不符合有关法律法规；",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C01",
+          "measure": "会计政策应符合国家有关会计法规和最新监管要求的规定。企业应按照国家最新会计准则制度规定，结合自身情况，制定企业统一的会计政策。企业应有专人关注与会计相关法律法规、规章制度的变化及监管机构的最新规定等，并及时对企业的内部会计规章制度和财务报告流程等做出相应更改。",
+          "guideline_refs": [
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R02",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "1、制定财务报告编制方案",
+      "statement": "⑵是否重要会计政策、会计估计变更未经审批，导致会计政策使用不当；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C02",
+          "measure": "会计政策和会计估计的调整，无论是强制的还是自愿的，均需按照规定的权限和程序审批。",
+          "guideline_refs": [
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R03",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "1、制定财务报告编制方案",
+      "statement": "⑶是否会计政策未能有效贯彻、执行；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C03",
+          "measure": "企业的内部会计规章制度至少要经财会部门负责人审批后才能生效，财务报告流程、年报编制方案应当经公司分管财务会计工作的负责人核准后签发。",
+          "guideline_refs": [
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R04",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "1、制定财务报告编制方案",
+      "statement": "⑷是否各部门职责、分工不清，导致数据传递出现差错、遗漏、格式不一致等",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C04",
+          "measure": "企业应建立完备的信息沟通渠道，将内部会计规章制度和财务流程、会计科目表和相关文件及时有效地传达至相关人员，使其了解相关职责要求、掌握适当的会计知识、会计政策并加以执行。企业还应通过内部审计等方式，定期进行测试，保证会计政策有效执行，且在不同业务部门、不同期间内保持一致性。",
+          "guideline_refs": [
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R05",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "1、制定财务报告编制方案",
+      "statement": "⑸是否各步骤时间安排不明确，导致整体编制进度延后，违反相关报送要求。",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C05",
+          "measure": "应明确各部门的职责分工，由总会计师或分管会计工作的负责人负责组织领导；财会部门负责财务报告编制工作；各部门应当及时向财会部门提供编制财务报告所需的信息，并对所提供信息的真实性和完整性负责。",
+          "guideline_refs": [
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C06",
+          "measure": "应根据财务报告的报送要求，倒排工时，为各步骤设置关键时间点，并由财会部门负责督促和考核各部门的工作进度，及时进行提醒，对未能及时完成的进行相关处罚。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R06",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "2、确定重大事项的会计处理",
+      "statement": "是否重大事项，如债务重组、非货币性交易、公允价值的计量、收购兼并、资产减值等的会计处理不合理，会导致会计信息扭曲，无法如实反映企业实际情况。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C07",
+          "measure": "企业应对重大事项予以关注，通常包括以前年度审计调整以及相关事项对当期的影响、会计准则制度的变化及对财务报告的影响、新增业务和其他新发生的事项及对财务报告的影响、年度内合并（汇总）报告范围的变化及对财务报告的影响等。企业应建立重大事项的处理流程，报适当管理层审批后，予以执行。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C08",
+          "measure": "及时沟通需要专业判断的重大会计事项并确定相应会计处理。企业应规定下属各部门、各单位人员及时将重大事项信息报告至同级财会部门。财会部门应定期研究、分析并与相关部门组织沟通重大事项的会计处理，逐级报请总会计师或分管会计工作的负责人审批后下达各相关单位执行。特别是资产减值损失、公允价值计量等涉及重大判断和估计时，财会部门应定期与资产管理部门进行沟通。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R07",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "3、清查资产核实债务",
+      "statement": "⑴是否资产、负债账实不符，虚增或虚减资产、负债；",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C09",
+          "measure": "确定具体可行的资产清查、负债核实计划，安排合理的时间和工作进度，配备足够的人员、确定实物资产盘点的具体方法和过程，同时做好业务准备工作。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R08",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "3、清查资产核实债务",
+      "statement": "⑵是否资产计价方法随意变更；",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C10",
+          "measure": "做好各项资产、负债的清查、核实工作，包括：与银行核对对账单、盘点库存现金、核对票据；核查结算款项，包括应收款项、应付款项、应交税金等是否存在，与债务、债权单位的相应债务、债权金额是否一致；核查原材料、在产品、自制半成品、库存商品等各项存货的实存数量与账面数量是否一致，是否有报废损失和积压物资等；核查账面投资是否存在，投资收益是否按照国家统一的会计准则制度规定进行确认和计量；核查房屋建筑物、机器设备、运输工具等各项固定资产的实存数量与账面数量是否一致，清查土地、房屋的权属证明，确定资产归属；核查在建工程的实际发生额与账面记录是否一致等。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R09",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "3、清查资产核实债务",
+      "statement": "⑶是否提前、推迟甚至不确认资产、负债等。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C11",
+          "measure": "对清查过程中发现的差异，应当分析原因，提出处理意见，取得合法证据和按照规定权限经审批，将清查、核实的结果及其处理办法向企业的董事会或者相应机构报告，并根据国家统一的会计准则制度的规定进行相应的会计处理。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R10",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "4、完成对账、调账、差错更正等业务",
+      "statement": "⑴是否账务处理存在错误，导致账证、账账不符；",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C12",
+          "measure": "核对各会计账簿记录与会计凭证的内容、金额等是否一致，记账方向是否相符。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R11",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "4、完成对账、调账、差错更正等业务",
+      "statement": "⑵是否虚列或隐瞒收入，推迟或提前确认收入；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C13",
+          "measure": "检查相关账务处理是否符合国家统一的会计准则制度和企业制定的核算方法。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R12",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "4、完成对账、调账、差错更正等业务",
+      "statement": "⑶是否随意改变费用、成本的确认标准或计量方法，虚列、多列、不列或者少列费用、成本；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C14",
+          "measure": "调整有关账项，合理确定本期应计的收入和应计的费用。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R13",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "4、完成对账、调账、差错更正等业务",
+      "statement": "⑷是否结账的时间、程序不符合相关规定；",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C15",
+          "measure": "检查是否存在因会计差错、会计政策变更等原因需要调整前期或者本期相关项目。对于调整项目，需取得和保留审批文件，以保证调整有据可依。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R14",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "4、完成对账、调账、差错更正等业务",
+      "statement": "⑸是否关账后又随意打开已关闭的会计期间等。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C16",
+          "measure": "不得为了赶编财务报告而提前结账，或把本期发生的经济业务事项延至下期登帐，也不得先编财务报告后结账，应在当期所有交易或事项处理完毕并经财会部门负责人审核签字确认后，实施关账和结账操作。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C17",
+          "measure": "如果在关账之后需要重新打开已关闭的会计期间，须填写相应的申请表，经总会计师或分管会计工作的负责人审批后进行。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R15",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "5、编制个别财务报告",
+      "statement": "⑴是否提供虚假财务报告，误导财务报告使用者，造成决策失误，干扰市场秩序；",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C18",
+          "measure": "企业财务报告列示的资产、负债、所有者权益金额应当真实可靠。一是各项资产计价方法不得随意变更，如有减值，应当合理计提减值准备，严禁虚增或虚减资产。二是各项负债应当反映企业的现时义务，不得提前、推迟或不确认负债，严禁虚增或虚减负债。三是所有者权益应当反映企业资产扣除负债后由所有者享有的剩余权益，由实收资本、资本公积、留存收益等构成。企业应当做好所有者权益保值增值工作，严禁虚假出资、抽逃出资、资本不实。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R16",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "5、编制个别财务报告",
+      "statement": "⑵是否报表数据不完整、不准确；",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C19",
+          "measure": "企业财务报告应当如实列示当期收入、费用和利润。一是各项收入的确认应当遵循规定的标准，不得虚列或者隐瞒收入，推迟或提前确认收入。二是各项费用、成本的确认应当符合规定，不得随意改变费用、成本的确认标准或计量方法，虚列、多列、不列或者少列费用、成本。三是利润由收入减去费用后的净额、直接计入当期利润的利得和损失等构成。不得随意调整利润的计算、分配方法，编造虚假利润。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R17",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "5、编制个别财务报告",
+      "statement": "⑶是否报表种类不完整；",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C20",
+          "measure": "企业财务报告列示的各种现金流量由经营活动、投资活动和筹资活动的现金流量构成，应当按照规定划清各类交易和事项的现金流量的界限。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R18",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "5、编制个别财务报告",
+      "statement": "⑷是否附注内容不完整等。",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C21",
+          "measure": "按照岗位分工和规定的程序编制财务报告。一是财会部门制定本单位财务报告编制分工表，并由财会部门负责人审核，确保报告编制范围完整。二是财会部门报告编制岗位按照登记完整、核对无误的会计账簿记录和其他有关资料对相关信息进行汇总编制，确保财务报告项目与相关账户对应关系正确，计算公式无误。三是进行校验审核工作，包括期初数核对、财务报告内有关项目的对应关系审核、报表前后勾稽关系审核、期末数与试算平衡表和工作底稿核对、财务报告主表与附表之间的平衡及勾稽关系校验等。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C22",
+          "measure": "按照国家统一的会计准则制度编制附注。附注是财务报告的重要组成部分，企业对反映企业财务状况、经营成果、现金流量的报表中需要说明的事项，作出真实、完整、清晰的说明。检查担保、诉讼、未决事项、资产重组等重大或有事项是否在附注中得到反映和披露。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C23",
+          "measure": "财会部门负责人审核报表内容和种类的真实、完整性，通过后予以上报。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R19",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "6、编制合并财务报告",
+      "statement": "⑴是否合并范围不完整；",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C24",
+          "measure": "编报单位财会部门应依据经同级法律事务部门确认的产权（股权）结构图，并考虑所有相关情况以确定合并范围符合国家统一的会计准则制度的规定，由财会部门负责人审核、确认合并范围是否完整。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R20",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "6、编制合并财务报告",
+      "statement": "⑵是否合并内部交易和事项不完整；",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C25",
+          "measure": "财会部门收集、审核下级单位财务报告，并汇总出本级次的财务报告，经汇总单位财会部门负责人审核。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R21",
+      "process_l1": "一、财务报告的编制",
+      "process_l2": "6、编制合并财务报告",
+      "statement": "⑶是否合并抵销分录不准确。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C26",
+          "measure": "财会部门制定内部交易和事项核对表及填制要求，报财会部门负责人审批后下发纳入合并范围内各单位。财会部门核对本单位及纳入合并范围内各单位之间内部交易的事项和金额，如有差异，应及时查明原因并进行调整。编制内部交易表及内部往来表交财会部门负责人审核。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C27",
+          "measure": "合并抵销分录应有相应的标准文件和证据进行支持，由财会部门负责人审核。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C28",
+          "measure": "对合并抵销分录实行交叉复核制度，具体编制人完成调整分录后即提交相应复核人进行审核，审核通过后才可录入试算平衡表。通过交叉复核，保证合并抵销分录的真实性、完整性。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R22",
+      "process_l1": "二、财务报告对外提供",
+      "process_l2": "1、审核财务报告",
+      "statement": "是否在财务报告对外提供前未按规定程序进行审核，对内容的真实性、完整性以及格式的合规性等审核不充分。",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C29",
+          "measure": "企业应严格按照规定的财务报告编制中的审批程序，由各级负责人逐级把关，对财务报告内容的真实性、完整性，格式的合规性等予以审核。",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C30",
+          "measure": "企业应保留审核记录，建立责任追究制度。",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C31",
+          "measure": "财务报告在对外提供前应当装订成册，加盖公章，并由企业负责人、总会计师或分管会计工作的负责人、财会部门负责人签名并盖章。",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R23",
+      "process_l1": "二、财务报告对外提供",
+      "process_l2": "2、选择具有相关业务资格的会计师事务所进行审计",
+      "statement": "是否财务报告对外提供前未经审计，审计机构不符合相关法律法规的规定，审计机构与企业串通舞弊。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C32",
+          "measure": "企业应根据相关法律法规的规定，选择符合资质的会计师事务所对财务报告进行审计。",
+          "guideline_refs": [
+            "应用指引第十五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C33",
+          "measure": "企业不得干扰审计人员的正常工作，并应对审计意见予以落实。",
+          "guideline_refs": [
+            "应用指引第十五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C34",
+          "measure": "注册会计师及其所在的事务所出具的审计报告，应随财务报告一并提供。",
+          "guideline_refs": [
+            "应用指引第十五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R24",
+      "process_l1": "二、财务报告对外提供",
+      "process_l2": "3、财务报告的对外提供",
+      "statement": "⑴是否对外提供未遵循相关法律法规的规定，导致承担相应的法律责任；",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C35",
+          "measure": "企业应根据相关法律法规的要求，在企业相关制度中明确负责财务报告对外提供的对象，在相关制度性文件中予以明确并由企业负责人监督。上市公司的财务报告需经董事会、监事会审核通过后向全社会提供。",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R25",
+      "process_l1": "二、财务报告对外提供",
+      "process_l2": "3、财务报告的对外提供",
+      "statement": "⑵是否对外提供的财务报告的编制基础、编制依据、编制原则和方法不一致，影响各方对企业情况的判断和经济决策的作出；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C36",
+          "measure": "企业应严格按照规定的财务报告编制中的审批程序，由财会部门负责人、总会计师或分管会计工作的负责人、企业负责人逐级把关，对财务报告内容的真实性、完整性，格式的合规性等予以审核，确保提供给投资者、债权人、政府监管部门、社会公众等各方面的财务报告的编制基础、编制依据、编制原则和方法完全一致。",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R26",
+      "process_l1": "二、财务报告对外提供",
+      "process_l2": "3、财务报告的对外提供",
+      "statement": "⑶是否未能及时对外报送财务报告，导致财务报告信息的使用价值降低，同时也违反有关法律法规；",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C37",
+          "measure": "企业应严格遵守相关法律法规和国家统一的会计准则制度对报送时间的要求，在财务报告的编制、审核、报送流程中的每一步骤设置时间点，对未能按时完成的相关人员进行处罚。",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R27",
+      "process_l1": "二、财务报告对外提供",
+      "process_l2": "3、财务报告的对外提供",
+      "statement": "⑷是否财务报告在对外提供前提前泄露或使不应知晓的对象获悉，导致发生内幕交易等，使投资者或企业本身蒙受损失。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C38",
+          "measure": "企业应设置严格的保密程序，对能够接触财务报告信息的人员进行权限设置，保证财务报告信息在对外提供前控制在适当的范围。并对财务报告信息的访问情况予以记录，以便了解情况，及时发现可能的泄密行为，在泄密后也易于找到相应的责任人。",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C39",
+          "measure": "企业对外提供的财务报告应当及时整理归档，并按有关规定妥善保存。",
+          "guideline_refs": [
+            "应用指引第十五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R28",
+      "process_l1": "三、财务报告分析利用",
+      "process_l2": "1、制定财务分析制度",
+      "statement": "是否制定的财务分析制度不符合企业实际情况，财务分析制度未充分利用企业现有资源，财务分析的流程、要求不明确，财务分析制度未经审批等。",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C40",
+          "measure": "企业在对基本情况分析时，应当重点了解企业的发展背景，包括企业的发展史、企业组织机构、产品销售及财务资产变动情况等，熟悉企业业务流程，分析研究企业的资产及财务管理活动。",
+          "guideline_refs": [
+            "基本规范第三十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C41",
+          "measure": "企业在制定财务报告分析制度时，应重点关注：财务报告分析的时间、组织形式、参加的部门和人员；财务报告分析的内容、分析的步骤、分析方法和指标体系；财务报告分析报告的编写要求等。",
+          "guideline_refs": [
+            "基本规范第三十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C42",
+          "measure": "财务报告分析制度草案经由财会部门负责人、总会计师或分管会计工作的负责人、企业负责人检查、修改、审批之后，根据制度设计的要求进行试行，发现问题及时总结上报。",
+          "guideline_refs": [
+            "应用指引第十六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "FIN-C43",
+          "measure": "财会部门根据试行情况进行修正，确定最终的财务报告分析制度文稿，并经财会部门负责人、总会计师或分管会计工作的负责人、企业负责人进行最终的审批。",
+          "guideline_refs": [
+            "应用指引第十六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R29",
+      "process_l1": "三、财务报告分析利用",
+      "process_l2": "2、编写财务分析报告",
+      "statement": "⑴是否财务分析报告的目的不正确或者不明确，财务分析方法不正确；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C44",
+          "measure": "编写时要明确分析的目的，运用正确的财务分析方法，并能充分、灵活地运用各项资料。分析内容包括：一是企业的资产分布、负债水平和所有者权益结构，通过资产负债率、流动比率、资产周转率等指标分析企业的偿债能力和营运能力；分析企业净资产的增减变化，了解和掌握企业规模和净资产的不断变化过程。二是分析各项收入、费用的构成及其增减变动情况，通过净资产收益率、每股收益等指标，分析企业的盈利能力和发展能力，了解和掌握当期利润增减变化的原因和未来发展趋势。三是分析经营活动、投资活动、筹资活动现金流量的运转情况，重点关注现金流量能否保证生产经营过程的正常运行，防止现金短缺或闲置。",
+          "guideline_refs": [
+            "应用指引第十七条 第十八条 第十九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R30",
+      "process_l1": "三、财务报告分析利用",
+      "process_l2": "2、编写财务分析报告",
+      "statement": "⑵是否财务分析报告的内容不完整，未对本期生产经营活动中发生的重大事项做专门分析；",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C45",
+          "measure": "总会计师或分管会计工作的负责人应当在财务分析和利用工作中发挥主导作用，负责组织领导。财会部门负责人审核财务分析报告的准确性，判断是否需要对特殊事项进行补充说明，并对财务分析报告进行补充说明。对生产经营活动中的重要资料、重大事项以及与上年同期数据相比有较大差异的情况要做重点说明。",
+          "guideline_refs": [
+            "应用指引第十六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R31",
+      "process_l1": "三、财务报告分析利用",
+      "process_l2": "2、编写财务分析报告",
+      "statement": "⑶是否财务分析局限于财会部门，未充分利用相关部门的资源，影响质量和可用性；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C46",
+          "measure": "企业财务分析会议应吸收有关部门负责人参加，对各部门提出的意见，财会部门应充分沟通、分析，进而修改完善财务分析报告。",
+          "guideline_refs": [
+            "应用指引第十六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R32",
+      "process_l1": "三、财务报告分析利用",
+      "process_l2": "2、编写财务分析报告",
+      "statement": "⑷是否财务分析报告未经审核等。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C47",
+          "measure": "修订后的分析报告应及时报送企业负责人，企业负责人负责审批分析报告，并据此进行决策，对于存在的问题及时采取措施。",
+          "guideline_refs": [
+            "应用指引第二十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R33",
+      "process_l1": "三、财务报告分析利用",
+      "process_l2": "3、整改落实",
+      "statement": "⑴是否财务分析报告的内容传递不畅，未能及时使有关各部门获悉；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C48",
+          "measure": "定期的财务分析报告应构成内部报告的组成部分，并充分利用信息技术和现有内部报告体系在各个层级上进行沟通。",
+          "guideline_refs": [
+            "应用指引第二十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "FIN-R34",
+      "process_l1": "三、财务报告分析利用",
+      "process_l2": "3、整改落实",
+      "statement": "⑵是否各部门对财务分析报告不够重视，未对其中的意见进行整改落实。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "FIN-C49",
+          "measure": "根据分析报告的意见，明确各部门职责。责任部门按要求落实改正，财会部门负责监督、跟踪责任部门的落实情况，并及时向有关负责人反馈落实情况。",
+          "guideline_refs": [
+            "应用指引第二十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    }
+  ]
+}

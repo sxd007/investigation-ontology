@@ -1,0 +1,535 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "rnd",
+  "domain_label": "研发与开发",
+  "framework_ref": "企业内部控制应用指引第10号",
+  "risk_text_status": "complete",
+  "generated_at": "2026-09-30T03:07:22.580396+00:00",
+  "processes": [
+    {
+      "process_l1": "一、立项与研究",
+      "process_l2": "1、立项（包含申请、评审和审批）"
+    },
+    {
+      "process_l1": "一、立项与研究",
+      "process_l2": "2、研发过程管理——自主研发"
+    },
+    {
+      "process_l1": "一、立项与研究",
+      "process_l2": "研发过程管理——委托（合作）研发"
+    },
+    {
+      "process_l1": "一、立项与研究",
+      "process_l2": "3、结题验收"
+    },
+    {
+      "process_l1": "二、开发与保护",
+      "process_l2": "1、研究成果开发"
+    },
+    {
+      "process_l1": "二、开发与保护",
+      "process_l2": "2、研究成果保护"
+    },
+    {
+      "process_l1": "二、开发与保护",
+      "process_l2": "3、评估与改进"
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "RND-R01",
+      "process_l1": "一、立项与研究",
+      "process_l2": "1、立项（包含申请、评审和审批）",
+      "statement": "⑴是否研发计划与国家（或企业）科技发展战略不匹配。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C01",
+          "measure": "建立完善的立项、审批制度，确定研究开发计划制定原则和审批人，审查承办单位或专题负责人的资质条件和评估、审批流程等。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R02",
+      "process_l1": "一、立项与研究",
+      "process_l2": "1、立项（包含申请、评审和审批）",
+      "statement": "⑵是否研发承办单位或专题负责人不具有相应资质。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C02",
+          "measure": "结合企业发展战略、市场及技术现状，制定研究项目开发计划。",
+          "guideline_refs": [
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C03",
+          "measure": "企业应当根据实际需要，结合研发计划，提出研究项目立项申请，开展可行性研究，编制可行性研究报告。企业可以组织独立于申请及立项审批之外的专业机构和人员进行评估论证，出具评估意见。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R03",
+      "process_l1": "一、立项与研究",
+      "process_l2": "1、立项（包含申请、评审和审批）",
+      "statement": "⑶是否研究项目未经科学论证或论证不充分。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C04",
+          "measure": "研究项目应当按照规定的权限和程序进行审批，重大研究项目应当报经董事会或类似权力机构集体审议决策。审批过程中，应当重点关注研究项目促进企业发展的必要性、技术的先进性以及成果转化的可行性。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R04",
+      "process_l1": "一、立项与研究",
+      "process_l2": "1、立项（包含申请、评审和审批）",
+      "statement": "⑷是否评审和审批环节把关不严，可能导致创新不足或资源浪费。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C05",
+          "measure": "制定开题计划和报告，开题计划经科研管理部门负责人审批，开题报告应对市场需求与效益、国内外在该方向的研究现状、主要技术路线、研究开发目标与进度、已有条件与基础、经费等进行充分论证、分析，保证项目符合企业需求。",
+          "guideline_refs": [
+            "基本规范第二十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R05",
+      "process_l1": "一、立项与研究",
+      "process_l2": "2、研发过程管理——自主研发",
+      "statement": "⑴是否研究人员配备不合理，导致研发成本过高、舞弊或研发失败。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C06",
+          "measure": "建立研发项目管理制度和技术标准，建立信息反馈制度和研发项目重大事项报告制度；严格落实岗位责任制。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R06",
+      "process_l1": "一、立项与研究",
+      "process_l2": "2、研发过程管理——自主研发",
+      "statement": "⑵是否研发过程管理不善，费用失控或科技收入形成账外资产，影响研发效率，提高研发成本甚至造成资产流失。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C07",
+          "measure": "合理设计项目实施进度计划和组织结构，跟踪项目进展，建立良好的工作机制，保证项目顺利实施。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R07",
+      "process_l1": "一、立项与研究",
+      "process_l2": "2、研发过程管理——自主研发",
+      "statement": "⑶是否多个项目同时进行时，相互争夺资源，出现资源的短期局部缺乏，可能造成研发效率下降。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C08",
+          "measure": "精确预计工作量和所需资源，提高资源使用效率。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R08",
+      "process_l1": "一、立项与研究",
+      "process_l2": "2、研发过程管理——自主研发",
+      "statement": "⑷是否研究过程中未能及时发现错误，导致修正成本提高。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C09",
+          "measure": "建立科技开发费用报销制度，明确费用支付标准及审批权限，遵循不相容岗位牵制原则，完善科技经费入账管理程序，按项目正确划分资本性支出和费用性支出，准确开展会计核算，建立科技收入管理制度。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R09",
+      "process_l1": "一、立项与研究",
+      "process_l2": "2、研发过程管理——自主研发",
+      "statement": "⑸是否科研合同管理不善，导致权属不清，知识产权存在争议。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C10",
+          "measure": "开展项目中期评审，及时纠偏调整；优化研发项目管理的任务分配方式。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R10",
+      "process_l1": "一、立项与研究",
+      "process_l2": "研发过程管理——委托（合作）研发",
+      "statement": "⑴是否委托（合作）单位选择不当，知识产权界定不清。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C11",
+          "measure": "加强委托（合作）研发单位资信、专业能力等方面管理。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C12",
+          "measure": "委托研发应采用招标、议标等方式确定受托单位，制定规范详尽的委托研发合同，明确产权归属、研究进度和质量标准等相关内容。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R11",
+      "process_l1": "一、立项与研究",
+      "process_l2": "研发过程管理——委托（合作）研发",
+      "statement": "⑵是否合作研发还包括与合作单位沟通障碍、合作方案设计不合理、权责利不能合理分配、资源整合不当等风险。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C13",
+          "measure": "合作研发应对合作单位进行尽职调查，签订书面合作研究合同，明确双方投资、分工、权利义务、研究成果产权归属等。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C14",
+          "measure": "加强项目的管理监督，严格控制项目费用，防止挪用、侵占等。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C15",
+          "measure": "根据项目进展情况、国内外技术最新发展趋势和市场需求变化情况，对项目的目标、内容、进度、资金进行适当调整。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R12",
+      "process_l1": "一、立项与研究",
+      "process_l2": "3、结题验收",
+      "statement": "⑴是否由于验收人员的技术、能力、独立性等造成验收成果与事实不符；",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C16",
+          "measure": "建立健全技术验收制度，严格执行测试程序。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C17",
+          "measure": "对验收过程中发现的异常情况应重新进行验收申请或补充进行研发，直至研发项目达到研发标准为止。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R13",
+      "process_l1": "一、立项与研究",
+      "process_l2": "3、结题验收",
+      "statement": "⑵是否测试与鉴定投入不足，导致测试与鉴定的不充分，不能有效地降低技术失败的风险。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C18",
+          "measure": "落实技术主管部门验收责任，由独立的、具备专业胜任能力测试人员进行鉴定试验，并按计划进行正式的、系统的、严格的评审。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C19",
+          "measure": "加大企业在测试和鉴定阶段的投入，对重要的研究项目可以组织外部专家参加鉴定。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R14",
+      "process_l1": "二、开发与保护",
+      "process_l2": "1、研究成果开发",
+      "statement": "⑴是否研究成果转化应用不足，导致资源闲置；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C20",
+          "measure": "建立健全研究成果开发制度，促进成果及时有效转化。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R15",
+      "process_l1": "二、开发与保护",
+      "process_l2": "1、研究成果开发",
+      "statement": "⑵是否新产品未经充分测试，导致大批量生产不成熟或成本过高；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C21",
+          "measure": "科学鉴定大批量生产的技术成熟度，力求降低产品成本。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R16",
+      "process_l1": "二、开发与保护",
+      "process_l2": "1、研究成果开发",
+      "statement": "⑶是否营销策略与市场需求不符，导致营销失败。",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C22",
+          "measure": "坚持开展以市场为导向的新产品开发消费者测试。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C23",
+          "measure": "建立研发项目档案，推进有关信息资源的共享和应用。",
+          "guideline_refs": [
+            "基本规范第四十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R17",
+      "process_l1": "二、开发与保护",
+      "process_l2": "2、研究成果保护",
+      "statement": "⑴是否未能有效识别和保护知识产权，权属未能得到明确规范，开发出的新技术或产品被限制使用；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C24",
+          "measure": "进行知识产权评审，及时取得权属。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C25",
+          "measure": "研发完成后确定采取专利或技术秘密等不同保护方式。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C26",
+          "measure": "利用专利文献选择较好的工艺路线。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R18",
+      "process_l1": "二、开发与保护",
+      "process_l2": "2、研究成果保护",
+      "statement": "⑵是否核心研究人员缺乏管理激励制度，导致形成新的竞争对手或技术秘密外泄。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C27",
+          "measure": "建立研究成果保护制度，加强对专利权、非专利技术、商业秘密及研发过程中形成的各类涉密图纸、程序、资料的管理，严格按照制度规定借阅和使用。禁止无关人员接触研究成果。",
+          "guideline_refs": [
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C28",
+          "measure": "建立严格的核心研究人员管理制度，明确界定核心研究人员范围和名册清单并与之签署保密协议。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C29",
+          "measure": "企业与核心研究人员签订劳动合同时，应当特别约定研究成果归属、离职条件、离职移交程序、离职后保密义务、离职后竞业限制年限及违约责任等内容。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C30",
+          "measure": "实施合理有效的研发绩效管理，制定科学的核心研发人员激励体系，注重长效激励。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "RND-R19",
+      "process_l1": "二、开发与保护",
+      "process_l2": "3、评估与改进",
+      "statement": "是否未能实施有效的全面评估，导致未发现研发过程中的薄弱环节。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "RND-C31",
+          "measure": "建立研发活动评估制度，加强对立项与研究、开发与保护等过程的全面评估。",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "RND-C32",
+          "measure": "认真总结研发管理经验，分析存在的薄弱环节，完善相关制度和办法，不断改进和提升研发活动的管理水平。",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    }
+  ]
+}

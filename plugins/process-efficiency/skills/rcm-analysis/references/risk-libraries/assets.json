@@ -1,0 +1,684 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "assets",
+  "domain_label": "资产管理",
+  "framework_ref": "企业内部控制应用指引第8号",
+  "risk_text_status": "complete",
+  "generated_at": "2026-09-30T03:07:22.574406+00:00",
+  "processes": [
+    {
+      "process_l1": "一、存货",
+      "process_l2": "取得存货"
+    },
+    {
+      "process_l1": "一、存货",
+      "process_l2": "验收存货"
+    },
+    {
+      "process_l1": "一、存货",
+      "process_l2": "仓储保管"
+    },
+    {
+      "process_l1": "一、存货",
+      "process_l2": "领用发出存货"
+    },
+    {
+      "process_l1": "一、存货",
+      "process_l2": "存货的盘点"
+    },
+    {
+      "process_l1": "一、存货",
+      "process_l2": "存货处置"
+    },
+    {
+      "process_l1": "二、固定资产",
+      "process_l2": "固定资产取得验收"
+    },
+    {
+      "process_l1": "三、无形资产",
+      "process_l2": "无形资产取得"
+    },
+    {
+      "process_l1": "三、无形资产",
+      "process_l2": "无形资产的使用与保全"
+    },
+    {
+      "process_l1": "三、无形资产",
+      "process_l2": "无形资产的技术升级与更新换代"
+    },
+    {
+      "process_l1": "三、无形资产",
+      "process_l2": "无形资产的处置"
+    },
+    {
+      "process_l1": "四、有价证券（包括应收票据、交易性金融资产、可供出售金融资产等）",
+      "process_l2": "有价证券的取得"
+    },
+    {
+      "process_l1": "四、有价证券（包括应收票据、交易性金融资产、可供出售金融资产等）",
+      "process_l2": "有价证券的使用"
+    },
+    {
+      "process_l1": "四、有价证券（包括应收票据、交易性金融资产、可供出售金融资产等）",
+      "process_l2": "有价证券的处置"
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "AST-R01",
+      "process_l1": "一、存货",
+      "process_l2": "取得存货",
+      "statement": "是否存在存货预算编制不科学、采购计划不合理的情况，导致存货积压或短缺，导致流动资金占用过量、存货价值贬损或生产中断",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C01",
+          "measure": "应当根据各种存货采购间隔期和当前库存，综合考虑企业生产经营计划、市场供求等因素，充分利用信息系统，合理确定存货采购日期和数量，确保存货处于最佳库存状态。考虑到存货取得的风险管控措施主要体现在预算编制和采购环节，将由相关的预算和采购内部控制应用指引加以规范",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R02",
+      "process_l1": "一、存货",
+      "process_l2": "验收存货",
+      "statement": "是否存在验收程序不规范、标准不明确的情况，导致数量克扣、以次充好、账实不符",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C02",
+          "measure": "外购存货的验收应当重点关注合同、发票等原始单据与存货的数量、质量、规格等核对一致。涉及技术含量较高的货物，必要时可委托具有检验资质的机构或聘请外部专家协助验收。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C03",
+          "measure": "自制存货的验收，应当重点关注产品质量，通过检验合格的半成品、产成品才能办理入库手续，不合格品应及时查明原因、落实责任、报告处理",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C04",
+          "measure": "其他方式取得存货的验收，应当重点关注存货来源、质量状况、实际价值是否符合有关合同或协议的约定",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C05",
+          "measure": "经验收合格的存货进入入库或销售环节。仓储部门对于入库的存货，应根据入库单的内容对存货的数量、质量、品种等进行检查，符合要求的予以入库；不符合要求的，应当及时办理退换货等相关事宜。入库记录要真实、完整，定期与财会等相关部门核对，不得擅自修改",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R03",
+      "process_l1": "一、存货",
+      "process_l2": "仓储保管",
+      "statement": "是否存在存货仓储保管方法不适当、监管不严密的情况，导致损坏变质、价值贬损、资源浪费",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C06",
+          "measure": "存货在不同仓库之间流动时，应当办理出入库手续",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C07",
+          "measure": "存货仓储期间要按照仓储物资所要求的储存条件妥善贮存，做好防火、防洪、防盗、防潮、防病虫害、防变质等保管工作，不同批次、型号和用途的产品要分类存放。生产现场的在加工原料、周转材料、半成品等要按照有助于提高生产效率的方式摆放，同时防止浪费、被盗和流失",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C08",
+          "measure": "对代管、代销、暂存、受托加工的存货，应单独存放和记录，避免与本单位存货混淆。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C09",
+          "measure": "结合企业实际情况，加强存货的保险投保，保证存货安全，合理降低存货意外损失风险。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C10",
+          "measure": "仓储部门应对库存物料和产品进行每日巡查和定期抽检，详细记录库存情况；发现毁损、存在跌价迹象的，应及时与生产、采购、财务等相关部门沟通。对于进入仓库的人员应办理进出登记手续，未经授权人员不得接触存货",
+          "guideline_refs": [
+            "基本规范第三十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R04",
+      "process_l1": "一、存货",
+      "process_l2": "领用发出存货",
+      "statement": "是否存在存货领用发出审核不严格、手续不完备的情况，导致货物流失",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C11",
+          "measure": "企业应当根据自身的业务特点，确定适用的存货发出管理模式，制定严格的存货准出制度，明确存货发出和领用的审批权限，健全存货出库手续，加强存货领用记录。通常情况下，对于一般的生产企业，仓储部门应核对经过审核的领料单或发货通知单的内容，做到单据齐全，名称、规格、计量单位准确；符合条件的准予领用或发出，并与领用人当面核对、点清交付。在商场超市等商品流通企业，在存货销售发出环节应侧重于防止商品失窃、随时整理弃置商品、每日核对销售记录和库存记录等。无论是何种企业，对于大批存货、贵重商品或危险品的发出，均应当实行特别授权；仓储部门应当根据经审批的销售（出库）通知单发出货物。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R05",
+      "process_l1": "一、存货",
+      "process_l2": "存货的盘点",
+      "statement": "是否存在存货盘点清查制度不完善、计划不可行的情况，导致工作流于形式、无法查清存货真实状况",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C12",
+          "measure": "企业应当建立存货盘点清查工作规程，结合本企业实际情况确定盘点周期、盘点流程、盘点方法等相关内容，定期盘点和不定期抽查相结合",
+          "guideline_refs": [
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C13",
+          "measure": "盘点清查时，应拟定详细的盘点计划，合理安排相关人员，使用科学的盘点方法，保持盘点记录的完整，以保证盘点的真实性、有效性",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C14",
+          "measure": "盘点清查结果要及时编制盘点表，形成书面报告，包括盘点人员、时间、地点、实际所盘点存货名称、品种、数量、存放情况以及盘点过程中发现的账实不符情况等内容",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C15",
+          "measure": "对盘点清查中发现的问题，应及时查明原因，落实责任，按照规定权限报经批准后处理",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C16",
+          "measure": "多部门人员共同盘点，应当充分体现相互制衡，严格按照盘点计划，认真记录盘点情况",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C17",
+          "measure": "企业至少应当于每年年度终了开展全面的存货盘点清查，及时发现存货减值迹象，将盘点清查结果形成书面报告",
+          "guideline_refs": [
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R06",
+      "process_l1": "一、存货",
+      "process_l2": "存货处置",
+      "statement": "是否存在存货报废处置责任不明确、审批不到位的情况，导致企业利益受损",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C18",
+          "measure": "企业应定期对存货进行检查，及时、充分了解存货的存储状态，对于存货变质、毁损、报废或流失的处理要分清责任、分析原因、及时合理",
+          "guideline_refs": [
+            "应用指引第十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R07",
+      "process_l1": "二、固定资产",
+      "process_l2": "固定资产取得验收",
+      "statement": "是否存在新增固定资产验收程序不规范，导致资产质量不符要求、进而影响资产运行效果的情况；是否存在固定资产投保制度不健全，导致应投保资产未投保、索赔不力，不能有效防范资产损失风险",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C19",
+          "measure": "建立严格的固定资产交付使用验收制度。企业外购固定资产应当根据合同、供应商发货单等对所购固定资产的品种、规格、数量、质量、技术要求及其他内容进行验收，出具验收单，编制验收报告。企业自行建造的固定资产，应由建造部门、固定资产管理部门、使用部门共同填制固定资产移交使用验收单，验收合格后移交使用部门投入使用。未通过验收的不合格资产，不得接收，必须按照合同等有关规定办理退换货或其他弥补措施。对于具有权属证明的资产，取得时必须有合法的权属证书。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C20",
+          "measure": "重视和加强固定资产的投保工作。企业应当通盘考虑固定资产状况，根据其性质和特点，确定和严格执行固定资产的投保范围和政策。投保金额与投保项目力求适当，对应投保的固定资产项目按规定程序进行审批，办理投保手续，规范投保行为，应对固定资产损失风险。对于重大固定资产项目的投保，应当考虑采取招标方式确定保险人，防范固定资产投保舞弊。已投保的固定资产发生损失的，及时调查原因及受损金额，向保险公司办理相关的索赔手续",
+          "guideline_refs": [
+            "应用指引第十六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R08",
+      "process_l1": null,
+      "process_l2": "固定资产的登记",
+      "statement": "是否存在固定资产登记内容不完整的情史，导致资产流失、资产信息失真、账实不符",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C21",
+          "measure": "根据固定资产的定义，结合自身实际情况，制定适合本企业的固定资产目录，列明固定资产编号、名称、种类、所在地点、使用部门、责任人、数量、账面价值、使用年限、损耗等内容，有利于企业了解固定资产使用情况的全貌",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C22",
+          "measure": "按照单项资产建立固定资产卡片，资产卡片应在资产编号上与固定资产目录保持对应关系，详细记录各项固定资产的来源、验收、使用地点、责任单位和责任人、运转、维修、改造、折旧、盘点等相关内容,便于固定资产的有效识别",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R09",
+      "process_l1": null,
+      "process_l2": "固定资产运行维护",
+      "statement": "是否存在固定资产操作不当、失修或维护过剩的情况，造成资产使用效率低下、产品残次率高，甚至发生生产事故或资源浪费",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C23",
+          "measure": "固定资产使用部门会同资产管理部门负责固定资产日常维修、保养，将资产日常维护流程体制化、程序化、标准化，定期检查，及时消除风险，提高固定资产的使用效率，切实消除安全隐患",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C24",
+          "measure": "固定资产使用部门及管理部门建立固定资产运行管理档案，并据以制定合理的日常维修和大修理计划，并经主管领导审批",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C25",
+          "measure": "固定资产实物管理部门审核施工单位资质和资信，并建立管理档案；修理项目应分类，明确需要招投标项目。修理完成，由施工单位出具交工验收报告，经资产使用和实物管理部门核对工程质量并审批。重大项目应专项审计",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C26",
+          "measure": "企业生产线等关键设备的运作效率与效果将直接影响企业的安全生产和产品质量，操作人员上岗前应由具有资质的技术人员对其进行充分的岗前培训，特殊设备实行岗位许可制度，需持证上岗，必须对资产运转进行实时监控，保证资产使用流程与既定操作流程相符，确保安全运行，提高使用效率",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R10",
+      "process_l1": null,
+      "process_l2": "固定资产的更新改造",
+      "statement": "是否存在固定资产更新改造不够、使用效能低下、维护不当、产能过剩的情况，导致企业缺乏竞争力、资产价值贬损、安全事故频发或资源浪费。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C27",
+          "measure": "定期对固定资产技术先进性评估，结合盈利能力和企业发展可持续性，资产使用部门根据需要提出技改方案，与财务部门一起进行预算可行性分析，并且经过管理部门的审核批准",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C28",
+          "measure": "管理部门需对技改方案实施过程适时监控、加强管理，有条件企业建立技改专项资金并定期或不定期审计。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R11",
+      "process_l1": null,
+      "process_l2": "固定资产清查",
+      "statement": "是否存在固定资产丢失、毁损等造成账实不符或资产贬值严重的情况",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C29",
+          "measure": "财务部门组织固定资产使用部门和管理部门需定期进行清查，明确资产权属，确保实物与卡、财务账表相符，在清查作业实施之前编制清查方案，经过管理部门审核后进行相关的清查作业",
+          "guideline_refs": [
+            "基本规范第三十二条",
+            "应用指引第十八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C30",
+          "measure": "在清查结束后，清查人员需要编制清查报告，管理部门需就清查报告进行审核，确保真实性、可靠性",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C31",
+          "measure": "清查过程中发现的盘盈（盘亏），应分析原因，追究责任，妥善处理，报告审核通过后及时调整固定资产账面价值，确保账实相符，并上报备案",
+          "guideline_refs": [
+            "基本规范第三十二条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R12",
+      "process_l1": null,
+      "process_l2": "固定资产的抵押",
+      "statement": "是否存在固定资产抵押制度不完善，导致抵押资产价值低估和资产流失",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C32",
+          "measure": "加强固定资产抵押、质押的管理，明晰固定资产抵押、质押流程，规定固定资产抵押、质押的程序和审批权限等，确保资产抵押、质押经过授权审批及适当程序。同时，应做好相应记录，保障企业资产安全",
+          "guideline_refs": [
+            "应用指引第十七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C33",
+          "measure": "财务部门办理资产抵押时，如需要委托专业中介机构鉴定评估固定资产的实际价值，应当会同金融机构有关人员、固定资产管理部门、固定资产使用部门现场勘验抵押品，对抵押资产的价值进行评估。对于抵押资产，应编制专门的抵押资产目录",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R13",
+      "process_l1": null,
+      "process_l2": "固定资产的处置",
+      "statement": "是否存在固定资产处置方式不合理，造成企业经济损失",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C34",
+          "measure": "对使用期满、正常报废的固定资产，应由固定资产使用部门或管理部门填制固定资产报废单，经企业授权部门或人员批准后对该固定资产进行报废清理",
+          "guideline_refs": [
+            "基本规范第三十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C35",
+          "measure": "对使用期限未满、非正常报废的固定资产，应由固定资产使用部门提出报废申请，注明报废理由、估计清理费用和可回收残值、预计处置价格等。企业应组织有关部门进行技术鉴定，按规定程序审批后进行报废清理",
+          "guideline_refs": [
+            "基本规范第三十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C36",
+          "measure": "对拟出售或投资转出及非货币交换的固定资产，应由有关部门或人员提出处置申请，对固定资产价值进行评估，并出具资产评估报告。报经企业授权部门或人员批准后予以出售或转让。企业应特别关注固定资产处置中的关联交易和处置定价，固定资产的处置应由独立于固定资产管理部门和使用部门的相关授权人员办理，固定资产处置价格应报经企业授权部门或人员审批后确定。对于重大固定资产处置，应当考虑聘请具有资质的中介机构进行资产评估，采取集体审议或联签制度。涉及产权变更的，应及时办理产权变更手续",
+          "guideline_refs": [
+            "基本规范第三十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C37",
+          "measure": "对出租的固定资产由相关管理部门提出出租或出借的申请，写明申请的理由和原因，并由相关授权人员和部门就申请进行审核。审核通过后应签订出租或出借合同，包括合同双方的具体情况，出租的原因和期限等内容",
+          "guideline_refs": [
+            "基本规范第三十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R14",
+      "process_l1": "三、无形资产",
+      "process_l2": "无形资产取得",
+      "statement": "取得的无形资产是否不具先进性，或权属不清，导致企业资源浪费或引发法律诉讼",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C38",
+          "measure": "企业应当建立严格的无形资产交付使用验收制度，明确无形资产的权属关系，及时办理产权登记手续。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C39",
+          "measure": "企业外购无形资产，必须仔细审核有关合同协议等法律文件，及时取得无形资产所有权的有效证明文件，同时特别关注外购无形资产的技术先进性；企业自行开发的无形资产，应由研发部门、无形资产管理部门、使用部门共同填制无形资产移交使用验收单，移交使用部门使用；企业购入或者以支付土地出让金方式取得的土地使用权，必须取得土地使用权的有效证明文件",
+          "guideline_refs": [
+            "应用指引第二十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "AST-C40",
+          "measure": "当无形资产权属关系发生变动时，应当按照规定及时办理权证转移手续。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R15",
+      "process_l1": "三、无形资产",
+      "process_l2": "无形资产的使用与保全",
+      "statement": "形资产是否使用效率低下，效能发挥不到位；缺乏严格的保密制度，致使体现在无形资产中的商业机密泄漏；由于商标等无形资产疏于管理，导致其他企业侵权，严重损害企业利益",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C41",
+          "measure": "企业应当强化无形资产使用过程的风险管控，充分发挥无形资产对提升企业产品质量和市场影响力的重要作用；建立健全无形资产核心技术保密制度，严格限制未经授权人员直接接触技术资料，对技术资料等无形资产的保管及接触应保有记录，实行责任追究，保证无形资产的安全与完整；对侵害本企业无形资产的，要积极取证并形成书面调查记录，提出维权对策，按规定程序审核并上报",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R16",
+      "process_l1": "三、无形资产",
+      "process_l2": "无形资产的技术升级与更新换代",
+      "statement": "无形资产是否缺乏核心技术、权属不清、技术落后、存在重大技术安全隐患，导致企业法律纠纷、缺乏可持续发展能力",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C42",
+          "measure": "企业应当定期对专利、专有技术等无形资产的先进性进行评估。发现某项无形资产给企业带来经济利益的能力受到重大不利影响时，应当考虑淘汰落后技术，同时加大研发投入，不断推动企业自主创新与技术升级，确保企业在市场经济竞争中始终处于优势地位。",
+          "guideline_refs": [
+            "应用指引第二十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R17",
+      "process_l1": "三、无形资产",
+      "process_l2": "无形资产的处置",
+      "statement": "无形资产是否长期闲置或低效使用，逐渐失去其使用价值；无形资产是否处置不当，造成企业资产流失",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "AST-C43",
+          "measure": "企业应当建立无形资产处置的相关管理制度，明确无形资产处置的范围、标准、程序和审批权限等要求。无形资产的处置应由独立于无形资产管理部门和使用部门的其他部门或人员按照规定的权限和程序办理；应当选择合理的方式确定处置价格，并报经企业授权部门或人员审批；重大的无形资产处置，应当委托具有资质的中介机构进行资产评估",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "AST-R18",
+      "process_l1": "四、有价证券（包括应收票据、交易性金融资产、可供出售金融资产等）",
+      "process_l2": "有价证券的取得",
+      "statement": "取得的有价证券是否权属不清，导致企业资源浪费或引发法律诉讼",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": []
+    },
+    {
+      "risk_ref": "AST-R19",
+      "process_l1": "四、有价证券（包括应收票据、交易性金融资产、可供出售金融资产等）",
+      "process_l2": "有价证券的使用",
+      "statement": "形资产是否使用效率低下，效能发挥不到位；或由于疏于管理，导致严重损害企业利益",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": []
+    },
+    {
+      "risk_ref": "AST-R20",
+      "process_l1": "四、有价证券（包括应收票据、交易性金融资产、可供出售金融资产等）",
+      "process_l2": "有价证券的处置",
+      "statement": "有价证券是否闲置或低效使用，逐渐失去其使用价值；有价证券资产是否处置不当，造成企业资产流失",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": []
+    }
+  ]
+}

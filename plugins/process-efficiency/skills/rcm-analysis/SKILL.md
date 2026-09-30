@@ -79,7 +79,16 @@ RISK-003 信息滞后     -            -             ●(部分)
 
 ## 风险参照集
 
-内置**跨行业通用集**（六类），调用方可按业务域提供扩展集（如采购/报销/研发域参照集，未来可发展为独立 references）：
+**两层结构：域风险库（深化）+ 通用六类（兜底）。**
+
+**域风险库**（[references/risk-libraries/](./references/risk-libraries/README.md)）：按《企业内部控制应用指引》18 域组织的结构化风险参照（风险条目 + 典型控制 + 指引条款出处 + 六类标签）。加载规则：
+
+1. SCOPE 阶段确认评价对象的域归属（可多域并列，如采购流程挂 procurement + treasury + contract），记录选域理由；
+2. 加载对应域库 JSON 作为 R2 覆盖度分析的对照基准——库条目的 `typical_controls` 同时是 `risk_undercontrolled` 判级的参照组合；
+3. `risk_text_status: pending` 的域（纯控制型，风险文本待补）只能用于控制侧参照，不得据此判 `risk_unidentified`；
+4. 参照库是**询问的起点不是判决的终点**：`risk_unidentified` 仍须先发 DDR + 典型场景说明；库不完备，库外风险靠评价者独立判断（完整纪律见库 README）。
+
+**通用兜底集**（无域库或库外补充时使用）：
 
 | 类别 | 典型风险 | 参照等级 |
 |------|---------|---------|
@@ -90,7 +99,7 @@ RISK-003 信息滞后     -            -             ●(部分)
 | 数据质量 | 记录不完整/状态不同步/证据缺失 | medium |
 | 资产安全 | 资产流失/信息泄露/单点依赖 | high |
 
-对照纪律：`risk_unidentified` 判定须给出参照集条目 + "该风险在本类流程的典型场景"的说明；不允许只凭直觉列风险。
+对照纪律：`risk_unidentified` 判定须给出参照集条目 + "该风险在本类流程的典型场景"的说明；不允许只凭直觉列风险。参照等级是粗粒度初判，finding severity 按 finding-contract §4 独立判级。
 
 ## 评价产出结构
 
@@ -140,4 +149,5 @@ node skills/process-assess-workflow/scripts/scaffold-dimension.mjs {output_root}
 - **下游**：[control-testing](../control-testing/SKILL.md)（本技能判设计有效性，它判运行有效性；本技能的 evidence 缺口 finding 是它抽样受阻的预警）
 - **同级**：[goal-alignment](../goal-alignment/SKILL.md)、[efficiency-diagnosis](../efficiency-diagnosis/SKILL.md)
 - **契约**：[finding-contract](../process-assess-workflow/references/finding-contract.md)
-- **参照系**：COSO 内控框架 / RCM（Risk-Control Matrix）方法；risk 域本体（threatens/impacts 桥接）
+- **参照集**：[域风险参照库](./references/risk-libraries/README.md)（18 域，风险条目+典型控制+指引出处；通用六类兜底）
+- **参照系**：COSO 内控框架 / RCM（Risk-Control Matrix）方法；《企业内部控制应用指引》18 域；risk 域本体（threatens/impacts 桥接）

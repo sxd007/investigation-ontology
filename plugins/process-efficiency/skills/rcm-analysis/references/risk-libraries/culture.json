@@ -1,0 +1,124 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "culture",
+  "domain_label": "企业文化",
+  "framework_ref": "企业内部控制应用指引第5号",
+  "risk_text_status": "pending",
+  "generated_at": "2026-09-30T03:07:22.568113+00:00",
+  "processes": [
+    {
+      "process_l1": "一、企业文化建设",
+      "process_l2": null
+    },
+    {
+      "process_l1": "二、企业文化评估",
+      "process_l2": null
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "CUL-R01",
+      "process_l1": "一、企业文化建设",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "CUL-C01",
+          "measure": "企业应当采取切实有效的措施，积极培育具有自身特色的企业文化，引导和规范员工行为，打造以主业为核心的企业品牌，形成整体团队的向心力，促进企业长远发展。",
+          "guideline_refs": [
+            "基本规范第十八条",
+            "应用指引第四条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CUL-C02",
+          "measure": "企业应当培育体现企业特色的发展愿景、积极向上的价值观、诚实守信的经营理念、履行社会责任和开拓创新的企业精神，以及团队协作和风险防范意识。",
+          "guideline_refs": [
+            "基本规范第十八条",
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CUL-C03",
+          "measure": "企业应当根据发展战略和实际情况，总结优良传统，挖掘文化底蕴，提炼核心价值，确定文化建设的目标和内容，形成企业文化规范，使其构成员工行为守则的重要组成部分。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CUL-C04",
+          "measure": "董事、监事、经理和其他高级管理人员应当在企业文化建设中发挥主导和垂范作用，以自身的优秀品格和脚踏实地的工作作风，带动影响整个团队，共同营造积极向上的企业文化环境。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CUL-C05",
+          "measure": "企业文化建设应当融入生产经营全过程，切实做到文化建设与发展战略的有机结合，增强员工的责任感和使命感，规范员工行为方式，使员工自身价值在企业发展中得到充分体现。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "CUL-R02",
+      "process_l1": "二、企业文化评估",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "CUL-C06",
+          "measure": "企业应当建立企业文化评估制度，明确评估的内容、程序和方法，落实评估责任制，避免企业文化建设流于形式。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CUL-C07",
+          "measure": "企业文化评估，应当重点关注董事、监事、经理和其他高级管理人员在企业文化建设中的责任履行情况、全体员工对企业核心价值观的认同感、企业经营管理行为与企业文化的一致性、企业品牌的社会影响力、参与企业并购重组各方文化的融合度，以及员工对企业未来发展的信心。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "CUL-C08",
+          "measure": "企业应当重视企业文化的评估结果，巩固和发扬文化建设成果，针对评估过程中发现的问题，研究影响企业文化建设的不利因素，分析深层次的原因，及时采取措施加以改进。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        }
+      ]
+    }
+  ]
+}

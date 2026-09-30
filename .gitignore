@@ -23,3 +23,6 @@ Thumbs.db
 # Python 编译产物
 __pycache__/
 *.pyc
+
+# 维护侧工具（域风险库转换器：输入为外部工作底稿，不入库；库 JSON 为入库工件）
+plugins/process-efficiency/skills/rcm-analysis/scripts/import-risk-library.py

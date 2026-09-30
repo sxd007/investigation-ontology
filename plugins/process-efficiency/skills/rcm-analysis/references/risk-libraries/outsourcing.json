@@ -1,0 +1,593 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "outsourcing",
+  "domain_label": "业务外包",
+  "framework_ref": "企业内部控制应用指引第13号",
+  "risk_text_status": "complete",
+  "generated_at": "2026-09-30T03:07:22.587912+00:00",
+  "processes": [
+    {
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "1、制定业务外包实施方案"
+    },
+    {
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "2、审核批准"
+    },
+    {
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "3、选择承包方"
+    },
+    {
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "4、签订业务外包合同"
+    },
+    {
+      "process_l1": "二、业务外包实施",
+      "process_l2": "1、组织实施业务外包活动"
+    },
+    {
+      "process_l1": "二、业务外包实施",
+      "process_l2": "2、业务外包过程管理"
+    },
+    {
+      "process_l1": "二、业务外包实施",
+      "process_l2": "3、验收"
+    },
+    {
+      "process_l1": "二、业务外包实施",
+      "process_l2": "4、会计控制"
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "OUT-R01",
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "1、制定业务外包实施方案",
+      "statement": "⑴是否企业缺乏业务外包管理制度，导致制定实施方案时无据可依；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C01",
+          "measure": "建立和完善业务外包管理制度，根据各类业务与核心主业的关联度、对外包业务的控制程度以及外部市场成熟度等标准，合理确定业务外包的范围，并根据是否对企业生产经营有重大影响对外包业务实施分类管理，以突出管控重点，同时明确规定业务外包的方式、条件、程序和实施等相关内容。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R02",
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "1、制定业务外包实施方案",
+      "statement": "⑵是否业务外包管理制度未明确业务外包范围，可能导致有关部门在制定实施方案时，将不宜外包的核心业务进行外包；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C02",
+          "measure": "严格按照业务外包管理制度规定的业务外包范围、方式、条件、程序和实施等内容制定实施方案，避免将核心业务外包，同时确保方案的完整性。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R03",
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "1、制定业务外包实施方案",
+      "statement": "⑶是否实施方案不合理、不符合企业生产经营特点或内容不完整，可能导致业务外包失败。",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C03",
+          "measure": "根据企业年度预算以及生产经营计划，对实施方案的重要方面进行深入评估及复核，包括承包方的选择方案、外包业务的成本效益及风险、外包合同期限、外包方式、员工培训计划等，确保方案的可行性。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C04",
+          "measure": "认真听取外部专业人员对业务外包的意见，并根据其合理化建议完善实施方案。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R04",
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "2、审核批准",
+      "statement": "⑴是否审批制度不健全，导致对业务外包的审批不规范；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C05",
+          "measure": "建立和完善业务外包的审核批准制度。明确授权批准的方式、权限、程序、责任和相关控制措施，规定各层级人员应当在授权范围内进行审批，不得超越权限审批。同时加大对分公司重大业务外包的管控力度，避免因分公司越权进行业务外包给企业带来不利后果。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R05",
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "2、审核批准",
+      "statement": "⑵是否审批不严格或者越权审批，导致业务外包决策出现重大疏漏，可能引发严重后果；",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C06",
+          "measure": "在对业务外包实施方案进行审查和评价时，应当着重对比分析该业务项目在自营与外包情况下的风险和收益，确定外包的合理性和可行性。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R06",
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "2、审核批准",
+      "statement": "⑶是否未能对业务外包实施方案是否符合成本效益原则进行合理审核以及做出恰当判断，导致业务外包不经济。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C07",
+          "measure": "总会计师或企业分管会计工作的负责人应当参与重大业务外包的决策，对业务外包的经济效益做出合理评价。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C08",
+          "measure": "对于重大业务外包方案，应当提交董事会或类似权力机构审批。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R07",
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "3、选择承包方",
+      "statement": "⑴承包方不是合法设立的法人主体，缺乏应有的专业资质，从业人员也不具备应有的专业技术资格，缺乏从事相关项目的经验，导致企业遭受损失甚至陷入法律纠纷；",
+      "category": "compliance",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C09",
+          "measure": "充分调查候选承包方的合法性，即是否为依法成立、合法经营的专业服务机构或经济组织，是否具有相应的经营范围和固定的办公场所。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C10",
+          "measure": "调查候选承包方的专业资质、技术实力及其从业人员的职业履历和专业技能。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R08",
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "3、选择承包方",
+      "statement": "⑵是否外包价格不合理，业务外包成本过高导致难以发挥业务外包的优势；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C11",
+          "measure": "考察候选承包方从事类似项目的成功案例、业界评价和口碑。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R09",
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "3、选择承包方",
+      "statement": "⑶是否存在商业贿赂等舞弊行为，导致相关人员涉案。",
+      "category": "fraud",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C12",
+          "measure": "综合考虑企业内外部因素，对业务外包的人工成本、营销成本、业务收入、人力资源等指标进行测算分析，合理确定外包价格，严格控制业务外包成本。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C13",
+          "measure": "引入竞争机制，按照有关法律法规，遵循公开、公平、公正的原则，采用公开招标等适当方式，择优选择承包方。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C14",
+          "measure": "按照规定的程序和权限从候选承包方中择优做出选择，并建立严格的回避制度和监督处罚制度，避免相关人员在选择承包方过程中出现受贿和舞弊行为。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R10",
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "4、签订业务外包合同",
+      "statement": "⑴是否合同条款未能针对业务外包风险做出明确的约定，对承包方的违约责任界定不够清晰，导致企业陷入合同纠纷和诉讼；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C15",
+          "measure": "在订立外包合同前，充分考虑业务外包方案中识别出的重要风险因素，并通过合同条款予以有效规避或降低。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R11",
+      "process_l1": "一、业务外包承包方选择",
+      "process_l2": "4、签订业务外包合同",
+      "statement": "⑵是否合同约定的业务外包价格不合理或成本费用过高，导致企业遭受损失。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C16",
+          "measure": "在合同的内容和范围方面，明确承包方提供的服务类型、数量、成本，以及明确界定服务的环节、作业方式、作业时间、服务费用等细节。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C17",
+          "measure": "在合同的权利和义务方面，明确企业有权督促承包方改进服务流程和方法，承包方有责任按照合同协议规定的方式和频率，将外包实施的进度和现状告知企业，并对存在问题进行有效沟通。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C18",
+          "measure": "在合同的服务和质量标准方面，应当规定承包方最低的服务水平要求以及如果未能满足标准应实施的补救措施。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C19",
+          "measure": "在合同的保密事项方面，应具体约定对于涉及本企业机密的业务和事项，承包方有责任履行保密义务。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C20",
+          "measure": "在费用结算标准方面，综合考虑内外部因素，合理确定外包价格，严格控制业务外包成本。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C21",
+          "measure": "在违约责任方面，制定既具原则性又体现一定灵活性的合同条款，以适应环境、技术和企业自身业务的变化。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R12",
+      "process_l1": "二、业务外包实施",
+      "process_l2": "1、组织实施业务外包活动",
+      "statement": "是否组织实施业务外包的工作不充分或未落实到位，影响下一环节业务外包过程管理的有效实施，导致难以实现业务外包的目标。",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C22",
+          "measure": "按照业务外包制度、工作流程和相关要求，制定业务外包实施的管控措施，包括落实与承包方之间的资产管理、信息资料管理、人力资源管理、安全保密管理等机制，确保承包方在履行外包业务合同时有章可循。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C23",
+          "measure": "做好与承包方的对接工作，通过培训等方式确保承包方充分了解企业的工作流程和质量要求，从价值链的起点开始控制业务质量。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C24",
+          "measure": "与承包方建立并保持畅通的沟通协调机制，以便及时发现并有效解决业务外包过程存在的问题。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C25",
+          "measure": "梳理有关工作流程，明确每个环节上的岗位职责分工、运营模式、管理机制、质量水平等方面的要求。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R13",
+      "process_l1": "二、业务外包实施",
+      "process_l2": "2、业务外包过程管理",
+      "statement": "⑴是否承包方在合同期内因市场变化等原因不能保持履约能力，无法继续按照合同约定履行义务，导致业务外包失败和本企业生产经营活动中断；",
+      "category": "error",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C26",
+          "measure": "在承包方提供服务或制造产品的过程中，密切关注重大业务外包承包方的履约能力，采取动态管理方式，对承包方开展日常绩效评价和定期考核。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R14",
+      "process_l1": "二、业务外包实施",
+      "process_l2": "2、业务外包过程管理",
+      "statement": "⑵是否承包方出现未按照业务外包合同约定的质量要求持续提供合格的产品或服务等违约行为，导致企业难以发挥业务外包优势，甚至遭受重大损失；",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C27",
+          "measure": "对承包方的履约能力进行持续评估，包括承包方对该项目的投入是否能够支持其产品或服务质量达到企业预期目标，承包方自身的财务状况、生产能力、技术创新能力等综合能力是否满足该项目的要求。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R15",
+      "process_l1": "二、业务外包实施",
+      "process_l2": "2、业务外包过程管理",
+      "statement": "⑶是否管控不力，导致商业秘密泄露。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C28",
+          "measure": "建立即时监控机制，一旦发现偏离合同目标等情况，应及时要求承包方调整改进。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C29",
+          "measure": "对重大业务外包的各种意外情况做出充分预计，建立相应的应急处理机制，制定临时替代方案，避免业务外包失败造成企业生产经营活动中断。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C30",
+          "measure": "有确凿证据表明承包方存在重大违约行为，并导致业务外包合同无法履行的，应当及时终止合同，并指定有关部门按照法律程序向承包方索赔。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C31",
+          "measure": "切实加强对业务外包过程中形成的商业信息资料的管理。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R16",
+      "process_l1": "二、业务外包实施",
+      "process_l2": "3、验收",
+      "statement": "是否验收方式与业务外包成果交付方式不匹配，验收标准不明确，验收程序不规范，使得验收工作流于形式，不能及时发现业务外包质量低劣等情况，可能导致企业遭受损失。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C32",
+          "measure": "根据承包方业务外包成果交付方式的特点，制定不同的验收方式。一般而言，可以对最终产品或服务进行一次性验收，也可以在整个外包过程中分阶段验收。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C33",
+          "measure": "根据业务外包合同的约定，结合在日常绩效评价基础上对外包业务质量是否达到预期目标的基本评价，确定验收标准。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C34",
+          "measure": "组织有关职能部门、财会部门、质量控制部门的相关人员，严格按照验收标准对承包方交付的产品或服务进行审查和全面测试，确保产品或服务符合需求，并出具验收证明。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C35",
+          "measure": "对在验收过程中发现异常情况的，应当立即报告，查明原因，视问题的严重性与承包方协商采取恰当的补救措施，并依法索赔。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        },
+        {
+          "control_ref": "OUT-C36",
+          "measure": "根据验收结果对业务外包是否达到预期目标作出总体评价，据此对业务外包管理制度和流程进行改进和优化。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R17",
+      "process_l1": "二、业务外包实施",
+      "process_l2": "4、会计控制",
+      "statement": "⑴是否缺乏有效的业务外包会计系统控制，未能全面真实地记录和反映企业业务外包各环节的资金流和实物流情况，可能导致企业资产流失或贬损；",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C37",
+          "measure": "企业财会部门应当根据国家统一的会计准则制度，对业务外包过程中交由承包方使用的资产、涉及资产负债变动的事项以及外包合同诉讼潜在影响等加强核算与监督。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R18",
+      "process_l1": "二、业务外包实施",
+      "process_l2": "4、会计控制",
+      "statement": "⑵是否业务外包相关会计处理不当，可能导致财务报告信息失真；",
+      "category": "data_quality",
+      "category_basis": "heuristic",
+      "reference_level": "medium",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C38",
+          "measure": "根据企业会计准则制度的规定，结合外包业务特点和企业管理机制，建立完善外包成本的会计核算方法，进行有关会计处理，并在财务报告中进行必要、充分的披露。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "OUT-R19",
+      "process_l1": "二、业务外包实施",
+      "process_l2": "4、会计控制",
+      "statement": "⑶是否结算审核不严格、支付方式不恰当、金额控制不严，可能导致企业资金损失或信用受损。",
+      "category": "asset_safety",
+      "category_basis": "heuristic",
+      "reference_level": "high",
+      "typical_controls": [
+        {
+          "control_ref": "OUT-C39",
+          "measure": "在向承包方结算费用时，应当依据验收证明，严格按照合同约定的结算条件、方式和标准办理支付。",
+          "guideline_refs": [],
+          "frequency": "业务发生时",
+          "execution_mode": "人工控制",
+          "importance": "一般控制"
+        }
+      ]
+    }
+  ]
+}

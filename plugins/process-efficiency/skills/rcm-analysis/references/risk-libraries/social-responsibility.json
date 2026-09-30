@@ -1,0 +1,242 @@
+{
+  "library_schema_version": "0.1.0",
+  "domain": "social-responsibility",
+  "domain_label": "社会责任",
+  "framework_ref": "企业内部控制应用指引第4号",
+  "risk_text_status": "pending",
+  "generated_at": "2026-09-30T03:07:22.567113+00:00",
+  "processes": [
+    {
+      "process_l1": "一、安全生产",
+      "process_l2": null
+    },
+    {
+      "process_l1": "二、产品质量",
+      "process_l2": null
+    },
+    {
+      "process_l1": "三、环境保护与资源节约",
+      "process_l2": null
+    },
+    {
+      "process_l1": "四、促进就业与员工权益保护",
+      "process_l2": null
+    }
+  ],
+  "risks": [
+    {
+      "risk_ref": "SR-R01",
+      "process_l1": "一、安全生产",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "SR-C01",
+          "measure": "企业应当根据国家有关安全生产的规定，结合本企业实际情况，建立严格的安全生产管理体系、操作规范和应急预案，强化安全生产责任追究制度，切实做到安全生产。",
+          "guideline_refs": [
+            "应用指引第五条"
+          ],
+          "frequency": "每年",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C02",
+          "measure": "企业应当重视安全生产投入，在人力、物力、资金、技术等方面提供必要的保障，健全检查监督机制，确保各项安全措施落实到位，不得随意降低保障标准和要求。",
+          "guideline_refs": [
+            "应用指引第六条"
+          ],
+          "frequency": "每季度",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C03",
+          "measure": "企业应当贯彻预防为主的原则，采用多种形式增强员工安全意识，重视岗位培训，对于特殊岗位实行资格认证制度。",
+          "guideline_refs": [
+            "应用指引第七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C04",
+          "measure": "企业如果发生生产安全事故，应当按照安全生产管理制度妥善处理，排除故障，减轻损失，追究责任。",
+          "guideline_refs": [
+            "应用指引第八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "SR-R02",
+      "process_l1": "二、产品质量",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "SR-C05",
+          "measure": "企业应当根据国家和行业相关产品质量的要求，从事生产经营活动，切实提高产品质量和服务水平，努力为社会提供优质安全健康的产品和服务，最大限度地满足消费者的需求，对社会和公众负责，接受社会监督，承担社会责任。",
+          "guideline_refs": [
+            "应用指引第九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C06",
+          "measure": "企业应当规范生产流程，建立严格的产品质量控制和检验制度，严把质量关，禁止缺乏质量保障、危害人民生命健康的产品流向社会。",
+          "guideline_refs": [
+            "应用指引第十条"
+          ],
+          "frequency": "每年",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C07",
+          "measure": "企业应当加强产品的售后服务。售后发现存在严重质量缺陷、隐患的产品，应当及时召回或采取其他有效措施，最大限度地降低或消除缺陷、隐患产品的社会危害。",
+          "guideline_refs": [
+            "应用指引第十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "SR-R03",
+      "process_l1": "三、环境保护与资源节约",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "SR-C08",
+          "measure": "企业应当按照国家有关环境保护与资源节约的规定，结合本企业实际情况，建立环境保护与资源节约制度，认真落实节能减排责任，积极开发和使用节能产品，发展循环经济，降低污染物排放，提高资源综合利用效率。",
+          "guideline_refs": [
+            "应用指引第十二条"
+          ],
+          "frequency": "不适用",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C09",
+          "measure": "企业应当重视生态保护，加大对环保工作的人力、物力、财力的投入和技术支持，不断改进工艺流程，降低能耗和污染物排放水平，实现清洁生产。",
+          "guideline_refs": [
+            "应用指引第十三条"
+          ],
+          "frequency": "不适用",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C10",
+          "measure": "企业应当重视资源节约和资源保护，着力开发利用可再生资源，防止对不可再生资源进行掠夺性或毁灭性开发。",
+          "guideline_refs": [
+            "应用指引第十四条"
+          ],
+          "frequency": "不适用",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C11",
+          "measure": "企业应当建立环境保护和资源节约的监控制度，定期开展监督检查，发现问题，及时采取措施予以纠正。",
+          "guideline_refs": [
+            "应用指引第十五条"
+          ],
+          "frequency": "不适用",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        }
+      ]
+    },
+    {
+      "risk_ref": "SR-R04",
+      "process_l1": "四、促进就业与员工权益保护",
+      "process_l2": null,
+      "statement": null,
+      "category": null,
+      "category_basis": "pending_risk_text",
+      "reference_level": null,
+      "typical_controls": [
+        {
+          "control_ref": "SR-C12",
+          "measure": "企业应当依法保护员工的合法权益，贯彻人力资源政策，保护员工依法享有劳动权利和履行劳动义务，保持工作岗位相对稳定，积极促进充分就业，切实履行社会责任。",
+          "guideline_refs": [
+            "应用指引第十六条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C13",
+          "measure": "企业应当与员工签订并履行劳动合同，遵循按劳分配、同工同酬的原则，建立科学的员工薪酬制度和激励机制，不得克扣或无故拖欠员工薪酬。",
+          "guideline_refs": [
+            "应用指引第十七条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C14",
+          "measure": "企业应当及时办理员工社会保险，足额缴纳社会保险费，保障员工依法享受社会保险待遇。",
+          "guideline_refs": [
+            "应用指引第十八条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C15",
+          "measure": "企业应当加强职工代表大会和工会组织建设，维护员工合法权益，积极开展员工职业教育培训，创造平等发展机会。",
+          "guideline_refs": [
+            "应用指引第十九条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C16",
+          "measure": "企业应当按照产学研用相结合的社会需求，积极创建实习基地，大力支持社会有关方面培养、锻炼社会需要的应用型人才。",
+          "guideline_refs": [
+            "应用指引第二十条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        },
+        {
+          "control_ref": "SR-C17",
+          "measure": "企业应当积极履行社会公益方面的责任和义务，关心帮助社会弱势群体，支持慈善事业。",
+          "guideline_refs": [
+            "应用指引第二十一条"
+          ],
+          "frequency": "业务发生时",
+          "execution_mode": "手工控制",
+          "importance": "重要控制"
+        }
+      ]
+    }
+  ]
+}
