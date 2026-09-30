@@ -4,8 +4,9 @@
 // 供四个能力技能（ASSESS 收尾）与 process-assess-workflow（REPORT 聚合前）复用。
 //
 // 用法:
-//   node validate-findings.mjs <findings.yaml> [--strict]
-//   --strict  把 warning 也按错误计（退出码非零）
+//   node validate-findings.mjs <findings.yaml> [--strict] [--baseline <baseline-vN.json>]
+//   --strict    把 warning 也按错误计（退出码非零）
+//   --baseline  跨文件校验 anchor.baseline：version 须等于基线 baseline_id，snapshot_ref 须命中基线 snapshots[].path
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { parseYaml } from './yaml-lite.mjs';
@@ -37,7 +38,7 @@ function hasPlaceholder(v) {
   return false;
 }
 
-function validate(obj) {
+function validate(obj, baselineCtx = null) {
   const errors = [];
   const warnings = [];
   if (!obj || typeof obj !== 'object' || !Array.isArray(obj.findings)) {
@@ -83,7 +84,19 @@ function validate(obj) {
       if (DESIGN_LAYERS.includes(f.dimension) && !hasDigest) at('anchor.digest', `设计层(${f.dimension})发现必须含 anchor.digest`);
       if (INSTANCE_LAYERS.includes(f.dimension) && !hasBaseline) at('anchor.baseline', `实例层(${f.dimension})发现必须含 anchor.baseline`);
       if (hasDigest) for (const k of ['doc_id', 'block_id', 'element_ref']) if (!(k in f.anchor.digest)) at(`anchor.digest.${k}`, '缺失');
-      if (hasBaseline) for (const k of ['version', 'snapshot_ref', 'record_ref']) if (!(k in f.anchor.baseline)) at(`anchor.baseline.${k}`, '缺失');
+      if (hasBaseline) {
+        for (const k of ['version', 'snapshot_ref', 'record_ref']) if (!(k in f.anchor.baseline)) at(`anchor.baseline.${k}`, '缺失');
+        // 跨文件校验（--baseline）：锚点必须命中基线声明的版本与快照
+        if (baselineCtx) {
+          const b = f.anchor.baseline;
+          if (b.version && b.version !== baselineCtx.baseline_id) {
+            at('anchor.baseline.version', `与基线 ${baselineCtx.baseline_id} 不一致：${b.version}`);
+          }
+          if (b.snapshot_ref && !baselineCtx.snapshotPaths.has(b.snapshot_ref)) {
+            at('anchor.baseline.snapshot_ref', `未命中基线 snapshots[].path：${b.snapshot_ref}（基线外未快照数据，违反锚点纪律 §2）`);
+          }
+        }
+      }
     }
 
     // evidence 非空列表
@@ -115,17 +128,26 @@ function validate(obj) {
 function runCli() {
   const args = process.argv.slice(2);
   const strict = args.includes('--strict');
-  const path = args.find((a) => !a.startsWith('--'));
-  if (!path) throw new Error('用法: node validate-findings.mjs <findings.yaml> [--strict]');
+  const baselineIdx = args.indexOf('--baseline');
+  const baselinePath = baselineIdx >= 0 ? args[baselineIdx + 1] : null;
+  const path = args.find((a, i) => !a.startsWith('--') && (baselineIdx < 0 || i !== baselineIdx + 1));
+  if (!path) throw new Error('用法: node validate-findings.mjs <findings.yaml> [--strict] [--baseline <baseline-vN.json>]');
   const abs = resolve(path);
   if (!existsSync(abs)) throw new Error(`文件不存在：${abs}`);
+  let baselineCtx = null;
+  if (baselinePath) {
+    const bAbs = resolve(baselinePath);
+    if (!existsSync(bAbs)) throw new Error(`基线文件不存在：${bAbs}`);
+    const b = JSON.parse(readFileSync(bAbs, 'utf8'));
+    baselineCtx = { baseline_id: b.baseline_id, snapshotPaths: new Set((b.snapshots || []).map((s) => s && s.path).filter(Boolean)) };
+  }
   let obj;
   try {
     obj = parseYaml(readFileSync(abs, 'utf8'));
   } catch (e) {
     throw new Error(`YAML 解析失败：${e.message}`);
   }
-  const { errors, warnings } = validate(obj);
+  const { errors, warnings } = validate(obj, baselineCtx);
   const n = (obj.findings || []).length;
   console.log(`=== findings 校验：${abs} ===`);
   console.log(`发现数：${n} ｜ 错误：${errors.length} ｜ 警告：${warnings.length}`);

@@ -171,8 +171,11 @@ function buildProjection(assessmentId, all) {
     ea.push(`  sourceAssessment: ${q(assessmentId)}`);
     ea.push(`  sourceFinding: ${q(f.finding_id)}`);
     ea.push(`  generatedAt: ${q(new Date().toISOString())}`);
-    ea.push(`  status: ${q(f.status || 'proposed')}`);
-    projected.push(ea.join('\n'));
+    // schema status 枚举仅 proposed/confirmed；finding 的 provisional（DDR 待闭环）归为 proposed
+    const eaStatus = f.status === 'confirmed' ? 'confirmed' : 'proposed';
+    ea.push(`  status: ${q(eaStatus)}`);
+    // 统一缩进 2 空格（yaml-lite 要求序列深于父 key；同时也是标准 YAML 风格）
+    projected.push(ea.map((l) => `  ${l}`).join('\n'));
   }
   const header = [
     `# 评价断言投影（evaluation-assertions.yaml）`,

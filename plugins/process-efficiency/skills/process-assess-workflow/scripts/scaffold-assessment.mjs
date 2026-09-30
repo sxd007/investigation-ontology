@@ -89,7 +89,7 @@ export function generateScaffold(outputDirectory, options) {
   const directory = resolve(outputDirectory);
   if (existsSync(directory) && !options.force) throw new Error(`目标目录已存在：${directory}；如需覆盖请添加 --force`);
   mkdirSync(join(directory, 'baselines'), { recursive: true });
-  mkdirSync(join(directory, '01_assessments'));
+  mkdirSync(join(directory, '01_assessments'), { recursive: true });
   const data = buildScaffold(options);
   writeFileSync(join(directory, 'meta.json'), `${JSON.stringify(data.meta, null, 2)}\n`, 'utf8');
   writeFileSync(join(directory, 'checklist.yaml'), data.checklistYaml, 'utf8');

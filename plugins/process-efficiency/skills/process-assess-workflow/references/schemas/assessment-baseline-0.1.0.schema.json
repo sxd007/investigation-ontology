@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://efio.example/schemas/assessment-baseline-0.1.0.schema.json",
+  "title": "AssessmentBaseline 0.1.0",
+  "description": "流程评价基线：digest 引用 + 指标定义 + 实例数据快照清单（含哈希），版本化 Append-Only。评价发现的 anchor.baseline 与结论可复现性以本结构为锚。",
+  "type": "object",
+  "required": [
+    "baseline_schema_version", "baseline_id", "assessment_id", "status", "created_at",
+    "scope", "digests", "metrics", "snapshots", "data_gaps"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "baseline_schema_version": {"const": "0.1.0"},
+    "baseline_id": {"type": "string", "pattern": "^baseline-v[1-9]\\d*$"},
+    "assessment_id": {"type": "string", "pattern": "^PA-\\d{4}-\\d{3}$"},
+    "status": {"enum": ["draft", "frozen"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "frozen_at": {"type": ["string", "null"], "format": "date-time"},
+    "supersedes": {"type": ["string", "null"], "pattern": "^baseline-v[1-9]\\d*$"},
+    "superseded_by": {"type": ["string", "null"], "pattern": "^baseline-v[1-9]\\d*$"},
+    "scope": {
+      "type": "object",
+      "required": ["processes"],
+      "additionalProperties": false,
+      "properties": {
+        "processes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "additionalProperties": false,
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "l3_ref": {"type": ["string", "null"]},
+              "org": {"type": ["string", "null"]}
+            }
+          }
+        },
+        "data_window": {"$ref": "#/$defs/dataWindow"},
+        "wave": {"type": ["string", "null"]}
+      }
+    },
+    "digests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["doc_id", "digest_ref", "digest_schema_version", "sha256"],
+        "additionalProperties": false,
+        "properties": {
+          "doc_id": {"type": "string", "minLength": 1},
+          "digest_ref": {"type": "string", "minLength": 1, "description": "相对评价根的路径（POSIX 分隔符），如 policy-digests/ACME-POL-001/digest.json"},
+          "digest_schema_version": {"enum": ["0.2.0", "0.3.0"]},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "stats": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "properties": {
+              "process_elements": {"type": "integer", "minimum": 0},
+              "process_objectives": {"type": "integer", "minimum": 0},
+              "risks": {"type": "integer", "minimum": 0},
+              "controls": {"type": "integer", "minimum": 0},
+              "flow_edges": {"type": "integer", "minimum": 0}
+            }
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["metric_id", "name", "definition", "data_mapping"],
+        "additionalProperties": false,
+        "properties": {
+          "metric_id": {"type": "string", "minLength": 1},
+          "name": {"type": "string", "minLength": 1},
+          "definition": {"type": "string", "minLength": 1, "description": "计算口径（分子/分母/统计方式）"},
+          "unit": {"type": ["string", "null"]},
+          "target_value": {"type": ["number", "string", "null"]},
+          "benchmark_ref": {"type": ["string", "null"], "description": "外部基准引用（如 APQC PCF metric ID）"},
+          "data_mapping": {
+            "type": "object",
+            "required": ["source_system", "field"],
+            "additionalProperties": false,
+            "properties": {
+              "source_system": {"type": "string", "minLength": 1},
+              "dataset": {"type": ["string", "null"]},
+              "field": {"type": "string", "minLength": 1},
+              "filter": {"type": ["string", "null"]}
+            }
+          },
+          "snapshot_ref": {"type": ["string", "null"], "description": "提供实际值的快照路径，须为 snapshots[].path 之一"}
+        }
+      }
+    },
+    "snapshots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "source_system", "acquired_at", "sha256"],
+        "additionalProperties": false,
+        "properties": {
+          "path": {"type": "string", "minLength": 1, "description": "相对评价根的路径（POSIX 分隔符），finding 锚点 anchor.baseline.snapshot_ref 引用本值"},
+          "source_system": {"type": "string", "minLength": 1},
+          "description": {"type": ["string", "null"]},
+          "acquired_at": {"type": "string", "format": "date-time"},
+          "data_window": {"$ref": "#/$defs/dataWindow"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "record_count": {"type": ["integer", "null"], "minimum": 0}
+        }
+      }
+    },
+    "data_gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "reason_type", "impact"],
+        "additionalProperties": false,
+        "properties": {
+          "source": {"type": "string", "minLength": 1, "description": "无法获取的数据源"},
+          "reason_type": {"enum": ["evaluator_gap", "provider_gap"], "description": "evaluator_gap=评价方未取数；provider_gap=数据方无法提供"},
+          "impact": {"type": "string", "minLength": 1, "description": "对评价范围/结论的降级影响"},
+          "mitigation": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "notes": {"type": ["string", "null"]}
+  },
+  "$defs": {
+    "dataWindow": {
+      "type": ["object", "null"],
+      "required": ["start", "end"],
+      "additionalProperties": false,
+      "properties": {
+        "start": {"type": "string", "format": "date"},
+        "end": {"type": "string", "format": "date"}
+      }
+    }
+  }
+}

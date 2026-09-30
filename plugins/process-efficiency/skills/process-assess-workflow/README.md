@@ -26,4 +26,4 @@ node skills/process-assess-workflow/scripts/scaffold-assessment.mjs process-asse
 
 ## 状态
 
-🚧 Alpha — SKILL 与脚手架就位；四维评价技能（goal-alignment / rcm-analysis / control-testing / efficiency-diagnosis）规划中，ASSESS 阶段可先行以手工评价过渡。
+✅ Beta — 全工具链就位：评价脚手架（scaffold-assessment / scaffold-dimension）、基线组装与校验（scaffold-baseline / validate-baseline，[baseline-contract](./references/baseline-contract.md)）、维度初稿生成（generate-dimension-drafts，digest 机械预填）、findings 闭环（validate-findings 含 --baseline 锚点跨文件校验 / aggregate-findings 含本体投影）、投影产物本地校验（validate-evaluation-assertions）、工具链回归测试（test-workflow-toolchain）。四维评价技能（goal-alignment / rcm-analysis / control-testing / efficiency-diagnosis）方法论与模板已就位。

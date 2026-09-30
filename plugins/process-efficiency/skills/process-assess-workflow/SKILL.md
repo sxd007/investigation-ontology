@@ -86,9 +86,22 @@ TRACK（跟踪整改落实）→ CLOSED
 
 1. **制度解构**：对制度文档清单逐份调用 `policy-digest`（输出根 `process-assessments/{assessment_id}/policy-digests/`，engagement_id 取本评价 `assessment_id`）；
 2. **指标定义**：确定评价指标集（可参照 proc 域 Metric / APQC PCF 基准），含计算口径与数据字段映射；
-3. **数据快照**：对实例数据（OA/ERP 事件日志、审批记录）做快照落盘（含 SHA-256 与获取时间），快照即基线的一部分——之后数据更新不影响本次评价的可复现性。
+3. **数据快照**：对实例数据（OA/ERP 事件日志、审批记录）做快照落盘到 `snapshots/`（含 SHA-256 与获取时间），快照即基线的一部分——之后数据更新不影响本次评价的可复现性；
+4. **组装基线**：运行脚手架生成基线草稿（自动扫描 `policy-digests/*/digest.json` 与 `snapshots/`，版本号自动递增）：
 
-**输出**：`baselines/baseline-v{N}.json`、`policy-digests/`（多份成果包）。
+```text
+node skills/process-assess-workflow/scripts/scaffold-baseline.mjs process-assessments/{assessment_id}
+```
+
+快照/digest 变动后用 `--refresh baselines/baseline-v{N}.json` 重算哈希（仅 draft）；指标定义与快照元数据（source_system/acquired_at/data_window）由 AI 补全。基线结构与纪律见 [baseline-contract](./references/baseline-contract.md)。
+
+5. **冻结基线**：校验 0 错误后将 `status` 改为 `frozen` 并填 `frozen_at`：
+
+```text
+node skills/process-assess-workflow/scripts/validate-baseline.mjs process-assessments/{assessment_id}/baselines/baseline-v{N}.json --strict
+```
+
+**输出**：`baselines/baseline-v{N}.json`（schema 0.1.0，Append-Only 版本化）、`policy-digests/`（多份成果包）、`snapshots/`（实例数据快照）。
 
 **门禁**（全部满足后推进至 ASSESS）：
 
@@ -118,6 +131,14 @@ TRACK（跟踪整改落实）→ CLOSED
 node skills/process-assess-workflow/scripts/scaffold-dimension.mjs {output_root}/01_assessments/goal --skill goal [--assessment-id PA-2026-001] [--date 2026-09-29]
 ```
 
+**维度初稿生成**：基线就位后运行 `generate-dimension-drafts.mjs`，从 digest/基线机械预填各维度产物（目标清单、RCM 矩阵映射、无控风险与 orphan 控制、控制设计表、选样计划、穿行模板路径、执行率看板行、结构诊断 E1-E3、周期分解环节行），判断列留白 `{…}` 由 AI 评价填充；已存在文件默认跳过（`--force` 覆盖）：
+
+```text
+node skills/process-assess-workflow/scripts/generate-dimension-drafts.mjs process-assessments/{assessment_id} --skill <goal|risk|control|efficiency> [--baseline baseline-vN]
+```
+
+场景二（无基线）可用 `--digest <digest.json>...` 直喂，输出目录由调用方指定。
+
 **消费纪律**：评价技能只消费 digest-schema 兼容的流程知识包（默认生产者 policy-digest；本体层投影为第二生产者，未来实现）与 baseline 声明的数据快照，**不回头读制度原文**（锚点追溯经 digest 间接实现），不引入基线外的未快照数据（保证结论可复现）。
 
 **上游纠错（DDR）**：评价技能在专业领域内识别流程知识包的缺陷嫌疑（遗漏/错归类/锚点错/幻觉），按 [DDR 机制](./references/digest-defect-report.md)报告至 `01_assessments/ddr.yaml`；验证与修复归 policy-digest（走 digest 版本链），下游不自行修改不回读原文。defect-susceptible 类 finding 在 DDR 闭环前保持 provisional。
@@ -137,11 +158,11 @@ node skills/process-assess-workflow/scripts/scaffold-dimension.mjs {output_root}
 
 **目标**：将各维度发现收敛为评级结论与改进建议，形成流程 Owner 可认领的行动清单。
 
-**校验**：REPORT 收敛前，对各维度 `findings.yaml` 运行 `scripts/validate-findings.mjs`（可加 `--strict`），确保 finding-contract 合规、无悬空结论，再行聚合。
+**校验**：REPORT 收敛前，对各维度 `findings.yaml` 运行 `scripts/validate-findings.mjs`（可加 `--strict`；加 `--baseline baselines/baseline-v{N}.json` 做锚点跨文件校验——version/snapshot_ref 必须命中基线声明），确保 finding-contract 合规、无悬空结论，再行聚合。
 
 **聚合**：`node scripts/aggregate-findings.mjs <assessment_root>` 生成 `assessment_report.md`（评级结论 / 发现明细 / 改进建议清单），并按 assertion-projection.md 投影 `01_assessments/evaluation-assertions.yaml`（加 `--no-projection` 可跳过投影）。
 
-**输出**：`assessment_report.md`；**可选**投影产物 `01_assessments/evaluation-assertions.yaml`——把双锚点且谓词族覆盖的 findings 按 framework evaluation-assertions schema（ACP-002）投影为本体断言，供跨评价沉淀与本体摄取。投影范围/映射/校验流程见 [断言投影契约](./references/assertion-projection.md)；投影失败不阻塞本阶段门禁。
+**输出**：`assessment_report.md`；**可选**投影产物 `01_assessments/evaluation-assertions.yaml`——把双锚点且谓词族覆盖的 findings 按 framework evaluation-assertions schema（ACP-002）投影为本体断言，供跨评价沉淀与本体摄取。投影范围/映射/校验流程见 [断言投影契约](./references/assertion-projection.md)；投影失败不阻塞本阶段门禁。投影产物用 `scripts/validate-evaluation-assertions.mjs` 本地校验（结构/XOR/supersedes 链/未对齐率），无需跨仓工具。
 
 **门禁**（全部满足后推进至 CLOSED；TRACK 为可选延长态）：
 
@@ -198,6 +219,7 @@ node skills/process-assess-workflow/scripts/scaffold-assessment.mjs process-asse
 
 - **能力层技能：** [policy-digest](../policy-digest/SKILL.md)（基座：文档→流程知识包）、[goal-alignment](../goal-alignment/SKILL.md)、[rcm-analysis](../rcm-analysis/SKILL.md)、[control-testing](../control-testing/SKILL.md)、[efficiency-diagnosis](../efficiency-diagnosis/SKILL.md)（四维评价）
 - **共享契约：** [finding-contract](./references/finding-contract.md) — 四技能评价发现的统一结构（GA/RC/CT/ED 前缀、锚点纪律、severity 判级），REPORT 阶段聚合的依据
+- **基线契约：** [baseline-contract](./references/baseline-contract.md) — 评价基线的结构/冻结纪律/版本链（schema 0.1.0），finding 实例层锚点的载体；配套 `scaffold-baseline.mjs` / `validate-baseline.mjs`
 - **本体投影：** [assertion-projection](./references/assertion-projection.md) — findings → evaluation-assertions 投影契约（ACP-002，可选增强路径）
 - **设计基准：** [docs/design.md](../../docs/design.md)（双模式架构、根心契约、范式差异）
 - **对照范式：** investigation-ontology 插件的 case-management（对抗性调查工作流，与本技能的协作性评价工作流互为镜像）

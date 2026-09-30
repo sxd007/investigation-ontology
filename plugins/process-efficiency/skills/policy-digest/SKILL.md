@@ -287,7 +287,8 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <engage
 
 ## 版本化格式
 
-- [Policy Digest schema 0.2.0（当前）](./references/schemas/policy-digest-0.2.0.schema.json)
+- [Policy Digest schema 0.3.0（当前）](./references/schemas/policy-digest-0.3.0.schema.json)
+- [Policy Digest schema 0.2.0（维护模式，入库前迁移 0.3.0）](./references/schemas/policy-digest-0.2.0.schema.json)
 - [Policy Digest schema 0.1.0（旧版）](./references/schemas/policy-digest-0.1.0.schema.json)
 - [Parsed Document schema 0.1.0](./references/schemas/parsed-document-0.1.0.schema.json)
 - [Candidates schema 0.3.0](./references/schemas/candidates-0.3.0.schema.json)
@@ -298,6 +299,7 @@ node skills/policy-digest/scripts/generate-policy-digest-explanation.mjs <engage
 - [校验器回归测试](./scripts/test-policy-digest-validation.mjs)
 - [十规则脱敏 fixture 回归测试](./scripts/test-ten-rule-policy-fixture.mjs)
 - [0.1 → 0.2 迁移器](./scripts/migrate-policy-digest-0.1-to-0.2.mjs)
+- [0.2 → 0.3 迁移器](./scripts/migrate-policy-digest-0.2-to-0.3.mjs)
 - [制度解构导览生成器](./scripts/generate-policy-digest-explanation.mjs)
 - [制度解构导览视图模板](./scripts/explanation-template.html)
 - [制度解构导览规范](references/explanation-view.md)

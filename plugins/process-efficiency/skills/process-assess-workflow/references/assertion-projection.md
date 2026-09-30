@@ -51,7 +51,7 @@
 
 1. REPORT 阶段聚合各维度 `findings.yaml` 后，按 §1 过滤可投影 finding；
 2. 按 §3 映射生成 `01_assessments/evaluation-assertions.yaml`；
-3. 用 vendored schema 校验结构（含 aligned/unaligned XOR 条件约束）；supersedes 链完整性（指向存在/无环/不分叉）与未对齐率统计可借 ontology_domain 的 `scripts/validate_evaluation_assertions.py`（跨仓工具，可选）；
+3. 用插件内 `scripts/validate-evaluation-assertions.mjs` 校验（结构含 aligned/unaligned XOR、supersedes 链完整性：指向存在/无环/不分叉、未对齐率统计）；ontology_domain 的 `scripts/validate_evaluation_assertions.py` 为跨仓等价物（可选）；
 4. 跳过清单（不满足 §1 条件的 finding + 原因）写入投影文件头部注释，并在 `assessment_report.md` 限制节注明投影覆盖率。
 
 ## 5. 治理纪律（与 candidates 一致）

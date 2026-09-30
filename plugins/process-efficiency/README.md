@@ -68,7 +68,11 @@ findings 闭环：评价产出 → `findings.yaml`（脚手架生成骨架）→
 
 - [x] **policy-digest schema 0.3.0 泛化**（已完成）— 语境标识 `case_id`→`engagement_id`，输出根按语境约定（调查语境 `cases/{case_id}/policy-digests/`，评价语境 `process-assessments/{assessment_id}/policy-digests/`）；0.2→0.3 机械迁移器就位，validator/projector/explanation 双版本兼容（0.2.0 读有效），scaffold `--engagement-id`。0.2.0 进入维护模式。
 - [x] **流程评价能力落地工具就位**（已完成）— 四能力技能 `templates/` 规范模板 + `scaffold-dimension.mjs` 维度脚手架 + findings 闭环工具（`validate-findings` / `aggregate-findings` / `yaml-lite`）；产出的 findings 遵循 finding-contract 收敛。
-- [ ] 流程评价技能集深化（评价基线组装 / 多流程并行 / 与 ontology_framework Metric·ControlPoint 投影对齐）— 进行中。
+- [x] **评价基线组装工具化**（2026-09-30 完成）— `assessment-baseline-0.1.0.schema.json` + [baseline-contract](./skills/process-assess-workflow/references/baseline-contract.md) + `scaffold-baseline.mjs`（扫描 digest/快照组装草稿、版本自动递增、`--refresh` 重算哈希仅 draft）+ `validate-baseline.mjs`（结构/文件存在性/sha256 实测/冻结纪律/版本链）；finding 实例层锚点（`anchor.baseline`）与基线结构对齐。附带修复 `scaffold-assessment.mjs --force` 对既有目录报 EEXIST 的问题。
+- [x] **维度产物初稿生成器**（2026-09-30 完成）— `generate-dimension-drafts.mjs`：从基线引用的 digest 机械预填四维度 12 类产物（目标清单+G3 对齐检查、KPI 计分卡、RCM 矩阵+orphan 控制、无控风险清单、控制设计表+冗余候选、选样计划、穿行模板路径、执行率看板、结构诊断 E1-E3、周期分解/瓶颈环节行、返工设计层对照）；判断列留白 `{…}`，既有文件默认跳过；支持 `--digest` 直喂（场景二）。
+- [x] **evaluation-assertions 本地校验器 + 锚点跨文件校验**（2026-09-30 完成）— `validate-evaluation-assertions.mjs`（结构/XOR/supersedes 链：指向存在·无环·不分叉/未对齐率，替代跨仓 Python 工具）；`validate-findings.mjs --baseline` 跨文件校验（anchor.baseline 的 version/snapshot_ref 必须命中基线声明）。附带修复：`aggregate-findings.mjs` 投影 status 的 provisional→proposed 映射（schema 枚举仅 proposed/confirmed）与断言块缩进（yaml-lite 兼容）。
+- [x] **工作流工具链回归测试**（2026-09-30 完成）— `test-workflow-toolchain.mjs`：9 脚本 × 8 组链路 × 40+ 断言固化（脚手架/基线冻结与哈希篡改/版本链/四维度初稿/锚点跨文件校验/投影与 provisional 映射/断言校验正负面六类），数据源复用 policy-digest ten-rule-policy fixture。
+- [ ] 流程评价技能集深化（多流程并行 / 与 ontology_framework Metric·ControlPoint 投影对齐）— 进行中。
 
 ## 版本
 
