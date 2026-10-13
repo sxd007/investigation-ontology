@@ -15,9 +15,21 @@ description: 工作空间任务台账的维护与调度配置。当需要新建/
 | 看进度、从哪里捡起来 | `<data_home>/board.html`（定时任务自动生成，ready to show） |
 | 补充刷新看板 | 重跑晨间刷新定时任务，或 `scripts/refresh_board.py`（**不是**触发本技能） |
 | 建卡 / 改卡 / 提升项目 | 本技能 `references/card-maintenance.md` |
-| 初始化工作区台账 / 首次 setup / 调度配置 | 本技能 `references/setup.md` |
+| 首次安装与自检 | 斜杠命令 `/workspace-board`（编排入口，规程在本技能 `references/setup.md` + `fleet.md`） |
+| 初始化工作区台账 / 调度配置 | 本技能 `references/setup.md` |
 | 下班收尾（读会话→写卡→刷板） | 定时任务执行 `references/eod-wrap.md` |
 | 跨空间发现 / 登记表策展 / 批量初始化 | 本技能 `references/fleet.md` |
+
+## 首次自检（每会话最多提一次）
+
+进入会话时按两级检测，**命中才提议、最多提一次、被拒或未被回应就不再问**：
+
+1. **全局未 setup**：当前平台推荐的 `data_home` 下无 `config.json`，且本技能从未部署过 → 提议：
+   > 「还没部署任务看板。要跑一下 `/workspace-board` 吗？（发现工作空间、确认清单、出看板、设定时任务，几分钟）」
+2. **当前工作区未初始化**（全局已 setup，但本空间无 `.taskboard/TASKS.md`）→ 提议：
+   > 「这个工作空间还没有任务台账。要我建一个吗？（会创建 `.taskboard/` 骨架并回填当前已知待办）」
+
+用户同意 → 走 `references/setup.md` 对应流程；拒绝或未回应 → 正常干活，**本会话不再提**。
 
 ## 数据位置
 
