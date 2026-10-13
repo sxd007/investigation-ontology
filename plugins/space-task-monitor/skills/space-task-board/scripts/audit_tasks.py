@@ -6,7 +6,7 @@
        --tasks-dirname  台账目录名，默认读 config.tasks_dirname，再默认 .taskboard
 退出码: 0=无问题  1=无 tasks/ 目录  2=发现问题
 """
-import os, io, re, sys, json, collections, argparse
+import os, io, re, sys, json, collections, argparse, datetime
 
 FIVE = ('active', 'waiting', 'blocked', 'done', 'dropped')
 
@@ -63,11 +63,12 @@ def main():
     d = os.path.join(root, tasks_dirname, 'tasks')
     if not os.path.isdir(d):
         print('无 tasks/ 目录:', d); return 1
-    issues, cards = [], {}
+    issues, cards, warn_mtime = [], {}, []
     for f in sorted(os.listdir(d)):
         if not f.endswith('.md'):
             continue
-        fm, body = parse_card(os.path.join(d, f))
+        fpath = os.path.join(d, f)
+        fm, body = parse_card(fpath)
         if fm is None:
             issues.append('%s: 缺 frontmatter' % f); continue
         cid = fm.get('id', '?')
@@ -78,9 +79,24 @@ def main():
         st = fm.get('status', '')
         if st and st not in FIVE:
             issues.append('%s: status="%s" 非法（只允许 %s）' % (f, st, '/'.join(FIVE)))
-        for label, pat in (('目标', r'\*\*目标\*\*'), ('范围', r'\*\*范围'), ('验收标准', r'\*\*验收标准\*\*')):
+        gran = fm.get('granularity', 'std') or 'std'
+        if gran not in ('std', 'mini'):
+            issues.append('%s: granularity="%s" 非法（只允许 std/mini）' % (f, gran))
+        req = (('目标', r'\*\*目标\*\*'),) if gran == 'mini' else (
+            ('目标', r'\*\*目标\*\*'), ('范围', r'\*\*范围'), ('验收标准', r'\*\*验收标准\*\*'))
+        for label, pat in req:
             if not re.search(pat, body):
                 issues.append('%s: 正文缺「%s」' % (f, label))
+        upd_v = fm.get('updated', '')
+        if upd_v and st not in ('done', 'dropped'):
+            try:
+                lag = (datetime.date.fromtimestamp(os.path.getmtime(fpath))
+                       - datetime.date.fromisoformat(upd_v)).days
+                if lag > 3:
+                    warn_mtime.append('%s: updated=%s 落后文件修改 %d 天（卡动过但没改 updated）'
+                                      % (f, upd_v, lag))
+            except ValueError:
+                pass
     for cid, (f, fm, body) in cards.items():
         if cid.startswith('P-'):
             ch = fm.get('children', '')
@@ -167,6 +183,8 @@ def main():
     if undef:
         print('  提示: 定义未经用户确认 %d 张：%s（批量确认后把 def_source 改为 user 并写 def_confirmed）'
               % (len(undef), ', '.join(undef)))
+    for w in warn_mtime:
+        print('  提示:', w)
     return 0 if not issues else 2
 
 if __name__ == '__main__':

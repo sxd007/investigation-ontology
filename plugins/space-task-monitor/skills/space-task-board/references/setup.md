@@ -30,7 +30,7 @@
 
 **晨间刷新**（示例 prompt，路径按实际替换）：
 
-> 运行看板刷新：执行 `python <技能目录>/scripts/refresh_board.py --config <data_home>/config.json`（Windows 用受管 Python 全路径与绝对路径）。成功后用一句话简报：N 工作区 / X 项未完成 / Y 项等外部 / Z 项受阻；失败则报告错误输出。不要做其他任何操作。
+> 运行看板刷新：执行 `python <技能目录>/scripts/refresh_board.py --config <data_home>/config.json --write-tasks-md`（Windows 用受管 Python 全路径与绝对路径）。成功后用一句话简报：N 工作区 / X 项未完成 / Y 项等外部 / Z 项受阻；失败则报告错误输出。不要做其他任何操作。
 
 **下班收尾**（示例 prompt）：
 
@@ -47,7 +47,7 @@
 1. 建 `<工作区>/.taskboard/`、`tasks/`、`templates/`
 2. 复制两个模板（**从 `<技能目录>/templates/`**，它是权威源）
 3. 写 `<工作区>/.taskboard/config.json` 指针（`data_home` 指向用户级目录，schema §2）
-4. 建 `TASKS.md`（总览 + 维护纪律两段即可，分组随事项长出来）
+4. `TASKS.md` 不手写 —— 回填卡片后由 `refresh_board.py --write-tasks-md` 生成（派生物）
 5. 在 `<工作区>` 的 IDE 上下文文件（按当前平台：`CODEBUDDY.md` / `CLAUDE.md` / `CODEX.md`）尾部追加「任务台账」节（见下；**若文件内有其他插件的标记包裹段（如 `efio:handbook-start/end`），不得插入标记段之间**，一律追加到文件尾部；无上下文文件则建最小版：抬头指向权威导航 + 空间定位一段 + 本节）
 6. 回填：读该工作区的日志、`README.md` 待办/结论节等**一手材料**聚合首版事项；目标/范围/验收标准必须从材料抽取，材料没写全宁可留空待用户补。
    **回填卡一律如实标 `def_source`**（`extracted`/`inferred`）；回填完成后把各卡三项**压缩成清单批量请用户确认**（"这几张卡的目标是这样理解的，对吗？"），确认的卡改 `user` + `def_confirmed`

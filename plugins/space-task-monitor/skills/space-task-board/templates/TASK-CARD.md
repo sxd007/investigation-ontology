@@ -2,12 +2,15 @@
 id: T-000
 title: <一句话事项名>
 project: P-0
+granularity: std
 status: active
 priority: P2
-owner: Alpha
+owner: <负责人>
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-next_review: YYYY-MM-DD
+next_review:
+due:
+blocker:
 def_source: inferred
 def_confirmed:
 kb_refs: []
@@ -43,29 +46,34 @@ sessions: []
 ---
 
 <!--
-状态取值（只这五个）：
-  active   进行中，可推进
-  waiting  等外部（律师 / 对方 / 领导 / 线下渠道）
-  blocked  受阻，当前推不动
-  done     已完成 —— 在看板「近期完成」记一行，卡片保留 30 天再删
-  dropped  已放弃 —— 在卡片里写一行放弃原因
+状态取值（只这五个）：active / waiting / blocked / done / dropped
 
-project 字段：
-  填所属项目 ID（如 P-1）。**独立任务留空** —— 不硬塞进项目。
+granularity（定义分级）：
+  std   标准任务（默认）—— 必填三项：目标 / 范围 / 验收标准
+  mini  微任务 —— 同时满足：一个动作一句话说清、完成与否无争议、单会话可完成、
+        无蔓延空间。mini 只必填「目标」一行（多数 = 标题复述），范围 / 验收可省。
+        mini 一旦跨会话、长出子任务或完成标准开始模糊 → 升级回 std 并补齐三项。
+        不为偷懒而 mini —— 它是给"标题即定义"的事项用的，不是逃避定义的后门。
 
-维护纪律：
-  · 状态或阶段有变化就改本卡，不攒着；`updated` 跟着改
-  · 卡是索引不是仓库：正文只写要点，细节留在知识库或日志里，用 kb_refs 指过去
-  · 卡内不得放未脱敏案件材料（受限工作区的东西不进台账）
-  · 不改写历史条目 —— 已完成项保留原位，新进展追加
+project 字段：填所属项目 ID（如 P-1）；独立任务留空。
+  子任务 ≥3 或跨多个会话 → 提升为项目：建 P-<n>-<slug>.md，本卡改为子项填 project:
 
-提升规则（防碎裂）：
-  当一个事项的子任务 ≥ 3 个，或它自己跨了多个会话，就**提升为项目**：
-  建 `P-<n>-<slug>.md`，把原卡改为子项并填 `project:` 字段，看板改为按项目分组。
+due / blocker（都可留空）：
+  due      真·截止日（YYYY-MM-DD）—— 与 next_review（复核节奏）是两回事；
+           看板对临期 / 逾期给出提示
+  blocker  阻塞归因，仅 status 为 waiting / blocked 时填：
+           user（卡在你本人）/ external（外部方）/ internal（自己可解但受阻）
+           不填则看板按阻塞文本推断（不如填了准）
 
-def_source（定义来源，三项「目标/范围/验收标准」的出处，须如实标）：
-  user       用户明确表述或已确认 → 同时把 def_confirmed 写为确认日期
-  extracted  AI 从既有材料（日志/README）抽取，未经用户确认
-  inferred   AI 归纳推断，未经用户确认
-  看板对非 user 且未 confirmed 的卡标「定义待确认」；批量确认后改为 user + def_confirmed
+def_source（三项的出处，须如实标）：
+  user（用户表述/已确认，同时写 def_confirmed 日期）/ extracted（材料抽取待确认）/
+  inferred（AI 推断待确认）。非 user 且未 confirmed → 看板标「定义待确认」
+
+下一步：只写一条、必须是当天可立即执行的动作（看板续接清单只取第一条）；
+  更多待办放「未完成」
+
+维护纪律（卡片级）：
+  · 状态有变化就改本卡 + updated；不改写历史条目，新进展追加
+  · 卡是索引不是仓库：细节用 kb_refs 指过去；不得放未脱敏案件材料
+  · TASKS.md 与 board.html 均为派生物，refresh 时重新生成 —— 不要手改
 -->

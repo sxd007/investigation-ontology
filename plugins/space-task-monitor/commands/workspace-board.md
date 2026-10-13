@@ -37,7 +37,8 @@ description: 任务看板首次安装与自检 — 发现工作空间、策展�
 
 ### Step 3 · 生成并展示看板
 
-1. 跑 `python <技能目录>/scripts/refresh_board.py --config <data_home>/config.json`
+1. 跑 `python <技能目录>/scripts/refresh_board.py --config <data_home>/config.json --write-tasks-md`
+   （一并重生成各空间 TASKS.md；首次覆盖非生成版会自动备份 `.bak`）
 2. 输出一句话简报：N 工作区 / X 项未完成 / Y 项等外部 / Z 项受阻
 3. **展示**：在 IDE 内预览或告知用户 `<data_home>/board.html` 已生成、可双击打开
    （页内点击事项名可看卡片全文）

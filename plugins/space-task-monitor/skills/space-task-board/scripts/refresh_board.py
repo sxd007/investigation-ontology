@@ -126,10 +126,12 @@ def load_registry(path):
 
 # ---------------------------------------------------------------- 聚合
 
-def collect(ws, ws_idx, tasks_dirname, today):
+def collect(ws, ws_idx, tasks_dirname, today, due_soon=7):
     """读一个工作区的全部卡片，返回结构化数据。"""
     d = os.path.join(ws['path'], tasks_dirname, 'tasks')
-    entry = dict(ws, cards=[], c=collections.Counter())
+    td = datetime.date.fromisoformat(today)
+    soon = (td + datetime.timedelta(days=due_soon)).isoformat()
+    entry = dict(ws, cards=[], c=collections.Counter(), recent_done=0)
     if not os.path.isdir(d):
         entry['none'] = True
         return entry
@@ -155,19 +157,42 @@ def collect(ws, ws_idx, tasks_dirname, today):
             stale = None
         def_src = fm_scalar(fm, 'def_source') or 'inferred'
         def_confirmed = fm_scalar(fm, 'def_confirmed')
-        req_ok = all(re.search(p, body) for p in
-                     (r'\*\*目标\*\*[：:]', r'\*\*范围[^*]*\*\*[：:]', r'\*\*验收标准\*\*[：:]'))
+        gran = fm_scalar(fm, 'granularity') or 'std'
+        req_pats = [r'\*\*目标\*\*[：:]'] if gran == 'mini' else [
+            r'\*\*目标\*\*[：:]', r'\*\*范围[^*]*\*\*[：:]', r'\*\*验收标准\*\*[：:]']
+        req_ok = all(re.search(p, body) for p in req_pats)
         def_pending = (st not in ('done', 'dropped')
                        and ((def_src != 'user' and not def_confirmed) or not req_ok))
+        due = fm_scalar(fm, 'due')
+        blocker = fm_scalar(fm, 'blocker')
+        due_od = bool(due) and st not in ('done', 'dropped') and due < today
+        due_near = bool(due) and st not in ('done', 'dropped') and today <= due <= soon
+        goal = field_bold(body, '目标')
+        msc = re.search(r'\*\*范围[^*]*\*\*[：:]\s*(.+)', body)
+        scope = msc.group(1).strip() if msc else ''
+        accept = field_bold(body, '验收标准')
+        body_modal = re.sub(r'^\*\*(目标|范围[^*]*|验收标准)\*\*[：:].*\n?', '', body, flags=re.M)
+        mdn = re.search(r'##\s*已完成[^\n]*\n(.*?)(\n## |\Z)', body, re.S)
+        if mdn:
+            for ln in mdn.group(1).splitlines():
+                m2 = re.match(r'\s*-\s*(\d{4}-\d{2}-\d{2})', ln)
+                if m2:
+                    try:
+                        if 0 <= (td - datetime.date.fromisoformat(m2.group(1))).days <= 7:
+                            entry['recent_done'] += 1
+                    except ValueError:
+                        pass
         entry['cards'].append(dict(
             key='w%d-%s' % (ws_idx, cid),
             id=cid, title=fm_scalar(fm, 'title'), project=project,
             pri=fm_scalar(fm, 'priority', 'P3'), st=st, kind=kind, solo=solo,
             updated=upd, stale=stale, next_review=nrv, overdue=overdue,
-            def_src=def_src, def_pending=def_pending,
+            def_src=def_src, def_pending=def_pending, gran=gran,
+            due=due, blocker=blocker, due_od=due_od, due_near=due_near,
+            sess=len(fm_list(fm, 'sessions')),
             children=fm_list(fm, 'children'), kb_refs=fm_list(fm, 'kb_refs'),
-            body=body[:BODY_CAP],
-            goal=field_bold(body, '目标'),
+            body=body_modal[:BODY_CAP],
+            goal=goal, scope=scope, accept=accept,
             progress=field_bold(body, '进度'),
             bottleneck=field_bottleneck(body),
             next_step=field_next_step(body)))
@@ -270,6 +295,10 @@ tr.sub .t { color:#5f6368; }
 .bneck { color:#b45309; font-size:12px; }
 .defbadge { background:#f7f8f9; color:#9aa0a6; border:1px dashed #d3d6da;
   border-radius:8px; padding:0 6px; font-size:11px; margin-left:6px; white-space:nowrap; }
+.due-soon { color:#b45309; font-size:12px; font-weight:600; }
+.defblock { background:#f7f8f9; border-left:3px solid #1a56db; border-radius:6px;
+  padding:8px 14px; margin:0 0 14px; font-size:12.5px; }
+.defblock .dk { color:var(--mut); display:inline-block; min-width:110px; }
 .overdue { color:#b91c1c; font-size:12px; font-weight:600; }
 .stale { color:#b0b5ba; font-size:11px; }
 .ns { color:#0d7a5f; }
@@ -399,10 +428,20 @@ function openCard(key) {
     + (DEFLBL[d.defsrc] ? '<span>' + DEFLBL[d.defsrc] + '</span>' : '')
     + (d.updated ? '<span>更新 ' + d.updated + '</span>' : '')
     + (d.next_review ? '<span>复核 ' + d.next_review + '</span>' : '')
+    + (d.sess ? '<span>会话 ' + d.sess + ' 个</span>' : '')
     + (d.kb && d.kb.length ? '<span>参考：' + escH(d.kb.join('、')) + '</span>' : '');
+  var defb = '';
+  if (d.goal || d.scope || d.accept) {
+    defb = '<div class="defblock">'
+      + (d.goal ? '<div><span class="dk">目标</span>' + inline(d.goal) + '</div>' : '')
+      + (d.scope ? '<div><span class="dk">范围（不做什么）</span>' + inline(d.scope) + '</div>' : '')
+      + (d.accept ? '<div><span class="dk">验收标准</span>' + inline(d.accept) + '</div>' : '')
+      + '</div>';
+  }
   ov.innerHTML = '<div class="modal"><button class="mclose">×</button>'
     + '<h2 class="ct">' + escH(d.title) + '</h2>'
     + '<div class="mmeta">' + meta + '</div>'
+    + defb
     + '<div class="md">' + renderMd(d.body) + '</div></div>';
   function close() { ov.remove(); document.removeEventListener('keydown', onKey); }
   function onKey(e) { if (e.key === 'Escape') close(); }
@@ -547,6 +586,7 @@ def render_overview(ws_data, T, now, today, stale_days=14, due_soon=7):
     # 综合提示（规则化：卡在用户 / 受阻 / 复核超期 / 临期 / 停滞 / 最值得续接）
     tips = []
     user_blk, blk, od, due, stale14, resume, defpend = [], [], [], [], [], [], []
+    dueod, duenear = [], []
     soon = (datetime.date.today() + datetime.timedelta(days=due_soon)).isoformat()
     for e in ws_data:
         if e.get('none'):
@@ -554,10 +594,16 @@ def render_overview(ws_data, T, now, today, stale_days=14, due_soon=7):
         for c in e['cards']:
             if c['st'] in ('done', 'dropped'):
                 continue
-            if c['st'] in ('waiting', 'blocked') and '用户' in (c['bottleneck'] or ''):
+            if c['st'] in ('waiting', 'blocked') and (
+                    c.get('blocker') == 'user'
+                    or (not c.get('blocker') and '用户' in (c['bottleneck'] or ''))):
                 user_blk.append((e, c))
             elif c['st'] == 'blocked':
                 blk.append((e, c))
+            if c.get('due_od'):
+                dueod.append((e, c))
+            elif c.get('due_near'):
+                duenear.append((e, c))
             if c['overdue']:
                 od.append((e, c))
             elif c['next_review'] and today <= c['next_review'] <= soon:
@@ -579,6 +625,11 @@ def render_overview(ws_data, T, now, today, stale_days=14, due_soon=7):
         tips.append(('🔴', '<b>%d 项卡在你本人</b> —— %s' % (len(user_blk), names(user_blk))))
     if blk:
         tips.append(('🔴', '<b>%d 项受阻</b> —— %s' % (len(blk), names(blk))))
+    if dueod:
+        tips.append(('🔴', '<b>%d 项已过截止日</b> —— %s' % (len(dueod), names(dueod))))
+    if duenear:
+        tips.append(('🟡', '<b>%d 项临近截止（%d 天内）</b> —— %s'
+                     % (len(duenear), due_soon, names(duenear))))
     if od:
         tips.append(('🟠', '<b>%d 项复核已超期</b> —— %s' % (len(od), names(od))))
     if due:
@@ -627,6 +678,10 @@ def row(c, sub=True):
         info += '<div class="bneck">⚠ %s</div>' % esc(c['bottleneck'])
     if c.get('overdue'):
         info += '<div class="overdue">复核超期（%s）</div>' % esc(c['next_review'])
+    if c.get('due_od'):
+        info += '<div class="overdue">截止逾期（%s）</div>' % esc(c['due'])
+    elif c.get('due_near'):
+        info += '<div class="due-soon">截止临近（%s）</div>' % esc(c['due'])
     ns = '<span class="ns">▶ %s</span>' % esc(c['next_step']) if c.get('next_step') else '—'
     return ('<tr%s><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>'
             % (attrs, t, badge_st(c['st']), info, ns, upd_cell(c)))
@@ -672,8 +727,10 @@ def render_ws_page(e, idx):
         parts.append('</div><p class="empty">无台账 —— 缺数据，不等于「无未完成事项」。</p></div>')
         return '\n'.join(parts)
     pj, so, sb, w, a = counts(e)
-    parts.append('<div class="wssum">%d 项目 · %d 独立任务 · %d 子项 ｜ 等外部 %d · 进行中 %d</div></div>'
-                 % (pj, so, sb, w, a))
+    wssum = '%d 项目 · %d 独立任务 · %d 子项 ｜ 等外部 %d · 进行中 %d' % (pj, so, sb, w, a)
+    if e.get('recent_done'):
+        wssum += ' · 近 7 天完成 <b>%d</b> 项' % e['recent_done']
+    parts.append('<div class="wssum">%s</div></div>' % wssum)
     cards = e['cards']
     by_id = {x['id']: x for x in cards}
     projects = [x for x in cards if x['kind'] == 'P' and x['st'] not in ('done', 'dropped')]
@@ -696,6 +753,77 @@ def render_ws_page(e, idx):
     return '\n'.join(parts)
 
 
+# ---------------------------------------------------------------- TASKS.md 派生
+
+def render_tasks_md(e, now, td):
+    """由卡片派生一个空间的 TASKS.md（与 board.html 同数据源；勿手改）。"""
+    L = []
+    A = L.append
+    A('# %s · 任务台账' % e['name'])
+    A('')
+    A('> <!-- auto-generated by refresh_board.py --> 本文件为派生物，每次刷新覆盖，**勿手改**；权威数据在 `tasks/` 卡片。')
+    A('> 生成时间：**%s** ｜ 状态取值：`active` 进行中 · `waiting` 等外部 · `blocked` 受阻 · `done` 完成 · `dropped` 放弃' % now)
+    A('')
+    A('## 总览')
+    A('')
+    A('| 状态 | 项目 | 独立任务 | 子项 | 合计 |')
+    A('|---|---|---|---|---|')
+    c = e['c']
+    tot = [0, 0, 0, 0]
+    for st, lbl in (('waiting', '等外部'), ('active', '可推进'), ('blocked', '受阻')):
+        r = (c['proj_' + st], c['solo_' + st], c['sub_' + st])
+        tot = [tot[i] + r[i] for i in range(3)]
+        A('| `%s` %s | %d | %d | %d | **%d** |' % (st, lbl, r[0], r[1], r[2], sum(r)))
+    A('| **合计未完成** | **%d** | **%d** | **%d** | **%d** |'
+      % (tot[0], tot[1], tot[2], sum(tot)))
+    A('')
+    cards = e['cards']
+    by_id = {x['id']: x for x in cards}
+    projects = [x for x in cards if x['kind'] == 'P' and x['st'] not in ('done', 'dropped')]
+    solos = [x for x in cards if x['solo'] and x['st'] not in ('done', 'dropped')]
+    for p in sorted(projects, key=lambda x: (ST_ORDER.get(x['st'], 9), PRI_ORDER.get(x['pri'], 9))):
+        A('## %s · %s　`%s` `%s`' % (p['id'], p['title'], p['pri'], p['st']))
+        A('')
+        if p['goal']:
+            A('> **目标**：%s' % p['goal'])
+        if p['bottleneck'] and p['st'] in ('waiting', 'blocked'):
+            A('> **瓶颈**：%s' % p['bottleneck'])
+        if p['goal'] or (p['bottleneck'] and p['st'] in ('waiting', 'blocked')):
+            A('')
+        subs, open_subs = proj_subs(p, cards, by_id)
+        A('| ID | 事项 | 状态 | 进度 |')
+        A('|---|---|---|---|')
+        for s in sorted(open_subs, key=lambda x: (ST_ORDER.get(x['st'], 9), PRI_ORDER.get(x['pri'], 9))):
+            A('| %s | %s | `%s` | %s |' % (s['id'], s['title'], s['st'], s['progress'] or ''))
+        A('')
+    if solos:
+        A('## 独立任务')
+        A('')
+        A('| ID | 事项 | 状态 | 进度 |')
+        A('|---|---|---|---|')
+        for s in sorted(solos, key=lambda x: (ST_ORDER.get(x['st'], 9), PRI_ORDER.get(x['pri'], 9))):
+            A('| %s | %s | `%s` | %s |' % (s['id'], s['title'], s['st'], s['progress'] or ''))
+        A('')
+    done_recent = []
+    for x in cards:
+        if x['st'] == 'done' and x['updated']:
+            try:
+                if (td - datetime.date.fromisoformat(x['updated'])).days <= 30:
+                    done_recent.append(x)
+            except ValueError:
+                pass
+    if done_recent:
+        A('## 近期完成（30 天）')
+        A('')
+        for x in sorted(done_recent, key=lambda x: x['updated'], reverse=True):
+            A('- **%s** %s（%s）' % (x['updated'], x['title'], x['id']))
+        A('')
+    A('---')
+    A('')
+    A('维护纪律见技能 `space-task-board`；统计由脚本解析得出，未手算。')
+    return '\n'.join(L)
+
+
 # ---------------------------------------------------------------- 整页
 
 def render_board(ws_data, T, now, registry_path, today, stale_days=14, due_soon=7):
@@ -705,6 +833,8 @@ def render_board(ws_data, T, now, registry_path, today, stale_days=14, due_soon=
             card_data[c['key']] = dict(title=c['title'], st=c['st'], pri=c['pri'],
                                        updated=c['updated'], next_review=c['next_review'],
                                        defsrc=c.get('def_src', ''),
+                                       goal=c.get('goal', ''), scope=c.get('scope', ''),
+                                       accept=c.get('accept', ''), sess=c.get('sess', 0),
                                        kb=c['kb_refs'], body=c['body'])
     data_js = json.dumps(card_data, ensure_ascii=False).replace('</', '<\\/')
 
@@ -768,6 +898,8 @@ def main():
     ap.add_argument('--registry')
     ap.add_argument('--out')
     ap.add_argument('--tasks-dirname')
+    ap.add_argument('--write-tasks-md', action='store_true',
+                    help='同步重生成各空间 TASKS.md（派生物；首次覆盖非生成版前自动备份 .bak）')
     ap.add_argument('--dry', action='store_true')
     args = ap.parse_args()
 
@@ -789,10 +921,25 @@ def main():
 
     today = datetime.date.today().isoformat()
     workspaces = load_registry(registry)
-    ws_data = [collect(ws, i, tasks_dirname, today) for i, ws in enumerate(workspaces)]
+    ws_data = [collect(ws, i, tasks_dirname, today, due_soon) for i, ws in enumerate(workspaces)]
     T = aggregate(ws_data)
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
     page = render_board(ws_data, T, now, registry, today, stale_days, due_soon)
+
+    if args.write_tasks_md and not args.dry:
+        td = datetime.date.today()
+        n_ws = 0
+        for e in ws_data:
+            if e.get('none'):
+                continue
+            tm = os.path.join(e['path'], tasks_dirname, 'TASKS.md')
+            if os.path.exists(tm):
+                old = io.open(tm, encoding='utf-8').read()
+                if 'auto-generated by refresh_board.py' not in old and not os.path.exists(tm + '.bak'):
+                    io.open(tm + '.bak', 'w', encoding='utf-8').write(old)
+            io.open(tm, 'w', encoding='utf-8').write(render_tasks_md(e, now, td))
+            n_ws += 1
+        print('TASKS.md 已同步重生成（%d 个空间；非生成版首次已备份 .bak）' % n_ws)
 
     pjT = T['proj_active'] + T['proj_waiting'] + T['proj_blocked']
     soT = T['solo_active'] + T['solo_waiting'] + T['solo_blocked']

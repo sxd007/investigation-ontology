@@ -18,7 +18,7 @@
    - 新冒出的待办 → 按 `references/card-maintenance.md` 建卡（必填三项从会话材料抽取；**抽不齐的留空并在收尾小结里问用户**，不编造；`def_source` 如实标 `extracted`/`inferred`）
    - 状态变化（如某卡今天被外部卡住了）→ 改 `status` 并写清「阻塞 / 待外部」
    - 没有推进的卡**不动**（不为了显得有产出而改写）
-4. **同步三处**：项目卡子项表 → `TASKS.md` → 然后跑 `refresh_board.py` 重刷看板
+4. **同步**：项目卡子项表 → 跑 `refresh_board.py --write-tasks-md`（看板与各空间 TASKS.md 一并重生成）
 5. **跑 `audit_tasks.py`** 逐个改动过的空间校验，有问题当场修
 6. **输出收尾小结**（对话内，不落盘）：
    - 今天推进了哪几张卡（一句话/张）

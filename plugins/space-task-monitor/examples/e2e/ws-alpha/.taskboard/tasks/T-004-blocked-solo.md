@@ -6,8 +6,10 @@ status: blocked
 priority: P0
 owner: Alpha
 created: 2026-10-09
-updated: 2026-10-09
+updated: 2026-10-13
 next_review:
+due:
+blocker: external
 def_source: user
 def_confirmed: 2026-10-13
 kb_refs: []

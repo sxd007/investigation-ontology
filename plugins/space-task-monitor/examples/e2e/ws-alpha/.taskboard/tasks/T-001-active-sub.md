@@ -8,6 +8,8 @@ owner: Alpha
 created: 2026-10-10
 updated: 2026-10-13
 next_review:
+due: 2026-10-16
+blocker:
 def_source: user
 def_confirmed: 2026-10-13
 kb_refs: []

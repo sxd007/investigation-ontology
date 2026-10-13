@@ -4,10 +4,12 @@ title: <项目名>
 type: project
 status: active
 priority: P1
-owner: Alpha
+owner: <负责人>
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-next_review: YYYY-MM-DD
+next_review:
+due:
+blocker:
 def_source: inferred
 def_confirmed:
 children: []
@@ -41,23 +43,20 @@ kb_refs: []
 ---
 
 <!--
-何时建项目：
-  · 一个事项的子任务 ≥ 3 个，或它跨了多个会话
-  · 多个子项共享同一个瓶颈（如都卡在同一份律师复核上）
-  · 需要向人汇报整体进度而不只是单点进度
+项目卡管「为什么做、做到什么算完、边界在哪」—— 变更极少；
+子项卡管「具体做完哪些、还差什么」—— 随进展变动。
+项目卡不重复子项的细节，只给汇总表与瓶颈判断。
 
-与任务卡的区别：
-  · 项目卡管「为什么做、做到什么算完、边界在哪」—— 变更极少
-  · 任务卡管「具体做完哪些、还差什么」—— 随进展变动
-  · 项目卡不重复子项的细节，只给汇总表与瓶颈判断
+何时建项目：子任务 ≥ 3 个、跨多个会话、多个子项共享同一瓶颈、
+  或需要向人汇报整体进度而不只是单点进度。
+项目状态由子项决定：任一子项 waiting 且是关键路径 → 项目 waiting；
+  全部子项 done → 项目 done。
 
-状态取值：同任务卡（active / waiting / blocked / done / dropped）
-  项目状态由子项决定：任一子项 waiting 且是关键路径 → 项目 waiting；
-  全部子项 done → 项目 done，整体移入看板「近期完成」
+due / blocker / def_source：语义同任务卡（见 TASK-CARD.md 注释）。
+项目永远走全量定义（无 mini 级）—— 它是"合同"。
 
-def_source（定义来源，三项「目标/范围/验收标准」的出处，须如实标）：
-  user       用户明确表述或已确认 → 同时把 def_confirmed 写为确认日期
-  extracted  AI 从既有材料（日志/README）抽取，未经用户确认
-  inferred   AI 归纳推断，未经用户确认
-  看板对非 user 且未 confirmed 的卡标「定义待确认」；批量确认后改为 user + def_confirmed
+维护纪律（卡片级）：
+  · children 统一带引号写法 ["T-001", "T-002"]（解析脚本按此剥离）
+  · 状态有变化就改本卡 + updated；不改写历史条目
+  · TASKS.md 与 board.html 均为派生物，refresh 时重新生成 —— 不要手改
 -->
