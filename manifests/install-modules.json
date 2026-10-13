@@ -89,7 +89,11 @@
         "plugins/process-efficiency/.workbuddy-plugin",
         "plugins/process-efficiency/.codebuddy-plugin",
         "plugins/process-efficiency/.claude-plugin",
-        "plugins/process-efficiency/.codex-plugin"
+        "plugins/process-efficiency/.codex-plugin",
+        "plugins/space-task-monitor/.workbuddy-plugin",
+        "plugins/space-task-monitor/.codebuddy-plugin",
+        "plugins/space-task-monitor/.claude-plugin",
+        "plugins/space-task-monitor/.codex-plugin"
       ],
       "targets": [
         "claude",
@@ -686,6 +690,29 @@
       "defaultInstall": false,
       "cost": "light",
       "stability": "beta"
+    },
+    {
+      "id": "space-task-board",
+      "kind": "skills",
+      "description": "工作空间任务台账与跨空间看板 — 单空间两级卡片（项目卡/任务卡）维护、晨间看板定时刷新、下班收尾写卡、跨工作区 fleet 管理。展示端为离线 board.html，定时静默执行，不依赖关键词触发",
+      "paths": [
+        "plugins/space-task-monitor/skills/space-task-board",
+        "plugins/space-task-monitor/docs/config-schema.md"
+      ],
+      "targets": [
+        "claude",
+        "codebuddy",
+        "workbuddy",
+        "codex",
+        "claude-project",
+        "codebuddy-project",
+        "workbuddy-project",
+        "codex-project"
+      ],
+      "dependencies": [],
+      "defaultInstall": true,
+      "cost": "light",
+      "stability": "alpha"
     },
     {
       "id": "policy-digest",

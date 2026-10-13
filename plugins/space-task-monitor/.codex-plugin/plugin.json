@@ -1,0 +1,46 @@
+{
+  "name": "space-task-monitor",
+  "version": "0.1.0",
+  "description": "Workspace task board and cross-workspace fleet monitoring — per-space project/task cards plus cross-space rollup for Codex.",
+  "author": {
+    "name": "Alpha Shen",
+    "email": "",
+    "url": "https://github.com/sxd007"
+  },
+  "homepage": "https://github.com/sxd007/investigation-ontology",
+  "repository": "https://github.com/sxd007/investigation-ontology",
+  "license": "Apache-2.0",
+  "keywords": [
+    "workspace",
+    "task-board",
+    "fleet",
+    "progress-tracking",
+    "cross-workspace",
+    "codex",
+    "skills"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.codex-plugin/mcp.json",
+  "interface": {
+    "displayName": "Space Task Monitor",
+    "shortDescription": "Workspace task board and cross-space fleet rollup for Codex.",
+    "longDescription": "Space Task Monitor keeps a two-level task board (project cards / task cards) inside each workspace and rolls up progress across all registered workspaces, preserving progress continuity across agent sessions.",
+    "developerName": "Alpha Shen",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Shell"
+    ],
+    "websiteURL": "https://github.com/sxd007/investigation-ontology",
+    "privacyPolicyURL": "https://github.com/sxd007/investigation-ontology/blob/main/SECURITY.md",
+    "termsOfServiceURL": "https://github.com/sxd007/investigation-ontology/blob/main/DISCLAIMER.md",
+    "defaultPrompt": [
+      "这个空间还有什么没做？",
+      "汇总所有工作空间的进度。",
+      "新建一个任务卡。"
+    ],
+    "brandColor": "#0F766E",
+    "screenshots": []
+  }
+}

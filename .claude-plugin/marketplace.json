@@ -68,6 +68,34 @@
         "risk-control"
       ],
       "strict": false
+    },
+    {
+      "name": "space-task-monitor",
+      "source": "./plugins/space-task-monitor/",
+      "description": "工作空间任务台账与跨空间监控 — 单空间两级任务看板（项目卡/任务卡）+ 跨工作区舰队汇总，多 agent 会话间的进度连续性管理",
+      "version": "0.1.0",
+      "author": {
+        "name": "Alpha Shen",
+        "url": "https://github.com/sxd007"
+      },
+      "homepage": "https://github.com/sxd007/investigation-ontology",
+      "repository": "https://github.com/sxd007/investigation-ontology",
+      "license": "Apache-2.0",
+      "keywords": [
+        "workspace",
+        "task-board",
+        "fleet",
+        "progress-tracking",
+        "cross-workspace"
+      ],
+      "category": "productivity",
+      "tags": [
+        "workspace",
+        "task-board",
+        "fleet",
+        "progress-tracking"
+      ],
+      "strict": false
     }
   ]
 }

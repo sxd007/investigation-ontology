@@ -1,0 +1,297 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>任务看板 · 2026-10-13</title>
+<style>
+:root { --bd:#e8eaed; --mut:#80868b; --bg:#fafafa; --card:#fff; --ink:#202124; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+  font:14px/1.65 system-ui,"Segoe UI","Microsoft YaHei",sans-serif; }
+.wrap { max-width:1060px; margin:0 auto; padding:20px 24px 64px; }
+.hidden { display:none !important; }
+
+.top { display:flex; align-items:baseline; gap:16px; margin-bottom:4px; }
+.top h1 { font-size:18px; margin:0; font-weight:600; }
+.top .meta { color:var(--mut); font-size:12px; }
+
+.tabs { display:flex; flex-wrap:wrap; gap:2px; border-bottom:1px solid var(--bd);
+  margin:12px 0 0; position:sticky; top:0; background:var(--bg); z-index:10; padding-top:6px; }
+.tabs button { border:none; background:none; padding:8px 14px; cursor:pointer;
+  font-size:13.5px; color:#5f6368; border-bottom:2px solid transparent; }
+.tabs button:hover { color:var(--ink); }
+.tabs button.on { color:#1a56db; border-bottom-color:#1a56db; font-weight:600; }
+.tabs .cnt { display:inline-block; min-width:18px; margin-left:5px; padding:0 5px;
+  border-radius:9px; background:#eef1f4; color:#5f6368; font-size:11px; line-height:16px; }
+.tabs button.on .cnt { background:#e8f0fe; color:#1a56db; }
+.tabpage { padding-top:18px; }
+
+/* 总览 */
+.stats { display:flex; gap:40px; margin:6px 0 4px; }
+.stat .num { font-size:30px; font-weight:700; line-height:1.2; }
+.stat .lbl { color:var(--mut); font-size:12px; }
+.stat.warn .num { color:#b45309; } .stat.bad .num { color:#b91c1c; }
+.subline { color:var(--mut); font-size:12px; margin-bottom:8px; }
+.ovh { font-size:14px; font-weight:600; color:#3c4043; margin:28px 0 10px; }
+.ovh .hint { font-weight:400; color:var(--mut); font-size:12px; margin-left:8px; }
+
+.wsgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media (max-width:860px) { .wsgrid { grid-template-columns:1fr; } }
+.wscard { background:var(--card); border:1px solid var(--bd); border-radius:10px;
+  padding:14px 16px; }
+.wscard .wsname { font-size:14px; font-weight:600; }
+.wscard .wsname .gotab { float:right; font-size:12px; font-weight:400; color:#1a56db;
+  cursor:pointer; }
+.wscard .wstopic { color:var(--mut); font-size:11.5px; margin:2px 0 10px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pjline { padding:6px 0; border-top:1px solid #f0f1f3; }
+.pjline .pjtop { display:flex; align-items:center; gap:8px; }
+.pjline .pjname { font-size:13px; }
+.pjline .bar { flex:1; max-width:120px; height:5px; background:#eef1f4;
+  border-radius:3px; overflow:hidden; }
+.pjline .bar i { display:block; height:100%; background:#1a56db; border-radius:3px; }
+.pjline .ratio { color:var(--mut); font-size:11.5px; white-space:nowrap; }
+.pjline .pprog { color:#5f6368; font-size:12px; margin-top:2px; }
+.sololine { color:var(--mut); font-size:11.5px; margin-top:8px; }
+.wscard.none .empty { padding:2px 0 0; }
+
+.tips { list-style:none; margin:0; padding:0; }
+.tips li { background:var(--card); border:1px solid var(--bd); border-radius:10px;
+  padding:10px 16px; margin:8px 0; font-size:13px; }
+.tips .ticon { margin-right:8px; }
+.tips .tl { color:#5f6368; }
+
+/* 表格 */
+table { width:100%; border-collapse:collapse; background:var(--card);
+  border:1px solid var(--bd); border-radius:10px; overflow:hidden; }
+th, td { text-align:left; padding:8px 14px; vertical-align:top; font-size:13px; }
+th { color:var(--mut); font-weight:500; font-size:12px; background:#f7f8f9;
+  border-bottom:1px solid var(--bd); }
+td { border-bottom:1px solid #f0f1f3; }
+tr:last-child td { border-bottom:none; }
+tr.sub td:first-child { padding-left:34px; }
+tr.sub .t { color:#5f6368; }
+
+.cardlink { color:#1a56db; cursor:pointer; }
+.cardlink:hover { text-decoration:underline; }
+.badge { display:inline-block; border-radius:10px; padding:1px 9px; font-size:12px;
+  white-space:nowrap; }
+.st-active { background:#e8f0fe; color:#1a56db; }
+.st-waiting { background:#fef3c7; color:#b45309; }
+.st-blocked { background:#fee2e2; color:#b91c1c; }
+.st-done { background:#f3f4f6; color:#6b7280; }
+.st-dropped { background:#f3f4f6; color:#9aa0a6; text-decoration:line-through; }
+.pri { font-weight:600; font-size:11.5px; margin-right:6px; }
+.pri-P0 { color:#b91c1c; } .pri-P1 { color:#c2410c; }
+.pri-P2 { color:#1a56db; } .pri-P3 { color:#9aa0a6; }
+.bneck { color:#b45309; font-size:12px; }
+.overdue { color:#b91c1c; font-size:12px; font-weight:600; }
+.stale { color:#b0b5ba; font-size:11px; }
+.ns { color:#0d7a5f; }
+
+.filters { display:none; flex-wrap:wrap; gap:6px; align-items:center; padding:12px 0 2px; }
+.filters button { border:1px solid var(--bd); background:var(--card); border-radius:14px;
+  padding:3px 12px; cursor:pointer; font-size:12.5px; color:#5f6368; }
+.filters button.on { background:#202124; color:#fff; border-color:#202124; }
+.filters input { border:1px solid var(--bd); border-radius:14px; padding:4px 12px;
+  font-size:12.5px; width:180px; margin-left:auto; }
+
+/* 工作区 tab */
+.wshead { margin:2px 0 12px; }
+.wshead .topic { font-size:13px; color:#3c4043; }
+.wshead .path { color:#b0b5ba; font-size:11.5px; font-family:Consolas,monospace; }
+.wssum { color:var(--mut); font-size:12.5px; margin-top:2px; }
+.sech { font-size:13px; font-weight:600; color:#5f6368; margin:18px 0 6px; }
+details.proj { margin:10px 0; }
+details.proj > summary { cursor:pointer; list-style:none; padding:10px 16px;
+  background:var(--card); border:1px solid var(--bd); border-radius:10px;
+  font-size:13.5px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+details.proj > summary::-webkit-details-marker { display:none; }
+details.proj[open] > summary { border-radius:10px 10px 0 0; border-bottom:none; }
+details.proj > summary .arrow { color:#9aa0a6; transition:transform .15s; }
+details.proj[open] > summary .arrow { transform:rotate(90deg); }
+details.proj > summary .bar { flex:1; min-width:60px; max-width:140px; height:5px;
+  background:#eef1f4; border-radius:3px; overflow:hidden; }
+details.proj > summary .bar i { display:block; height:100%; background:#1a56db; }
+details.proj > summary .subnote { color:var(--mut); font-size:12px; font-weight:400; }
+details.proj > .pbody { background:var(--card); border:1px solid var(--bd);
+  border-top:none; border-radius:0 0 10px 10px; padding:10px 16px 14px; }
+.pmeta { font-size:12.5px; color:#3c4043; margin-bottom:8px; }
+.pmeta div { margin:2px 0; }
+.pmeta .k { color:var(--mut); display:inline-block; min-width:34px; }
+details.proj table { border:none; border-radius:0; }
+details.proj .pbody table { border-top:1px solid #f0f1f3; }
+.empty { color:var(--mut); font-size:13px; padding:10px 2px; }
+.foot { margin-top:36px; color:#b0b5ba; font-size:12px; border-top:1px solid var(--bd);
+  padding-top:12px; }
+
+/* 卡片弹窗 */
+.overlay { position:fixed; inset:0; background:rgba(32,33,36,.45); z-index:100;
+  display:flex; align-items:flex-start; justify-content:center; padding:40px 16px; }
+.modal { background:#fff; border-radius:12px; max-width:760px; width:100%;
+  max-height:calc(100vh - 80px); overflow:auto; padding:24px 28px; position:relative;
+  box-shadow:0 8px 30px rgba(0,0,0,.18); }
+.modal .mclose { position:absolute; top:12px; right:16px; border:none; background:none;
+  font-size:20px; color:#9aa0a6; cursor:pointer; }
+.modal .mmeta { display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+  margin:6px 0 14px; font-size:12.5px; color:var(--mut); }
+.modal h2.ct { font-size:17px; margin:0; padding-right:30px; }
+.modal .md h1 { font-size:16px; margin:14px 0 6px; }
+.modal .md h2 { font-size:14.5px; margin:16px 0 6px; border:none; padding:0; }
+.modal .md h3 { font-size:13.5px; margin:12px 0 4px; }
+.modal .md p { margin:6px 0; font-size:13px; }
+.modal .md ul, .modal .md ol { margin:6px 0; padding-left:22px; font-size:13px; }
+.modal .md table { margin:8px 0; font-size:12.5px; }
+.modal .md code { background:#f3f4f6; border-radius:4px; padding:0 4px; font-size:12px; }
+</style></head><body><div class="wrap">
+<div class="top"><h1>任务看板</h1><span class="meta">2026-10-13 11:24 生成 · 派生缓存，权威数据在各工作区任务卡</span></div>
+<div class="tabs"><button class="on" data-tab="tab-overview">总览</button><button data-tab="tab-ws-0">阿尔法空间 <span class="cnt">4</span></button><button data-tab="tab-ws-1">贝塔空间 <span class="cnt">?</span></button></div>
+<div class="filters" id="filters"><span><button class="f-st on" data-v="all">全部状态</button><button class="f-st" data-v="active">进行中</button><button class="f-st" data-v="waiting">等外部</button><button class="f-st" data-v="blocked">受阻</button></span><span><button class="f-pri on" data-v="all">全部优先级</button><button class="f-pri" data-v="P0">P0</button><button class="f-pri" data-v="P1">P1</button><button class="f-pri" data-v="P2">P2</button><button class="f-pri" data-v="P3">P3</button></span><input id="q" type="search" placeholder="搜索标题…"></div>
+<div class="tabpage" id="tab-overview">
+<div class="stats"><div class="stat"><div class="num">4</div><div class="lbl">未完成</div></div><div class="stat warn"><div class="num">1</div><div class="lbl">等外部</div></div><div class="stat"><div class="num">2</div><div class="lbl">进行中</div></div><div class="stat bad"><div class="num">1</div><div class="lbl">受阻</div></div></div>
+<div class="subline">2 个工作区（1 有台账）· 1 项目 · 1 独立任务 · 2 子项</div>
+<div class="ovh">工作空间与项目<span class="hint">点项目看详情 · 点右上角进该空间明细</span></div>
+<div class="wsgrid">
+<div class="wscard"><div class="wsname">阿尔法空间<span class="gotab" data-tab="tab-ws-0">明细 →</span></div><div class="wstopic">E2E 测试空间（有台账）</div>
+<div class="pjline"><div class="pjtop"><span class="pri pri-P1">P1</span><span class="cardlink t" data-key="w0-P-1">E2E 演示项目</span> <span class="badge st-active">进行中</span><span class="bar"><i style="width:33%"></i></span><span class="ratio">1/3</span></div><div class="pprog">子项完成比 1 / 3。</div></div>
+<div class="sololine">独立任务 1 项 · 子项 2 项 ｜ 等外部 1 · 进行中 2</div></div>
+<div class="wscard none"><div class="wsname">贝塔空间<span class="gotab" data-tab="tab-ws-1">明细 →</span></div><p class="empty">无台账 —— 缺数据</p></div>
+</div>
+<div class="ovh">需要你知道的<span class="hint">综合提示 · 规则生成，每日刷新</span></div>
+<ul class="tips">
+<li><span class="ticon">🔴</span><b>1 项卡在你本人</b> —— <span class="cardlink t" data-key="w0-T-002">等外部子项（验证卡在用户识别）</span></li>
+<li><span class="ticon">🔴</span><b>1 项受阻</b> —— <span class="cardlink t" data-key="w0-T-004">受阻独立任务（验证受阻统计）</span></li>
+<li><span class="ticon">🟠</span><b>1 项复核已超期</b> —— <span class="cardlink t" data-key="w0-T-002">等外部子项（验证卡在用户识别）</span></li>
+<li><span class="ticon">🟢</span><b>最值得续接</b> —— 阿尔法空间 · <span class="cardlink t" data-key="w0-T-002">等外部子项（验证卡在用户识别）</span>：<span class="ns">▶ 请用户确认口径</span></li>
+</ul>
+</div>
+<div class="tabpage ws-page hidden" id="tab-ws-0">
+<div class="wshead"><div class="topic">E2E 测试空间（有台账）</div><div class="path">d:/work/90.codes/investigation-ontology/cc-investigation-ontology/plugins/space-task-monitor/examples/e2e/ws-alpha</div>
+<div class="wssum">1 项目 · 1 独立任务 · 2 子项 ｜ 等外部 1 · 进行中 2</div></div>
+<div class="sech">项目（1）</div>
+<details class="proj" open><summary><span class="arrow">▸</span><span class="pri pri-P1">P1</span><b><span class="cardlink t" data-key="w0-P-1">E2E 演示项目</span></b> <span class="badge st-active">进行中</span><span class="bar"><i style="width:33%"></i></span><span class="subnote">子项 1/3</span></summary>
+<div class="pbody">
+<div class="pmeta"><div><span class="k">目标</span>验证 .taskboard 结构端到端可用。</div><div><span class="k">进度</span>子项完成比 1 / 3。</div><div class="ns">▶ 推 T-001 完成刷新链路验证</div></div>
+<table><thead><tr><th style="width:36%">子项</th><th>状态</th><th style="width:26%">进度 / 阻塞</th><th style="width:22%">下一步</th><th>更新</th></tr></thead><tbody>
+<tr data-st="waiting" data-pri="P2" data-text="等外部子项（验证卡在用户识别）" class="sub"><td><span class="pri pri-P2">P2</span><span class="cardlink t" data-key="w0-T-002">等外部子项（验证卡在用户识别）</span></td><td><span class="badge st-waiting">等外部</span></td><td>未启动。<div class="bneck">⚠ 卡在用户：需确认演示数据口径</div><div class="overdue">复核超期（2026-10-01）</div></td><td><span class="ns">▶ 请用户确认口径</span></td><td>2026-10-11 <span class="stale">2 天前</span></td></tr>
+<tr data-st="active" data-pri="P1" data-text="活动子项（验证续接清单）" class="sub"><td><span class="pri pri-P1">P1</span><span class="cardlink t" data-key="w0-T-001">活动子项（验证续接清单）</span></td><td><span class="badge st-active">进行中</span></td><td>推进中。</td><td><span class="ns">▶ 执行 refresh_board.py 并检查续接清单</span></td><td>2026-10-13</td></tr>
+</tbody></table>
+</div></details>
+<div class="sech">独立任务（1）</div>
+<table><thead><tr><th style="width:36%">事项</th><th>状态</th><th style="width:26%">进度 / 阻塞</th><th style="width:22%">下一步</th><th>更新</th></tr></thead><tbody>
+<tr data-st="blocked" data-pri="P0" data-text="受阻独立任务（验证受阻统计）"><td><span class="pri pri-P0">P0</span><span class="cardlink t" data-key="w0-T-004">受阻独立任务（验证受阻统计）</span></td><td><span class="badge st-blocked">受阻</span></td><td>推不动。<div class="bneck">⚠ 依赖的外部系统故障未修复</div></td><td><span class="ns">▶ 外部系统修复后重试</span></td><td>2026-10-09 <span class="stale">4 天前</span></td></tr>
+</tbody></table>
+</div>
+<div class="tabpage ws-page hidden" id="tab-ws-1">
+<div class="wshead"><div class="topic">E2E 测试空间（无台账，验证缺数据分支）</div><div class="path">d:/work/90.codes/investigation-ontology/cc-investigation-ontology/plugins/space-task-monitor/examples/e2e/ws-beta</div>
+</div><p class="empty">无台账 —— 缺数据，不等于「无未完成事项」。</p></div>
+<div class="foot">登记表：d:/work/90.codes/investigation-ontology/cc-investigation-ontology/plugins/space-task-monitor/examples/e2e/home\workspaces.md ｜ 本页由 refresh_board.py 生成，统计由脚本解析得出；点击任意事项名称查看卡片全文（页内弹窗）。</div>
+</div><script>window.CARD_DATA={"w0-P-1": {"title": "E2E 演示项目", "st": "active", "pri": "P1", "updated": "2026-10-13", "next_review": "", "kb": [], "body": "# P-1 · E2E 演示项目\n\n**目标**：验证 .taskboard 结构端到端可用。\n\n**范围（不做什么）**：不碰真实工作区数据。\n\n**验收标准**：refresh/audit/discover 三脚本在 fixture 上全部通过。\n\n**进度**：子项完成比 1 / 3。\n\n## 子项\n\n| ID | 事项 | 状态 | 进度 |\n|---|---|---|---|\n| T-001 | 活动子项 | `active` | 推进中 |\n| T-002 | 等外部子项 | `waiting` | 卡用户确认 |\n| T-003 | 已完成子项 | `done` | 2026-10-12 完成 |\n\n## 阻塞 / 待外部\n\n- T-002 卡在用户：需确认演示数据口径\n\n## 下一步\n\n1. 推 T-001 完成刷新链路验证\n"}, "w0-T-001": {"title": "活动子项（验证续接清单）", "st": "active", "pri": "P1", "updated": "2026-10-13", "next_review": "", "kb": [], "body": "# T-001 · 活动子项（验证续接清单）\n\n**目标**：让看板续接清单有一条 active 数据。\n\n**范围（不做什么）**：不做真实业务。\n\n**验收标准**：看板总览「最值得续接」命中本卡。\n\n**进度**：推进中。\n\n## 已完成\n\n- 2026-10-10 建卡\n\n## 未完成\n\n- 跑通刷新链路\n\n## 阻塞 / 待外部\n\n- 无\n\n## 下一步\n\n1. 执行 refresh_board.py 并检查续接清单\n"}, "w0-T-002": {"title": "等外部子项（验证卡在用户识别）", "st": "waiting", "pri": "P2", "updated": "2026-10-11", "next_review": "2026-10-01", "kb": [], "body": "# T-002 · 等外部子项（验证卡在用户识别）\n\n**目标**：让综合提示命中「卡在你本人」与「复核超期」两条规则。\n\n**范围（不做什么）**：不做真实业务。\n\n**验收标准**：总览 tips 出现 🔴 卡在你本人 + 🟠 复核超期。\n\n**进度**：未启动。\n\n## 已完成\n\n- 无\n\n## 未完成\n\n- 等用户确认口径\n\n## 阻塞 / 待外部\n\n- **卡在用户**：需确认演示数据口径\n\n## 下一步\n\n1. 请用户确认口径\n"}, "w0-T-003": {"title": "已完成子项", "st": "done", "pri": "P3", "updated": "2026-10-12", "next_review": "", "kb": [], "body": "# T-003 · 已完成子项\n\n**目标**：验证 done 卡不计入未完成统计。\n\n**范围（不做什么）**：无。\n\n**验收标准**：统计中不出现本卡。\n\n**进度**：2026-10-12 完成。\n\n## 已完成\n\n- 2026-10-12 完成\n\n## 未完成\n\n- 无\n\n## 阻塞 / 待外部\n\n- 无\n\n## 下一步\n\n1. 无\n"}, "w0-T-004": {"title": "受阻独立任务（验证受阻统计）", "st": "blocked", "pri": "P0", "updated": "2026-10-09", "next_review": "", "kb": [], "body": "# T-004 · 受阻独立任务（验证受阻统计）\n\n**目标**：让看板受阻计数为 1 且综合提示出现受阻条。\n\n**范围（不做什么）**：不做真实业务。\n\n**验收标准**：总览「受阻」数字为 1，tips 出现 🔴 受阻。\n\n**进度**：推不动。\n\n## 已完成\n\n- 无\n\n## 未完成\n\n- 依赖外部系统修复\n\n## 阻塞 / 待外部\n\n- 依赖的外部系统故障未修复\n\n## 下一步\n\n1. 外部系统修复后重试\n"}};</script>
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tabpage').forEach(function(p) { p.classList.add('hidden'); });
+  document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('.tabs button').forEach(function(b) {
+    b.classList.toggle('on', b.dataset.tab === id);
+  });
+  document.getElementById('filters').style.display = (id === 'tab-overview') ? 'none' : 'flex';
+}
+document.querySelectorAll('.tabs button').forEach(function(b) {
+  b.addEventListener('click', function() { showTab(b.dataset.tab); });
+});
+
+/* ---- 迷你 markdown 渲染（卡片正文结构简单：标题/加粗/列表/表格/代码） ---- */
+function escH(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function inline(s) {
+  return escH(s)
+    .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+function renderMd(md) {
+  var lines = md.split('\n'), out = [], i = 0;
+  while (i < lines.length) {
+    var ln = lines[i];
+    if (/^\s*\|/.test(ln)) {  // 表格块
+      var rows = [];
+      while (i < lines.length && /^\s*\|/.test(lines[i])) { rows.push(lines[i]); i++; }
+      var trs = rows.filter(function(r) { return !/^\s*\|[\s:\-|]+\|\s*$/.test(r); });
+      out.push('<table>' + trs.map(function(r, ri) {
+        var cells = r.replace(/^\s*\||\|\s*$/g, '').split('|');
+        var tag = ri === 0 ? 'th' : 'td';
+        return '<tr>' + cells.map(function(c) { return '<'+tag+'>'+inline(c.trim())+'</'+tag+'>'; }).join('') + '</tr>';
+      }).join('') + '</table>');
+      continue;
+    }
+    var m;
+    if ((m = ln.match(/^(#{1,3})\s+(.*)$/))) {
+      var lv = m[1].length; out.push('<h'+lv+'>'+inline(m[2])+'</h'+lv+'>'); i++; continue;
+    }
+    if ((m = ln.match(/^\s*[-*]\s+(.*)$/))) {
+      var items = [];
+      while (i < lines.length && (m = lines[i].match(/^\s*[-*]\s+(.*)$/))) { items.push(m[1]); i++; }
+      out.push('<ul>' + items.map(function(x) { return '<li>'+inline(x)+'</li>'; }).join('') + '</ul>');
+      continue;
+    }
+    if ((m = ln.match(/^\s*\d+[.、]\s*(.*)$/))) {
+      var its = [];
+      while (i < lines.length && (m = lines[i].match(/^\s*\d+[.、]\s*(.*)$/))) { its.push(m[1]); i++; }
+      out.push('<ol>' + its.map(function(x) { return '<li>'+inline(x)+'</li>'; }).join('') + '</ol>');
+      continue;
+    }
+    if (/^\s*---\s*$/.test(ln)) { i++; continue; }
+    if (/^\s*$/.test(ln)) { i++; continue; }
+    out.push('<p>' + inline(ln) + '</p>'); i++;
+  }
+  return out.join('');
+}
+
+/* ---- 卡片弹窗 ---- */
+var STLBL = {active:'进行中', waiting:'等外部', blocked:'受阻', done:'已完成', dropped:'已放弃'};
+function openCard(key) {
+  var d = window.CARD_DATA[key]; if (!d) return;
+  var ov = document.createElement('div'); ov.className = 'overlay';
+  var meta = '<span class="badge st-' + d.st + '">' + (STLBL[d.st] || d.st) + '</span>'
+    + '<span class="pri pri-' + d.pri + '">' + d.pri + '</span>'
+    + (d.updated ? '<span>更新 ' + d.updated + '</span>' : '')
+    + (d.next_review ? '<span>复核 ' + d.next_review + '</span>' : '')
+    + (d.kb && d.kb.length ? '<span>参考：' + escH(d.kb.join('、')) + '</span>' : '');
+  ov.innerHTML = '<div class="modal"><button class="mclose">×</button>'
+    + '<h2 class="ct">' + escH(d.title) + '</h2>'
+    + '<div class="mmeta">' + meta + '</div>'
+    + '<div class="md">' + renderMd(d.body) + '</div></div>';
+  function close() { ov.remove(); document.removeEventListener('keydown', onKey); }
+  function onKey(e) { if (e.key === 'Escape') close(); }
+  ov.addEventListener('click', function(e) { if (e.target === ov) close(); });
+  ov.querySelector('.mclose').addEventListener('click', close);
+  document.addEventListener('keydown', onKey);
+  document.body.appendChild(ov);
+}
+document.addEventListener('click', function(e) {
+  var el = e.target.closest('.cardlink');
+  if (el) { e.preventDefault(); e.stopPropagation(); openCard(el.dataset.key); return; }
+  var gt = e.target.closest('.gotab');
+  if (gt) { showTab(gt.dataset.tab); }
+});
+
+/* ---- 过滤器（仅工作区 tab） ---- */
+function applyFilters() {
+  var st = document.querySelector('.f-st.on').dataset.v;
+  var pri = document.querySelector('.f-pri.on').dataset.v;
+  var q = document.getElementById('q').value.trim().toLowerCase();
+  document.querySelectorAll('.ws-page tr[data-st]').forEach(function(r) {
+    var ok = (st === 'all' || r.dataset.st === st)
+      && (pri === 'all' || r.dataset.pri === pri)
+      && (!q || r.dataset.text.indexOf(q) >= 0);
+    r.classList.toggle('hidden', !ok);
+  });
+  document.querySelectorAll('.ws-page details.proj').forEach(function(d) {
+    var any = d.querySelector('tr[data-st]:not(.hidden)');
+    d.classList.toggle('hidden', !any);
+  });
+}
+document.querySelectorAll('.filters button').forEach(function(b) {
+  b.addEventListener('click', function() {
+    b.parentNode.querySelectorAll('button').forEach(function(x) { x.classList.remove('on'); });
+    b.classList.add('on'); applyFilters();
+  });
+});
+document.getElementById('q').addEventListener('input', applyFilters);
+</script></body></html>

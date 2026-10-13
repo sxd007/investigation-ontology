@@ -26,3 +26,7 @@ __pycache__/
 
 # 维护侧工具（域风险库转换器：输入为外部工作底稿，不入库；库 JSON 为入库工件）
 plugins/process-efficiency/skills/rcm-analysis/scripts/import-risk-library.py
+
+# space-task-monitor 真实数据样张（由真实工作区生成，含业务信息，不入库；
+# 入库样张为 examples/e2e/ 虚构数据看板）
+plugins/space-task-monitor/examples/board-sample.html

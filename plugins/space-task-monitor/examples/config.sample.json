@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "home": "~/.codebuddy/task-board",
+  "runtime": "codebuddy",
+  "tasks_dirname": ".taskboard",
+  "registry": "workspaces.md",
+  "board": "board.html",
+  "schedule": {
+    "morning_refresh": { "enabled": true, "time": "08:30", "days": ["MO", "TU", "WE", "TH", "FR"] },
+    "eod_wrap": { "enabled": true, "time": "18:00", "days": ["MO", "TU", "WE", "TH", "FR"] }
+  },
+  "tips": { "stale_days": 14, "due_soon_days": 7 },
+  "discover": { "session_roots": [] }
+}
