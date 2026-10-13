@@ -8,6 +8,8 @@ owner: Alpha
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 next_review: YYYY-MM-DD
+def_source: inferred
+def_confirmed:
 children: []
 kb_refs: []
 ---
@@ -52,4 +54,10 @@ kb_refs: []
 状态取值：同任务卡（active / waiting / blocked / done / dropped）
   项目状态由子项决定：任一子项 waiting 且是关键路径 → 项目 waiting；
   全部子项 done → 项目 done，整体移入看板「近期完成」
+
+def_source（定义来源，三项「目标/范围/验收标准」的出处，须如实标）：
+  user       用户明确表述或已确认 → 同时把 def_confirmed 写为确认日期
+  extracted  AI 从既有材料（日志/README）抽取，未经用户确认
+  inferred   AI 归纳推断，未经用户确认
+  看板对非 user 且未 confirmed 的卡标「定义待确认」；批量确认后改为 user + def_confirmed
 -->

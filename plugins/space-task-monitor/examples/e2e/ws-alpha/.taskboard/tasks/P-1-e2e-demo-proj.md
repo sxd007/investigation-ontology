@@ -8,6 +8,8 @@ owner: Alpha
 created: 2026-10-10
 updated: 2026-10-13
 next_review:
+def_source: user
+def_confirmed: 2026-10-13
 children: ["T-001", "T-002", "T-003"]
 kb_refs: []
 ---

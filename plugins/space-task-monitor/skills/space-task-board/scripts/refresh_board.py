@@ -153,11 +153,18 @@ def collect(ws, ws_idx, tasks_dirname, today):
             stale = (datetime.date.today() - datetime.date.fromisoformat(upd)).days if upd else None
         except ValueError:
             stale = None
+        def_src = fm_scalar(fm, 'def_source') or 'inferred'
+        def_confirmed = fm_scalar(fm, 'def_confirmed')
+        req_ok = all(re.search(p, body) for p in
+                     (r'\*\*目标\*\*[：:]', r'\*\*范围[^*]*\*\*[：:]', r'\*\*验收标准\*\*[：:]'))
+        def_pending = (st not in ('done', 'dropped')
+                       and ((def_src != 'user' and not def_confirmed) or not req_ok))
         entry['cards'].append(dict(
             key='w%d-%s' % (ws_idx, cid),
             id=cid, title=fm_scalar(fm, 'title'), project=project,
             pri=fm_scalar(fm, 'priority', 'P3'), st=st, kind=kind, solo=solo,
             updated=upd, stale=stale, next_review=nrv, overdue=overdue,
+            def_src=def_src, def_pending=def_pending,
             children=fm_list(fm, 'children'), kb_refs=fm_list(fm, 'kb_refs'),
             body=body[:BODY_CAP],
             goal=field_bold(body, '目标'),
@@ -261,6 +268,8 @@ tr.sub .t { color:#5f6368; }
 .pri-P0 { color:#b91c1c; } .pri-P1 { color:#c2410c; }
 .pri-P2 { color:#1a56db; } .pri-P3 { color:#9aa0a6; }
 .bneck { color:#b45309; font-size:12px; }
+.defbadge { background:#f7f8f9; color:#9aa0a6; border:1px dashed #d3d6da;
+  border-radius:8px; padding:0 6px; font-size:11px; margin-left:6px; white-space:nowrap; }
 .overdue { color:#b91c1c; font-size:12px; font-weight:600; }
 .stale { color:#b0b5ba; font-size:11px; }
 .ns { color:#0d7a5f; }
@@ -384,8 +393,10 @@ var STLBL = {active:'进行中', waiting:'等外部', blocked:'受阻', done:'�
 function openCard(key) {
   var d = window.CARD_DATA[key]; if (!d) return;
   var ov = document.createElement('div'); ov.className = 'overlay';
+  var DEFLBL = {user:'定义：用户确认', extracted:'定义：材料抽取 · 待确认', inferred:'定义：AI 推断 · 待确认'};
   var meta = '<span class="badge st-' + d.st + '">' + (STLBL[d.st] || d.st) + '</span>'
     + '<span class="pri pri-' + d.pri + '">' + d.pri + '</span>'
+    + (DEFLBL[d.defsrc] ? '<span>' + DEFLBL[d.defsrc] + '</span>' : '')
     + (d.updated ? '<span>更新 ' + d.updated + '</span>' : '')
     + (d.next_review ? '<span>复核 ' + d.next_review + '</span>' : '')
     + (d.kb && d.kb.length ? '<span>参考：' + escH(d.kb.join('、')) + '</span>' : '');
@@ -449,7 +460,10 @@ def pri_tag(c):
 
 
 def card_link(c, cls='cardlink t'):
-    return '<span class="%s" data-key="%s">%s</span>' % (cls, esc(c['key']), esc(c['title']))
+    s = '<span class="%s" data-key="%s">%s</span>' % (cls, esc(c['key']), esc(c['title']))
+    if c.get('def_pending'):
+        s += '<span class="defbadge">定义待确认</span>'
+    return s
 
 
 def upd_cell(c):
@@ -532,7 +546,7 @@ def render_overview(ws_data, T, now, today, stale_days=14, due_soon=7):
 
     # 综合提示（规则化：卡在用户 / 受阻 / 复核超期 / 临期 / 停滞 / 最值得续接）
     tips = []
-    user_blk, blk, od, due, stale14, resume = [], [], [], [], [], []
+    user_blk, blk, od, due, stale14, resume, defpend = [], [], [], [], [], [], []
     soon = (datetime.date.today() + datetime.timedelta(days=due_soon)).isoformat()
     for e in ws_data:
         if e.get('none'):
@@ -550,6 +564,8 @@ def render_overview(ws_data, T, now, today, stale_days=14, due_soon=7):
                 due.append((e, c))
             if c['st'] == 'active' and c.get('stale') is not None and c['stale'] >= stale_days:
                 stale14.append((e, c))
+            if c.get('def_pending'):
+                defpend.append((e, c))
             if c['st'] in ('active', 'waiting', 'blocked') and c['next_step']:
                 resume.append((e, c))
     resume.sort(key=lambda x: ({'waiting': 0, 'active': 1, 'blocked': 2}.get(x[1]['st'], 9),
@@ -570,6 +586,9 @@ def render_overview(ws_data, T, now, today, stale_days=14, due_soon=7):
     if stale14:
         tips.append(('🟡', '<b>%d 项进行中但超 %d 天未更新</b> —— %s（还在推进吗？）'
                      % (len(stale14), stale_days, names(stale14))))
+    if defpend:
+        tips.append(('🟡', '<b>%d 张卡的定义（目标/范围/验收标准）未经你确认</b> —— %s'
+                     '（AI 起草的推断，收尾时可批量确认）' % (len(defpend), names(defpend))))
     if wT:
         ext = wT - len(user_blk)
         if ext > 0:
@@ -685,6 +704,7 @@ def render_board(ws_data, T, now, registry_path, today, stale_days=14, due_soon=
         for c in e.get('cards', []):
             card_data[c['key']] = dict(title=c['title'], st=c['st'], pri=c['pri'],
                                        updated=c['updated'], next_review=c['next_review'],
+                                       defsrc=c.get('def_src', ''),
                                        kb=c['kb_refs'], body=c['body'])
     data_js = json.dumps(card_data, ensure_ascii=False).replace('</', '<\\/')
 

@@ -8,6 +8,8 @@ owner: Alpha
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 next_review: YYYY-MM-DD
+def_source: inferred
+def_confirmed:
 kb_refs: []
 sessions: []
 ---
@@ -60,4 +62,10 @@ project 字段：
 提升规则（防碎裂）：
   当一个事项的子任务 ≥ 3 个，或它自己跨了多个会话，就**提升为项目**：
   建 `P-<n>-<slug>.md`，把原卡改为子项并填 `project:` 字段，看板改为按项目分组。
+
+def_source（定义来源，三项「目标/范围/验收标准」的出处，须如实标）：
+  user       用户明确表述或已确认 → 同时把 def_confirmed 写为确认日期
+  extracted  AI 从既有材料（日志/README）抽取，未经用户确认
+  inferred   AI 归纳推断，未经用户确认
+  看板对非 user 且未 confirmed 的卡标「定义待确认」；批量确认后改为 user + def_confirmed
 -->

@@ -98,6 +98,14 @@ def main():
             pj = fm.get('project', '')
             if pj and pj != '-' and pj not in cards:
                 issues.append('%s: 孤儿子项，project=%s 不存在' % (f, pj))
+    # ── 定义来源（提示级，不计入 issues）：非 user 且未 confirmed 的未完成卡 ──
+    undef = []
+    for cid, (f, fm, body) in cards.items():
+        if fm.get('status') in ('done', 'dropped'):
+            continue
+        if fm.get('def_source', '') != 'user' and not fm.get('def_confirmed', ''):
+            undef.append(cid)
+
     gaps = []
     for prefix, width, start in (('P-', 1, 1), ('T-', 3, 1)):
         nums = sorted(int(c.split('-')[1]) for c in cards
@@ -156,6 +164,9 @@ def main():
         print('  -', i)
     for gp in gaps:
         print('  提示: ID 缺口', gp)
+    if undef:
+        print('  提示: 定义未经用户确认 %d 张：%s（批量确认后把 def_source 改为 user 并写 def_confirmed）'
+              % (len(undef), ', '.join(undef)))
     return 0 if not issues else 2
 
 if __name__ == '__main__':

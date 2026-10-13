@@ -8,6 +8,8 @@ owner: Alpha
 created: 2026-10-10
 updated: 2026-10-12
 next_review:
+def_source: user
+def_confirmed: 2026-10-12
 kb_refs: []
 sessions: []
 ---
