@@ -1,4 +1,4 @@
-﻿# Ontology 层设计概述
+# Ontology 层设计概述
 
 > 本文档概述 investigation-ontology 中集成本体层（Ontology Layer）的设计。
 > 完整设计哲学参见 [investigation-ontology](https://github.com/your-org/investigation-ontology) 仓库的 `design-phylosophy.md`。

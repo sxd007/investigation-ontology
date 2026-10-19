@@ -1,4 +1,4 @@
-﻿---
+---
 skill_navigation:
   description: "整理通话记录时，建议根据通话中出现的信号加载以下技能"
   suggestions:

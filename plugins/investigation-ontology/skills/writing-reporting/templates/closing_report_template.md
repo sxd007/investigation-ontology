@@ -1,4 +1,4 @@
-﻿---
+---
 skill_navigation:
   description: "撰写结案报告前，建议加载以下技能确保报告完整"
   suggestions:

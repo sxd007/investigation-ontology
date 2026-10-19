@@ -1,4 +1,4 @@
-﻿# 贡献指南
+# 贡献指南
 
 感谢你考虑为 investigation-ontology 贡献代码或内容。**所有开发方法论和编写规范见 [`DEVELOPMENT_GUIDE.md`](DEVELOPMENT_GUIDE.md)**，本文件聚焦贡献方向和工作流。
 

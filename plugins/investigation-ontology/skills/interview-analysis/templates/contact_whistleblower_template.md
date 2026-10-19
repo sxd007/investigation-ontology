@@ -1,4 +1,4 @@
-﻿---
+---
 skill_navigation:
   description: "使用本模板前，建议根据案件特征加载以下技能获取背景知识"
   suggestions:

@@ -1,4 +1,4 @@
-<!-- handbook-version: 1.0.0 -->
+<!-- handbook-version: 1.0.1 -->
 # investigation-ontology 操作指南
 
 > 本文件指导 AI 在办理反舞弊调查案件时的操作方式——什么原则必须遵守、什么场景该调度什么能力。由插件分发到工作区根目录，SessionStart hook 自动全量注入 IDE 上下文文件。
@@ -163,11 +163,9 @@ REVIEWING 仅将 `case_memory/INDEX.md` 用于检查是否遗漏调查方向，�
 <project-root>/
 ├── INVESTIGATION-HANDBOOK.md           ← 调查操作指南（本文件）
 ├── CODEBUDDY.md / CLAUDE.md / CODEX.md ← IDE 上下文文件（hook 自动注入）
-├── templates/                          ← 工作底稿模板
 ├── global_ontology/                    ← 本体层：跨案件共享实体图谱
 │   ├── entities/                       ← person/ organization/ account/ evidence/ case/
 │   └── relations/                      ← Link Types
-├── rules/                              ← 治理规则（ontology-actions/、binding-protocol.md）
 └── cases/CASE-YYYY-NNN/
     ├── README.md                       ← 案件目录索引
     ├── meta.json                       ← 案件元数据
@@ -180,6 +178,16 @@ REVIEWING 仅将 `case_memory/INDEX.md` 用于检查是否遗漏调查方向，�
     ├── 01_INIT/ ~ 04_REVIEWING/        ← 阶段目录
     └── case_memory/                    ← 非正式观察记录
 ```
+
+> **治理规则与工作底稿模板不在工作区，而在插件内**（技能通过插件相对路径引用）：
+>
+> | 类别 | 插件内位置 |
+> |------|-----------|
+> | 治理规则 | `{插件根}/rules/`（evidence-rules.md / investigation-ethics.md / working-paper-standards.md） |
+> | 本体 Action 与绑定协议 | `{插件根}/skills/ontology/references/`（action-governance.md、actions/、binding-protocol.md） |
+> | 工作底稿模板 | `{插件根}/skills/{skill}/templates/`（各技能自带） |
+>
+> 排查问题请到插件目录查找，工作区不会创建 `rules/` 或 `templates/`。
 
 ### 4.2 命名规范
 
@@ -203,7 +211,7 @@ REVIEWING 仅将 `case_memory/INDEX.md` 用于检查是否遗漏调查方向，�
 
 | 维度 | 要求 |
 |------|------|
-| 信息源标注 | 所有 claim 标注来源类型（firsthand/relay/opinion/attitude/inference）和核实来源；详细规则见 `rules/evidence-rules.md` |
+| 信息源标注 | 所有 claim 标注来源类型（firsthand/relay/opinion/attitude/inference）和核实来源；详细规则见插件 `rules/evidence-rules.md` |
 | [举报人称] | 举报人提供的信息必须标注 `[举报人称]`，不得直接引用为已确立事实 |
 | 置信度 | HYP 使用可选 `0..1` 分析值；EV/FND 使用 suspected / probable / confirmed；not_applicable 属于适用性或处置状态 |
 | 双向索引 | 新增信息必须指回原定义文件 |

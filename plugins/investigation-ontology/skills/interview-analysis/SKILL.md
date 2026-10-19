@@ -1,4 +1,4 @@
-﻿---
+---
 name: interview-analysis
 description: 访谈全流程支持 — 策略设计、提纲生成与评估、笔录结构化审查与对抗行为识别、SCAN陈述分析、可信度评估、问话策略
 origin: efio

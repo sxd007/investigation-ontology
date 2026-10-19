@@ -1,4 +1,4 @@
-﻿# Agents
+# Agents
 
 investigation-ontology 提供以下专业代理，可通过 Claude Code 的子代理功能调用：
 

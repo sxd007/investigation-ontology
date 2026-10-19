@@ -1,4 +1,4 @@
-﻿# 配置加载契约（Config Loading Contract）
+# 配置加载契约（Config Loading Contract）
 
 **所有 skill 和 agent 不得直接执行实质性工作，直到已完成以下配置检查。**
 

@@ -1,4 +1,4 @@
-﻿---
+---
 name: mcp-integration
 description: 调查 MCP 能力参考 — 当需要了解本插件生态中可用的 MCP 服务器类型及其能力、或需要判断某项调查任务是否可由 MCP 辅助完成时使用本技能。MCP 与技能松耦合：技能描述分析需求，模型自行编排 MCP 调用。
 origin: efio

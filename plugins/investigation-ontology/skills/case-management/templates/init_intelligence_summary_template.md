@@ -1,4 +1,4 @@
-﻿---
+---
 skill_navigation:
   description: "撰写 INIT 情报摘要前，建议根据案件特征加载以下技能获取背景知识"
   suggestions:

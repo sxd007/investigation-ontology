@@ -1,4 +1,4 @@
-﻿---
+---
 name: fraud-classification
 description: 舞弊分类与路由 — 基于 ACFE 分类框架分析线索信号、匹配案件所属舞弊类型、路由到对应 fraud-<domain> 场景技能
 origin: efio

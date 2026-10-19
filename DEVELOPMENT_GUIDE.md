@@ -1,4 +1,4 @@
-﻿# investigation-ontology 开发指南
+# investigation-ontology 开发指南
 
 本文档是 `cc-investigation-ontology` 插件的**唯一开发方法论权威来源**。所有开发规范、架构原则、编写标准、操作流程均在此定义。
 

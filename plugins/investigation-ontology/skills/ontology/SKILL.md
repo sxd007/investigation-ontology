@@ -1,4 +1,4 @@
-﻿---
+---
 name: ontology
 description: 调查本体论 — 当需要创建或修改本体对象（Person/Organization/Account/Evidence/Case）、断言实体间关系（TRANSFERRED/HAS_ACCOUNT/WORKS_AT 等）、或执行本体 Action（CLOSE_CASE/RESOLVE_ENTITY/SEAL_EVIDENCE/ASSERT_RELATION 等）时使用本技能。覆盖 Object Types、Link Types、Action 治理规则和 Binding Protocol。
 origin: efio

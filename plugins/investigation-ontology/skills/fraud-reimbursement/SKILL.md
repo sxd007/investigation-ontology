@@ -1,4 +1,4 @@
-﻿---
+---
 name: fraud-reimbursement
 description: 费用报销舞弊调查 — 员工利用职务便利虚构、篡改、重复申报或不当归类的报销行为。覆盖信号识别、证据路径、数据分析方法和调查方案设计。
 origin: efio

@@ -1,4 +1,4 @@
-﻿---
+---
 name: investigation-techniques
 description: 调查技术参考 — 当需要了解数字取证、OSINT公开信息检索、通讯分析、实地调查、监控技术、资产追踪等调查手段的方法和适用条件时使用本技能。本技能提供调查手段的方法论指导和选型建议，供调查员参考执行。财务数据分析由 data-analysis 技能覆盖，访谈由 interview-analysis 覆盖。
 origin: efio

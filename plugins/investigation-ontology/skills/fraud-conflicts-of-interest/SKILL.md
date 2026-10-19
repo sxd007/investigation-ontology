@@ -1,4 +1,4 @@
-﻿---
+---
 name: fraud-conflicts-of-interest
 description: 利益冲突舞弊调查 — 员工在商业决策中存在未披露的个人利益，损害公司利益的各类场景。覆盖采购冲突、销售冲突、裙带关系、双重角色、回扣关联的信号识别与调查方法。
 origin: efio

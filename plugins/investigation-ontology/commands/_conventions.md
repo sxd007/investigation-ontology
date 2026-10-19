@@ -1,4 +1,4 @@
-﻿# Command Conventions
+# Command Conventions
 
 Every non-underscore file in `commands/` is a plugin slash-command workflow.
 

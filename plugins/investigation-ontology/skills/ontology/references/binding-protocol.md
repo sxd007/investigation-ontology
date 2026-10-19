@@ -1,4 +1,4 @@
-﻿# Binding Protocol（绑定协议）
+# Binding Protocol（绑定协议）
 
 > 认知层（investigation-ontology skills）与本体层（ontology）的接口契约。认知层通过此协议引用本体对象，继承其状态约束，但不在本体中复制推理逻辑。
 

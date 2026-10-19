@@ -1,4 +1,4 @@
-﻿---
+---
 name: case-management
 description: 调查流程与案件管理 — 案件生命周期管理、调查计划编制、质量管控(质量控制)、团队协作、时间线管理、风险管理、成本管理、结案评估
 origin: efio
