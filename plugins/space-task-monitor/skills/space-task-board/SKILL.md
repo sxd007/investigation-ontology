@@ -68,7 +68,7 @@ description: 工作空间任务台账的维护与调度配置。当需要新建/
 
 | 脚本 | 用途 |
 |------|------|
-| `refresh_board.py` | 解析登记表+各空间卡片 → 生成 `<data_home>/board.html`（看板唯一生成入口，定时任务与手动补充共用） |
+| `refresh_board.py` | 解析登记表+各空间卡片 → 生成 `<data_home>/board.html`（看板唯一生成入口，定时任务与手动补充共用）；`--self-check` 做计数口径自检（tab 角标 / 总览 / 状态三类必须相等） |
 | `audit_tasks.py <工作区路径>` | 未完成计数 + 看板计数一致性 + 健康检查（字段/必填三项/children/孤儿/ID 缺口） |
 | `discover_ws.py` | 多 runtime 自适应发现工作区（只给候选，登记表做策展） |
 

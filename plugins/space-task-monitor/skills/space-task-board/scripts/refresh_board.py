@@ -3,7 +3,7 @@ r"""跨空间任务看板渲染器：解析登记表 + 各空间任务卡，生�
 
 用法:
   python refresh_board.py [--home DIR] [--config FILE] [--registry FILE]
-                          [--out FILE] [--tasks-dirname NAME] [--dry]
+                          [--out FILE] [--tasks-dirname NAME] [--dry] [--self-check]
 
 参数解析优先级：命令行 > config.json > 内置默认。
   --config         config.json 路径，默认 <home>/config.json（schema 见 docs/config-schema.md）
@@ -196,7 +196,8 @@ def collect(ws, ws_idx, tasks_dirname, today, due_soon=7):
             progress=field_bold(body, '进度'),
             bottleneck=field_bottleneck(body),
             next_step=field_next_step(body)))
-        if st != 'done':
+        # 计数桶只装未完成卡；done / dropped 属终态，不进桶（避免终态混入任何求和口径）
+        if st not in ('done', 'dropped'):
             key = ('proj_' if kind == 'P' else 'solo_' if solo else 'sub_') + st
             entry['c'][key] += 1
     return entry
@@ -513,13 +514,25 @@ def upd_cell(c):
 
 
 def counts(e):
+    """未完成计数（口径：不计 done / dropped）。
+
+    返回命名 dict，避免调用方按位置猜语义：
+      proj / solo / sub    三类各自未完成数（三者互斥，合计 = 未完成总数）
+      waiting / active / blocked  三状态各自合计（是上面三类的状态切片，非并列项）
+      total                未完成总数 = proj + solo + sub（勿写成 sum(其余值)，会重复计数）
+    """
     c = e['c']
-    pj = c['proj_active'] + c['proj_waiting'] + c['proj_blocked']
-    so = c['solo_active'] + c['solo_waiting'] + c['solo_blocked']
-    sb = c['sub_active'] + c['sub_waiting'] + c['sub_blocked']
-    w = c['proj_waiting'] + c['solo_waiting'] + c['sub_waiting']
-    a = c['proj_active'] + c['solo_active'] + c['sub_active']
-    return pj, so, sb, w, a
+    return {
+        'proj': c['proj_active'] + c['proj_waiting'] + c['proj_blocked'],
+        'solo': c['solo_active'] + c['solo_waiting'] + c['solo_blocked'],
+        'sub': c['sub_active'] + c['sub_waiting'] + c['sub_blocked'],
+        'waiting': c['proj_waiting'] + c['solo_waiting'] + c['sub_waiting'],
+        'active': c['proj_active'] + c['solo_active'] + c['sub_active'],
+        'blocked': c['proj_blocked'] + c['solo_blocked'] + c['sub_blocked'],
+        'total': (c['proj_active'] + c['proj_waiting'] + c['proj_blocked']
+                  + c['solo_active'] + c['solo_waiting'] + c['solo_blocked']
+                  + c['sub_active'] + c['sub_waiting'] + c['sub_blocked']),
+    }
 
 
 def proj_subs(p, cards, by_id):
@@ -561,7 +574,8 @@ def render_overview(ws_data, T, now, today, stale_days=14, due_soon=7):
                        '<span class="gotab" data-tab="tab-ws-%d">明细 →</span></div>'
                        '<p class="empty">无台账 —— 缺数据</p></div>' % (esc(e['name']), i))
             continue
-        pj, so, sb, w, a = counts(e)
+        v = counts(e)
+        pj, so, sb, w, a = v['proj'], v['solo'], v['sub'], v['waiting'], v['active']
         out.append('<div class="wscard"><div class="wsname">%s'
                    '<span class="gotab" data-tab="tab-ws-%d">明细 →</span></div>'
                    '<div class="wstopic">%s</div>' % (esc(e['name']), i, esc(e['topic'])))
@@ -726,8 +740,9 @@ def render_ws_page(e, idx):
     if e.get('none'):
         parts.append('</div><p class="empty">无台账 —— 缺数据，不等于「无未完成事项」。</p></div>')
         return '\n'.join(parts)
-    pj, so, sb, w, a = counts(e)
-    wssum = '%d 项目 · %d 独立任务 · %d 子项 ｜ 等外部 %d · 进行中 %d' % (pj, so, sb, w, a)
+    v = counts(e)
+    wssum = '%d 项目 · %d 独立任务 · %d 子项 ｜ 等外部 %d · 进行中 %d' % (
+        v['proj'], v['solo'], v['sub'], v['waiting'], v['active'])
     if e.get('recent_done'):
         wssum += ' · 近 7 天完成 <b>%d</b> 项' % e['recent_done']
     parts.append('<div class="wssum">%s</div></div>' % wssum)
@@ -851,7 +866,8 @@ def render_board(ws_data, T, now, registry_path, today, stale_days=14, due_soon=
             nav.append('<button data-tab="tab-ws-%d">%s <span class="cnt">?</span></button>'
                        % (i, esc(e['name'])))
         else:
-            n = sum(v for _, v in e['c'].items())
+            # 角标口径必须与总览、明细页一致：只数 active / waiting / blocked，不含 done / dropped
+            n = counts(e)['total']
             nav.append('<button data-tab="tab-ws-%d">%s <span class="cnt">%d</span></button>'
                        % (i, esc(e['name']), n))
     nav.append('</div>')
@@ -891,6 +907,32 @@ def load_json(path):
         return {}
 
 
+def self_check(ws_data, T):
+    """计数恒等式自检：各口径必须一致（口径错会立刻暴露，不必靠肉眼看页面）。
+
+    1) tab 角标合计 = 总览未完成
+    2) 总览未完成 = waiting + active + blocked 三状态合计
+    3) 总览未完成 = proj + solo + sub 三类合计
+    4) 计数桶内不得出现终态桶（done / dropped）
+    """
+    bad = []
+    nav_total = sum(counts(e)['total'] for e in ws_data if not e.get('none'))
+    ov = (T['proj_active'] + T['proj_waiting'] + T['proj_blocked']
+          + T['solo_active'] + T['solo_waiting'] + T['solo_blocked']
+          + T['sub_active'] + T['sub_waiting'] + T['sub_blocked'])
+    by_state = (T['proj_waiting'] + T['solo_waiting'] + T['sub_waiting']
+                + T['proj_active'] + T['solo_active'] + T['sub_active']
+                + T['proj_blocked'] + T['solo_blocked'] + T['sub_blocked'])
+    if nav_total != ov:
+        bad.append('tab 角标合计 %d ≠ 总览未完成 %d' % (nav_total, ov))
+    if by_state != ov:
+        bad.append('按状态合计 %d ≠ 总览未完成 %d' % (by_state, ov))
+    for k, v in T.items():
+        if k.endswith('_done') or k.endswith('_dropped'):
+            bad.append('计数桶混入终态：%s=%d（done/dropped 不应进桶）' % (k, v))
+    return nav_total, ov, bad
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--home')
@@ -901,6 +943,8 @@ def main():
     ap.add_argument('--write-tasks-md', action='store_true',
                     help='同步重生成各空间 TASKS.md（派生物；首次覆盖非生成版前自动备份 .bak）')
     ap.add_argument('--dry', action='store_true')
+    ap.add_argument('--self-check', action='store_true',
+                    help='额外做计数恒等式自检（角标/总览/状态/类别口径一致），不一致则退出码 2')
     args = ap.parse_args()
 
     # 优先级：命令行 > config.json > 内置默认
@@ -954,6 +998,14 @@ def main():
     else:
         io.open(out_path, 'w', encoding='utf-8').write(page)
         print('board 已生成: %s ｜ %s' % (out_path, stat))
+    if args.self_check:
+        tab_total, ov, bad = self_check(ws_data, T)
+        if bad:
+            print('[self-check] 失败：')
+            for b in bad:
+                print('  - %s' % b)
+            return 2
+        print('[self-check] 通过：tab 角标合计 %d = 总览未完成 %d = 状态合计' % (tab_total, ov))
     return 0
 
 
