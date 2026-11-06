@@ -244,10 +244,10 @@ body { margin:0; background:var(--bg); color:var(--ink);
 .ovh { font-size:14px; font-weight:600; color:#3c4043; margin:28px 0 10px; }
 .ovh .hint { font-weight:400; color:var(--mut); font-size:12px; margin-left:8px; }
 
-.wsgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-@media (max-width:860px) { .wsgrid { grid-template-columns:1fr; } }
+.wsgrid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; }
+@media (max-width:860px) { .wsgrid { grid-template-columns:minmax(0,1fr); } }
 .wscard { background:var(--card); border:1px solid var(--bd); border-radius:10px;
-  padding:14px 16px; }
+  padding:14px 16px; min-width:0; }
 .wscard .wsname { font-size:14px; font-weight:600; }
 .wscard .wsname .gotab { float:right; font-size:12px; font-weight:400; color:#1a56db;
   cursor:pointer; }

@@ -33,10 +33,10 @@ body { margin:0; background:var(--bg); color:var(--ink);
 .ovh { font-size:14px; font-weight:600; color:#3c4043; margin:28px 0 10px; }
 .ovh .hint { font-weight:400; color:var(--mut); font-size:12px; margin-left:8px; }
 
-.wsgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-@media (max-width:860px) { .wsgrid { grid-template-columns:1fr; } }
+.wsgrid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; }
+@media (max-width:860px) { .wsgrid { grid-template-columns:minmax(0,1fr); } }
 .wscard { background:var(--card); border:1px solid var(--bd); border-radius:10px;
-  padding:14px 16px; }
+  padding:14px 16px; min-width:0; }
 .wscard .wsname { font-size:14px; font-weight:600; }
 .wscard .wsname .gotab { float:right; font-size:12px; font-weight:400; color:#1a56db;
   cursor:pointer; }
@@ -148,7 +148,7 @@ details.proj .pbody table { border-top:1px solid #f0f1f3; }
 .modal .md table { margin:8px 0; font-size:12.5px; }
 .modal .md code { background:#f3f4f6; border-radius:4px; padding:0 4px; font-size:12px; }
 </style></head><body><div class="wrap">
-<div class="top"><h1>任务看板</h1><span class="meta">2026-11-06 17:32 生成 · 派生缓存，权威数据在各工作区任务卡</span></div>
+<div class="top"><h1>任务看板</h1><span class="meta">2026-11-06 17:53 生成 · 派生缓存，权威数据在各工作区任务卡</span></div>
 <div class="tabs"><button class="on" data-tab="tab-overview">总览</button><button data-tab="tab-ws-0">阿尔法空间 <span class="cnt">5</span></button><button data-tab="tab-ws-1">贝塔空间 <span class="cnt">?</span></button><button data-tab="tab-ws-2">伽马空间 <span class="cnt">0</span></button></div>
 <div class="filters" id="filters"><span><button class="f-st on" data-v="all">全部状态</button><button class="f-st" data-v="active">进行中</button><button class="f-st" data-v="waiting">等外部</button><button class="f-st" data-v="blocked">受阻</button></span><span><button class="f-pri on" data-v="all">全部优先级</button><button class="f-pri" data-v="P0">P0</button><button class="f-pri" data-v="P1">P1</button><button class="f-pri" data-v="P2">P2</button><button class="f-pri" data-v="P3">P3</button></span><input id="q" type="search" placeholder="搜索标题…"></div>
 <div class="tabpage" id="tab-overview">
